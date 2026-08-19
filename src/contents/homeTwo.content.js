@@ -22,7 +22,7 @@ export const homeTwoContent = {
     tagline: "About Comapny",
     title: "Welcome to \nour physical therapy \nservices",
     badgeTitle: "Best Couple \nCounselling",
-    badgeIcon: "icon-valentines",
+    badgeicon: "fas fa-brain",
     text1: "Over 20 years’ experience providing top quality therapy across \nworld orem aliqua lonm andhn ipsum therapy services",
     experienceCount: "20",
     experienceLabel: "Year \n Experience ",
@@ -44,7 +44,7 @@ export const homeTwoContent = {
     items: [
       {
         image: "/assets/images/services/services-v2-img1.jpg",
-        icon: "icon-valentines",
+        icon: "fas fa-brain",
         title: "Couples therapy",
         link: "/personal-counselling",
         delay: "0ms",
@@ -52,7 +52,7 @@ export const homeTwoContent = {
       },
       {
         image: "/assets/images/services/services-v2-img2.jpg",
-        icon: "icon-disappointed-boy",
+        icon: "fas fa-toolbox",
         title: "Family Counselling",
         link: "/services-details",
         delay: "100ms",
@@ -60,7 +60,7 @@ export const homeTwoContent = {
       },
       {
         image: "/assets/images/services/services-v2-img3.jpg",
-        icon: "icon-pediatrics",
+        icon: "fas fa-mobile-alt",
         title: "Troubling Emotions",
         link: "/services-details",
         delay: "0ms",
@@ -97,7 +97,7 @@ export const homeTwoContent = {
       label: "Theraphy Issues Solve"
     },
     {
-      icon: "icon-mail-message",
+      icon: "fas fa-book-open",
       iconStyle: "style2",
       count: "542",
       hasPlus: false,
@@ -114,7 +114,7 @@ export const homeTwoContent = {
     title: "Effective Solutions \nProfessional Mental Therapy \nServices",
     items: [
       {
-        icon: "icon-checkup-svgrepo",
+        icon: "fas fa-user-shield",
         title: "Diagnosis & Investigation",
         description: "Psychlogical porro quisquam est qui dolorem ipsum \nquia dolor sit amet consectetur sit amet ipsum ",
         delay: ".1s"

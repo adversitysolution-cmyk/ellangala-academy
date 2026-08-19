@@ -40,16 +40,12 @@ export default function Contact() {
               </div>
 
               <ul
-                className="list-unstyled"
+                className="contact-page__top-list contact-page__top-grid"
                 style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  flexWrap: 'wrap',
-                  gap: '30px',
                   backgroundColor: '#fff8f8',
-                  padding: '50px 50px',
-                  borderRadius: '12px'
+                  padding: 'clamp(24px, 4vw, 45px)',
+                  borderRadius: '12px',
+                  boxShadow: '0 4px 18px rgba(0,0,0,0.03)'
                 }}
               >
                 <li

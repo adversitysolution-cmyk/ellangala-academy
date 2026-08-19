@@ -16,7 +16,7 @@ const mindGymPrograms = [
     title: "POSITIVE MINDGYM APP",
     link: "/mindgym/app",
     img: "/assets/images/case/positive-mindgym-app.jpg",
-    icon: "icon-pediatrics",
+    icon: "fas fa-mobile-alt",
     description: "Guided digital practices and Positive Psychology tools for building consistent everyday mental wellbeing habits.",
     btnText: "Learn More",
     delay: "0.1s"
@@ -25,7 +25,7 @@ const mindGymPrograms = [
     title: "POSITIVE MINDGYM CENTRE",
     link: "/mindgym/mind-gym",
     img: "/assets/images/case/mind-gym.jpg",
-    icon: "icon-valentines",
+    icon: "fas fa-landmark",
     description: "Our dedicated physical mind training center with structured experiential workshops, reflexology, and wellness sessions.",
     btnText: "Learn More",
     delay: "0.2s"
@@ -34,7 +34,7 @@ const mindGymPrograms = [
     title: "POSITIVE MIND TOOLKIT",
     link: "/mindgym/toolkit",
     img: "/assets/images/case/positive-mind-toolkit.jpg",
-    icon: "icon-disappointed-boy",
+    icon: "fas fa-toolbox",
     description: "Simple practical techniques for calmness, mental clarity, focus, and handling challenging everyday emotional moments.",
     btnText: "Learn More",
     delay: "0.3s"

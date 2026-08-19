@@ -351,9 +351,9 @@ export default function HeaderOne() {
                             )}
                           </ul>
                         </li>
-                        <li>
+                        {/* <li>
                           <Link to="/blog">{header.nav.blog}</Link>
-                        </li>
+                        </li> */}
                         <li>
                           <Link to="/contact">{header.nav.contact}</Link>
                         </li>

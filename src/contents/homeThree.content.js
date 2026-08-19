@@ -36,7 +36,7 @@ export const homeThreeContent = {
 
   intro: [
     {
-      icon: "icon-cel-rings-love",
+      icon: "fas fa-user-graduate",
       title: "Personal Treatment",
       description: "Psychlogical porro quisquam est qui dolorem \nipsum quia dolor sit amet consectetur sit",
       delay: "0ms",
@@ -50,7 +50,7 @@ export const homeThreeContent = {
       animation: "fadeInRight"
     },
     {
-      icon: "icon-checkup-svgrepo",
+      icon: "fas fa-user-tie",
       title: "Personal relationships",
       description: "Psychlogical porro quisquam est qui dolorem \nipsum quia dolor sit amet consectetur sit",
       delay: "200ms",

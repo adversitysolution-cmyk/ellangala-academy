@@ -2153,3 +2153,295 @@
     width: auto !important;
   }
 }
+
+/* ==========================================================================
+   GLOBAL RESPONSIVE FOUNDATION & FLUID TYPOGRAPHY (PHASE 1)
+   ========================================================================== */
+
+/* 1. H-03: Fluid Responsive Typography */
+@media (max-width: 767px) {
+  h1, .founder-hero__title, .main-slider__title {
+    font-size: clamp(26px, 7vw, 36px) !important;
+    line-height: 1.25 !important;
+    word-wrap: break-word !important;
+  }
+
+  .sec-title__title, .qual-header__title, .awards-header__title, .about-three__title {
+    font-size: clamp(23px, 6vw, 32px) !important;
+    line-height: 1.28 !important;
+    word-wrap: break-word !important;
+  }
+
+  .sec-title__tagline h6, .qual-header__eyebrow, .founder-hero__eyebrow {
+    font-size: 12px !important;
+    letter-spacing: 1px !important;
+  }
+
+  .founder-hero-full {
+    min-height: auto !important;
+    padding: 60px 0 50px !important;
+  }
+
+  .founder-hero__tagline-box {
+    padding: 16px 14px !important;
+    margin-top: 20px !important;
+  }
+}
+
+@media (max-width: 375px) {
+  h1, .founder-hero__title, .sec-title__title {
+    font-size: 22px !important;
+  }
+}
+
+/* 2. M-04: PageHeader Responsive Spacing */
+.page-header {
+  padding: clamp(65px, 8.5vw, 115px) 0 clamp(55px, 7.5vw, 100px) !important;
+}
+
+@media (max-width: 767px) {
+  .page-header__title {
+    font-size: clamp(24px, 6.5vw, 34px) !important;
+    line-height: 1.25 !important;
+    word-wrap: break-word !important;
+  }
+
+  .page-header .thm-breadcrumb {
+    padding-top: 10px !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    font-size: 13.5px !important;
+  }
+}
+
+/* 3. Header Intermediate Width (992px - 1199px) Optimization */
+@media (min-width: 992px) and (max-width: 1199px) {
+  .main-header-one__bottom-inner {
+    padding: 0 10px !important;
+  }
+
+  .main-menu__list > li {
+    padding: 25px 8px !important;
+  }
+
+  .main-menu__list > li > a {
+    font-size: 14px !important;
+  }
+
+  .main-header-one__bottom-right {
+    gap: 8px !important;
+  }
+
+  .main-header-one__bottom-right-btn .thm-btn {
+    padding: 11px 16px !important;
+    font-size: 12.5px !important;
+  }
+
+  .main-header__cart-box a.header-cart-icon-btn {
+    width: 42px !important;
+    height: 42px !important;
+    font-size: 18px !important;
+  }
+}
+
+/* 4. M-10: Sticky Header Smoothness */
+.stricky-header.stricked-menu {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+  transition: all 0.3s ease-in-out !important;
+}
+
+/* 5. M-11: FAQ Multi-line Alignment */
+.accrodion-title {
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+}
+
+.accrodion-title h4 {
+  flex: 1 !important;
+  padding-right: 15px !important;
+  font-size: clamp(15px, 2vw, 18px) !important;
+  line-height: 1.4 !important;
+}
+
+/* 6. M-01: Footer Programs Grid Responsive Alignment */
+@media (min-width: 576px) and (max-width: 991px) {
+  .footer-widget__programs-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 20px !important;
+  }
+}
+
+@media (max-width: 575px) {
+  .footer-widget__programs-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+}
+
+/* 7. H-04: Shop/Resources Swipeable Filter Bar */
+.shop-category-filter-bar {
+  display: flex !important;
+  align-items: stretch !important;
+  width: 100% !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  scrollbar-width: thin !important;
+  border-radius: 8px !important;
+}
+
+@media (max-width: 768px) {
+  .shop-category-filter-bar {
+    flex-wrap: nowrap !important;
+    justify-content: flex-start !important;
+    padding-bottom: 4px !important;
+  }
+
+  .shop-category-filter-bar button {
+    flex: 0 0 auto !important;
+    min-width: 130px !important;
+    padding: 11px 14px !important;
+    font-size: 12.5px !important;
+    white-space: nowrap !important;
+  }
+}
+
+/* 8. H-01: Cart Mobile Responsive Stack */
+@media (max-width: 575px) {
+  .cart-mobile-card-list {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important;
+    margin-bottom: 25px !important;
+  }
+
+  .cart-mobile-card {
+    background: #ffffff !important;
+    border: 1px solid #ECE7DE !important;
+    border-radius: 10px !important;
+    padding: 16px !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04) !important;
+  }
+
+  .cart-mobile-card__header {
+    display: flex !important;
+    gap: 12px !important;
+    align-items: center !important;
+    margin-bottom: 12px !important;
+    padding-bottom: 10px !important;
+    border-bottom: 1px solid #F0ECE4 !important;
+  }
+
+  .cart-mobile-card__header img {
+    width: 65px !important;
+    height: 75px !important;
+    object-fit: contain !important;
+    background: #FAF8F5 !important;
+    border-radius: 6px !important;
+    padding: 4px !important;
+  }
+
+  .cart-mobile-card__title {
+    flex: 1 !important;
+    font-size: 14.5px !important;
+    font-weight: 700 !important;
+    color: var(--uterpy-black, #021B41) !important;
+    margin: 0 !important;
+    line-height: 1.35 !important;
+  }
+
+  .cart-mobile-card__row {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    margin-bottom: 10px !important;
+  }
+
+  .cart-mobile-card__row span {
+    font-size: 13px !important;
+    color: #6B7280 !important;
+    font-weight: 500 !important;
+  }
+
+  .cart-mobile-card__row strong {
+    font-size: 15px !important;
+    color: var(--uterpy-black, #021B41) !important;
+    font-weight: 700 !important;
+  }
+}
+
+/* 9. M-02 & Media Aspect Ratios */
+.responsive-video-box {
+  width: 100% !important;
+  aspect-ratio: 16 / 9 !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  background-color: #000000 !important;
+}
+
+.responsive-video-box video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+/* 10. M-05: Contact Page Info Cards Grid */
+.contact-page__top-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)) !important;
+  gap: 20px !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+@media (max-width: 575px) {
+  .contact-page__top-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* 11. M-08: Testimonials Carousel Navigation on Small Screens */
+@media (max-width: 767px) {
+  .testimonial-one .carousel-control-block__outer {
+    position: relative !important;
+    top: 0 !important;
+    right: 0 !important;
+    margin-bottom: 20px !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+  }
+}
+
+/* 12. M-03: Qualifications Cards Mobile & Tablet Optimization */
+@media (max-width: 575px) {
+  .qual-card-item {
+    padding: 16px 14px !important;
+    gap: 12px !important;
+    border-radius: 12px !important;
+  }
+
+  .qual-card-item__icon {
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+  }
+
+  .qual-card-item__title {
+    font-size: 13.5px !important;
+  }
+}
+
+/* 13. Global Safeguards: No Horizontal Body Overflow */
+body, html {
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+}
+
+.page-wrapper {
+  overflow-x: hidden !important;
+  max-width: 100% !important;
+}

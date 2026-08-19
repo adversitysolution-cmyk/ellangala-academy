@@ -49,7 +49,7 @@ export default function BlogDetails() {
                       <img
                         src={post.img}
                         alt={post.title}
-                        style={{ width: '100%', height: '420px', objectFit: 'cover' }}
+                        style={{ width: '100%', height: 'clamp(220px, 45vw, 420px)', objectFit: 'cover' }}
                       />
                     </div>
                     <div className="blog-list-page__single-content">

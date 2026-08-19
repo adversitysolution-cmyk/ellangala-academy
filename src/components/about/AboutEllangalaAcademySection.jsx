@@ -119,18 +119,15 @@ export default function AboutEllangalaAcademySection() {
               <h2
                 style={{
                   color: '#0A1C30',
-                  fontSize: 'clamp(36px, 3.8vw, 48px)',
+                  fontSize: 'clamp(26px, 3.8vw, 48px)',
                   fontWeight: '800',
-                  lineHeight: '1.16',
+                  lineHeight: '1.18',
                   letterSpacing: '-0.5px',
-                  margin: '18px 0 16px',
+                  margin: '14px 0 16px',
                   fontFamily: "'Playfair Display', Georgia, serif"
                 }}
               >
-                Positive <br />
-                Psychology for <br />
-                Meaningful <br />
-                Life
+                Positive <span className="d-none d-lg-inline"><br /></span>Psychology for <span className="d-none d-lg-inline"><br /></span>Meaningful Life
               </h2>
 
               {/* Gold Line Under Heading */}
@@ -153,7 +150,7 @@ export default function AboutEllangalaAcademySection() {
                   margin: 0
                 }}
               >
-                Empowering minds. <br />
+                Empowering minds. <br className="d-none d-sm-inline" />
                 Enriching lives.
               </p>
 
@@ -165,8 +162,8 @@ export default function AboutEllangalaAcademySection() {
                   borderRadius: '16px',
                   overflow: 'hidden',
                   position: 'relative',
-                  marginTop: '1cm',
-                  marginBottom: '55px'
+                  marginTop: '24px',
+                  marginBottom: '35px'
                 }}
               >
                 <video

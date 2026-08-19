@@ -7,83 +7,83 @@ export const aboutContent = {
 
   intro: [
     {
-      icon: "icon-cel-rings-love",
-      title: "Personal Treatment",
-      description: "Psychlogical porro quisquam est qui dolorem ipsum quia dolor sit amet consectetur sit",
+      icon: "fas fa-user-graduate",
+      title: "Students",
+      description: "Build focus, confidence, self-awareness and healthier habits for learning and everyday life.",
       borderClass: "border-left"
     },
     {
-      icon: "icon-support",
-      title: "Urgent Help After Hours",
-      description: "Psychlogical porro quisquam est qui dolorem ipsum quia dolor sit amet consectetur sit",
+      icon: "fas fa-users",
+      title: "Parents & Families",
+      description: "Develop thoughtful communication, emotional awareness and healthier relationships within everyday family life.",
       borderClass: "border-bottom1"
     },
     {
-      icon: "icon-checkup-svgrepo",
-      title: "Personal relationships",
-      description: "Psychlogical porro quisquam est qui dolorem ipsum quia dolor sit amet consectetur sit",
+      icon: "fas fa-user-tie",
+      title: "Professionals & Individuals",
+      description: "Strengthen mental fitness, emotional balance and purposeful approaches to work and personal life.",
       borderClass: "border-left border-bottom1 border2"
     },
     {
-      icon: "icon-aim-target-arrow",
+      icon: "fas fa-university",
       iconStyle: "style2",
-      title: "Reduce anxiety",
-      description: "Psychlogical porro quisquam est qui dolorem ipsum quia dolor sit amet consectetur sit",
+      title: "Schools & Organisations",
+      description: "Practical mind-training experiences designed for institutions, educators, teams and learning communities.",
       borderClass: ""
     }
   ],
 
   whyChoose: {
-    experienceCount: "20",
-    experienceLabel: "Year \n Experience ",
-    title: "Welcome to \nour physical therapy \nservices",
-    text1: "Welcome to Psychological Counseling",
-    text2: "Over 20 years’ experience providing top quality therapy across world orem aliqua lonm andhn ipsum therapy services",
+    experienceCount: "3",
+    experienceLabel: "Core \n Pillars ",
+    title: "Where Psychology \nWisdom and Practice \nCome Together",
+    text1: "A practical approach to meaningful living",
+    text2: "We combine psychological understanding, Indian perspectives and practical exercises so learning becomes useful in everyday life.",
     features: [
-      "Sed egestas tellus est aliquet eget tristique",
-      "Sit amet consectetur adipiscin elites varius monte massa, blandit",
-      "Proin ultrices massa arcu scelerisque facilisi egestas eassa"
+      "Positive Psychology & Research",
+      "Indian Wisdom & Perspective",
+      "Practical Mind Training"
     ],
     highlights: [
       {
-        icon: "icon-idea",
-        title: "Amazing \nCounseling Services"
+        icon: "fas fa-lightbulb",
+        title: "Human-Centred \nLearning"
       },
       {
-        icon: "icon-brain-svgrepo",
-        title: "Innovative \nphysical theraphy"
+        icon: "fas fa-brain",
+        title: "Everyday \nApplication"
       }
     ],
-    ctaText: "Something know about \nour services",
-    ctaBtnText: "Our Counseling",
-    ctaBtnLink: "/contact"
+    ctaText: "Discover what shapes \nour approach",
+    ctaBtnText: "Our Approach",
+    ctaBtnLink: "/about"
   },
 
   counter: [
     {
       icon: "icon-rating",
-      count: "20",
+      count: "20000",
+      hasPlus: true,
+      label: "Individuals reached"
+    },
+    {
+      icon: "icon-award-badge-quality",
+      count: "300",
+      hasPlus: true,
+      label: "Institutions reached"
+    },
+    {
+      icon: "icon-appreciation-best-marketing",
+      count: "16",
       hasPlus: true,
       label: "Years of experience"
     },
     {
-      icon: "icon-award-badge-quality",
-      count: "120",
-      hasPlus: false,
-      label: "Awards Recieved"
-    },
-    {
-      icon: "icon-appreciation-best-marketing",
-      count: "3140",
-      hasPlus: true,
-      label: "Theraphy Issues Solve"
-    },
-    {
-      icon: "icon-mail-message",
+      icon: "fas fa-book-open",
       iconStyle: "style2",
-      count: "542",
+      count: "15",
       hasPlus: false,
-      label: "Individual Counselling"
+      label: "Books authored"
     }
   ],
 

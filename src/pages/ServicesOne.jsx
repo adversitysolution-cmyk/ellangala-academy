@@ -16,7 +16,7 @@ const positiveWorkshops = [
     title: "Positive Psychology for a Meaningful Life",
     link: "/programs/positive-psychology-meaningful-life",
     img: "/assets/images/case/positive-psychology-meaningful-life.jpg",
-    icon: "icon-brain-svgrepo",
+    icon: "fas fa-brain",
     description: "Explore strengths, wellbeing, relationships and purpose for a more meaningful everyday life.",
     btnText: "Learn More",
     delay: "0.1s"
@@ -25,7 +25,7 @@ const positiveWorkshops = [
     title: "Spiritual Psychology for Daily Life",
     link: "/programs/spiritual-psychology-purposeful-life",
     img: "/assets/images/case/case-v1-img1.jpg",
-    icon: "icon-idea",
+    icon: "fas fa-spa",
     description: "Explore values, inner awareness, tranquility and meaning for a deeper sense of daily life purpose.",
     btnText: "Learn More",
     delay: "0.2s"
@@ -34,7 +34,7 @@ const positiveWorkshops = [
     title: "Positive Parenting",
     link: "/programs/positive-parenting",
     img: "/assets/images/case/case-v1-img3.jpg",
-    icon: "icon-support",
+    icon: "fas fa-hands-helping",
     description: "Practical perspectives for healthier communication, emotional awareness and stronger parent-child relationships.",
     btnText: "Learn More",
     delay: "0.3s"
@@ -43,7 +43,7 @@ const positiveWorkshops = [
     title: "Positive Teaching",
     link: "/programs/positive-teaching",
     img: "/assets/images/case/case-v1-img4.jpg",
-    icon: "icon-award-badge-quality",
+    icon: "fas fa-chalkboard-teacher",
     description: "Empowering educators with psychological tools, mindful engagement, and positive classroom dynamics.",
     btnText: "Learn More",
     delay: "0.1s"
@@ -52,7 +52,7 @@ const positiveWorkshops = [
     title: "Student Success Mindset",
     link: "/programs/student-success-mindset",
     img: "/assets/images/case/case-v1-img5.jpg",
-    icon: "icon-aim-target-arrow",
+    icon: "fas fa-user-graduate",
     description: "Build focus, confidence, exam resilience, self-awareness and healthier habits for academic learning.",
     btnText: "Learn More",
     delay: "0.2s"
@@ -61,7 +61,7 @@ const positiveWorkshops = [
     title: "The Art of Mind Training",
     link: "/programs/the-art-of-mind-training",
     img: "/assets/images/case/mind-gym.jpg",
-    icon: "icon-valentines",
+    icon: "fas fa-brain",
     description: "Structured mental fitness practices to master attention, regulate emotions, and foster clarity.",
     btnText: "Learn More",
     delay: "0.3s"
@@ -70,7 +70,7 @@ const positiveWorkshops = [
     title: "Positive Psychology at the Workplace",
     link: "/programs/positive-psychology-at-the-workplace",
     img: "/assets/images/case/case-v1-img2.jpg",
-    icon: "icon-checkup-svgrepo",
+    icon: "fas fa-briefcase",
     description: "Enhance productivity, collaborative leadership, stress management and workplace emotional wellbeing.",
     btnText: "Learn More",
     delay: "0.1s"
@@ -79,7 +79,7 @@ const positiveWorkshops = [
     title: "Bhagavad Gita for a Meaningful Life",
     link: "/programs/bhagavadgita-for-daily-life",
     img: "/assets/images/case/indian-culture-and-science.jpg",
-    icon: "icon-cel-rings-love",
+    icon: "fas fa-book-open",
     description: "Timeless philosophical wisdom for approaching responsibility, choices, and everyday life with greater balance.",
     btnText: "Learn More",
     delay: "0.2s"
@@ -88,7 +88,7 @@ const positiveWorkshops = [
     title: "Mind & Emotional Wellness",
     link: "/programs/mind-and-emotional-wellness",
     img: "/assets/images/case/positive-mind-toolkit.jpg",
-    icon: "icon-disappointed-boy",
+    icon: "fas fa-heart",
     description: "Holistic psychological practices to nurture calmness, manage anxiety, and cultivate lasting inner peace.",
     btnText: "Learn More",
     delay: "0.3s"
@@ -100,7 +100,7 @@ const positiveMentoring = [
     title: "Student Mentoring",
     link: "/mentoring/student-mentoring",
     img: "/assets/images/case/case-v1-img6.jpg",
-    icon: "icon-aim-target-arrow",
+    icon: "fas fa-user-graduate",
     description: "Personalized 1-on-1 guidance for students to build study focus, emotional resilience, self-discipline, and academic confidence.",
     btnText: "Learn More",
     delay: "0.1s"
@@ -109,7 +109,7 @@ const positiveMentoring = [
     title: "Parent Mentoring",
     link: "/mentoring/parent-mentoring",
     img: "/assets/images/case/case-v1-img7.jpg",
-    icon: "icon-support",
+    icon: "fas fa-hands-helping",
     description: "Individualized counseling and parental guidance to resolve communication barriers and foster loving family environments.",
     btnText: "Learn More",
     delay: "0.2s"
@@ -118,7 +118,7 @@ const positiveMentoring = [
     title: "Teacher Mentoring",
     link: "/mentoring/teacher-mentoring",
     img: "/assets/images/case/case-v1-img8.jpg",
-    icon: "icon-award-badge-quality",
+    icon: "fas fa-chalkboard-teacher",
     description: "Empowering educators with psychological strategies, empathetic mentoring, stress management, and inspirational teaching tools.",
     btnText: "Learn More",
     delay: "0.3s"
@@ -127,7 +127,7 @@ const positiveMentoring = [
     title: "Personal Mentoring",
     link: "/mentoring/personal-mentoring",
     img: "/assets/images/case/case-v1-img9.jpg",
-    icon: "icon-checkup-svgrepo",
+    icon: "fas fa-user-check",
     description: "Direct one-on-one psychological mentoring tailored to help individuals overcome personal obstacles and thrive.",
     btnText: "Learn More",
     delay: "0.1s"
@@ -136,7 +136,7 @@ const positiveMentoring = [
     title: "Life Mentoring",
     link: "/mentoring/life-mentoring",
     img: "/assets/images/case/case-v1-img10.jpg",
-    icon: "icon-cel-rings-love",
+    icon: "fas fa-seedling",
     description: "Holistic life coaching integrating positive psychology, daily balance, emotional health, and conscious lifestyle habits.",
     btnText: "Learn More",
     delay: "0.2s"
@@ -145,7 +145,7 @@ const positiveMentoring = [
     title: "Career Mentoring",
     link: "/mentoring/career-mentoring",
     img: "/assets/images/case/case-v1-img11.jpg",
-    icon: "icon-idea",
+    icon: "fas fa-briefcase",
     description: "Strategic professional mentoring to discover strengths, navigate career transitions, and build workplace leadership.",
     btnText: "Learn More",
     delay: "0.3s"
@@ -154,7 +154,7 @@ const positiveMentoring = [
     title: "Purpose Mentoring",
     link: "/mentoring/purpose-mentoring",
     img: "/assets/images/case/case-v1-img12.jpg",
-    icon: "icon-valentines",
+    icon: "fas fa-compass",
     description: "Guided self-inquiry to uncover your authentic calling, deeper core values, and lasting fulfillment in life.",
     btnText: "Learn More",
     delay: "0.1s"
@@ -163,7 +163,7 @@ const positiveMentoring = [
     title: "Mindset Mentoring",
     link: "/mentoring/mindset-mentoring",
     img: "/assets/images/case/case-v1-img1.jpg",
-    icon: "icon-brain-svgrepo",
+    icon: "fas fa-brain",
     description: "Cognitive reframing and mind conditioning to eliminate self-limiting beliefs and cultivate an empowering growth mindset.",
     btnText: "Learn More",
     delay: "0.2s"
@@ -172,7 +172,7 @@ const positiveMentoring = [
     title: "Spiritual Mentoring",
     link: "/mentoring/spiritual-mentoring",
     img: "/assets/images/case/case-v1-img2.jpg",
-    icon: "icon-disappointed-boy",
+    icon: "fas fa-spa",
     description: "Inner exploration rooted in Indian wisdom, reflective philosophy, meditation, and conscious spiritual psychology.",
     btnText: "Learn More",
     delay: "0.3s"
@@ -184,7 +184,7 @@ const recommendedPrograms = [
     title: "POSITIVE MINDGYM APP",
     link: "/mindgym/app",
     img: "/assets/images/case/positive-mindgym-app.jpg",
-    icon: "icon-pediatrics",
+    icon: "fas fa-mobile-alt",
     description: "Guided digital practices and Positive Psychology tools for building consistent everyday mental wellbeing habits.",
     btnText: "Learn More",
     delay: "0.1s"
@@ -193,7 +193,7 @@ const recommendedPrograms = [
     title: "POSITIVE MINDGYM CENTRE",
     link: "/mindgym/mind-gym",
     img: "/assets/images/case/mind-gym.jpg",
-    icon: "icon-valentines",
+    icon: "fas fa-landmark",
     description: "Our dedicated physical mind training center with structured experiential workshops, reflexology, and wellness sessions.",
     btnText: "Learn More",
     delay: "0.2s"
@@ -202,7 +202,7 @@ const recommendedPrograms = [
     title: "POSITIVE MIND TOOLKIT",
     link: "/mindgym/toolkit",
     img: "/assets/images/case/positive-mind-toolkit.jpg",
-    icon: "icon-disappointed-boy",
+    icon: "fas fa-toolbox",
     description: "Simple practical techniques for calmness, mental clarity, focus, and handling challenging everyday emotional moments.",
     btnText: "Learn More",
     delay: "0.3s"

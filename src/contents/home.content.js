@@ -55,28 +55,28 @@ export const homeContent = {
   // =========================================================
   intro: [
     {
-      icon: "icon-cel-rings-love",
+      icon: "fas fa-user-graduate",
       title: "Students",
       description:
         "Build focus, confidence, self-awareness and healthier habits for learning and everyday life.",
       borderClass: "border-left",
     },
     {
-      icon: "icon-support",
+      icon: "fas fa-users",
       title: "Parents & Families",
       description:
         "Develop thoughtful communication, emotional awareness and healthier relationships within everyday family life.",
       borderClass: "border-bottom1",
     },
     {
-      icon: "icon-checkup-svgrepo",
+      icon: "fas fa-user-tie",
       title: "Professionals & Individuals",
       description:
         "Strengthen mental fitness, emotional balance and purposeful approaches to work and personal life.",
       borderClass: "border-left border-bottom1 border2",
     },
     {
-      icon: "icon-aim-target-arrow",
+      icon: "fas fa-university",
       iconStyle: "style2",
       title: "Schools & Organisations",
       description:
@@ -97,7 +97,7 @@ export const homeContent = {
     items: [
       {
         image: "/assets/images/services/mind-gym.jpg",
-        icon: "icon-valentines",
+        icon: "fas fa-brain",
         title: "Mind Gym",
         link: "/mindgym/mind-gym",
         description:
@@ -107,7 +107,7 @@ export const homeContent = {
       },
       {
         image: "/assets/images/services/positive-mind-toolkit.jpg",
-        icon: "icon-disappointed-boy",
+        icon: "fas fa-toolbox",
         title: "Positive Mind Toolkit",
         link: "/mindgym/toolkit",
         description:
@@ -117,7 +117,7 @@ export const homeContent = {
       },
       {
         image: "/assets/images/services/positive-mindgym-app.jpg",
-        icon: "icon-pediatrics",
+        icon: "fas fa-mobile-alt",
         title: "Positive MindGym App",
         link: "/mindgym/app",
         description:
@@ -155,11 +155,11 @@ export const homeContent = {
 
     highlights: [
       {
-        icon: "icon-idea",
+        icon: "fas fa-lightbulb",
         title: "Human-Centred \nLearning",
       },
       {
-        icon: "icon-brain-svgrepo",
+        icon: "fas fa-brain",
         title: "Everyday \nApplication",
       },
     ],
@@ -183,7 +183,7 @@ export const homeContent = {
     items: [
       {
         image: "/assets/images/case/positive-psychology-meaningful-life.jpg",
-        icon: "icon-spa",
+        icon: "fas fa-spa",
         title: "Positive Workshop",
         link: "/positive-workshops",
         description:
@@ -191,7 +191,7 @@ export const homeContent = {
       },
       {
         image: "/assets/images/case/positive-mentoring.jpg",
-        icon: "icon-hands-helping",
+        icon: "fas fa-hands-helping",
         title: "Positive Mentoring",
         link: "/positive-mentoring",
         description:
@@ -199,7 +199,7 @@ export const homeContent = {
       },
       {
         image: "/assets/images/case/mind-gym.jpg",
-        icon: "icon-brain-svgrepo",
+        icon: "fas fa-brain",
         title: "Positive MindGym",
         link: "/mindgym",
         description:
@@ -239,7 +239,7 @@ export const homeContent = {
       label: "Years of experience",
     },
     {
-      icon: "icon-mail-message",
+      icon: "fas fa-book-open",
       iconStyle: "style2",
       count: "15",
       hasPlus: false,
@@ -265,14 +265,14 @@ export const homeContent = {
 
     leftItems: [
       {
-        icon: "icon-checkup-svgrepo",
+        icon: "fas fa-user-shield",
         title: "Positive Psychologist & Life Coach",
         description:
           "Over 16 years of work exploring the mind, wellbeing, personal growth and practical approaches to meaningful living.",
         delay: "100ms",
       },
       {
-        icon: "icon-brain-svgrepo2",
+        icon: "fas fa-book-reader",
         title: "Author, Researcher & Educator",
         description:
           "Author of 15 books, with research connecting Positive Psychology, Indian wisdom and contemporary approaches to human wellbeing.",
@@ -281,7 +281,7 @@ export const homeContent = {
     ],
 
     rightBox: {
-      icon: "icon-brain-svgrepo",
+      icon: "fas fa-brain",
       title: "Creator of Mind Gym & \nPositive Mind Toolkit",
       description:
         "Practical mind-training frameworks created to turn psychological understanding into awareness, healthier mental habits and everyday practice.",

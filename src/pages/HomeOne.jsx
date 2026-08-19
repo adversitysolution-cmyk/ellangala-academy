@@ -326,7 +326,7 @@ export default function HomeOne() {
 
             <div className="row gy-4 justify-content-center">
               {homeContent.caseStudies.items.map((cs, idx) => (
-                <div key={idx} className="col-xl-4 col-lg-4 col-md-6 d-flex">
+                <div key={idx} className="col-xl-4 col-lg-4 col-md-6 col-sm-12 d-flex">
                   <div
                     className="case-one__single"
                     style={{
@@ -346,7 +346,7 @@ export default function HomeOne() {
                         alt={cs.title}
                         style={{
                           width: '100%',
-                          height: '380px',
+                          height: 'clamp(260px, 35vw, 380px)',
                           objectFit: 'cover',
                           display: 'block',
                           transition: 'transform 0.5s ease'

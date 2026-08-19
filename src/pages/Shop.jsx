@@ -13,13 +13,11 @@ import { shopContent } from '../contents/shop.content';
 
 const resourceCategories = [
   { id: 'books', label: 'Books', icon: 'fa fa-book' },
-  { id: 'affirmation-cards', label: 'Affirmation Cards', icon: 'fa fa-clone' },
+  { id: 'affirmation-cards', label: 'Affirmation Cards', icon: 'fa fa-layer-group' },
   { id: 'blogs', label: 'Blogs & Articles', icon: 'fa fa-newspaper' },
   { id: 'videos', label: 'Videos on Talks', icon: 'fa fa-video' },
   { id: 'meditation', label: 'Meditation & Music', icon: 'fa fa-spa' },
   { id: 'free-resources', label: 'Free Resources', icon: 'fa fa-gift' },
-  { id: 'insta', label: 'Insta', icon: 'fab fa-instagram' },
-  { id: 'facebook', label: 'Facebook', icon: 'fab fa-facebook-f' },
 ];
 
 export default function Shop() {
@@ -58,19 +56,15 @@ export default function Shop() {
         <section className="shop-page" style={{ paddingTop: '50px', paddingBottom: '90px' }}>
           <div className="container">
             {/* Category Filter Horizontal Sharp-Edged Slab Navigation */}
-            <div style={{ marginBottom: '45px' }}>
+            <div style={{ marginBottom: '35px' }}>
               <div
+                className="shop-category-filter-bar"
                 style={{
-                  display: 'flex',
-                  flexWrap: 'wrap',
-                  alignItems: 'stretch',
-                  justifyContent: 'center',
                   border: '1px solid #ECE7DE',
                   borderTop: '3px solid var(--uterpy-base, #CA8A38)',
                   backgroundColor: '#ffffff',
                   boxShadow: '0 4px 18px rgba(0,0,0,0.06)',
-                  borderRadius: '0px',
-                  overflow: 'hidden',
+                  borderRadius: '6px'
                 }}
               >
                 {resourceCategories.map((cat, idx) => {
@@ -82,16 +76,11 @@ export default function Shop() {
                       onClick={() => handleCategoryClick(cat.id)}
                       aria-label={cat.label}
                       style={{
-                        flex: '1 1 auto',
-                        minWidth: '140px',
-                        padding: '14px 18px',
                         border: 'none',
                         borderRight: idx < resourceCategories.length - 1 ? '1px solid #ECE7DE' : 'none',
-                        borderBottom: '1px solid #ECE7DE',
                         backgroundColor: isActive ? 'var(--uterpy-base, #CA8A38)' : '#ffffff',
                         color: isActive ? '#ffffff' : '#1F2937',
                         fontWeight: isActive ? '700' : '600',
-                        fontSize: '13.5px',
                         letterSpacing: '0.4px',
                         textTransform: 'uppercase',
                         cursor: 'pointer',
@@ -100,7 +89,7 @@ export default function Shop() {
                         justifyContent: 'center',
                         gap: '8px',
                         transition: 'all 0.2s ease',
-                        borderRadius: '0px',
+                        flexShrink: 0
                       }}
                       onMouseEnter={(e) => {
                         if (!isActive) {

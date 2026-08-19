@@ -221,7 +221,7 @@ export default function Checkout() {
                 </div>
 
                 {/* Start Checkout Area Sidebar */}
-                <div className="col-xl-4 col-lg-5">
+                <div className="col-xl-4 col-lg-5 col-md-12 col-sm-12 mt-4 mt-lg-0">
                   <div className="checkout-area__sidebar">
                     <div className="checkout-area__sidebar-single">
                       <div className="title">

@@ -44,9 +44,7 @@ export const commonContent = {
       { name: "Blogs & Articles", path: "/resources?tab=blogs" },
       { name: "Videos on Talks", path: "/resources?tab=videos" },
       { name: "Meditation & Music", path: "/resources?tab=meditation" },
-      { name: "Free Resources", path: "/resources?tab=free-resources" },
-      { name: "Insta", icon: "fab fa-instagram", path: "https://www.instagram.com/dr.naveen_ellangala?igsh=dncwc25rd2NyaHdi", isExternal: true },
-      { name: "Facebook", icon: "fab fa-facebook-f", path: "https://www.facebook.com/share/1UB9HNkoav/", isExternal: true }
+      { name: "Free Resources", path: "/resources?tab=free-resources" }
     ]
   },
 

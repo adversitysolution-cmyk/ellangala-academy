@@ -33,7 +33,7 @@ export const serviceDetailsContent = {
         title: "Thoughts"
       },
       {
-        icon: "icon-valentines",
+        icon: "fas fa-heart",
         title: "Feelings"
       },
       {
@@ -74,7 +74,7 @@ export const serviceDetailsContent = {
         title: "Thoughts"
       },
       {
-        icon: "icon-valentines",
+        icon: "fas fa-heart",
         title: "Feelings"
       },
       {
@@ -115,7 +115,7 @@ export const serviceDetailsContent = {
         title: "Thoughts"
       },
       {
-        icon: "icon-valentines",
+        icon: "fas fa-heart",
         title: "Feelings"
       },
       {
@@ -156,7 +156,7 @@ export const serviceDetailsContent = {
         title: "Thoughts"
       },
       {
-        icon: "icon-valentines",
+        icon: "fas fa-heart",
         title: "Feelings"
       },
       {
@@ -197,7 +197,7 @@ export const serviceDetailsContent = {
         title: "Thoughts"
       },
       {
-        icon: "icon-valentines",
+        icon: "fas fa-heart",
         title: "Feelings"
       },
       {
@@ -238,7 +238,7 @@ export const serviceDetailsContent = {
         title: "Thoughts"
       },
       {
-        icon: "icon-valentines",
+        icon: "fas fa-heart",
         title: "Feelings"
       },
       {
@@ -279,7 +279,7 @@ export const serviceDetailsContent = {
         title: "Thoughts"
       },
       {
-        icon: "icon-valentines",
+        icon: "fas fa-heart",
         title: "Feelings"
       },
       {
@@ -320,7 +320,7 @@ export const serviceDetailsContent = {
         title: "Thoughts"
       },
       {
-        icon: "icon-valentines",
+        icon: "fas fa-heart",
         title: "Feelings"
       },
       {
@@ -361,7 +361,7 @@ export const serviceDetailsContent = {
         title: "Thoughts"
       },
       {
-        icon: "icon-valentines",
+        icon: "fas fa-heart",
         title: "Feelings"
       },
       {
@@ -405,7 +405,7 @@ export const serviceDetailsContent = {
         title: "Thoughts"
       },
       {
-        icon: "icon-valentines",
+        icon: "fas fa-heart",
         title: "Feelings"
       },
       {
@@ -446,7 +446,7 @@ export const serviceDetailsContent = {
         title: "Thoughts"
       },
       {
-        icon: "icon-valentines",
+        icon: "fas fa-heart",
         title: "Feelings"
       },
       {
@@ -487,7 +487,7 @@ export const serviceDetailsContent = {
         title: "Thoughts"
       },
       {
-        icon: "icon-valentines",
+        icon: "fas fa-heart",
         title: "Feelings"
       },
       {
@@ -528,7 +528,7 @@ export const serviceDetailsContent = {
         title: "Thoughts"
       },
       {
-        icon: "icon-valentines",
+        icon: "fas fa-heart",
         title: "Feelings"
       },
       {
@@ -569,7 +569,7 @@ export const serviceDetailsContent = {
         title: "Thoughts"
       },
       {
-        icon: "icon-valentines",
+        icon: "fas fa-heart",
         title: "Feelings"
       },
       {
@@ -610,7 +610,7 @@ export const serviceDetailsContent = {
         title: "Thoughts"
       },
       {
-        icon: "icon-valentines",
+        icon: "fas fa-heart",
         title: "Feelings"
       },
       {
@@ -651,7 +651,7 @@ export const serviceDetailsContent = {
         title: "Thoughts"
       },
       {
-        icon: "icon-valentines",
+        icon: "fas fa-heart",
         title: "Feelings"
       },
       {
@@ -692,7 +692,7 @@ export const serviceDetailsContent = {
         title: "Thoughts"
       },
       {
-        icon: "icon-valentines",
+        icon: "fas fa-heart",
         title: "Feelings"
       },
       {
@@ -733,7 +733,7 @@ export const serviceDetailsContent = {
         title: "Thoughts"
       },
       {
-        icon: "icon-valentines",
+        icon: "fas fa-heart",
         title: "Feelings"
       },
       {
@@ -777,7 +777,7 @@ export const serviceDetailsContent = {
         title: "Thoughts"
       },
       {
-        icon: "icon-valentines",
+        icon: "fas fa-heart",
         title: "Feelings"
       },
       {
@@ -818,7 +818,7 @@ export const serviceDetailsContent = {
         title: "Thoughts"
       },
       {
-        icon: "icon-valentines",
+        icon: "fas fa-heart",
         title: "Feelings"
       },
       {
@@ -859,7 +859,7 @@ export const serviceDetailsContent = {
         title: "Thoughts"
       },
       {
-        icon: "icon-valentines",
+        icon: "fas fa-heart",
         title: "Feelings"
       },
       {
@@ -903,7 +903,7 @@ export const serviceDetailsContent = {
         title: "Thoughts"
       },
       {
-        icon: "icon-valentines",
+        icon: "fas fa-heart",
         title: "Feelings"
       },
       {
@@ -944,7 +944,7 @@ export const serviceDetailsContent = {
         title: "Thoughts"
       },
       {
-        icon: "icon-valentines",
+        icon: "fas fa-heart",
         title: "Feelings"
       },
       {
@@ -985,7 +985,7 @@ export const serviceDetailsContent = {
         title: "Thoughts"
       },
       {
-        icon: "icon-valentines",
+        icon: "fas fa-heart",
         title: "Feelings"
       },
       {
@@ -1026,7 +1026,7 @@ export const serviceDetailsContent = {
         title: "Thoughts"
       },
       {
-        icon: "icon-valentines",
+        icon: "fas fa-heart",
         title: "Feelings"
       },
       {
@@ -1067,7 +1067,7 @@ export const serviceDetailsContent = {
         title: "Thoughts"
       },
       {
-        icon: "icon-valentines",
+        icon: "fas fa-heart",
         title: "Feelings"
       },
       {
@@ -1108,7 +1108,7 @@ export const serviceDetailsContent = {
         title: "Thoughts"
       },
       {
-        icon: "icon-valentines",
+        icon: "fas fa-heart",
         title: "Feelings"
       },
       {

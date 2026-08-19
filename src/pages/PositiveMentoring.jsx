@@ -16,7 +16,7 @@ const positiveMentoring = [
     title: "Student Mentoring",
     link: "/mentoring/student-mentoring",
     img: "/assets/images/case/case-v1-img6.jpg",
-    icon: "icon-aim-target-arrow",
+    icon: "fas fa-user-graduate",
     description: "Personalized 1-on-1 guidance for students to build study focus, emotional resilience, self-discipline, and academic confidence.",
     btnText: "Learn More",
     delay: "0.1s"
@@ -25,7 +25,7 @@ const positiveMentoring = [
     title: "Parent Mentoring",
     link: "/mentoring/parent-mentoring",
     img: "/assets/images/case/case-v1-img7.jpg",
-    icon: "icon-support",
+    icon: "fas fa-hands-helping",
     description: "Individualized counseling and parental guidance to resolve communication barriers and foster loving family environments.",
     btnText: "Learn More",
     delay: "0.2s"
@@ -34,7 +34,7 @@ const positiveMentoring = [
     title: "Teacher Mentoring",
     link: "/mentoring/teacher-mentoring",
     img: "/assets/images/case/case-v1-img8.jpg",
-    icon: "icon-award-badge-quality",
+    icon: "fas fa-chalkboard-teacher",
     description: "Empowering educators with psychological strategies, empathetic mentoring, stress management, and inspirational teaching tools.",
     btnText: "Learn More",
     delay: "0.3s"
@@ -43,7 +43,7 @@ const positiveMentoring = [
     title: "Personal Mentoring",
     link: "/mentoring/personal-mentoring",
     img: "/assets/images/case/case-v1-img9.jpg",
-    icon: "icon-checkup-svgrepo",
+    icon: "fas fa-user-check",
     description: "Direct one-on-one psychological mentoring tailored to help individuals overcome personal obstacles and thrive.",
     btnText: "Learn More",
     delay: "0.1s"
@@ -52,7 +52,7 @@ const positiveMentoring = [
     title: "Life Mentoring",
     link: "/mentoring/life-mentoring",
     img: "/assets/images/case/case-v1-img10.jpg",
-    icon: "icon-cel-rings-love",
+    icon: "fas fa-seedling",
     description: "Holistic life coaching integrating positive psychology, daily balance, emotional health, and conscious lifestyle habits.",
     btnText: "Learn More",
     delay: "0.2s"
@@ -61,7 +61,7 @@ const positiveMentoring = [
     title: "Career Mentoring",
     link: "/mentoring/career-mentoring",
     img: "/assets/images/case/case-v1-img11.jpg",
-    icon: "icon-idea",
+    icon: "fas fa-briefcase",
     description: "Strategic professional mentoring to discover strengths, navigate career transitions, and build workplace leadership.",
     btnText: "Learn More",
     delay: "0.3s"
@@ -70,7 +70,7 @@ const positiveMentoring = [
     title: "Purpose Mentoring",
     link: "/mentoring/purpose-mentoring",
     img: "/assets/images/case/case-v1-img12.jpg",
-    icon: "icon-valentines",
+    icon: "fas fa-compass",
     description: "Guided self-inquiry to uncover your authentic calling, deeper core values, and lasting fulfillment in life.",
     btnText: "Learn More",
     delay: "0.1s"
@@ -79,7 +79,7 @@ const positiveMentoring = [
     title: "Mindset Mentoring",
     link: "/mentoring/mindset-mentoring",
     img: "/assets/images/case/case-v1-img1.jpg",
-    icon: "icon-brain-svgrepo",
+    icon: "fas fa-brain",
     description: "Cognitive reframing and mind conditioning to eliminate self-limiting beliefs and cultivate an empowering growth mindset.",
     btnText: "Learn More",
     delay: "0.2s"
@@ -88,7 +88,7 @@ const positiveMentoring = [
     title: "Spiritual Mentoring",
     link: "/mentoring/spiritual-mentoring",
     img: "/assets/images/case/case-v1-img2.jpg",
-    icon: "icon-disappointed-boy",
+    icon: "fas fa-spa",
     description: "Inner exploration rooted in Indian wisdom, reflective philosophy, meditation, and conscious spiritual psychology.",
     btnText: "Learn More",
     delay: "0.3s"

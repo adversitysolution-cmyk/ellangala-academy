@@ -64,7 +64,8 @@ export default function Cart() {
               {/* Left Column: Cart Table & Coupon */}
               <div className="col-xl-8 col-lg-7">
                 <div className="cart-page__left">
-                  <div className="table-responsive">
+                  {/* Desktop Table View (Hidden on mobile < 576px) */}
+                  <div className="table-responsive d-none d-sm-block">
                     <table className="table cart-table">
                       <thead>
                         <tr>
@@ -189,23 +190,128 @@ export default function Cart() {
                               <td>₹{(item.price * item.quantity).toFixed(2)}</td>
                             </tr>
                           ))
-                        ) : (
-                          <tr>
-                            <td colSpan="4" className="text-center py-5">
-                              <div style={{ padding: '30px 0' }}>
-                                <i className="fas fa-shopping-cart" style={{ fontSize: '48px', color: '#ccc', marginBottom: '15px' }}></i>
-                                <h4 style={{ color: '#333', marginBottom: '10px' }}>Your cart is currently empty</h4>
-                                <p style={{ color: '#777', marginBottom: '20px' }}>Explore our publications and add inspiring books to your cart.</p>
-                                <Link to="/shop" className="thm-btn">
-                                  <span>Return to Bookstore</span>
-                                </Link>
-                              </div>
-                            </td>
-                          </tr>
-                        )}
+                        ) : null}
                       </tbody>
                     </table>
                   </div>
+
+                  {/* Mobile Stacked Cards (Visible only on < 576px) */}
+                  <div className="cart-mobile-card-list d-block d-sm-none">
+                    {cartItems && cartItems.length > 0 ? (
+                      cartItems.map((item) => (
+                        <div key={item.id} className="cart-mobile-card">
+                          <div className="cart-mobile-card__header">
+                            <img src={item.img} alt={item.title} />
+                            <h4 className="cart-mobile-card__title">
+                              <Link to={item.link || `/shop-details?id=${item.id}`}>
+                                {item.title}
+                              </Link>
+                            </h4>
+                            <button
+                              type="button"
+                              onClick={() => removeFromCart(item.id)}
+                              aria-label="Remove item"
+                              style={{
+                                width: '32px',
+                                height: '32px',
+                                borderRadius: '50%',
+                                border: '1px solid #ECE7DE',
+                                backgroundColor: '#FAF8F5',
+                                color: '#f42647',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer',
+                                flexShrink: 0
+                              }}
+                            >
+                              <i className="fas fa-times"></i>
+                            </button>
+                          </div>
+
+                          <div className="cart-mobile-card__row">
+                            <span>Unit Price:</span>
+                            <strong>₹{item.price}.00</strong>
+                          </div>
+
+                          <div className="cart-mobile-card__row">
+                            <span>Quantity:</span>
+                            <div
+                              style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '10px',
+                                backgroundColor: '#FAF8F5',
+                                border: '1px solid #ECE7DE',
+                                borderRadius: '6px',
+                                padding: '4px 8px'
+                              }}
+                            >
+                              <button
+                                type="button"
+                                onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                                style={{
+                                  width: '28px',
+                                  height: '28px',
+                                  borderRadius: '50%',
+                                  backgroundColor: '#ffffff',
+                                  border: '1px solid #e0e0e0',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  cursor: 'pointer',
+                                  color: '#333'
+                                }}
+                              >
+                                <i className="fa fa-minus" style={{ fontSize: '11px' }}></i>
+                              </button>
+                              <span style={{ fontWeight: '700', minWidth: '20px', textAlign: 'center' }}>
+                                {item.quantity}
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                                style={{
+                                  width: '28px',
+                                  height: '28px',
+                                  borderRadius: '50%',
+                                  backgroundColor: '#ffffff',
+                                  border: '1px solid #e0e0e0',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  cursor: 'pointer',
+                                  color: '#333'
+                                }}
+                              >
+                                <i className="fa fa-plus" style={{ fontSize: '11px' }}></i>
+                              </button>
+                            </div>
+                          </div>
+
+                          <div className="cart-mobile-card__row" style={{ paddingTop: '8px', borderTop: '1px dashed #ECE7DE', marginTop: '6px' }}>
+                            <span style={{ fontWeight: '600', color: '#1F2937' }}>Subtotal:</span>
+                            <strong style={{ color: 'var(--uterpy-base, #CA8A38)', fontSize: '16px' }}>
+                              ₹{(item.price * item.quantity).toFixed(2)}
+                            </strong>
+                          </div>
+                        </div>
+                      ))
+                    ) : null}
+                  </div>
+
+                  {(!cartItems || cartItems.length === 0) && (
+                    <div className="text-center py-5">
+                      <div style={{ padding: '30px 0' }}>
+                        <i className="fas fa-shopping-cart" style={{ fontSize: '48px', color: '#ccc', marginBottom: '15px' }}></i>
+                        <h4 style={{ color: '#333', marginBottom: '10px' }}>Your cart is currently empty</h4>
+                        <p style={{ color: '#777', marginBottom: '20px' }}>Explore our publications and add inspiring books to your cart.</p>
+                        <Link to="/shop" className="thm-btn">
+                          <span>Return to Bookstore</span>
+                        </Link>
+                      </div>
+                    </div>
+                  )}
 
                   {/* Coupon Form Box (hidden as requested, easy to re-enable in future)
                   <div className="cart-cupon__form-box">
