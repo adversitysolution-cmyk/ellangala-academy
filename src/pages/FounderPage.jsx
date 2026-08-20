@@ -39,9 +39,9 @@ export default function FounderPage() {
     { num: 9, title: 'Nane Nanna Shilpi' },
     { num: 10, title: 'Positive Parenting' },
     { num: 11, title: 'Dhanatmaka Poshakatva' },
-    { num: 12, title: 'The Student Success Mindset', forthcoming: true },
-    { num: 13, title: 'Vidhyarthi Sadhanege ondu kaipidi', forthcoming: true },
-    { num: 14, title: 'Purandaradasara Keerthanegalu mattu vyaktitva vikasana', forthcoming: true },
+    { num: 12, title: 'The Student Success Mindset' },
+    { num: 13, title: 'Vidhyarthi Sadhanege ondu kaipidi' },
+    { num: 14, title: 'Purandaradasara Keerthanegalu\nmattu vyaktitva vikasana', forthcoming: true, allowWrap: true },
     { num: 15, title: 'Manassigondu Budhi mathu', forthcoming: true }
   ];
 
@@ -140,7 +140,7 @@ export default function FounderPage() {
       title: 'Samskrithi Puraskritharu Prashasthi',
       org: 'Megamarati Kannada Matu Sahithya Vedike, Bangalore',
       icon: (
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="#CA8A38">
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="#CA8A38">
           <circle cx="12" cy="9" r="6" />
           <path d="M12 2l2.4 4.8 5.3.8-3.8 3.7.9 5.3L12 14l-4.8 2.6.9-5.3-3.8-3.7 5.3-.8L12 2z" fill="#FAF6F0" />
           <path d="m8.5 15.5-2.5 6.5 6-3 6 3-2.5-6.5" fill="#CA8A38" />
@@ -152,7 +152,7 @@ export default function FounderPage() {
       title: 'Kuvempu Rajya Prashasthi',
       org: 'Balaku Trust, Bangalore',
       icon: (
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="#CA8A38">
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="#CA8A38">
           <path d="m9 2-3 7h3l3-7z" fill="#CA8A38" />
           <path d="m15 2 3 7h-3l-3-7z" fill="#CA8A38" />
           <circle cx="12" cy="15" r="6" fill="#CA8A38" />
@@ -164,7 +164,7 @@ export default function FounderPage() {
       title: 'Samaja Seva Prashasthi',
       org: 'Vishwa Kannada Sahithya Mattu Samskrithika Samsthe, Bangalore',
       icon: (
-        <svg width="30" height="30" viewBox="0 0 24 24" fill="#CA8A38">
+        <svg width="42" height="42" viewBox="0 0 24 24" fill="#CA8A38">
           <path d="M19.5 9.5 18 8l-3.5 3.5L12 9 8.5 12.5 5 9 1 13l4 4 3.5-3.5L12 16l4.5-4.5L20 15l3-3-3.5-2.5zM12 13.5l-2-2 2-2 2 2-2 2z" />
         </svg>
       )
@@ -173,7 +173,7 @@ export default function FounderPage() {
       title: 'Praja Vibhushana Rastra Prashasthi',
       org: 'Karunadu Seva Trust(R), Mysore',
       icon: (
-        <svg width="30" height="30" viewBox="0 0 24 24" fill="#CA8A38">
+        <svg width="42" height="42" viewBox="0 0 24 24" fill="#CA8A38">
           <path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z" />
         </svg>
       )
@@ -182,7 +182,7 @@ export default function FounderPage() {
       title: 'Navaparva Satya Sachi Prashasthi',
       org: 'Nava Parva Foundation(R), Bangalore',
       icon: (
-        <svg width="30" height="30" viewBox="0 0 24 24" fill="#CA8A38">
+        <svg width="42" height="42" viewBox="0 0 24 24" fill="#CA8A38">
           <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
         </svg>
       )
@@ -191,7 +191,7 @@ export default function FounderPage() {
       title: 'Best Educationalist',
       org: 'Jidayu Staffing Force Private Limited',
       icon: (
-        <svg width="30" height="30" viewBox="0 0 24 24" fill="#CA8A38">
+        <svg width="42" height="42" viewBox="0 0 24 24" fill="#CA8A38">
           <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z" />
           <rect x="4" y="19" width="16" height="2.5" rx="1.25" />
         </svg>
@@ -201,7 +201,7 @@ export default function FounderPage() {
       title: 'Rajyotsava Prashasthi',
       org: 'Kasturi Shrigannada Vedike, Mandya',
       icon: (
-        <svg width="30" height="30" viewBox="0 0 24 24" fill="#CA8A38">
+        <svg width="42" height="42" viewBox="0 0 24 24" fill="#CA8A38">
           <path d="M19 5h-2V3H7v2H5c-1.1 0-2 .9-2 2v1c0 2.55 1.92 4.63 4.39 4.94A5.01 5.01 0 0 0 11 15.9V19H8v2h8v-2h-3v-3.1c1.8-.47 3.16-1.89 3.61-3.96C19.08 11.63 21 9.55 21 8V7c0-1.1-.9-2-2-2zM5 8V7h2v3.82C5.84 10.4 5 9.3 5 8zm14 0c0 1.3-.84 2.4-2 2.82V7h2v1z" />
         </svg>
       )
@@ -834,10 +834,10 @@ export default function FounderPage() {
               <ellipse cx="38" cy="105" rx="13" ry="6" fill="#87A96B" opacity="0.35" transform="rotate(-35 38 105)" />
             </svg>
 
-            <div className="container" style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 1 }}>
-              <div className="row align-items-center gx-lg-5">
+            <div className="container" style={{ maxWidth: '1440px', margin: '0 auto', padding: '0 24px', position: 'relative', zIndex: 1 }}>
+              <div className="row align-items-center gx-lg-4 gx-xl-5">
                 {/* Left Column: Heading, Subtitle, 2-Column Numbered Book List & Button */}
-                <div className="col-lg-6 col-md-12 mb-5 mb-lg-0">
+                <div className="col-xl-7 col-lg-7 col-md-12 mb-5 mb-lg-0">
                   <div style={{ marginBottom: '24px' }}>
                     {/* Icon + Title */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '8px' }}>
@@ -881,8 +881,17 @@ export default function FounderPage() {
                         {booksListCol2.map((b) => (
                           <div key={b.num} className="books-item-row">
                             <div className="books-number-badge">{b.num}</div>
-                            <div className="books-item-title">
-                              {b.title}
+                            <div className={`books-item-title ${b.allowWrap ? 'books-item-title--wrap' : ''}`}>
+                              {typeof b.title === 'string' && b.title.includes('\n') ? (
+                                b.title.split('\n').map((line, lIdx, arr) => (
+                                  <React.Fragment key={lIdx}>
+                                    {line}
+                                    {lIdx < arr.length - 1 && <br />}
+                                  </React.Fragment>
+                                ))
+                              ) : (
+                                b.title
+                              )}
                               {b.forthcoming && <span className="books-item-forthcoming">(forthcoming)</span>}
                             </div>
                           </div>
@@ -904,7 +913,7 @@ export default function FounderPage() {
                 </div>
 
                 {/* Right Column: Showcase Image */}
-                <div className="col-lg-6 col-md-12 text-center text-lg-end">
+                <div className="col-xl-5 col-lg-5 col-md-12 text-center text-lg-end">
                   <div style={{ width: '100%', maxWidth: '600px', display: 'inline-block', position: 'relative' }}>
                     <img
                       src={founderBooksShowcaseImg}

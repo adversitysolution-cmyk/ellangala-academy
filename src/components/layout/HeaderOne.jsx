@@ -9,11 +9,19 @@ export default function HeaderOne() {
   const { totalCount } = useCart();
   const { toggleMobileNav } = useMobileNav();
 
+  const scrollToSection = (id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      const offset = el.getBoundingClientRect().top + window.pageYOffset + 20;
+      window.scrollTo({ top: offset, behavior: 'smooth' });
+    }
+  };
+
   return (
     <>
       <header className="main-header main-header-one clearfix">
         <div className="main-header-one__top">
-          <div className="container">
+          <div className="container-fluid p-0">
             <div className="main-header-one__top-inner">
               <div className="main-header-one__top-left">
                 <div className="main-header__contact-list">
@@ -217,7 +225,7 @@ export default function HeaderOne() {
                                     <span className="programs-megamenu__icon-badge">
                                       <i className="fa fa-brain"></i>
                                     </span>
-                                    MINDGYM
+                                    POSITIVE MINDGYM
                                   </Link>
                                   <div className="programs-megamenu__line"></div>
                                 </div>
@@ -267,7 +275,16 @@ export default function HeaderOne() {
                               <Link to="/founder">Founder</Link>
                             </li>
                             <li>
-                              <Link to="/about#our-team">Team</Link>
+                              <Link to="/team">Team</Link>
+                            </li>
+                            <li>
+                              <Link to="/about#vision-mission" onClick={() => scrollToSection('vision-mission')}>Vision &amp; Mission</Link>
+                            </li>
+                            <li>
+                              <Link to="/about#philosophy" onClick={() => scrollToSection('philosophy')}>Our Philosophy</Link>
+                            </li>
+                            <li>
+                              <Link to="/about#methodology" onClick={() => scrollToSection('methodology')}>Our Methodology</Link>
                             </li>
                           </ul>
                         </li>

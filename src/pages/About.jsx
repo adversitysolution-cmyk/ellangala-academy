@@ -11,22 +11,39 @@ import ScrollToTop from '../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../hooks/useUterpyPlugins';
 import { aboutContent } from '../contents/about.content';
 import AboutEllangalaAcademySection from '../components/about/AboutEllangalaAcademySection';
+import AboutFoundationSection from '../components/about/AboutFoundationSection';
+import AboutPhilosophySection from '../components/about/AboutPhilosophySection';
+import AboutMethodologySection from '../components/about/AboutMethodologySection';
+import TestimonialsSection from '../components/common/TestimonialsSection';
 
 export default function About() {
   useUterpyPlugins();
   const location = useLocation();
 
   useEffect(() => {
-    if (location.hash) {
-      const targetId = location.hash.replace('#', '');
-      const element = document.getElementById(targetId);
-      if (element) {
-        setTimeout(() => {
-          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 200);
+    const scrollToHash = () => {
+      if (location.hash) {
+        const targetId = location.hash.replace('#', '');
+        const element = document.getElementById(targetId);
+        if (element) {
+          const headerOffset = -20;
+          const elementPosition = element.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          });
+        }
       }
-    }
-  }, [location]);
+    };
+
+    const timer1 = setTimeout(scrollToHash, 80);
+    const timer2 = setTimeout(scrollToHash, 300);
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+    };
+  }, [location.pathname, location.hash]);
 
   return (
     <>
@@ -101,9 +118,12 @@ export default function About() {
                 <div className="why-choose-one__content">
                   <div className="sec-title">
                     <h2 className="sec-title__title">
-                      Welcome to <br />
-                      our physical therapy <br />
-                      services
+                      {aboutContent.whyChoose.title.split('\n').map((line, lIdx, arr) => (
+                        <React.Fragment key={lIdx}>
+                          {line}
+                          {lIdx < arr.length - 1 && <br />}
+                        </React.Fragment>
+                      ))}
                     </h2>
                   </div>
 
@@ -137,17 +157,12 @@ export default function About() {
 
                               <div className="title-box">
                                 <h2>
-                                  {idx === 0 ? (
-                                    <>
-                                      Amazing <br />
-                                      Counseling Services
-                                    </>
-                                  ) : (
-                                    <>
-                                      Innovative <br />
-                                      physical theraphy
-                                    </>
-                                  )}
+                                  {h.title.split('\n').map((line, lIdx, arr) => (
+                                    <React.Fragment key={lIdx}>
+                                      {line}
+                                      {lIdx < arr.length - 1 && <br />}
+                                    </React.Fragment>
+                                  ))}
                                 </h2>
                               </div>
                             </div>
@@ -159,7 +174,12 @@ export default function About() {
                   <div className="why-choose-one__content-text3">
                     <div className="text-box">
                       <p>
-                        Something know about <br /> our services
+                        {aboutContent.whyChoose.ctaText.split('\n').map((line, lIdx, arr) => (
+                          <React.Fragment key={lIdx}>
+                            {line}
+                            {lIdx < arr.length - 1 && <br />}
+                          </React.Fragment>
+                        ))}
                       </p>
                     </div>
 
@@ -180,8 +200,20 @@ export default function About() {
         <AboutEllangalaAcademySection />
         {/* End Positive Psychology for Meaningful Life (Ellangala Academy) Section */}
 
+        {/* Start Our Foundation (Mission & Vision) Section */}
+        <AboutFoundationSection />
+        {/* End Our Foundation (Mission & Vision) Section */}
+
+        {/* Start Our Philosophy Section */}
+        <AboutPhilosophySection />
+        {/* End Our Philosophy Section */}
+
+        {/* Start Our Methodology Section */}
+        <AboutMethodologySection />
+        {/* End Our Methodology Section */}
+
         {/* Start Counter One */}
-        <section className="counter-one">
+        <section className="counter-one" style={{ marginTop: '0', position: 'relative', zIndex: 3 }}>
           <div className="container">
             <div className="counter-one__inner">
               <div
@@ -279,6 +311,12 @@ export default function About() {
                         </li>
                       ))}
                     </ul>
+
+                    <div className="btn-box" style={{ marginTop: '35px' }}>
+                      <Link to="/founder" className="thm-btn">
+                        About Founder
+                      </Link>
+                    </div>
                   </div>
                 </div>
                 {/* End Therapy One Left */}
@@ -318,69 +356,7 @@ export default function About() {
         {/* End Therapy One */}
 
         {/* Start Testimonial One */}
-        <section className="testimonial-one">
-          <div
-            className="testimonial-one__pattern"
-            style={{ backgroundImage: 'url(/assets/images/pattern/testimonial-v1-pattern1.png)' }}
-          ></div>
-          <div className="carousel-control-block__outer">
-            <div className="carousel-control-block">
-              <div className="carousel-btn-block testimonial-carousel-btn">
-                <span className="carousel-btn left-btn">
-                  <i className="icon-right-arrow"></i>
-                </span>
-                <span className="carousel-btn right-btn">
-                  <i className="icon-right-arrow1"></i>
-                </span>
-              </div>
-              <div className="carousel-number-count"></div>
-            </div>
-          </div>
-          <div className="container">
-            <div className="sec-title">
-              <div className="sec-title__tagline">
-                <h6>{aboutContent.testimonials.tagline}</h6>
-              </div>
-              <h2 className="sec-title__title">
-                {aboutContent.testimonials.title.split('\n').map((line, lIdx, arr) => (
-                  <React.Fragment key={lIdx}>
-                    {line}
-                    {lIdx < arr.length - 1 && <br />}
-                  </React.Fragment>
-                ))}
-              </h2>
-            </div>
-            <div className="row">
-              <div className="col-xl-12">
-                <div className="testimonial-one__inner">
-                  <div className="testimonial-carousel__one owl-theme owl-carousel">
-                    {aboutContent.testimonials.items.map((t, idx) => (
-                      <div key={idx} className="testimonial-one__slide testimonial-one__single">
-                        <p className="testimonial-one__single-text">
-                          {t.text}
-                        </p>
-                        <div className="testimonial-one__client-info">
-                          <div className="testimonial-one__client-details">
-                            <div className="testimonial-one__client-img">
-                              <img src={t.image} alt="#" />
-                            </div>
-                            <div className="testimonial-one__client-content">
-                              <h4>{t.name}</h4>
-                              <p>{t.role}</p>
-                            </div>
-                          </div>
-                          <div className="testimonial-one__quote">
-                            <span className="icon-quote"></span>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <TestimonialsSection />
         {/* End Testimonial One */}
 
         {/* Start Team One */}

@@ -1,12 +1,13 @@
 import React from 'react';
 import academyVideo from '../../this_vidio_have_tumbnail_at_th.mp4';
+import decorativeBgImg from '../../Images/ChatGPT Image Aug 20, 2026, 06_21_43 PM.png';
 
 export default function AboutEllangalaAcademySection() {
   const points = [
     {
       id: 1,
       icon: (
-        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#CA8A38" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#CA8A38" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
           {/* Head profile facing right with smooth silhouette */}
           <path d="M8.5 21v-3.5a4 4 0 0 1 1.2-2.8L10 14h2l1-1a5.5 5.5 0 0 0 1.8-4c0-.5-.1-1-.2-1.5l.4-.5h1.5l.8 1.2a1 1 0 0 0 .8.5h.9v1.2l-.8.8v1.3l1.2 1.2a1 1 0 0 1 .2.8l-.5 2a2 2 0 0 1-1.4 1.4L16.5 21" />
           <path d="M8.5 17.5a8 8 0 0 1-2-5.5 8 8 0 0 1 9.5-7.8c2.2.5 4 2.2 4.5 4.5" />
@@ -19,11 +20,11 @@ export default function AboutEllangalaAcademySection() {
     {
       id: 2,
       icon: (
-        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#CA8A38" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#CA8A38" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
           {/* User profile with star */}
           <circle cx="10" cy="7" r="4" />
           <path d="M3 20c0-3.3 2.7-6 6-6h2c1.8 0 3.3.8 4.4 2" />
-          <polygon points="18.5 13 19.5 15.2 22 15.5 20.2 17.2 20.7 19.6 18.5 18.4 16.3 19.6 16.8 17.2 15 15.5 17.5 15.2 18.5 13" fill="none" stroke="#CA8A38" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+          <polygon points="18.5 13 19.5 15.2 22 15.5 20.2 17.2 20.7 19.6 18.5 18.4 16.3 19.6 16.8 17.2 15 15.5 17.5 15.2 18.5 13" fill="none" stroke="#CA8A38" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       ),
       text: "Founded by Dr. Naveen Ellangala, a Positive Psychologist, Holistic Mind Coach, Psychotherapist, and author with over 17 years of experience, the academy has positively impacted thousands of individuals across schools, colleges, corporate organizations, and community groups."
@@ -31,7 +32,7 @@ export default function AboutEllangalaAcademySection() {
     {
       id: 3,
       icon: (
-        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#CA8A38" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#CA8A38" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
           {/* Symmetrical 5-petal Lotus */}
           <path d="M12 3.5c-1.8 3.5-2.2 6.5-2.2 9 0 2.5 1 4 2.2 4.5 1.2-.5 2.2-2 2.2-4.5 0-2.5-.4-5.5-2.2-9z" />
           <path d="M12 17c-2.5 0-5.5-1.5-6.5-4.5-.8-2.5 0-5.5 1.8-7 1.5 2.2 2.8 5 4.7 6" />
@@ -44,7 +45,7 @@ export default function AboutEllangalaAcademySection() {
     {
       id: 4,
       icon: (
-        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#CA8A38" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#CA8A38" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
           {/* Open Book */}
           <path d="M3.5 6.5A2.5 2.5 0 0 1 6 4h5v14.5H6A2.5 2.5 0 0 0 3.5 21V6.5z" />
           <path d="M20.5 6.5A2.5 2.5 0 0 0 18 4h-5v14.5h5a2.5 2.5 0 0 1 2.5 2.5V6.5z" />
@@ -59,7 +60,7 @@ export default function AboutEllangalaAcademySection() {
     {
       id: 5,
       icon: (
-        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#CA8A38" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="#CA8A38" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
           {/* 3 People Community Group */}
           <circle cx="12" cy="7.5" r="3" />
           <path d="M7 19.5v-1a5 5 0 0 1 10 0v1" />
@@ -162,7 +163,7 @@ export default function AboutEllangalaAcademySection() {
                   borderRadius: '16px',
                   overflow: 'hidden',
                   position: 'relative',
-                  marginTop: '24px',
+                  marginTop: '3cm',
                   marginBottom: '35px'
                 }}
               >
@@ -178,71 +179,6 @@ export default function AboutEllangalaAcademySection() {
                     display: 'block',
                     borderRadius: '16px',
                     objectFit: 'contain'
-                  }}
-                />
-              </div>
-
-              {/* Our Mission Card (Under Video) */}
-              <div
-                style={{
-                  position: 'relative',
-                  marginTop: '20px',
-                  paddingLeft: '6px',
-                  maxWidth: '430px'
-                }}
-              >
-                {/* Large Green Double Quotes Graphic */}
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: '-18px',
-                    left: '-2px',
-                    lineHeight: 1,
-                    zIndex: 0,
-                    pointerEvents: 'none'
-                  }}
-                >
-                  <svg width="64" height="50" viewBox="0 0 68 54" fill="#62BA80">
-                    <path d="M28 26c0 14-8 26-24 28l-4-6c10-3 14-9 14-14H0V0h28v26zm40 0c0 14-8 26-24 28l-4-6c10-3 14-9 14-14H40V0h68v26z" />
-                  </svg>
-                </div>
-
-                {/* Our Mission Title */}
-                <h3
-                  style={{
-                    position: 'relative',
-                    zIndex: 1,
-                    color: '#1E2238',
-                    fontSize: '28px',
-                    fontWeight: '800',
-                    margin: '0 0 10px',
-                    paddingTop: '16px',
-                    fontFamily: "'Outfit', 'DM Sans', sans-serif"
-                  }}
-                >
-                  Our Mission
-                </h3>
-
-                {/* Mission Paragraph Text */}
-                <p
-                  style={{
-                    color: '#374151',
-                    fontSize: '15px',
-                    lineHeight: '1.65',
-                    margin: '0 0 14px',
-                    fontWeight: '450'
-                  }}
-                >
-                  To empower individuals to transform their lives through systematic mind training.
-                </p>
-
-                {/* Green Bottom-Left Accent Bar */}
-                <div
-                  style={{
-                    width: '6px',
-                    height: '24px',
-                    backgroundColor: '#62BA80',
-                    borderRadius: '3px'
                   }}
                 />
               </div>
@@ -265,10 +201,27 @@ export default function AboutEllangalaAcademySection() {
                 width: '100%',
                 display: 'flex',
                 flexDirection: 'column',
-                justifyContent: 'space-between'
+                justifyContent: 'space-between',
+                position: 'relative',
+                overflow: 'hidden'
               }}
             >
-              <div style={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'space-between' }}>
+              {/* Middle Layer Decorative Background Image */}
+              <div
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  backgroundImage: `url(${decorativeBgImg})`,
+                  backgroundSize: '85%',
+                  backgroundPosition: 'center',
+                  backgroundRepeat: 'no-repeat',
+                  opacity: 0.15,
+                  pointerEvents: 'none',
+                  zIndex: 1
+                }}
+              />
+
+              <div style={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'space-between', position: 'relative', zIndex: 2 }}>
                 {points.map((item, index) => (
                   <div key={item.id} style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
                     <div
@@ -283,15 +236,16 @@ export default function AboutEllangalaAcademySection() {
                       {/* Soft Pale Cream Circle Badge with Gold Icon */}
                       <div
                         style={{
-                          width: '66px',
-                          height: '66px',
+                          width: '78px',
+                          height: '78px',
+                          minWidth: '78px',
                           borderRadius: '50%',
                           backgroundColor: '#FCF8F2',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
                           flexShrink: 0,
-                          boxShadow: '0 2px 8px rgba(202, 138, 56, 0.1)'
+                          boxShadow: '0 3px 10px rgba(202, 138, 56, 0.12)'
                         }}
                       >
                         {item.icon}
@@ -301,11 +255,11 @@ export default function AboutEllangalaAcademySection() {
                       <div style={{ flex: 1 }}>
                         <p
                           style={{
-                            fontSize: '15px',
-                            lineHeight: '1.68',
-                            color: '#2D3748',
+                            fontSize: '17px',
+                            lineHeight: '1.65',
+                            color: '#1A202C',
                             margin: 0,
-                            fontWeight: '450',
+                            fontWeight: '500',
                             letterSpacing: '0.05px',
                             fontFamily: "'Outfit', 'DM Sans', sans-serif"
                           }}

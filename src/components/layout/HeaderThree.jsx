@@ -7,11 +7,19 @@ export default function HeaderThree() {
   const { header } = commonContent;
   const { toggleMobileNav } = useMobileNav();
 
+  const scrollToSection = (id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      const offset = el.getBoundingClientRect().top + window.pageYOffset + 20;
+      window.scrollTo({ top: offset, behavior: 'smooth' });
+    }
+  };
+
   return (
     <>
       <header className="main-header main-header-one style3 clearfix">
         <div className="main-header-one__top">
-          <div className="container">
+          <div className="container-fluid p-0">
             <div className="main-header-one__top-inner">
               <div className="main-header-one__top-left">
                 <div className="main-header__contact-list">
@@ -218,11 +226,11 @@ export default function HeaderThree() {
                               <div className="programs-megamenu__col programs-megamenu__col--featured">
                                 <div className="programs-megamenu__col-header">
                                   <Link to="/mindgym" className="programs-megamenu__col-title">
-                                    <span className="programs-megamenu__icon-badge">
-                                      <i className="fa fa-brain"></i>
-                                    </span>
-                                    MINDGYM
-                                  </Link>
+                                  <span className="programs-megamenu__icon-badge">
+                                    <i className="fa fa-brain"></i>
+                                  </span>
+                                  POSITIVE MINDGYM
+                                </Link>
                                   <div className="programs-megamenu__line"></div>
                                 </div>
                                 <ul className="programs-megamenu__list programs-megamenu__list--featured">
@@ -271,26 +279,19 @@ export default function HeaderThree() {
                               <Link to="/founder">Founder</Link>
                             </li>
                             <li>
-                              <Link to="/about#our-team">Team</Link>
+                              <Link to="/team">Team</Link>
+                            </li>
+                            <li>
+                              <Link to="/about#vision-mission" onClick={() => scrollToSection('vision-mission')}>Vision &amp; Mission</Link>
+                            </li>
+                            <li>
+                              <Link to="/about#philosophy" onClick={() => scrollToSection('philosophy')}>Our Philosophy</Link>
+                            </li>
+                            <li>
+                              <Link to="/about#methodology" onClick={() => scrollToSection('methodology')}>Our Methodology</Link>
                             </li>
                           </ul>
                         </li>
-                        {/* Case menu item (hidden for now, easy to enable in future)
-                        <li className="dropdown">
-                          <a href="#">{header.nav.case}</a>
-                          <ul>
-                            <li>
-                              <Link to="/cases">Case One</Link>
-                            </li>
-                            <li>
-                              <Link to="/cases-2">Case Two</Link>
-                            </li>
-                            <li>
-                              <Link to="/case-details">Case Details</Link>
-                            </li>
-                          </ul>
-                        </li>
-                        */}
                         {/* Page menu item (hidden for now, easy to enable in future)
                         <li className="dropdown">
                           <a href="#">{header.nav.page}</a>

@@ -51,7 +51,7 @@ export default function MindGymPage() {
 
       <div className="page-wrapper">
         <HeaderOne />
-        <PageHeader title="MindGym" breadcrumb="MindGym" />
+        <PageHeader title="Positive MindGym" breadcrumb="Positive MindGym" />
 
         {/* Start MindGym Section */}
         <section className="services-one" style={{ paddingBottom: '100px', paddingTop: '90px' }}>

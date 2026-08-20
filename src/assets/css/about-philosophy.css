@@ -1,0 +1,301 @@
+/* =========================================================
+   ABOUT PHILOSOPHY SECTION (OUR PHILOSOPHY)
+   ========================================================= */
+
+.philosophy-section {
+  position: relative;
+  scroll-margin-top: 0px;
+  padding: 20px 0 60px;
+  background:
+    radial-gradient(circle at 85% 25%, rgba(255, 238, 205, 0.4) 0%, transparent 55%),
+    radial-gradient(circle at 10% 85%, rgba(230, 245, 235, 0.3) 0%, transparent 45%),
+    #FAF7F2;
+  overflow: hidden;
+  font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  z-index: 1;
+}
+
+.philosophy-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 5% 15%, rgba(215, 175, 100, 0.09), transparent 30%);
+  pointer-events: none;
+}
+
+.philosophy-section .container {
+  width: min(1700px, 96%);
+  margin: auto;
+  position: relative;
+  z-index: 2;
+}
+
+/* 2-Column Main Grid */
+.philosophy-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.35fr;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 0;
+}
+
+/* Left Column */
+.philosophy-content {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Eyebrow: Lotus + Line + OUR PHILOSOPHY + Extended Line */
+.philosophy-eyebrow-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.philosophy-lotus-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #C59239;
+  filter: drop-shadow(0 1.5px 3px rgba(197, 146, 57, 0.25));
+}
+
+.philosophy-eyebrow-divider {
+  width: 1.5px;
+  height: 22px;
+  background-color: #D8C39E;
+}
+
+.philosophy-eyebrow {
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #C59239;
+  margin: 0;
+}
+
+.philosophy-eyebrow-line {
+  flex: 1;
+  max-width: 150px;
+  height: 1px;
+  background: linear-gradient(90deg, #D8C39E 0%, transparent 100%);
+}
+
+/* Main Heading in exact 3 lines */
+.philosophy-heading {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(34px, 3.8vw, 54px);
+  line-height: 1.16;
+  font-weight: 800;
+  color: #0F2342;
+  margin: 0 0 36px;
+  letter-spacing: -0.4px;
+}
+
+.philosophy-heading-line {
+  display: block;
+  white-space: nowrap;
+}
+
+.philosophy-heading-line.highlight {
+  color: #C59239;
+}
+
+/* 3 Philosophy Points with Connector Line */
+.philosophy-points {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* Vertical guide line behind connector dots */
+.philosophy-points::before {
+  content: "";
+  position: absolute;
+  left: 98px;
+  top: 36px;
+  bottom: 36px;
+  width: 1px;
+  background-color: #E2D7C5;
+  z-index: 1;
+}
+
+.philosophy-point-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Circular Badges (74px) */
+.philosophy-point-badge {
+  width: 74px;
+  height: 74px;
+  min-width: 74px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.philosophy-point-item:hover .philosophy-point-badge {
+  transform: scale(1.05);
+}
+
+.philosophy-point-badge--green {
+  background: #E8F4EE;
+  border: 2px solid #D2EADC;
+  color: #2E7E5A;
+}
+
+.philosophy-point-badge--gold {
+  background: #FAF2E6;
+  border: 2px solid #F2E4CE;
+  color: #C29140;
+}
+
+.philosophy-point-badge--blue {
+  background: #EAF1FA;
+  border: 2px solid #D6E4F5;
+  color: #3B6E9F;
+}
+
+/* Small Colored Indicator Dot */
+.philosophy-point-dot {
+  width: 10px;
+  height: 10px;
+  min-width: 10px;
+  border-radius: 50%;
+  margin-top: 32px;
+  position: relative;
+  z-index: 3;
+}
+
+.philosophy-point-dot--green {
+  background-color: #2E7E5A;
+  box-shadow: 0 0 0 3px #FAF7F2, 0 0 8px rgba(46, 126, 90, 0.4);
+}
+
+.philosophy-point-dot--gold {
+  background-color: #C29140;
+  box-shadow: 0 0 0 3px #FAF7F2, 0 0 8px rgba(194, 145, 64, 0.4);
+}
+
+.philosophy-point-dot--blue {
+  background-color: #3B6E9F;
+  box-shadow: 0 0 0 3px #FAF7F2, 0 0 8px rgba(59, 110, 159, 0.4);
+}
+
+/* Point Paragraph Text */
+.philosophy-point-text {
+  font-size: 15.5px;
+  line-height: 1.68;
+  color: #384353;
+  margin: 0;
+  font-weight: 450;
+  padding-top: 14px;
+  max-width: 480px;
+}
+
+/* Right Image Column (Scaled 40% more to fill frame prominently) */
+.philosophy-image-wrap {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  overflow: visible;
+  margin-top: 15px;
+}
+
+.philosophy-main-img {
+  width: 100%;
+  max-width: 1400px;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  border-radius: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  transform: scale(1.4) translateX(2cm);
+  transform-origin: center center;
+  transition: transform 0.4s ease;
+}
+
+.philosophy-main-img:hover {
+  transform: scale(1.42) translateX(2cm);
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .philosophy-grid {
+    grid-template-columns: 1fr;
+    gap: 45px;
+  }
+
+  .philosophy-image-wrap {
+    max-width: 750px;
+    margin: 20px auto 0;
+    overflow: hidden;
+  }
+
+  .philosophy-main-img {
+    transform: scale(1.2);
+    transform-origin: center center;
+  }
+
+  .philosophy-main-img:hover {
+    transform: scale(1.22);
+  }
+
+  .philosophy-points::before {
+    left: 88px;
+  }
+}
+
+@media (max-width: 768px) {
+  .philosophy-section {
+    padding: 70px 0 80px;
+  }
+
+  .philosophy-heading {
+    font-size: 32px;
+    margin-bottom: 28px;
+  }
+
+  .philosophy-point-badge {
+    width: 58px;
+    height: 58px;
+    min-width: 58px;
+  }
+
+  .philosophy-point-badge svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .philosophy-point-dot {
+    margin-top: 24px;
+  }
+
+  .philosophy-points::before {
+    left: 76px;
+  }
+
+  .philosophy-point-text {
+    font-size: 14.5px;
+    padding-top: 8px;
+  }
+
+  .philosophy-main-img {
+    transform: scale(1.1);
+  }
+}

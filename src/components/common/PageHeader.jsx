@@ -7,7 +7,7 @@ export default function PageHeader({ title, pageName = title }) {
       <div
         className="page-header__bg"
         style={{
-          backgroundImage: 'url("/assets/images/backgrounds/ellangala_background_1920x425_books_aligned.png")',
+          backgroundImage: 'url("/assets/images/backgrounds/page-header-hero-bg.png")',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
@@ -17,7 +17,7 @@ export default function PageHeader({ title, pageName = title }) {
         <img src="/assets/images/shapes/page-header-shape1.png" alt="#" />
       </div>
 
-      <div className="container">
+      <div className="container" style={{ position: 'relative', zIndex: 5 }}>
         <div className="page-header__inner text-center">
           <h2>{title}</h2>
           <ul className="thm-breadcrumb">

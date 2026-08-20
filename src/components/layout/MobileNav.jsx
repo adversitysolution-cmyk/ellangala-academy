@@ -156,7 +156,7 @@ export default function MobileNav() {
                         <span className="mobile-nav__pillar-badge">
                           <i className="fa fa-brain"></i>
                         </span>
-                        <span>MINDGYM</span>
+                        <span>POSITIVE MINDGYM</span>
                       </Link>
                       <button
                         type="button"
@@ -208,13 +208,64 @@ export default function MobileNav() {
                   <li>
                     <Link to="/founder" onClick={handleClose} className="mobile-nav__sub-link">
                       <i className="fa fa-user-circle mobile-nav__sub-icon"></i>
-                      <span>Founder Profile</span>
+                      <span>Founder</span>
                     </Link>
                   </li>
                   <li>
-                    <Link to="/about#our-team" onClick={handleClose} className="mobile-nav__sub-link">
+                    <Link to="/team" onClick={handleClose} className="mobile-nav__sub-link">
                       <i className="fa fa-users mobile-nav__sub-icon"></i>
-                      <span>Our Team</span>
+                      <span>Team</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/about#vision-mission"
+                      onClick={() => {
+                        handleClose();
+                        const el = document.getElementById('vision-mission');
+                        if (el) {
+                          const offset = el.getBoundingClientRect().top + window.pageYOffset + 20;
+                          window.scrollTo({ top: offset, behavior: 'smooth' });
+                        }
+                      }}
+                      className="mobile-nav__sub-link"
+                    >
+                      <i className="fa fa-bullseye mobile-nav__sub-icon"></i>
+                      <span>Vision &amp; Mission</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/about#philosophy"
+                      onClick={() => {
+                        handleClose();
+                        const el = document.getElementById('philosophy');
+                        if (el) {
+                          const offset = el.getBoundingClientRect().top + window.pageYOffset + 20;
+                          window.scrollTo({ top: offset, behavior: 'smooth' });
+                        }
+                      }}
+                      className="mobile-nav__sub-link"
+                    >
+                      <i className="fa fa-lightbulb mobile-nav__sub-icon"></i>
+                      <span>Our Philosophy</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/about#methodology"
+                      onClick={() => {
+                        handleClose();
+                        const el = document.getElementById('methodology');
+                        if (el) {
+                          const offset = el.getBoundingClientRect().top + window.pageYOffset + 20;
+                          window.scrollTo({ top: offset, behavior: 'smooth' });
+                        }
+                      }}
+                      className="mobile-nav__sub-link"
+                    >
+                      <i className="fa fa-sitemap mobile-nav__sub-icon"></i>
+                      <span>Our Methodology</span>
                     </Link>
                   </li>
                 </ul>

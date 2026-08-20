@@ -9,6 +9,7 @@ import SearchPopup from '../components/layout/SearchPopup';
 import ScrollToTop from '../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../hooks/useUterpyPlugins';
 import { homeContent } from '../contents/home.content';
+import TestimonialsSection from '../components/common/TestimonialsSection';
 
 export default function HomeOne() {
   useUterpyPlugins();
@@ -17,7 +18,8 @@ export default function HomeOne() {
 
   const handleProgramScroll = (direction) => {
     if (programsScrollRef.current) {
-      const scrollAmount = direction === 'left' ? -350 : 350;
+      const frameWidth = programsScrollRef.current.clientWidth;
+      const scrollAmount = direction === 'left' ? -frameWidth : frameWidth;
       programsScrollRef.current.scrollBy({
         left: scrollAmount,
         behavior: 'smooth',
@@ -31,8 +33,8 @@ export default function HomeOne() {
       const maxScroll = scrollWidth - clientWidth;
       if (maxScroll > 0) {
         const dotIndex = Math.min(
-          3,
-          Math.max(0, Math.round((scrollLeft / maxScroll) * 3))
+          4,
+          Math.max(0, Math.round((scrollLeft / maxScroll) * 4))
         );
         setActiveDot(dotIndex);
       }
@@ -44,7 +46,7 @@ export default function HomeOne() {
       const { scrollWidth, clientWidth } = programsScrollRef.current;
       const maxScroll = scrollWidth - clientWidth;
       programsScrollRef.current.scrollTo({
-        left: (maxScroll / 3) * dotIdx,
+        left: (maxScroll / 4) * dotIdx,
         behavior: 'smooth',
       });
       setActiveDot(dotIdx);
@@ -240,9 +242,12 @@ export default function HomeOne() {
                 <div className="why-choose-one__content">
                   <div className="sec-title">
                     <h2 className="sec-title__title">
-                      Welcome to <br />
-                      our physical therapy <br />
-                      services
+                      {homeContent.whyChoose.title.split('\n').map((line, lIdx, arr) => (
+                        <React.Fragment key={lIdx}>
+                          {line}
+                          {lIdx < arr.length - 1 && <br />}
+                        </React.Fragment>
+                      ))}
                     </h2>
                   </div>
 
@@ -275,17 +280,12 @@ export default function HomeOne() {
                               </div>
                               <div className="title-box">
                                 <h2>
-                                  {idx === 0 ? (
-                                    <>
-                                      Amazing <br />
-                                      Counseling Services
-                                    </>
-                                  ) : (
-                                    <>
-                                      Innovative <br />
-                                      physical theraphy
-                                    </>
-                                  )}
+                                  {item.title.split('\n').map((line, lIdx, arr) => (
+                                    <React.Fragment key={lIdx}>
+                                      {line}
+                                      {lIdx < arr.length - 1 && <br />}
+                                    </React.Fragment>
+                                  ))}
                                 </h2>
                               </div>
                             </div>
@@ -297,7 +297,12 @@ export default function HomeOne() {
                   <div className="why-choose-one__content-text3">
                     <div className="text-box">
                       <p>
-                        Something know about <br /> our services
+                        {homeContent.whyChoose.ctaText.split('\n').map((line, lIdx, arr) => (
+                          <React.Fragment key={lIdx}>
+                            {line}
+                            {lIdx < arr.length - 1 && <br />}
+                          </React.Fragment>
+                        ))}
                       </p>
                     </div>
 
@@ -315,7 +320,7 @@ export default function HomeOne() {
         {/* End Why Choose One */}
 
         {/* Start Case One */}
-        <section className="case-one" style={{ position: 'relative' }}>
+        <section className="case-one" style={{ position: 'relative', paddingBottom: '90px', paddingTop: '80px' }}>
           <div className="container" style={{ position: 'relative' }}>
             <div className="sec-title text-center" style={{ marginBottom: '45px' }}>
               <div className="sec-title__tagline">
@@ -324,65 +329,104 @@ export default function HomeOne() {
               <h2 className="sec-title__title">{homeContent.caseStudies.title}</h2>
             </div>
 
-            <div className="row gy-4 justify-content-center">
-              {homeContent.caseStudies.items.map((cs, idx) => (
-                <div key={idx} className="col-xl-4 col-lg-4 col-md-6 col-sm-12 d-flex">
-                  <div
-                    className="case-one__single"
-                    style={{
-                      width: '100%',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      borderRadius: '10px',
-                      overflow: 'hidden',
-                      boxShadow: '0 8px 25px rgba(0, 0, 0, 0.06)',
-                      transition: 'all 0.3s ease',
-                      backgroundColor: '#ffffff'
-                    }}
-                  >
-                    <div className="case-one__single-img" style={{ position: 'relative', overflow: 'hidden' }}>
-                      <img
-                        src={cs.image}
-                        alt={cs.title}
-                        style={{
-                          width: '100%',
-                          height: 'clamp(260px, 35vw, 380px)',
-                          objectFit: 'cover',
-                          display: 'block',
-                          transition: 'transform 0.5s ease'
-                        }}
-                      />
-                    </div>
+            <div className="case-one__carousel-container">
+              {/* Navigation Arrows */}
+              <button
+                type="button"
+                className="case-one__nav-btn case-one__nav-btn--prev"
+                onClick={() => handleProgramScroll('left')}
+                aria-label="Previous programs"
+              >
+                <i className="fa fa-angle-left"></i>
+              </button>
+              <button
+                type="button"
+                className="case-one__nav-btn case-one__nav-btn--next"
+                onClick={() => handleProgramScroll('right')}
+                aria-label="Next programs"
+              >
+                <i className="fa fa-angle-right"></i>
+              </button>
+
+              {/* Single Horizontal Row Track with all 21 cards */}
+              <div
+                ref={programsScrollRef}
+                onScroll={handleProgramsOnScroll}
+                className="case-one__carousel-track"
+              >
+                {homeContent.caseStudies.items.map((cs, idx) => (
+                  <div key={idx} className="case-one__single-item">
                     <div
-                      className="case-one__single-content"
+                      className="case-one__single"
                       style={{
-                        flex: '1',
+                        width: '100%',
+                        height: '100%',
                         display: 'flex',
                         flexDirection: 'column',
-                        justifyContent: 'space-between',
-                        padding: '28px 24px 32px'
+                        borderRadius: '0px',
+                        overflow: 'hidden',
+                        backgroundColor: '#ffffff',
                       }}
                     >
-                      <div className="icon-box">
-                        <span className={cs.icon}></span>
-                      </div>
-                      <div className="btn-box">
-                        <Link to={cs.link} aria-label={cs.title}>
-                          <span className="icon-arrow-right1"></span>
+                      <div className="case-one__single-img" style={{ position: 'relative', width: '100%', aspectRatio: '420 / 380', overflow: 'hidden' }}>
+                        <Link to={cs.link}>
+                          <img
+                            src={cs.image}
+                            alt={cs.title}
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'cover',
+                              display: 'block',
+                            }}
+                          />
                         </Link>
                       </div>
-                      <div className="case-one__single-content-inner">
-                        <h2 style={{ fontSize: '22px', marginBottom: '12px' }}>
-                          <Link to={cs.link}>{cs.title}</Link>
-                        </h2>
-                        <p style={{ fontSize: '14.5px', lineHeight: '1.6', color: '#555555', margin: 0 }}>
-                          {cs.description}
-                        </p>
+
+                      <div
+                        className="case-one__single-content"
+                        style={{
+                          flex: '1',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'space-between',
+                          minHeight: '190px',
+                        }}
+                      >
+                        <div className="icon-box">
+                          <span className="icon-brain"></span>
+                        </div>
+                        <div className="btn-box">
+                          <Link to={cs.link} aria-label={cs.title}>
+                            <span className="icon-arrow-right1"></span>
+                          </Link>
+                        </div>
+                        <div className="case-one__single-content-inner">
+                          <h2>
+                            <Link to={cs.link}>{cs.title}</Link>
+                          </h2>
+                          <p>
+                            {cs.description}
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
+
+              {/* Dots Pagination */}
+              <div className="case-one__dots-wrapper">
+                {[0, 1, 2, 3, 4].map((dotIdx) => (
+                  <button
+                    key={dotIdx}
+                    type="button"
+                    className={`case-one__dot ${activeDot === dotIdx ? 'active' : ''}`}
+                    onClick={() => scrollToDot(dotIdx)}
+                    aria-label={`Go to slide ${dotIdx + 1}`}
+                  />
+                ))}
+              </div>
             </div>
           </div>
         </section>
@@ -488,6 +532,12 @@ export default function HomeOne() {
                         </li>
                       ))}
                     </ul>
+
+                    <div className="btn-box" style={{ marginTop: '35px' }}>
+                      <Link to="/founder" className="thm-btn">
+                        About Founder
+                      </Link>
+                    </div>
                   </div>
                 </div>
 
@@ -526,68 +576,7 @@ export default function HomeOne() {
         {/* End Therapy One */}
 
         {/* Start Testimonial One */}
-        {homeContent.testimonials.items && homeContent.testimonials.items.length > 0 && (
-          <section className="testimonial-one">
-            <div
-              className="testimonial-one__pattern"
-              style={{ backgroundImage: 'url(/assets/images/pattern/testimonial-v1-pattern1.png)' }}
-            ></div>
-            <div className="carousel-control-block__outer">
-              <div className="carousel-control-block">
-                <div className="carousel-btn-block testimonial-carousel-btn">
-                  <span className="carousel-btn left-btn">
-                    <i className="icon-right-arrow"></i>
-                  </span>
-                  <span className="carousel-btn right-btn">
-                    <i className="icon-right-arrow1"></i>
-                  </span>
-                </div>
-                <div className="carousel-number-count"></div>
-              </div>
-            </div>
-            <div className="container">
-              <div className="sec-title">
-                <div className="sec-title__tagline">
-                  <h6>{homeContent.testimonials.tagline}</h6>
-                </div>
-                <h2 className="sec-title__title">
-                  {homeContent.testimonials.title.split('\n').map((line, lIdx, arr) => (
-                    <React.Fragment key={lIdx}>
-                      {line}
-                      {lIdx < arr.length - 1 && <br />}
-                    </React.Fragment>
-                  ))}
-                </h2>
-              </div>
-              <div className="row">
-                <div className="col-xl-12">
-                  <div className="testimonial-one__inner">
-                    <div className="testimonial-carousel__one owl-theme owl-carousel">
-                      {homeContent.testimonials.items.map((t, idx) => (
-                        <div key={idx} className="testimonial-one__slide testimonial-one__single">
-                          <p className="testimonial-one__single-text">
-                            {t.text}
-                          </p>
-                          <div className="testimonial-one__client-info">
-                            <div className="testimonial-one__client-details">
-                              <div className="testimonial-one__client-content" style={{ marginLeft: 0 }}>
-                                <h4>{t.name}</h4>
-                                <p>{t.role}</p>
-                              </div>
-                            </div>
-                            <div className="testimonial-one__quote">
-                              <span className="icon-quote"></span>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-        )}
+        <TestimonialsSection />
         {/* End Testimonial One */}
 
         {/* Start Team One (hidden) */}

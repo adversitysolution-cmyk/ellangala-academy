@@ -33,31 +33,7 @@ export const aboutContent = {
     }
   ],
 
-  whyChoose: {
-    experienceCount: "3",
-    experienceLabel: "Core \n Pillars ",
-    title: "Where Psychology \nWisdom and Practice \nCome Together",
-    text1: "A practical approach to meaningful living",
-    text2: "We combine psychological understanding, Indian perspectives and practical exercises so learning becomes useful in everyday life.",
-    features: [
-      "Positive Psychology & Research",
-      "Indian Wisdom & Perspective",
-      "Practical Mind Training"
-    ],
-    highlights: [
-      {
-        icon: "fas fa-lightbulb",
-        title: "Human-Centred \nLearning"
-      },
-      {
-        icon: "fas fa-brain",
-        title: "Everyday \nApplication"
-      }
-    ],
-    ctaText: "Discover what shapes \nour approach",
-    ctaBtnText: "Our Approach",
-    ctaBtnLink: "/about"
-  },
+  whyChoose: homeContent.whyChoose,
 
   counter: [
     {
@@ -87,30 +63,7 @@ export const aboutContent = {
     }
   ],
 
-  testimonials: {
-    tagline: "Client Feedbacks",
-    title: "What does the customer \nhave to say?",
-    items: [
-      {
-        text: "Lorem Ipsum available, but the majority have suffered dimply free text Suspe ndisse suscipit sagittis dolore magna aliqua ipsum quia",
-        image: "/assets/images/testimonial/testimonial-v1-img1.jpg",
-        name: "Robert Anton",
-        role: "Therapy Specialist"
-      },
-      {
-        text: "Lorem Ipsum available, but the majority have suffered dimply free text Suspe ndisse suscipit sagittis dolore magna aliqua ipsum quia",
-        image: "/assets/images/testimonial/testimonial-v1-img2.jpg",
-        name: "Arun Wilan",
-        role: "Therapy Specialist"
-      },
-      {
-        text: "Lorem Ipsum available, but the majority have suffered dimply free text Suspe ndisse suscipit sagittis dolore magna aliqua ipsum quia",
-        image: "/assets/images/testimonial/testimonial-v1-img3.jpg",
-        name: "Kone Arkola",
-        role: "Therapy Specialist"
-      }
-    ]
-  },
+  testimonials: homeContent.testimonials,
 
   therapy: homeContent.therapy,
 

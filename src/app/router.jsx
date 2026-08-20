@@ -61,6 +61,7 @@ export default function AppRouter() {
 
         <Route path="/about" element={<About />} />
         <Route path="/founder" element={<FounderPage />} />
+        <Route path="/about/founder" element={<FounderPage />} />
         <Route path="/dr-naveen-ellangala" element={<FounderPage />} />
         <Route path="/positive-workshops" element={<PositiveWorkshops />} />
         <Route path="/workshops" element={<PositiveWorkshops />} />

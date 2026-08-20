@@ -1,0 +1,359 @@
+/* =========================================================
+   FOUNDATION SECTION
+   ========================================================= */
+
+.foundation-section {
+  position: relative;
+  scroll-margin-top: 0px;
+  padding: 0 0 50px;
+  background:
+    radial-gradient(circle at center,
+      rgba(255,225,170,.25),
+      transparent 55%),
+    #faf8f2;
+  overflow: hidden;
+  font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  z-index: 1;
+}
+
+.foundation-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at top left,
+      rgba(223,188,110,.12),
+      transparent 30%);
+  pointer-events: none;
+}
+
+.foundation-section .container {
+  width: min(1440px, 94%);
+  margin: auto;
+  position: relative;
+  z-index: 2;
+}
+
+.section-header {
+  scroll-margin-top: 60px;
+  text-align: center;
+  max-width: 900px;
+  margin: 0 auto 20px;
+}
+
+.section-header .foundation-lotus-icon {
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: center;
+}
+
+.eyebrow {
+  display: inline-block;
+  color: #c79b3b;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 15px;
+}
+
+.section-header h2 {
+  font-size: clamp(38px, 4.5vw, 56px);
+  color: #102547;
+  font-family: "Playfair Display", Georgia, serif;
+  margin-bottom: 16px;
+  line-height: 1.15;
+  font-weight: 800;
+}
+
+.section-header p {
+  color: #5d6675;
+  font-size: 19px;
+  line-height: 1.7;
+  margin: 0 auto;
+}
+
+.foundation-grid {
+  display: grid;
+  grid-template-columns: 1fr 400px 1fr;
+  align-items: center;
+  gap: 36px;
+  max-width: 1380px;
+  margin: 0 auto;
+}
+
+/* Direct Content Containers (Cards Removed) */
+.foundation-card {
+  position: relative;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  padding: 10px 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.icon-circle {
+  width: 104px;
+  height: 104px;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  box-shadow:
+    0 10px 35px rgba(0,0,0,.08);
+  border: 3.5px solid #FFFFFF;
+  transition: transform 0.3s ease;
+}
+
+.icon-circle:hover {
+  transform: scale(1.06);
+}
+
+.mission-card .icon-circle {
+  background: radial-gradient(circle at 35% 35%, #E6F7EF 0%, #C4EBDD 100%);
+  box-shadow: 0 10px 28px rgba(27, 94, 75, 0.18);
+}
+
+.vision-card .icon-circle {
+  background: radial-gradient(circle at 35% 35%, #E5F0FA 0%, #C4DFFA 100%);
+  box-shadow: 0 10px 28px rgba(30, 78, 122, 0.18);
+}
+
+.mission-card .icon-circle svg {
+  color: #145746;
+}
+
+.vision-card .icon-circle svg {
+  color: #1E4E7A;
+}
+
+.foundation-card h3 {
+  text-align: center;
+  margin-bottom: 16px;
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.mission-card h3 {
+  color: #165645;
+}
+
+.vision-card h3 {
+  color: #1E4E7A;
+}
+
+.foundation-card h3 span {
+  display: block;
+  font-size: 40px;
+  line-height: 1.15;
+  font-weight: 800;
+  letter-spacing: 1px;
+  margin-top: 4px;
+}
+
+.mission-card h3 span {
+  color: #0E3E32;
+}
+
+.vision-card h3 span {
+  color: #123658;
+}
+
+/* Primary Statement */
+.card-statement {
+  font-size: 18.5px;
+  line-height: 1.55;
+  font-weight: 700;
+  color: #15273C;
+  margin-bottom: 14px;
+  max-width: 440px;
+}
+
+/* Secondary Detail Paragraph */
+.card-desc {
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: #556677;
+  margin-bottom: 26px;
+  max-width: 440px;
+}
+
+/* Features Grid */
+.features {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  width: 100%;
+  max-width: 460px;
+  padding-top: 20px;
+}
+
+.mission-card .features {
+  border-top: 1px solid rgba(102,184,181,.35);
+}
+
+.vision-card .features {
+  border-top: 1px solid rgba(100,150,230,.30);
+}
+
+.features div {
+  text-align: center;
+  font-size: 11.5px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: #344054;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.25s ease;
+}
+
+.features div:hover {
+  transform: translateY(-3px);
+}
+
+.mission-card .features div {
+  color: #204A3C;
+}
+
+.vision-card .features div {
+  color: #224563;
+}
+
+.features div svg {
+  width: 26px;
+  height: 26px;
+}
+
+.mission-card .features div svg {
+  color: #165C4A;
+}
+
+.vision-card .features div svg {
+  color: #1E5381;
+}
+
+.center-brain {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.center-brain img {
+  width: 100%;
+  max-width: 380px;
+  position: relative;
+  z-index: 3;
+  filter: drop-shadow(0 15px 35px rgba(210, 165, 85, 0.22));
+  transition: transform 0.4s ease;
+}
+
+.center-brain:hover img {
+  transform: scale(1.02);
+}
+
+.brain-rings {
+  position: absolute;
+  width: 480px;
+  height: 480px;
+  border-radius: 50%;
+  border: 2px solid rgba(219,181,88,.25);
+  pointer-events: none;
+}
+
+.brain-rings::before,
+.brain-rings::after {
+  content: "";
+  position: absolute;
+  inset: 40px;
+  border-radius: 50%;
+  border: 2px solid rgba(219,181,88,.18);
+}
+
+.brain-rings::after {
+  inset: 80px;
+}
+
+.quote-box {
+  margin: 60px auto 0;
+  width: fit-content;
+  background: #fff;
+  border: 1px solid rgba(220,180,90,.35);
+  border-radius: 100px;
+  padding: 18px 56px;
+  font-size: 24px;
+  font-style: italic;
+  font-weight: 700;
+  color: #102547;
+  font-family: "Playfair Display", Georgia, serif;
+  box-shadow:
+    0 15px 30px rgba(0,0,0,.05);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Responsive */
+@media (max-width: 1100px) {
+  .foundation-grid {
+    grid-template-columns: 1fr;
+    gap: 45px;
+    max-width: 580px;
+  }
+
+  .center-brain {
+    order: -1;
+  }
+
+  .brain-rings {
+    width: 360px;
+    height: 360px;
+  }
+}
+
+@media (max-width: 768px) {
+  .foundation-section {
+    padding: 70px 0;
+  }
+
+  .section-header h2 {
+    font-size: 30px;
+  }
+
+  .section-header p {
+    font-size: 16px;
+  }
+
+  .card-statement {
+    font-size: 16px;
+  }
+
+  .card-desc {
+    font-size: 14px;
+  }
+
+  .foundation-card h3 span {
+    font-size: 32px;
+  }
+
+  .features {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  .quote-box {
+    font-size: 17px;
+    padding: 12px 28px;
+  }
+}

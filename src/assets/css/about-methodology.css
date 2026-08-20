@@ -1,0 +1,514 @@
+/* =========================================================
+   OUR METHODOLOGY SECTION (EXACT DESIGN MATCH)
+   ========================================================= */
+
+.methodology-section {
+  position: relative;
+  scroll-margin-top: 0px;
+  padding: 20px 0 95px;
+  background-color: #FAF7F2;
+  background-image: radial-gradient(circle at 1px 1px, rgba(197, 146, 57, 0.12) 1px, transparent 0);
+  background-size: 28px 28px;
+  font-family: 'Outfit', 'DM Sans', sans-serif;
+  overflow: hidden;
+  color: #2D3748;
+}
+
+.methodology-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(197, 146, 57, 0.07) 1px, transparent 1px);
+  background-size: 28px 28px;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.methodology-section .container {
+  max-width: 1480px;
+  width: 95%;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+/* Header */
+.methodology-header {
+  text-align: center;
+  max-width: 880px;
+  margin: 0 auto 30px;
+}
+
+.methodology-lotus-top {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  color: #C59239;
+  filter: drop-shadow(0 2px 4px rgba(197, 146, 57, 0.2));
+}
+
+.methodology-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(38px, 4.4vw, 58px);
+  font-weight: 800;
+  color: #143026;
+  margin: 0 0 14px;
+  letter-spacing: -0.5px;
+}
+
+.methodology-subtitle {
+  font-size: 16.5px;
+  line-height: 1.62;
+  color: #4A5568;
+  margin: 0 auto;
+  font-weight: 450;
+  max-width: 780px;
+}
+
+/* Center Pill Badge */
+.methodology-pill-wrap {
+  text-align: center;
+  margin: 0 auto 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.methodology-pill {
+  display: inline-block;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(246, 242, 236, 0.88) 100%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #0E243F;
+  border: 1px solid rgba(218, 208, 192, 0.75);
+  font-size: 14.5px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  padding: 8px 26px;
+  border-radius: 30px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
+}
+
+.methodology-dots-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.methodology-dots-row span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* 3-Column Diagram Grid */
+.methodology-diagram-wrap {
+  position: relative;
+  margin-top: 10px;
+  margin-bottom: 50px;
+}
+
+.methodology-diagram {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1.25fr 1fr;
+  align-items: center;
+  gap: 28px;
+  z-index: 2;
+}
+
+/* SVG Connector Overlay on Desktop */
+.methodology-svg-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Left & Right Column Lists (Balanced 4 on Left, 4 on Right) */
+.methodology-cards-col {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  position: relative;
+  z-index: 3;
+}
+
+.methodology-cards-col--right {
+  gap: 18px;
+}
+
+/* Individual Methodology Card (Exact soft tints, opacity & glow) */
+.methodology-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-radius: 20px;
+  padding: 15px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.035);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-decoration: none;
+}
+
+.methodology-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+/* Card Themes & Opacity Tints */
+.methodology-card--green {
+  background: linear-gradient(135deg, rgba(237, 247, 241, 0.95) 0%, rgba(246, 251, 248, 0.85) 100%);
+  border-color: rgba(200, 235, 212, 0.7);
+}
+
+.methodology-card--purple {
+  background: linear-gradient(135deg, rgba(246, 240, 250, 0.95) 0%, rgba(251, 247, 253, 0.85) 100%);
+  border-color: rgba(228, 214, 242, 0.7);
+}
+
+.methodology-card--gold {
+  background: linear-gradient(135deg, rgba(253, 245, 236, 0.95) 0%, rgba(254, 250, 245, 0.85) 100%);
+  border-color: rgba(246, 227, 204, 0.7);
+}
+
+.methodology-card--sage {
+  background: linear-gradient(135deg, rgba(241, 247, 243, 0.95) 0%, rgba(248, 251, 249, 0.85) 100%);
+  border-color: rgba(215, 235, 222, 0.7);
+}
+
+.methodology-card--blue {
+  background: linear-gradient(135deg, rgba(239, 245, 252, 0.95) 0%, rgba(247, 250, 254, 0.85) 100%);
+  border-color: rgba(212, 230, 250, 0.7);
+}
+
+.methodology-card--orange {
+  background: linear-gradient(135deg, rgba(254, 243, 237, 0.95) 0%, rgba(254, 249, 245, 0.85) 100%);
+  border-color: rgba(249, 222, 209, 0.7);
+}
+
+.methodology-card--teal {
+  background: linear-gradient(135deg, rgba(238, 247, 249, 0.95) 0%, rgba(247, 252, 253, 0.85) 100%);
+  border-color: rgba(206, 237, 243, 0.7);
+}
+
+.methodology-card--violet {
+  background: linear-gradient(135deg, rgba(247, 240, 248, 0.95) 0%, rgba(253, 247, 253, 0.85) 100%);
+  border-color: rgba(235, 212, 238, 0.7);
+}
+
+/* Icon Badges (Exact size 64px, soft white inner circle, crisp outline) */
+.methodology-card-badge {
+  width: 64px;
+  height: 64px;
+  min-width: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #FFFFFF;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+}
+
+.methodology-card:hover .methodology-card-badge {
+  transform: scale(1.05);
+}
+
+.methodology-card--green .methodology-card-badge {
+  border: 2px solid #CDE8D5;
+  color: #3C7149;
+}
+.methodology-card--green .methodology-card-title {
+  color: #3C7149;
+}
+
+.methodology-card--purple .methodology-card-badge {
+  border: 2px solid #DFCEF0;
+  color: #6B3E93;
+}
+.methodology-card--purple .methodology-card-title {
+  color: #6B3E93;
+}
+
+.methodology-card--gold .methodology-card-badge {
+  border: 2px solid #F5DBBA;
+  color: #B8681E;
+}
+.methodology-card--gold .methodology-card-title {
+  color: #B8681E;
+}
+
+.methodology-card--sage .methodology-card-badge {
+  border: 2px solid #D3E6DA;
+  color: #417855;
+}
+.methodology-card--sage .methodology-card-title {
+  color: #417855;
+}
+
+.methodology-card--blue .methodology-card-badge {
+  border: 2px solid #CFE2F5;
+  color: #276097;
+}
+.methodology-card--blue .methodology-card-title {
+  color: #276097;
+}
+
+.methodology-card--orange .methodology-card-badge {
+  border: 2px solid #F7D4C2;
+  color: #C35B27;
+}
+.methodology-card--orange .methodology-card-title {
+  color: #C35B27;
+}
+
+.methodology-card--teal .methodology-card-badge {
+  border: 2px solid #C8E8EE;
+  color: #1E8392;
+}
+.methodology-card--teal .methodology-card-title {
+  color: #1E8392;
+}
+
+.methodology-card--violet .methodology-card-badge {
+  border: 2px solid #E6CCE9;
+  color: #854D88;
+}
+.methodology-card--violet .methodology-card-title {
+  color: #854D88;
+}
+
+/* Card Content & Text */
+.methodology-card-content {
+  flex: 1;
+}
+
+.methodology-card-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 16.5px;
+  font-weight: 750;
+  line-height: 1.28;
+  margin: 0 0 4px;
+  letter-spacing: -0.2px;
+}
+
+.methodology-card-text {
+  font-size: 13px;
+  line-height: 1.48;
+  color: #4A5568;
+  margin: 0;
+  font-weight: 450;
+}
+
+/* Center Image & Circular Frame */
+.methodology-center-wrap {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+.methodology-circle-container {
+  position: relative;
+  width: 460px;
+  height: 460px;
+  max-width: 100%;
+  border-radius: 50%;
+  padding: 7px;
+  background: #FFFFFF;
+  border: 3px solid rgba(220, 205, 185, 0.7);
+  box-shadow:
+    0 18px 45px rgba(15, 35, 66, 0.12),
+    0 0 0 1px rgba(197, 146, 57, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.4s ease;
+}
+
+.methodology-circle-container:hover {
+  transform: scale(1.015);
+}
+
+.methodology-circle-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+}
+
+/* Connector Line Anchor Tags */
+.methodology-line-tag {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  z-index: 4;
+}
+
+/* Left card anchor tags */
+.methodology-card--green .methodology-line-tag {
+  right: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #3C7149;
+}
+.methodology-card--purple .methodology-line-tag {
+  right: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #6B3E93;
+}
+.methodology-card--gold .methodology-line-tag {
+  right: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #B8681E;
+}
+.methodology-card--sage .methodology-line-tag {
+  right: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #417855;
+}
+
+/* Right card anchor tags */
+.methodology-card--blue .methodology-line-tag {
+  left: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #276097;
+}
+.methodology-card--orange .methodology-line-tag {
+  left: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #C35B27;
+}
+.methodology-card--teal .methodology-line-tag {
+  left: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #1E8392;
+}
+.methodology-card--violet .methodology-line-tag {
+  left: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #854D88;
+}
+
+/* =========================================================
+   BOTTOM CENTERED STATEMENT (DIRECT ON PAGE)
+   ========================================================= */
+
+.methodology-bottom-statement {
+  text-align: center;
+  max-width: 860px;
+  margin: 15px auto 25px;
+  padding: 0 15px;
+}
+
+.methodology-bottom-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(22px, 2.3vw, 27px);
+  font-weight: 750;
+  color: #143026;
+  margin: 0 0 10px;
+  line-height: 1.35;
+}
+
+.methodology-bottom-desc {
+  font-size: 16px;
+  line-height: 1.65;
+  color: #3C4A42;
+  margin: 0 auto;
+  font-weight: 450;
+  max-width: 740px;
+}
+
+/* =========================================================
+   RESPONSIVE DESIGN
+   ========================================================= */
+
+@media (max-width: 1200px) {
+  .methodology-svg-overlay {
+    display: none;
+  }
+
+  .methodology-diagram {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+
+  .methodology-center-wrap {
+    order: -1;
+    margin-bottom: 15px;
+  }
+
+  .methodology-circle-container {
+    width: 360px;
+    height: 360px;
+  }
+
+  .methodology-cards-col {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .methodology-cards-col--right {
+    gap: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .methodology-section {
+    padding: 70px 0 80px;
+  }
+
+  .methodology-title {
+    font-size: 34px;
+  }
+
+  .methodology-subtitle {
+    font-size: 15px;
+  }
+
+  .methodology-circle-container {
+    width: 290px;
+    height: 290px;
+  }
+
+  .methodology-cards-col {
+    grid-template-columns: 1fr;
+  }
+
+  .methodology-banner {
+    flex-direction: column;
+    text-align: center;
+    padding: 24px 20px;
+  }
+
+  .methodology-banner-body {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .methodology-banner-diamond {
+    display: none;
+  }
+
+  .methodology-banner-art {
+    display: none;
+  }
+}
