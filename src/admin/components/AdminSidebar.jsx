@@ -6,6 +6,7 @@ import {
   CalendarDays,
   FileText,
   ShoppingBag,
+  BookOpen,
   LogOut,
   X
 } from 'lucide-react';
@@ -19,6 +20,7 @@ export default function AdminSidebar({ isOpen, onClose }) {
     { label: 'Enrollments', icon: ClipboardList, path: '/admin/enrollments' },
     { label: 'Events', icon: CalendarDays, path: '/admin/events' },
     { label: 'Blogs / Insights', icon: FileText, path: '/admin/blogs' },
+    { label: 'Products', icon: BookOpen, path: '/admin/products' },
     { label: 'Book Orders', icon: ShoppingBag, path: '/admin/orders' }
   ];
 

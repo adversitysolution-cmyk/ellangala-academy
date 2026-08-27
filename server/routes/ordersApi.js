@@ -18,6 +18,42 @@ router.post('/orders', async (req, res) => {
   res.status(201).json(order);
 });
 
+// Public: POST /api/orders/track (order ID + email/phone lookup)
+router.post('/orders/track', async (req, res) => {
+  const { orderId, contact } = req.body || {};
+  if (!orderId || !contact) {
+    return res.status(400).json({ error: 'Order ID and the email or phone used at checkout are required.' });
+  }
+
+  const order = await getDbOrderById(orderId.trim());
+  const normalizedContact = contact.trim().toLowerCase();
+  const digitsOnly = contact.trim().replace(/\D/g, '');
+  const matches = order && (
+    (order.email || '').toLowerCase() === normalizedContact ||
+    (digitsOnly && (order.phone || '').replace(/\D/g, '') === digitsOnly)
+  );
+
+  if (!matches) {
+    return res.status(404).json({ error: 'No order found matching that Order ID and contact info.' });
+  }
+
+  res.json({
+    id: order.id,
+    status: order.status,
+    paymentStatus: order.paymentStatus,
+    paymentMethod: order.paymentMethod,
+    items: order.items,
+    subtotal: order.subtotal,
+    shipping: order.shipping,
+    discount: order.discount,
+    totalAmount: order.totalAmount,
+    city: order.city,
+    state: order.state,
+    createdAt: order.createdAt,
+    updatedAt: order.updatedAt
+  });
+});
+
 // Admin: GET /api/admin/orders
 router.get('/admin/orders', async (req, res) => {
   res.json(await getDbOrders());

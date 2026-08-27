@@ -33,6 +33,7 @@ export default function Checkout() {
   });
 
   const [orderPlaced, setOrderPlaced] = useState(false);
+  const [placedOrder, setPlacedOrder] = useState(null);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -52,7 +53,7 @@ export default function Checkout() {
     setOrderError('');
 
     try {
-      await orderService.addOrder({
+      const created = await orderService.addOrder({
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,
@@ -70,6 +71,7 @@ export default function Checkout() {
         paymentMethod: formData.paymentMethod,
         orderNotes: formData.orderNotes
       });
+      setPlacedOrder(created);
       setOrderPlaced(true);
       clearCart();
     } catch (err) {
@@ -97,12 +99,27 @@ export default function Checkout() {
                 <div style={{ maxWidth: '650px', margin: '0 auto', backgroundColor: '#fcfaf7', padding: '50px 30px', borderRadius: '12px', border: '1px solid #e8e2d8' }}>
                   <i className="fas fa-check-circle text-success" style={{ fontSize: '64px', marginBottom: '20px' }}></i>
                   <h2 style={{ fontSize: '32px', fontWeight: '700', marginBottom: '15px' }}>Thank You For Your Order!</h2>
-                  <p style={{ fontSize: '17px', color: '#555', lineHeight: '1.7', marginBottom: '25px' }}>
+                  <p style={{ fontSize: '17px', color: '#555', lineHeight: '1.7', marginBottom: '10px' }}>
                     Your book order has been successfully placed. We will contact you at <strong>{formData.phone}</strong> and ship your books to <strong>{formData.city}, {formData.state}</strong> shortly.
                   </p>
-                  <Link to="/shop" className="thm-btn">
-                    <span>Continue Browsing Books</span>
-                  </Link>
+                  {placedOrder?.id && (
+                    <p style={{ fontSize: '15px', color: '#0F231B', marginBottom: '25px' }}>
+                      Your Order ID: <strong>{placedOrder.id}</strong> — save this to track your order status.
+                    </p>
+                  )}
+                  <div style={{ display: 'flex', gap: '14px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                    <Link to="/shop" className="thm-btn">
+                      <span>Continue Browsing Books</span>
+                    </Link>
+                    {placedOrder?.id && (
+                      <Link
+                        to={`/track-order?orderId=${encodeURIComponent(placedOrder.id)}`}
+                        style={{ padding: '12px 28px', borderRadius: '8px', border: '1px solid #CBD5E1', color: '#334155', textDecoration: 'none', fontWeight: '700', fontSize: '14px', display: 'inline-flex', alignItems: 'center' }}
+                      >
+                        Track Your Order
+                      </Link>
+                    )}
+                  </div>
                 </div>
               </div>
             ) : (

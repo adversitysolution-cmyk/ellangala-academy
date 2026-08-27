@@ -183,7 +183,7 @@ export default function BlogListPage() {
 
                       <td style={{ textAlign: 'right' }}>
                         <ActionMenu
-                          actions={[
+                          items={[
                             {
                               label: 'Edit Article',
                               icon: Edit,
@@ -202,7 +202,7 @@ export default function BlogListPage() {
                             {
                               label: 'Delete',
                               icon: Trash2,
-                              variant: 'danger',
+                              danger: true,
                               onClick: () => setDeleteModalId(b.id)
                             }
                           ]}

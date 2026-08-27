@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url';
 import { pool } from './pool.js';
 import { initialEvents } from '../../src/features/events/data/eventSeedData.js';
 import { blogContent } from '../../src/contents/blog.content.js';
+import { shopContent } from '../../src/contents/shop.content.js';
 import { invalidateSitemapCache } from '../lib/sitemapGenerator.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -89,6 +90,28 @@ async function seedIfEmpty() {
       });
     }
   }
+
+  const [[{ n: productCount }]] = await pool.query('SELECT COUNT(*) AS n FROM products');
+  if (productCount === 0) {
+    for (const p of (shopContent.shop.products || [])) {
+      await saveDbProduct({
+        id: p.id,
+        title: p.title,
+        category: p.category || 'BOOKS',
+        author: p.author || 'Dr. Naveen Ellangala',
+        type: p.type || '',
+        theme: p.theme || '',
+        price: p.price || '',
+        discount: p.discount || '',
+        image: p.img || '',
+        alt: p.alt || p.title,
+        description: p.description || '',
+        highlights: p.highlights || [],
+        sale: Boolean(p.sale),
+        status: 'published'
+      });
+    }
+  }
 }
 
 // Used by the sitemap generator.
@@ -128,6 +151,15 @@ function rowToEnrollment(row) {
 
 function rowToMessage(row) {
   return { ...row, submittedAt: toIso(row.submittedAt) };
+}
+
+function rowToProduct(row) {
+  return {
+    ...row,
+    sale: toBool(row.sale),
+    createdAt: toIso(row.createdAt),
+    updatedAt: toIso(row.updatedAt)
+  };
 }
 
 // --- EVENT DB OPERATIONS ---
@@ -462,4 +494,68 @@ export async function createDbMessage(data) {
     [record.id, record.name, record.email, record.phone, record.subject, record.message, record.status, toMysqlDatetime(record.submittedAt)]
   );
   return record;
+}
+
+// --- PRODUCT DB OPERATIONS ---
+export async function getDbProducts({ status } = {}) {
+  const [rows] = status
+    ? await pool.query('SELECT * FROM products WHERE status = ? ORDER BY pk DESC', [status])
+    : await pool.query('SELECT * FROM products ORDER BY pk DESC');
+  return rows.map(rowToProduct);
+}
+
+export async function getDbProductById(id) {
+  const [rows] = await pool.query('SELECT * FROM products WHERE id = ? LIMIT 1', [id]);
+  return rows[0] ? rowToProduct(rows[0]) : null;
+}
+
+export async function saveDbProduct(productData) {
+  const now = new Date().toISOString();
+
+  let existing = null;
+  if (productData.id) {
+    const [rows] = await pool.query('SELECT * FROM products WHERE id = ? LIMIT 1', [productData.id]);
+    existing = rows[0] || null;
+  }
+
+  if (existing) {
+    const merged = { ...rowToProduct(existing), ...productData, updatedAt: now };
+    await pool.query(
+      `UPDATE products SET title=?, category=?, author=?, type=?, theme=?, price=?, discount=?, image=?, alt=?, description=?, highlights=?, sale=?, status=?, updatedAt=? WHERE id=?`,
+      [merged.title, merged.category, merged.author, merged.type, merged.theme, merged.price, merged.discount, merged.image, merged.alt, merged.description, JSON.stringify(merged.highlights || []), Boolean(merged.sale), merged.status, toMysqlDatetime(merged.updatedAt), existing.id]
+    );
+    return merged;
+  }
+
+  const id = productData.id || slugify(productData.title || 'product') + '-' + Date.now().toString().slice(-5);
+  const record = {
+    id,
+    title: productData.title || 'Untitled Product',
+    category: productData.category || 'BOOKS',
+    author: productData.author || 'Dr. Naveen Ellangala',
+    type: productData.type || '',
+    theme: productData.theme || '',
+    price: productData.price || '',
+    discount: productData.discount || '',
+    image: productData.image || '',
+    alt: productData.alt || productData.title || '',
+    description: productData.description || '',
+    highlights: productData.highlights || [],
+    sale: Boolean(productData.sale),
+    status: productData.status || 'published',
+    createdAt: now,
+    updatedAt: now
+  };
+
+  await pool.query(
+    `INSERT INTO products (id, title, category, author, type, theme, price, discount, image, alt, description, highlights, sale, status, createdAt, updatedAt)
+     VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+    [record.id, record.title, record.category, record.author, record.type, record.theme, record.price, record.discount, record.image, record.alt, record.description, JSON.stringify(record.highlights), record.sale, record.status, toMysqlDatetime(record.createdAt), toMysqlDatetime(record.updatedAt)]
+  );
+  return record;
+}
+
+export async function deleteDbProduct(id) {
+  const [result] = await pool.query('DELETE FROM products WHERE id = ?', [id]);
+  return result.affectedRows > 0;
 }

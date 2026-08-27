@@ -10,6 +10,7 @@ import SearchPopup from '../components/layout/SearchPopup';
 import ScrollToTop from '../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../hooks/useUterpyPlugins';
 import { shopContent } from '../contents/shop.content';
+import { productService } from '../admin/services/productService';
 import SEO from '../seo/SEO';
 import { generateBreadcrumbSchema, generateOrganizationSchema } from '../seo/schemas/schemaGenerators';
 
@@ -30,9 +31,14 @@ const resourceCategories = [
 
 export default function Shop() {
   useUterpyPlugins();
-  const { header, products } = shopContent.shop;
+  const { header } = shopContent.shop;
+  const [products, setProducts] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    productService.getPublishedProducts().then(setProducts).catch(() => {});
+  }, []);
 
   const tabParam = searchParams.get('tab');
   const [activeCategory, setActiveCategory] = useState(
@@ -214,7 +220,7 @@ export default function Shop() {
                 >
                   <div className="shop-page__single">
                     <div className="shop-page__single-img">
-                      <img src={item.img} alt={item.alt || item.title} />
+                      <img src={item.image} alt={item.alt || item.title} />
                       {item.sale && <div className="text">Sale</div>}
                     </div>
                     <div className="shop-page__single-content">

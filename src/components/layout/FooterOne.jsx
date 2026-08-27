@@ -139,6 +139,9 @@ export default function FooterOne({ hideSubscribe = false }) {
                     <li>
                       <Link to="/contact">Contact</Link>
                     </li>
+                    <li>
+                      <Link to="/track-order">Track Order</Link>
+                    </li>
                   </ul>
                 </div>
               </div>

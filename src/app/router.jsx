@@ -21,6 +21,7 @@ import Error404 from '../pages/Error404';
 import VideosOnTalksPage from '../pages/VideosOnTalksPage';
 import MeditationMusicPage from '../pages/MeditationMusicPage';
 import FreeResourcesPage from '../pages/FreeResourcesPage';
+import TrackOrderPage from '../pages/TrackOrderPage';
 
 // Layout & Context
 import MobileNav from '../components/layout/MobileNav';
@@ -51,6 +52,11 @@ import EventRegistrationsPage from '../admin/pages/EventRegistrationsPage';
 import BlogListPage from '../admin/pages/BlogListPage';
 import BlogCreatePage from '../admin/pages/BlogCreatePage';
 import BlogEditPage from '../admin/pages/BlogEditPage';
+
+// Admin Products Module Imports
+import ProductListPage from '../admin/pages/ProductListPage';
+import ProductCreatePage from '../admin/pages/ProductCreatePage';
+import ProductEditPage from '../admin/pages/ProductEditPage';
 
 function ScrollToTopOnRoute() {
   const { pathname, hash } = useLocation();
@@ -126,6 +132,7 @@ export default function AppRouter() {
               <Route path="/shop/:id" element={<ShopDetails />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
+              <Route path="/track-order" element={<TrackOrderPage />} />
 
               <Route path="/faq" element={<FAQ />} />
               <Route path="/contact" element={<Contact />} />
@@ -251,6 +258,32 @@ export default function AppRouter() {
                 element={
                   <AdminProtectedRoute>
                     <BlogEditPage />
+                  </AdminProtectedRoute>
+                }
+              />
+
+              {/* Admin Products Routes */}
+              <Route
+                path="/admin/products"
+                element={
+                  <AdminProtectedRoute>
+                    <ProductListPage />
+                  </AdminProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/products/new"
+                element={
+                  <AdminProtectedRoute>
+                    <ProductCreatePage />
+                  </AdminProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/products/:id/edit"
+                element={
+                  <AdminProtectedRoute>
+                    <ProductEditPage />
                   </AdminProtectedRoute>
                 }
               />

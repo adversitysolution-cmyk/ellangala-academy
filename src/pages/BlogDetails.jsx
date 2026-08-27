@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import DOMPurify from 'dompurify';
 import { useSearchParams, useParams, Link } from 'react-router-dom';
 import HeaderOne from '../components/layout/HeaderOne';
 import FooterOne from '../components/layout/FooterOne';
@@ -175,13 +176,16 @@ export default function BlogDetails() {
                   </div>
 
                   <div className="blog-details__content-text1">
-                    <p className="text1">
-                      {postDetails.text1}
-                    </p>
-                    <h2>{postDetails.heading2}</h2>
-                    <p className="text2">
-                      {postDetails.text2}
-                    </p>
+                    <div
+                      className="text1"
+                      dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(postDetails.text1 || '') }}
+                    />
+                    {postDetails.heading2 && <h2>{postDetails.heading2}</h2>}
+                    {postDetails.text2 && (
+                      <p className="text2">
+                        {postDetails.text2}
+                      </p>
+                    )}
                   </div>
 
                   <div className="blog-details__content-text3">

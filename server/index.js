@@ -5,9 +5,11 @@ import { fileURLToPath } from 'url';
 import eventsApi from './routes/eventsApi.js';
 import blogsApi from './routes/blogsApi.js';
 import ordersApi from './routes/ordersApi.js';
+import productsApi from './routes/productsApi.js';
 import enrollmentsApi from './routes/enrollmentsApi.js';
 import contactApi from './routes/contactApi.js';
 import adminAuthApi from './routes/adminAuthApi.js';
+import uploadApi, { uploadsDir } from './routes/uploadApi.js';
 import sitemapRoute from './routes/sitemapRoute.js';
 import { requireAdminAuth } from './middleware/adminAuth.js';
 import { ensureSchema } from './db/store.js';
@@ -28,15 +30,18 @@ app.use('/api/admin', requireAdminAuth); // everything else under /api/admin/* r
 app.use('/api', eventsApi);
 app.use('/api', blogsApi);
 app.use('/api', ordersApi);
+app.use('/api', productsApi);
 app.use('/api', enrollmentsApi);
 app.use('/api', contactApi);
+app.use('/api', uploadApi);
 
 // 2. Dynamic Sitemap Endpoint (Handled BEFORE SPA catch-all)
 app.use('/', sitemapRoute);
 
-// 3. Serve Static Assets from Dist (Production)
+// 3. Serve Static Assets from Dist (Production) + persistent uploaded images
 const distDir = path.join(rootDir, 'dist');
 app.use(express.static(distDir));
+app.use('/uploads', express.static(uploadsDir));
 
 // 4. SPA Fallback Router
 app.get('*', (req, res) => {

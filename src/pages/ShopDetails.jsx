@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useSearchParams, Link, useNavigate } from 'react-router-dom';
 import HeaderOne from '../components/layout/HeaderOne';
 import FooterOne from '../components/layout/FooterOne';
@@ -9,7 +9,7 @@ import MobileNav from '../components/layout/MobileNav';
 import SearchPopup from '../components/layout/SearchPopup';
 import ScrollToTop from '../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../hooks/useUterpyPlugins';
-import { shopContent } from '../contents/shop.content';
+import { productService } from '../admin/services/productService';
 import { useCart } from '../context/CartContext';
 import SEO from '../seo/SEO';
 import { generateBookSchema, generateBreadcrumbSchema } from '../seo/schemas/schemaGenerators';
@@ -25,24 +25,57 @@ export default function ShopDetails() {
   const [searchParams] = useSearchParams();
   const { id: paramId } = useParams();
 
-  const bookId = paramId || searchParams.get('id') || 'bhagavadgeetha-for-meaningful-life';
-  const products = shopContent.shop.products;
-  const product = products.find((p) => p.id === bookId) || products[0];
+  const bookId = paramId || searchParams.get('id');
+
+  const [product, setProduct] = useState(null);
+  const [relatedProducts, setRelatedProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    Promise.all([
+      bookId ? productService.getProductById(bookId) : Promise.resolve(null),
+      productService.getPublishedProducts()
+    ]).then(([fetchedProduct, allProducts]) => {
+      const resolved = fetchedProduct || allProducts[0] || null;
+      setProduct(resolved);
+      setRelatedProducts(resolved ? allProducts.filter((p) => p.id !== resolved.id).slice(0, 3) : []);
+      setLoading(false);
+    });
+  }, [bookId]);
 
   const handleAddToCart = () => {
     addToCart(product, quantity);
     navigate('/cart');
   };
 
-  // Related products (excluding current)
-  const relatedProducts = products.filter((p) => p.id !== product.id).slice(0, 3);
+  if (loading) {
+    return (
+      <>
+        <CustomCursor />
+        <Preloader />
+      </>
+    );
+  }
 
-  // Gallery images (main cover + other book previews for gallery effect)
-  const galleryImages = [
-    product.img,
-    relatedProducts[0] ? relatedProducts[0].img : product.img,
-    relatedProducts[1] ? relatedProducts[1].img : product.img
-  ];
+  if (!product) {
+    return (
+      <>
+        <CustomCursor />
+        <Preloader />
+        <div className="page-wrapper">
+          <HeaderOne />
+          <PageHeader title="Product Not Found" pageName="Shop Details" />
+          <div className="container" style={{ padding: '80px 20px', textAlign: 'center' }}>
+            <h2>Product Not Found</h2>
+            <p style={{ color: '#64748B', margin: '16px 0 24px' }}>The product you are looking for could not be found.</p>
+            <Link to="/shop" className="thm-btn">Back to Shop</Link>
+          </div>
+          <FooterOne />
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -54,7 +87,7 @@ export default function ShopDetails() {
           title={`${product.title} | Ellangala’s Academy`}
           description={product.description || `Read and order ${product.title} by Dr. Naveen Ellangala.`}
           canonical={`/shop/${product.id}`}
-          image={product.img}
+          image={product.image}
           type="product"
           structuredData={[
             generateBookSchema(product),
@@ -83,7 +116,7 @@ export default function ShopDetails() {
                           <div className="swiper-slide">
                             <div className="img-box">
                               <img
-                                src={product.img}
+                                src={product.image}
                                 alt={product.alt || product.title}
                                 style={{
                                   width: '100%',
@@ -547,7 +580,7 @@ export default function ShopDetails() {
                 <div key={idx} className="col-xl-4 col-lg-6 col-md-6 wow animated fadeInUp" data-wow-delay={`${0.1 * (idx + 1)}s`}>
                   <div className="shop-page__single">
                     <div className="shop-page__single-img">
-                      <img src={item.img} alt={item.alt || item.title} />
+                      <img src={item.image} alt={item.alt || item.title} />
                       {item.sale && <div className="text">Sale</div>}
                     </div>
                     <div className="shop-page__single-content">

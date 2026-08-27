@@ -96,6 +96,26 @@ CREATE TABLE IF NOT EXISTS enrollments (
   updatedAt DATETIME
 );
 
+CREATE TABLE IF NOT EXISTS products (
+  pk INT AUTO_INCREMENT PRIMARY KEY,
+  id VARCHAR(191) UNIQUE,
+  title VARCHAR(255) NOT NULL,
+  category VARCHAR(100),
+  author VARCHAR(255),
+  type VARCHAR(100),
+  theme VARCHAR(255),
+  price VARCHAR(50),
+  discount VARCHAR(50),
+  image VARCHAR(500),
+  alt VARCHAR(500),
+  description TEXT,
+  highlights JSON,
+  sale BOOLEAN DEFAULT FALSE,
+  status VARCHAR(20) DEFAULT 'published',
+  createdAt DATETIME,
+  updatedAt DATETIME
+);
+
 CREATE TABLE IF NOT EXISTS messages (
   pk INT AUTO_INCREMENT PRIMARY KEY,
   id VARCHAR(191) UNIQUE,

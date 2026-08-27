@@ -27,5 +27,18 @@ export const orderService = {
       method: 'PATCH',
       body: JSON.stringify({ status, internalNotes })
     });
+  },
+
+  async trackOrder(orderId, contact) {
+    const res = await fetch('/api/orders/track', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ orderId, contact })
+    });
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({}));
+      throw new Error(body.error || 'Order not found.');
+    }
+    return res.json();
   }
 };

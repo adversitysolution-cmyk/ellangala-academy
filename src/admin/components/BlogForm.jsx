@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ReactQuill from 'react-quill-new';
+import 'react-quill-new/dist/quill.snow.css';
 import {
   FileText,
   Globe,
@@ -15,6 +17,17 @@ import {
   Tag
 } from 'lucide-react';
 import { siteConfig } from '../../seo/siteConfig';
+import { uploadService } from '../services/uploadService';
+
+const QUILL_MODULES = {
+  toolbar: [
+    [{ header: [2, 3, false] }],
+    ['bold', 'italic', 'underline'],
+    [{ list: 'ordered' }, { list: 'bullet' }],
+    ['blockquote', 'link'],
+    ['clean']
+  ]
+};
 
 export default function BlogForm({ initialData = null, onSubmit, isSubmitting = false }) {
   const navigate = useNavigate();
@@ -38,6 +51,9 @@ export default function BlogForm({ initialData = null, onSubmit, isSubmitting = 
   });
 
   const [showSeoSection, setShowSeoSection] = useState(true);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [uploadError, setUploadError] = useState('');
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     if (initialData) {
@@ -91,7 +107,29 @@ export default function BlogForm({ initialData = null, onSubmit, isSubmitting = 
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const isContentEmpty = !formData.content || formData.content === '<p><br></p>';
+    if (isContentEmpty) {
+      setUploadError('');
+      alert('Please write the article body before publishing.');
+      return;
+    }
     onSubmit(formData);
+  };
+
+  const handleImageFileChange = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadError('');
+    setIsUploadingImage(true);
+    try {
+      const { url } = await uploadService.uploadImage(file);
+      handleChange('image', url);
+    } catch (err) {
+      setUploadError(err.message || 'Image upload failed.');
+    } finally {
+      setIsUploadingImage(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
   };
 
   // SEO Computed Preview Values
@@ -196,14 +234,13 @@ export default function BlogForm({ initialData = null, onSubmit, isSubmitting = 
 
               <div>
                 <label className="admin-form-label required">Full Content / Article Body</label>
-                <textarea
-                  required
-                  rows={12}
+                <ReactQuill
+                  theme="snow"
                   value={formData.content}
-                  onChange={(e) => handleChange('content', e.target.value)}
-                  placeholder="Write full article body text, insights, paragraphs, and takeaways..."
-                  className="admin-textarea"
-                  style={{ fontFamily: 'Inter, monospace', lineHeight: '1.6' }}
+                  onChange={(html) => handleChange('content', html)}
+                  modules={QUILL_MODULES}
+                  placeholder="Write the full article body — insights, paragraphs, and takeaways..."
+                  style={{ backgroundColor: '#fff' }}
                 />
               </div>
             </div>
@@ -399,13 +436,35 @@ export default function BlogForm({ initialData = null, onSubmit, isSubmitting = 
 
             <div>
               <label className="admin-form-label">Image URL / Asset Path</label>
-              <input
-                type="text"
-                value={formData.image}
-                onChange={(e) => handleChange('image', e.target.value)}
-                className="admin-input"
-                style={{ marginBottom: '12px' }}
-              />
+              <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
+                <input
+                  type="text"
+                  value={formData.image}
+                  onChange={(e) => handleChange('image', e.target.value)}
+                  className="admin-input"
+                  style={{ flex: 1 }}
+                />
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp,image/gif"
+                  onChange={handleImageFileChange}
+                  style={{ display: 'none' }}
+                  id="blog-cover-upload"
+                />
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={isUploadingImage}
+                  className="admin-btn admin-btn--secondary"
+                  style={{ whiteSpace: 'nowrap' }}
+                >
+                  <Upload size={14} /> {isUploadingImage ? 'Uploading...' : 'Upload'}
+                </button>
+              </div>
+              {uploadError && (
+                <div style={{ fontSize: '11px', color: '#EF4444', marginBottom: '8px' }}>{uploadError}</div>
+              )}
 
               <div
                 style={{
