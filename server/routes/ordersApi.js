@@ -5,6 +5,27 @@ import {
   updateDbOrderStatus
 } from '../db/store.js';
 import { asyncRouter } from '../lib/asyncRouter.js';
+import { sendMail } from '../lib/mailer.js';
+import { siteConfig } from '../../src/seo/siteConfig.js';
+
+const STATUS_MESSAGES = {
+  New: 'has been received and is being reviewed',
+  Processing: 'is now being processed',
+  Shipped: 'has been shipped',
+  Delivered: 'has been delivered',
+  Cancelled: 'has been cancelled'
+};
+
+function sendOrderStatusEmail(order) {
+  const trackUrl = `${siteConfig.url}/track-order?orderId=${encodeURIComponent(order.id)}`;
+  const statusPhrase = STATUS_MESSAGES[order.status] || `is now marked as "${order.status}"`;
+  return sendMail({
+    to: order.email,
+    subject: `Your order ${order.id} ${statusPhrase}`,
+    text: `Hi ${order.customerName || ''},\n\nYour order ${order.id} ${statusPhrase}.\n\nTrack your order: ${trackUrl}\n\n— Ellangala’s Academy`,
+    html: `<p>Hi ${order.customerName || ''},</p><p>Your order <strong>${order.id}</strong> ${statusPhrase}.</p><p><a href="${trackUrl}">Track your order</a></p><p>— Ellangala’s Academy</p>`
+  });
+}
 
 const router = asyncRouter();
 
@@ -68,9 +89,15 @@ router.get('/admin/orders/:id', async (req, res) => {
 
 // Admin: PATCH /api/admin/orders/:id
 router.patch('/admin/orders/:id', async (req, res) => {
+  const existing = await getDbOrderById(req.params.id);
+  if (!existing) return res.status(404).json({ error: 'Order not found' });
+
   const updated = await updateDbOrderStatus(req.params.id, req.body);
-  if (!updated) return res.status(404).json({ error: 'Order not found' });
   res.json(updated);
+
+  if (req.body?.status && req.body.status !== existing.status && updated.email) {
+    sendOrderStatusEmail(updated);
+  }
 });
 
 export default router;
