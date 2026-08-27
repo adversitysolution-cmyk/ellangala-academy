@@ -10,6 +10,7 @@ import contactApi from './routes/contactApi.js';
 import adminAuthApi from './routes/adminAuthApi.js';
 import sitemapRoute from './routes/sitemapRoute.js';
 import { requireAdminAuth } from './middleware/adminAuth.js';
+import { ensureSchema } from './db/store.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -51,9 +52,22 @@ app.get('*', (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`🚀 Ellangala’s Academy Server running on http://localhost:${PORT}`);
-  console.log(`🌐 Dynamic Sitemap available at http://localhost:${PORT}/sitemap.xml`);
+// 5. Error handler (catches rejected promises forwarded by asyncRouter)
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).json({ error: 'Internal server error' });
 });
+
+ensureSchema()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`🚀 Ellangala’s Academy Server running on http://localhost:${PORT}`);
+      console.log(`🌐 Dynamic Sitemap available at http://localhost:${PORT}/sitemap.xml`);
+    });
+  })
+  .catch((err) => {
+    console.error('Failed to initialize database:', err);
+    process.exit(1);
+  });
 
 export default app;

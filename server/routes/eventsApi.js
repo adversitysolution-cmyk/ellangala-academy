@@ -1,4 +1,3 @@
-import { Router } from 'express';
 import {
   getDbEvents,
   getDbEventBySlug,
@@ -7,17 +6,18 @@ import {
   deleteDbEvent
 } from '../db/store.js';
 import { generateContentSeo } from '../lib/seoGenerator.js';
+import { asyncRouter } from '../lib/asyncRouter.js';
 
-const router = Router();
+const router = asyncRouter();
 
 // Public: GET /api/events (Returns published events by default)
-router.get('/events', (req, res) => {
+router.get('/events', async (req, res) => {
   const { status, all } = req.query;
   if (all === 'true' || status === 'all') {
-    return res.json(getDbEvents());
+    return res.json(await getDbEvents());
   }
   const statusFilter = status || 'published';
-  const events = getDbEvents().filter(e => {
+  const events = (await getDbEvents()).filter(e => {
     if (statusFilter === 'published') {
       return e.status === 'published' || e.status === 'cancelled' || e.status === 'completed';
     }
@@ -27,9 +27,9 @@ router.get('/events', (req, res) => {
 });
 
 // Public: GET /api/events/:slug
-router.get('/events/:slug', (req, res) => {
+router.get('/events/:slug', async (req, res) => {
   const { slug } = req.params;
-  const event = getDbEventBySlug(slug);
+  const event = await getDbEventBySlug(slug);
 
   if (!event) {
     return res.status(404).json({ error: 'Event not found' });
@@ -56,9 +56,9 @@ router.get('/events/:slug', (req, res) => {
 });
 
 // Admin: POST /api/admin/events
-router.post('/admin/events', (req, res) => {
+router.post('/admin/events', async (req, res) => {
   try {
-    const newRecord = saveDbEvent(req.body);
+    const newRecord = await saveDbEvent(req.body);
     res.status(201).json(newRecord);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -66,9 +66,9 @@ router.post('/admin/events', (req, res) => {
 });
 
 // Admin: PUT /api/admin/events/:id
-router.put('/admin/events/:id', (req, res) => {
+router.put('/admin/events/:id', async (req, res) => {
   try {
-    const updated = saveDbEvent({ ...req.body, id: req.params.id });
+    const updated = await saveDbEvent({ ...req.body, id: req.params.id });
     res.json(updated);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -76,8 +76,8 @@ router.put('/admin/events/:id', (req, res) => {
 });
 
 // Admin: DELETE /api/admin/events/:id
-router.delete('/admin/events/:id', (req, res) => {
-  const success = deleteDbEvent(req.params.id);
+router.delete('/admin/events/:id', async (req, res) => {
+  const success = await deleteDbEvent(req.params.id);
   if (success) {
     res.json({ success: true, message: 'Event deleted successfully' });
   } else {
@@ -86,20 +86,20 @@ router.delete('/admin/events/:id', (req, res) => {
 });
 
 // Admin: PATCH /api/admin/events/:id/publish
-router.patch('/admin/events/:id/publish', (req, res) => {
-  const existing = getDbEventById(req.params.id);
+router.patch('/admin/events/:id/publish', async (req, res) => {
+  const existing = await getDbEventById(req.params.id);
   if (!existing) return res.status(404).json({ error: 'Event not found' });
 
-  const updated = saveDbEvent({ ...existing, status: 'published' });
+  const updated = await saveDbEvent({ ...existing, status: 'published' });
   res.json(updated);
 });
 
 // Admin: PATCH /api/admin/events/:id/unpublish
-router.patch('/admin/events/:id/unpublish', (req, res) => {
-  const existing = getDbEventById(req.params.id);
+router.patch('/admin/events/:id/unpublish', async (req, res) => {
+  const existing = await getDbEventById(req.params.id);
   if (!existing) return res.status(404).json({ error: 'Event not found' });
 
-  const updated = saveDbEvent({ ...existing, status: 'draft' });
+  const updated = await saveDbEvent({ ...existing, status: 'draft' });
   res.json(updated);
 });
 

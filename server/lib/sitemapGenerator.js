@@ -50,13 +50,13 @@ ${urlNodes}
 </urlset>`;
 }
 
-export function getDynamicSitemapXml() {
+export async function getDynamicSitemapXml() {
   const now = Date.now();
   if (cachedXml && (now - lastCacheTime < CACHE_TTL_MS)) {
     return cachedXml;
   }
 
-  const store = getStore();
+  const store = await getStore();
   const events = store.events || [];
   const blogs = store.blogs || [];
 

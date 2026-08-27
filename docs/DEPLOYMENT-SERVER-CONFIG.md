@@ -64,6 +64,9 @@ The server serves `dist/` and proxies all unknown routes to `dist/index.html`.
 
 ---
 
+## Database (MySQL)
+The server stores events, blogs, orders, enrollments, and contact messages in MySQL (`server/db/`). Set `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD`, `DB_NAME` (see `.env.example`). On first boot the server creates its tables if they don't exist (`server/db/schema.sql`) and seeds events/blogs from the site's static content — no manual migration step needed.
+
 ## Admin Credentials
 - **URL**: `https://ellangala.com/login`
 - Set `ADMIN_EMAIL` and `ADMIN_PASSWORD` env vars before starting the server (see `.env.example`). The server refuses to start without them — there is no default password baked into the code.

@@ -13,9 +13,6 @@ dist-ssr
 *.local
 .env
 
-# Runtime data (seeded on first run, holds live orders/enrollments/messages)
-server/data/store.json
-
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

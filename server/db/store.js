@@ -1,340 +1,338 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { pool } from './pool.js';
 import { initialEvents } from '../../src/features/events/data/eventSeedData.js';
 import { blogContent } from '../../src/contents/blog.content.js';
 import { invalidateSitemapCache } from '../lib/sitemapGenerator.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const DATA_DIR = path.join(__dirname, '..', 'data');
-const STORE_PATH = path.join(DATA_DIR, 'store.json');
 
-function ensureDataDir() {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
-  }
+const toIso = (val) => (val instanceof Date ? val.toISOString() : val);
+const toBool = (val) => Boolean(val);
+
+function toMysqlDatetime(iso) {
+  return new Date(iso || Date.now()).toISOString().slice(0, 19).replace('T', ' ');
 }
 
-function initialSeed() {
-  const seededBlogs = (blogContent.list.posts || []).map(b => ({
-    id: b.id,
-    slug: b.slug || b.id,
-    title: b.title,
-    excerpt: b.excerpt || '',
-    content: b.details?.text1 ? `${b.details.text1}\n\n${b.details.text2 || ''}\n\n${b.details.text3 || ''}` : b.excerpt,
-    category: b.category || 'Positive Psychology',
-    image: b.img || '/assets/images/blog/blog-mind-gym.png',
-    author: b.author ? b.author.replace(/^By\s+/, '') : 'Dr. Naveen Ellangala',
-    status: 'published',
-    readTime: b.readTime || '10 Mins Read',
-    details: b.details || null,
-    seo: {
-      title: `${b.title} | Ellangala’s Academy`,
-      description: b.excerpt,
-      image: b.img,
-      noindex: false
-    },
-    publishedAt: new Date().toISOString(),
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
-  }));
-
-  const seededEvents = (initialEvents || []).map(e => ({
-    ...e,
-    status: e.status || 'published',
-    seo: {
-      title: `${e.title} | Ellangala’s Academy`,
-      description: e.shortDescription,
-      image: e.image,
-      noindex: false
-    },
-    publishedAt: e.createdAt || new Date().toISOString(),
-    createdAt: e.createdAt || new Date().toISOString(),
-    updatedAt: e.updatedAt || new Date().toISOString()
-  }));
-
-  return {
-    events: seededEvents,
-    blogs: seededBlogs,
-    orders: [],
-    enrollments: [],
-    messages: []
-  };
+async function nextId(conn, table, prefix) {
+  const year = new Date().getFullYear();
+  const [rows] = await conn.query(
+    `SELECT COUNT(*) AS n FROM ${table} WHERE id LIKE ?`,
+    [`${prefix}-${year}-%`]
+  );
+  return `${prefix}-${year}-${String(rows[0].n + 1).padStart(4, '0')}`;
 }
 
-export function getStore() {
-  ensureDataDir();
-  if (!fs.existsSync(STORE_PATH)) {
-    const data = initialSeed();
-    fs.writeFileSync(STORE_PATH, JSON.stringify(data, null, 2), 'utf-8');
-    return data;
-  }
-  try {
-    const raw = fs.readFileSync(STORE_PATH, 'utf-8');
-    const data = JSON.parse(raw);
-    // Backfill collections added after this store.json was first created.
-    data.orders = data.orders || [];
-    data.enrollments = data.enrollments || [];
-    data.messages = data.messages || [];
-    return data;
-  } catch (err) {
-    console.error('Error reading store.json, re-seeding:', err);
-    const data = initialSeed();
-    fs.writeFileSync(STORE_PATH, JSON.stringify(data, null, 2), 'utf-8');
-    return data;
-  }
-}
-
-export function saveStore(data) {
-  ensureDataDir();
-  fs.writeFileSync(STORE_PATH, JSON.stringify(data, null, 2), 'utf-8');
-  invalidateSitemapCache();
-}
-
-// --- EVENT DB OPERATIONS ---
-export function getDbEvents({ status } = {}) {
-  const store = getStore();
-  if (status) {
-    return store.events.filter(e => e.status === status);
-  }
-  return store.events;
-}
-
-export function getDbEventBySlug(slug) {
-  const events = getDbEvents();
-  return events.find(e => e.slug === slug || String(e.id) === String(slug)) || null;
-}
-
-export function getDbEventById(id) {
-  const events = getDbEvents();
-  return events.find(e => String(e.id) === String(id)) || null;
-}
-
-export function saveDbEvent(eventData) {
-  const store = getStore();
-  const now = new Date().toISOString();
-
-  let slug = (eventData.slug || eventData.title || 'event')
+function slugify(text) {
+  return (text || '')
     .toLowerCase()
     .trim()
     .replace(/[^a-z0-9 -]/g, '')
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-');
+}
 
-  // Existing check
-  let existingIndex = -1;
-  if (eventData.id) {
-    existingIndex = store.events.findIndex(e => String(e.id) === String(eventData.id));
+async function uniqueSlug(conn, table, baseSlug, excludeId = null) {
+  let slug = baseSlug;
+  const [rows] = await conn.query(
+    excludeId ? `SELECT id FROM ${table} WHERE slug = ? AND id != ?` : `SELECT id FROM ${table} WHERE slug = ?`,
+    excludeId ? [slug, excludeId] : [slug]
+  );
+  if (rows.length > 0) {
+    slug = `${slug}-${Date.now().toString().slice(-4)}`;
+  }
+  return slug;
+}
+
+// --- SCHEMA + SEED (runs once on server start) ---
+export async function ensureSchema() {
+  const schemaSql = fs.readFileSync(path.join(__dirname, 'schema.sql'), 'utf-8');
+  const statements = schemaSql.split(';').map(s => s.trim()).filter(Boolean);
+  for (const stmt of statements) {
+    await pool.query(stmt);
+  }
+  await seedIfEmpty();
+}
+
+async function seedIfEmpty() {
+  const [[{ n: eventCount }]] = await pool.query('SELECT COUNT(*) AS n FROM events');
+  if (eventCount === 0) {
+    const now = new Date().toISOString();
+    for (const e of initialEvents || []) {
+      await saveDbEvent({
+        ...e,
+        seo: { title: `${e.title} | Ellangala’s Academy`, description: e.shortDescription, image: e.image, noindex: false },
+        createdAt: e.createdAt || now,
+        publishedAt: e.createdAt || now
+      });
+    }
   }
 
-  if (existingIndex >= 0) {
-    const existing = store.events[existingIndex];
-    if (existing.slug !== slug && store.events.some((e, idx) => idx !== existingIndex && e.slug === slug)) {
-      slug = `${slug}-${Date.now().toString().slice(-4)}`;
+  const [[{ n: blogCount }]] = await pool.query('SELECT COUNT(*) AS n FROM blogs');
+  if (blogCount === 0) {
+    for (const b of (blogContent.list.posts || [])) {
+      await saveDbBlog({
+        id: b.id,
+        slug: b.slug || b.id,
+        title: b.title,
+        excerpt: b.excerpt || '',
+        content: b.details?.text1 ? `${b.details.text1}\n\n${b.details.text2 || ''}\n\n${b.details.text3 || ''}` : b.excerpt,
+        category: b.category || 'Positive Psychology',
+        image: b.img || '/assets/images/blog/blog-mind-gym.png',
+        author: b.author ? b.author.replace(/^By\s+/, '') : 'Dr. Naveen Ellangala',
+        status: 'published',
+        readTime: b.readTime || '10 Mins Read',
+        details: b.details || null,
+        seo: { title: `${b.title} | Ellangala’s Academy`, description: b.excerpt, image: b.img, noindex: false }
+      });
     }
-    const updated = {
-      ...existing,
-      ...eventData,
-      slug,
-      updatedAt: now,
-      publishedAt: eventData.status === 'published' && existing.status !== 'published' ? now : (existing.publishedAt || now)
-    };
-    store.events[existingIndex] = updated;
-    saveStore(store);
-    return updated;
-  } else {
-    // New Event
-    const nextNum = store.events.length + 1;
-    const year = new Date().getFullYear();
-    const id = eventData.id || `EVT-${year}-${String(nextNum).padStart(4, '0')}`;
-
-    if (store.events.some(e => e.slug === slug)) {
-      slug = `${slug}-${Date.now().toString().slice(-4)}`;
-    }
-
-    const newRecord = {
-      id,
-      slug,
-      title: eventData.title || 'Untitled Event',
-      category: eventData.category || 'Positive Workshop',
-      shortDescription: eventData.shortDescription || '',
-      description: eventData.description || '',
-      image: eventData.image || '/assets/images/blog/blog-positive-psychology.png',
-      date: eventData.date || new Date().toISOString().split('T')[0],
-      startTime: eventData.startTime || '10:00',
-      endTime: eventData.endTime || '12:00',
-      timezone: eventData.timezone || 'Asia/Kolkata',
-      mode: eventData.mode || 'Offline',
-      venue: eventData.venue || 'Ellangala’s Academy',
-      address: eventData.address || '',
-      city: eventData.city || 'Bengaluru',
-      googleMeetLink: eventData.googleMeetLink || eventData.meetingLink || '',
-      meetingLink: eventData.googleMeetLink || eventData.meetingLink || '',
-      organizer: eventData.organizer || 'Ellangala’s Academy',
-      speaker: eventData.speaker || 'Dr. Naveen Ellangala',
-      registrationOpen: eventData.registrationOpen !== undefined ? Boolean(eventData.registrationOpen) : true,
-      capacity: eventData.capacity ? Number(eventData.capacity) : null,
-      availableSeats: eventData.capacity ? Number(eventData.capacity) : null,
-      priceType: eventData.priceType || 'Free',
-      price: eventData.price || null,
-      razorpayLink: eventData.razorpayLink || eventData.paymentLink || '',
-      paymentLink: eventData.razorpayLink || eventData.paymentLink || '',
-      status: eventData.status || 'published',
-      featured: Boolean(eventData.featured),
-      seo: eventData.seo || {
-        title: '',
-        description: '',
-        image: '',
-        noindex: false
-      },
-      createdAt: now,
-      updatedAt: now,
-      publishedAt: eventData.status === 'published' ? now : null
-    };
-
-    store.events.unshift(newRecord);
-    saveStore(store);
-    return newRecord;
   }
 }
 
-export function deleteDbEvent(id) {
-  const store = getStore();
-  const initialLen = store.events.length;
-  store.events = store.events.filter(e => String(e.id) !== String(id));
-  if (store.events.length !== initialLen) {
-    saveStore(store);
+// Used by the sitemap generator.
+export async function getStore() {
+  const [events] = await pool.query('SELECT * FROM events');
+  const [blogs] = await pool.query('SELECT * FROM blogs');
+  return { events: events.map(rowToEvent), blogs: blogs.map(rowToBlog) };
+}
+
+function rowToEvent(row) {
+  return {
+    ...row,
+    registrationOpen: toBool(row.registrationOpen),
+    featured: toBool(row.featured),
+    createdAt: toIso(row.createdAt),
+    updatedAt: toIso(row.updatedAt),
+    publishedAt: toIso(row.publishedAt)
+  };
+}
+
+function rowToBlog(row) {
+  return {
+    ...row,
+    createdAt: toIso(row.createdAt),
+    updatedAt: toIso(row.updatedAt),
+    publishedAt: toIso(row.publishedAt)
+  };
+}
+
+function rowToOrder(row) {
+  return { ...row, createdAt: toIso(row.createdAt), updatedAt: toIso(row.updatedAt) };
+}
+
+function rowToEnrollment(row) {
+  return { ...row, submittedAt: toIso(row.submittedAt), updatedAt: toIso(row.updatedAt) };
+}
+
+function rowToMessage(row) {
+  return { ...row, submittedAt: toIso(row.submittedAt) };
+}
+
+// --- EVENT DB OPERATIONS ---
+export async function getDbEvents({ status } = {}) {
+  const [rows] = status
+    ? await pool.query('SELECT * FROM events WHERE status = ? ORDER BY pk DESC', [status])
+    : await pool.query('SELECT * FROM events ORDER BY pk DESC');
+  return rows.map(rowToEvent);
+}
+
+export async function getDbEventBySlug(slug) {
+  const [rows] = await pool.query('SELECT * FROM events WHERE slug = ? OR id = ? LIMIT 1', [slug, slug]);
+  return rows[0] ? rowToEvent(rows[0]) : null;
+}
+
+export async function getDbEventById(id) {
+  const [rows] = await pool.query('SELECT * FROM events WHERE id = ? LIMIT 1', [id]);
+  return rows[0] ? rowToEvent(rows[0]) : null;
+}
+
+export async function saveDbEvent(eventData) {
+  const conn = pool;
+  const now = new Date().toISOString();
+
+  let existing = null;
+  if (eventData.id) {
+    const [rows] = await conn.query('SELECT * FROM events WHERE id = ? LIMIT 1', [eventData.id]);
+    existing = rows[0] || null;
+  }
+
+  const baseSlug = slugify(eventData.slug || eventData.title || 'event');
+  const slug = await uniqueSlug(conn, 'events', baseSlug, existing ? existing.id : null);
+
+  if (existing) {
+    const merged = {
+      ...rowToEvent(existing),
+      ...eventData,
+      slug,
+      updatedAt: now,
+      publishedAt: eventData.status === 'published' && existing.status !== 'published' ? now : (toIso(existing.publishedAt) || now)
+    };
+    await conn.query(
+      `UPDATE events SET slug=?, title=?, category=?, shortDescription=?, description=?, image=?, date=?, startTime=?, endTime=?, timezone=?, mode=?, venue=?, address=?, city=?, googleMeetLink=?, meetingLink=?, organizer=?, speaker=?, registrationOpen=?, capacity=?, availableSeats=?, priceType=?, price=?, razorpayLink=?, paymentLink=?, status=?, featured=?, seo=?, updatedAt=?, publishedAt=? WHERE id=?`,
+      [merged.slug, merged.title, merged.category, merged.shortDescription, merged.description, merged.image, merged.date, merged.startTime, merged.endTime, merged.timezone, merged.mode, merged.venue, merged.address, merged.city, merged.googleMeetLink, merged.meetingLink, merged.organizer, merged.speaker, Boolean(merged.registrationOpen), merged.capacity ?? null, merged.availableSeats ?? null, merged.priceType, merged.price, merged.razorpayLink, merged.paymentLink, merged.status, Boolean(merged.featured), JSON.stringify(merged.seo || {}), toMysqlDatetime(merged.updatedAt), merged.publishedAt ? toMysqlDatetime(merged.publishedAt) : null, existing.id]
+    );
+    invalidateSitemapCache();
+    return merged;
+  }
+
+  const id = eventData.id || await nextId(conn, 'events', 'EVT');
+  const record = {
+    id,
+    slug,
+    title: eventData.title || 'Untitled Event',
+    category: eventData.category || 'Positive Workshop',
+    shortDescription: eventData.shortDescription || '',
+    description: eventData.description || '',
+    image: eventData.image || '/assets/images/blog/blog-positive-psychology.png',
+    date: eventData.date || new Date().toISOString().split('T')[0],
+    startTime: eventData.startTime || '10:00',
+    endTime: eventData.endTime || '12:00',
+    timezone: eventData.timezone || 'Asia/Kolkata',
+    mode: eventData.mode || 'Offline',
+    venue: eventData.venue || 'Ellangala’s Academy',
+    address: eventData.address || '',
+    city: eventData.city || 'Bengaluru',
+    googleMeetLink: eventData.googleMeetLink || eventData.meetingLink || '',
+    meetingLink: eventData.googleMeetLink || eventData.meetingLink || '',
+    organizer: eventData.organizer || 'Ellangala’s Academy',
+    speaker: eventData.speaker || 'Dr. Naveen Ellangala',
+    registrationOpen: eventData.registrationOpen !== undefined ? Boolean(eventData.registrationOpen) : true,
+    capacity: eventData.capacity ? Number(eventData.capacity) : null,
+    availableSeats: eventData.capacity ? Number(eventData.capacity) : null,
+    priceType: eventData.priceType || 'Free',
+    price: eventData.price || null,
+    razorpayLink: eventData.razorpayLink || eventData.paymentLink || '',
+    paymentLink: eventData.razorpayLink || eventData.paymentLink || '',
+    status: eventData.status || 'published',
+    featured: Boolean(eventData.featured),
+    seo: eventData.seo || { title: '', description: '', image: '', noindex: false },
+    createdAt: eventData.createdAt || now,
+    updatedAt: now,
+    publishedAt: eventData.status === 'published' ? (eventData.publishedAt || now) : null
+  };
+
+  await conn.query(
+    `INSERT INTO events (id, slug, title, category, shortDescription, description, image, date, startTime, endTime, timezone, mode, venue, address, city, googleMeetLink, meetingLink, organizer, speaker, registrationOpen, capacity, availableSeats, priceType, price, razorpayLink, paymentLink, status, featured, seo, createdAt, updatedAt, publishedAt)
+     VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+    [record.id, record.slug, record.title, record.category, record.shortDescription, record.description, record.image, record.date, record.startTime, record.endTime, record.timezone, record.mode, record.venue, record.address, record.city, record.googleMeetLink, record.meetingLink, record.organizer, record.speaker, record.registrationOpen, record.capacity, record.availableSeats, record.priceType, record.price, record.razorpayLink, record.paymentLink, record.status, record.featured, JSON.stringify(record.seo), toMysqlDatetime(record.createdAt), toMysqlDatetime(record.updatedAt), record.publishedAt ? toMysqlDatetime(record.publishedAt) : null]
+  );
+  invalidateSitemapCache();
+  return record;
+}
+
+export async function deleteDbEvent(id) {
+  const [result] = await pool.query('DELETE FROM events WHERE id = ?', [id]);
+  if (result.affectedRows > 0) {
+    invalidateSitemapCache();
     return true;
   }
   return false;
 }
 
 // --- BLOG DB OPERATIONS ---
-export function getDbBlogs({ status } = {}) {
-  const store = getStore();
-  if (status) {
-    return store.blogs.filter(b => b.status === status);
-  }
-  return store.blogs;
+export async function getDbBlogs({ status } = {}) {
+  const [rows] = status
+    ? await pool.query('SELECT * FROM blogs WHERE status = ? ORDER BY pk DESC', [status])
+    : await pool.query('SELECT * FROM blogs ORDER BY pk DESC');
+  return rows.map(rowToBlog);
 }
 
-export function getDbBlogBySlug(slug) {
-  const blogs = getDbBlogs();
-  return blogs.find(b => b.slug === slug || String(b.id) === String(slug)) || null;
+export async function getDbBlogBySlug(slug) {
+  const [rows] = await pool.query('SELECT * FROM blogs WHERE slug = ? OR id = ? LIMIT 1', [slug, slug]);
+  return rows[0] ? rowToBlog(rows[0]) : null;
 }
 
-export function getDbBlogById(id) {
-  const blogs = getDbBlogs();
-  return blogs.find(b => String(b.id) === String(id)) || null;
+export async function getDbBlogById(id) {
+  const [rows] = await pool.query('SELECT * FROM blogs WHERE id = ? LIMIT 1', [id]);
+  return rows[0] ? rowToBlog(rows[0]) : null;
 }
 
-export function saveDbBlog(blogData) {
-  const store = getStore();
+export async function saveDbBlog(blogData) {
+  const conn = pool;
   const now = new Date().toISOString();
 
-  let slug = (blogData.slug || blogData.title || 'blog')
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9 -]/g, '')
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-');
-
-  let existingIndex = -1;
+  let existing = null;
   if (blogData.id) {
-    existingIndex = store.blogs.findIndex(b => String(b.id) === String(blogData.id));
+    const [rows] = await conn.query('SELECT * FROM blogs WHERE id = ? LIMIT 1', [blogData.id]);
+    existing = rows[0] || null;
   }
 
-  if (existingIndex >= 0) {
-    const existing = store.blogs[existingIndex];
-    if (existing.slug !== slug && store.blogs.some((b, idx) => idx !== existingIndex && b.slug === slug)) {
-      slug = `${slug}-${Date.now().toString().slice(-4)}`;
-    }
-    const updated = {
-      ...existing,
+  const baseSlug = slugify(blogData.slug || blogData.title || 'blog');
+  const slug = await uniqueSlug(conn, 'blogs', baseSlug, existing ? existing.id : null);
+
+  if (existing) {
+    const merged = {
+      ...rowToBlog(existing),
       ...blogData,
       slug,
       updatedAt: now,
-      publishedAt: blogData.status === 'published' && existing.status !== 'published' ? now : (existing.publishedAt || now)
+      publishedAt: blogData.status === 'published' && existing.status !== 'published' ? now : (toIso(existing.publishedAt) || now)
     };
-    store.blogs[existingIndex] = updated;
-    saveStore(store);
-    return updated;
-  } else {
-    // New Blog
-    const nextNum = store.blogs.length + 1;
-    const year = new Date().getFullYear();
-    const id = blogData.id || `BLOG-${year}-${String(nextNum).padStart(4, '0')}`;
-
-    if (store.blogs.some(b => b.slug === slug)) {
-      slug = `${slug}-${Date.now().toString().slice(-4)}`;
-    }
-
-    const newRecord = {
-      id,
-      slug,
-      title: blogData.title || 'Untitled Article',
-      excerpt: blogData.excerpt || '',
-      content: blogData.content || '',
-      category: blogData.category || 'Positive Psychology',
-      image: blogData.image || '/assets/images/blog/blog-mind-gym.png',
-      author: blogData.author || 'Dr. Naveen Ellangala',
-      status: blogData.status || 'published',
-      readTime: blogData.readTime || '8 Mins Read',
-      details: blogData.details || {
-        headerTitle: blogData.title,
-        category: blogData.category || 'Positive Psychology',
-        date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-        author: blogData.author || 'Dr. Naveen Ellangala',
-        title: blogData.title,
-        text1: blogData.content || blogData.excerpt,
-        articleImage: blogData.image || '/assets/images/blog/blog-mind-gym.png'
-      },
-      seo: blogData.seo || {
-        title: '',
-        description: '',
-        image: '',
-        noindex: false
-      },
-      createdAt: now,
-      updatedAt: now,
-      publishedAt: blogData.status === 'published' ? now : null
-    };
-
-    store.blogs.unshift(newRecord);
-    saveStore(store);
-    return newRecord;
+    await conn.query(
+      `UPDATE blogs SET slug=?, title=?, excerpt=?, content=?, category=?, image=?, author=?, status=?, readTime=?, details=?, seo=?, updatedAt=?, publishedAt=? WHERE id=?`,
+      [merged.slug, merged.title, merged.excerpt, merged.content, merged.category, merged.image, merged.author, merged.status, merged.readTime, JSON.stringify(merged.details || null), JSON.stringify(merged.seo || {}), toMysqlDatetime(merged.updatedAt), merged.publishedAt ? toMysqlDatetime(merged.publishedAt) : null, existing.id]
+    );
+    return merged;
   }
+
+  const id = blogData.id || await nextId(conn, 'blogs', 'BLOG');
+  const record = {
+    id,
+    slug,
+    title: blogData.title || 'Untitled Article',
+    excerpt: blogData.excerpt || '',
+    content: blogData.content || '',
+    category: blogData.category || 'Positive Psychology',
+    image: blogData.image || '/assets/images/blog/blog-mind-gym.png',
+    author: blogData.author || 'Dr. Naveen Ellangala',
+    status: blogData.status || 'published',
+    readTime: blogData.readTime || '8 Mins Read',
+    details: blogData.details || {
+      headerTitle: blogData.title,
+      category: blogData.category || 'Positive Psychology',
+      date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+      author: blogData.author || 'Dr. Naveen Ellangala',
+      title: blogData.title,
+      text1: blogData.content || blogData.excerpt,
+      articleImage: blogData.image || '/assets/images/blog/blog-mind-gym.png'
+    },
+    seo: blogData.seo || { title: '', description: '', image: '', noindex: false },
+    createdAt: now,
+    updatedAt: now,
+    publishedAt: blogData.status === 'published' ? now : null
+  };
+
+  await conn.query(
+    `INSERT INTO blogs (id, slug, title, excerpt, content, category, image, author, status, readTime, details, seo, createdAt, updatedAt, publishedAt)
+     VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+    [record.id, record.slug, record.title, record.excerpt, record.content, record.category, record.image, record.author, record.status, record.readTime, JSON.stringify(record.details), JSON.stringify(record.seo), toMysqlDatetime(record.createdAt), toMysqlDatetime(record.updatedAt), record.publishedAt ? toMysqlDatetime(record.publishedAt) : null]
+  );
+  return record;
 }
 
-export function deleteDbBlog(id) {
-  const store = getStore();
-  const initialLen = store.blogs.length;
-  store.blogs = store.blogs.filter(b => String(b.id) !== String(id));
-  if (store.blogs.length !== initialLen) {
-    saveStore(store);
-    return true;
-  }
-  return false;
+export async function deleteDbBlog(id) {
+  const [result] = await pool.query('DELETE FROM blogs WHERE id = ?', [id]);
+  return result.affectedRows > 0;
 }
 
 // --- ORDER DB OPERATIONS ---
-export function getDbOrders() {
-  return getStore().orders;
+export async function getDbOrders() {
+  const [rows] = await pool.query('SELECT * FROM orders ORDER BY pk DESC');
+  return rows.map(rowToOrder);
 }
 
-export function getDbOrderById(id) {
-  return getDbOrders().find(o => String(o.id) === String(id)) || null;
+export async function getDbOrderById(id) {
+  const [rows] = await pool.query('SELECT * FROM orders WHERE id = ? LIMIT 1', [id]);
+  return rows[0] ? rowToOrder(rows[0]) : null;
 }
 
-export function createDbOrder(orderData) {
-  const store = getStore();
+export async function createDbOrder(orderData) {
   const now = new Date().toISOString();
-  const nextNum = store.orders.length + 1;
-  const year = new Date().getFullYear();
-  const id = `ORD-${year}-${String(nextNum).padStart(4, '0')}`;
+  const id = await nextId(pool, 'orders', 'ORD');
 
-  const newRecord = {
+  const record = {
     id,
     customerName: `${orderData.firstName || ''} ${orderData.lastName || ''}`.trim() || 'Guest',
     phone: orderData.phone || '',
@@ -357,24 +355,23 @@ export function createDbOrder(orderData) {
     updatedAt: now
   };
 
-  store.orders.unshift(newRecord);
-  saveStore(store);
-  return newRecord;
+  await pool.query(
+    `INSERT INTO orders (id, customerName, phone, email, address, city, state, zipcode, country, items, subtotal, shipping, discount, totalAmount, paymentMethod, paymentStatus, status, internalNotes, createdAt, updatedAt)
+     VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+    [record.id, record.customerName, record.phone, record.email, record.address, record.city, record.state, record.zipcode, record.country, JSON.stringify(record.items), record.subtotal, record.shipping, record.discount, record.totalAmount, record.paymentMethod, record.paymentStatus, record.status, record.internalNotes, toMysqlDatetime(record.createdAt), toMysqlDatetime(record.updatedAt)]
+  );
+  return record;
 }
 
-export function updateDbOrderStatus(id, { status, internalNotes } = {}) {
-  const store = getStore();
-  const index = store.orders.findIndex(o => String(o.id) === String(id));
-  if (index === -1) return null;
-
-  store.orders[index] = {
-    ...store.orders[index],
-    ...(status !== undefined ? { status } : {}),
-    ...(internalNotes !== undefined ? { internalNotes } : {}),
-    updatedAt: new Date().toISOString()
-  };
-  saveStore(store);
-  return store.orders[index];
+export async function updateDbOrderStatus(id, { status, internalNotes } = {}) {
+  const existing = await getDbOrderById(id);
+  if (!existing) return null;
+  const updatedAt = new Date().toISOString();
+  await pool.query(
+    'UPDATE orders SET status = COALESCE(?, status), internalNotes = COALESCE(?, internalNotes), updatedAt = ? WHERE id = ?',
+    [status ?? null, internalNotes ?? null, toMysqlDatetime(updatedAt), id]
+  );
+  return getDbOrderById(id);
 }
 
 // --- ENROLLMENT DB OPERATIONS ---
@@ -387,24 +384,22 @@ export function deriveProgramType(programTitle = '') {
   return 'General Enquiry';
 }
 
-export function getDbEnrollments() {
-  return getStore().enrollments;
+export async function getDbEnrollments() {
+  const [rows] = await pool.query('SELECT * FROM enrollments ORDER BY pk DESC');
+  return rows.map(rowToEnrollment);
 }
 
-export function getDbEnrollmentById(id) {
-  return getDbEnrollments().find(e => String(e.id) === String(id)) || null;
+export async function getDbEnrollmentById(id) {
+  const [rows] = await pool.query('SELECT * FROM enrollments WHERE id = ? LIMIT 1', [id]);
+  return rows[0] ? rowToEnrollment(rows[0]) : null;
 }
 
-export function createDbEnrollment(formData) {
-  const store = getStore();
+export async function createDbEnrollment(formData) {
   const now = new Date().toISOString();
-  const nextNum = store.enrollments.length + 1;
-  const year = new Date().getFullYear();
-  const id = `ENR-${year}-${String(nextNum).padStart(4, '0')}`;
-
+  const id = await nextId(pool, 'enrollments', 'ENR');
   const isEvent = formData.sourceType === 'Event' || (formData.program || '').toLowerCase().includes('event');
 
-  const newRecord = {
+  const record = {
     id,
     fullName: formData.fullName || formData.name || 'Anonymous',
     phone: formData.phone || '',
@@ -422,39 +417,36 @@ export function createDbEnrollment(formData) {
     updatedAt: now
   };
 
-  store.enrollments.unshift(newRecord);
-  saveStore(store);
-  return newRecord;
+  await pool.query(
+    `INSERT INTO enrollments (id, fullName, phone, email, city, interest, type, sourceType, eventId, eventTitle, message, status, internalNotes, submittedAt, updatedAt)
+     VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+    [record.id, record.fullName, record.phone, record.email, record.city, record.interest, record.type, record.sourceType, record.eventId, record.eventTitle, record.message, record.status, record.internalNotes, toMysqlDatetime(record.submittedAt), toMysqlDatetime(record.updatedAt)]
+  );
+  return record;
 }
 
-export function updateDbEnrollmentStatus(id, { status, internalNotes } = {}) {
-  const store = getStore();
-  const index = store.enrollments.findIndex(e => String(e.id) === String(id));
-  if (index === -1) return null;
-
-  store.enrollments[index] = {
-    ...store.enrollments[index],
-    ...(status !== undefined ? { status } : {}),
-    ...(internalNotes !== undefined ? { internalNotes } : {}),
-    updatedAt: new Date().toISOString()
-  };
-  saveStore(store);
-  return store.enrollments[index];
+export async function updateDbEnrollmentStatus(id, { status, internalNotes } = {}) {
+  const existing = await getDbEnrollmentById(id);
+  if (!existing) return null;
+  const updatedAt = new Date().toISOString();
+  await pool.query(
+    'UPDATE enrollments SET status = COALESCE(?, status), internalNotes = COALESCE(?, internalNotes), updatedAt = ? WHERE id = ?',
+    [status ?? null, internalNotes ?? null, toMysqlDatetime(updatedAt), id]
+  );
+  return getDbEnrollmentById(id);
 }
 
 // --- CONTACT MESSAGE DB OPERATIONS ---
-export function getDbMessages() {
-  return getStore().messages;
+export async function getDbMessages() {
+  const [rows] = await pool.query('SELECT * FROM messages ORDER BY pk DESC');
+  return rows.map(rowToMessage);
 }
 
-export function createDbMessage(data) {
-  const store = getStore();
+export async function createDbMessage(data) {
   const now = new Date().toISOString();
-  const nextNum = store.messages.length + 1;
-  const year = new Date().getFullYear();
-  const id = `MSG-${year}-${String(nextNum).padStart(4, '0')}`;
+  const id = await nextId(pool, 'messages', 'MSG');
 
-  const newRecord = {
+  const record = {
     id,
     name: data.name || '',
     email: data.email || '',
@@ -465,7 +457,9 @@ export function createDbMessage(data) {
     submittedAt: now
   };
 
-  store.messages.unshift(newRecord);
-  saveStore(store);
-  return newRecord;
+  await pool.query(
+    `INSERT INTO messages (id, name, email, phone, subject, message, status, submittedAt) VALUES (?,?,?,?,?,?,?,?)`,
+    [record.id, record.name, record.email, record.phone, record.subject, record.message, record.status, toMysqlDatetime(record.submittedAt)]
+  );
+  return record;
 }
