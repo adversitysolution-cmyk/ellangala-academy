@@ -59,6 +59,16 @@
   --bs-gutter-y: 30px;
 }
 
+html {
+  scroll-behavior: smooth !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+}
+
 body {
   font-family: var(--uterpy-font);
   color: rgba(var(--brand-primary-rgb), 0.85);
@@ -1686,21 +1696,14 @@ Main Header One
 
 .main-header-one__bottom-left .logo-one {
   position: relative;
-  display: block;
-  padding-right: 80px;
+  display: flex;
+  align-items: center;
+  padding-right: 30px;
   z-index: 1;
 }
 
 .main-header-one__bottom-left .logo-one::before {
-  position: absolute;
-  top: -23px;
-  left: -99999px;
-  bottom: 0px;
-  right: 0;
-  content: "";
-  border-bottom: 103px solid #ffffff;
-  border-right: 42px solid transparent;
-  z-index: -1;
+  display: none !important;
 }
 
 .main-header-one__bottom-left .logo-one a {
@@ -1709,7 +1712,7 @@ Main Header One
 }
 
 .main-header-one__bottom-left .logo-one a img {
-  max-height: 140px;
+  max-height: 75px;
   width: auto;
   object-fit: contain;
 }
@@ -1717,7 +1720,7 @@ Main Header One
 .main-header-one__bottom-left .main-menu__main-menu-box {
   position: relative;
   display: block;
-  margin-left: 140px;
+  margin-left: 30px;
 }
 
 
@@ -3063,8 +3066,8 @@ Main Slider Three
 .page-header {
   position: relative;
   display: block;
-  min-height: 520px;
-  padding: 195px 0px 185px;
+  min-height: 180px !important;
+  padding: 55px 0px 50px !important;
   overflow: hidden;
   z-index: 1;
 }
@@ -3091,60 +3094,65 @@ Main Slider Three
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(15, 35, 27, 0.30);
+  background: rgba(15, 35, 27, 0.45);
   z-index: 1;
 }
 
 .page-header .shape1 {
-  position: absolute;
-  bottom: -10px;
-  left: 0;
-  right: 0;
-  text-align: center;
-  z-index: -1;
-  mix-blend-mode: overlay;
+  display: none !important;
 }
 
 .page-header__inner {
   position: relative;
   display: block;
+  text-align: left !important;
 }
 
 .page-header__inner h2 {
   color: #ffffff;
   font-weight: 700;
-  font-size: 60px;
-  line-height: 70px;
+  font-size: clamp(28px, 4vw, 44px) !important;
+  line-height: 1.25 !important;
   margin-bottom: 0px;
   text-transform: capitalize;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  text-align: left !important;
 }
 
 .page-header__inner .thm-breadcrumb {
   position: relative;
-  display: block;
-  margin-top: 16px;
+  display: flex !important;
+  align-items: center;
+  justify-content: flex-start !important;
+  text-align: left !important;
+  margin-top: 10px !important;
+  padding-left: 0 !important;
+  list-style: none;
 }
 
 .page-header__inner .thm-breadcrumb li {
   position: relative;
   display: inline-block;
   color: #ffffff;
-  font-size: 18px;
-  line-height: 28px;
+  font-size: 16px !important;
+  line-height: 24px !important;
   font-weight: 500;
   font-family: var(--uterpy-font);
-  padding-right: 26px;
+  padding-right: 22px;
   margin-left: 11px;
+}
+
+.page-header__inner .thm-breadcrumb li:first-child {
+  margin-left: 0 !important;
 }
 
 .page-header__inner .thm-breadcrumb li::before {
   position: absolute;
-  top: 9px;
+  top: 7px;
   right: 0;
   bottom: 0;
-  width: 11px;
-  height: 11px;
+  width: 10px;
+  height: 10px;
   background: var(--uterpy-base);
   clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
   content: "";
@@ -3156,8 +3164,8 @@ Main Slider Three
 
 .page-header__inner .thm-breadcrumb li a {
   color: #ffffff;
-  font-size: 18px;
-  line-height: 28px;
+  font-size: 16px !important;
+  line-height: 24px !important;
   font-weight: 500;
   font-family: var(--uterpy-font);
   transition: all 200ms linear;
@@ -5142,22 +5150,11 @@ Team One
 }
 
 .team-one__single-img:before {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  content: "";
-  background-color: rgba(0, 0, 0, 0.5);
-  width: 0%;
-  transform: translateY(100%);
-  transition: all 500ms ease;
-  z-index: 1;
+  display: none !important;
 }
 
 .team-one__single:hover .team-one__single-img:before {
-  transform: translateY(0);
-  width: 100%;
+  display: none !important;
 }
 
 .team-one__single-img img {
@@ -14153,4 +14150,108 @@ body.boxed-wrapper .main-header__bottom-contact-box {
 
 .programs-megamenu__card-link:hover .programs-megamenu__card-info span {
   color: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* --------------------------------------------------------------------------
+   Submenu Arrow Indicators & Seamless Hover Bridges
+   -------------------------------------------------------------------------- */
+.main-menu .main-menu__list > li.dropdown > a::after,
+.stricky-header .main-menu__list > li.dropdown > a::after {
+  content: '\f107' !important;
+  font-family: 'Font Awesome 5 Free' !important;
+  font-weight: 900 !important;
+  margin-left: 6px !important;
+  font-size: 12px !important;
+  display: inline-block !important;
+  transition: transform 0.25s ease !important;
+  vertical-align: middle !important;
+}
+
+.main-menu .main-menu__list > li.dropdown:hover > a::after,
+.stricky-header .main-menu__list > li.dropdown:hover > a::after {
+  transform: rotate(180deg) !important;
+  color: var(--uterpy-base, #CA8A38) !important;
+}
+
+/* Invisible Hover Bridge for Mega Menu (prevents disappearing on mouse move) */
+.main-menu .main-menu__list>li.programs-megamenu-item .programs-megamenu::before,
+.stricky-header .main-menu__list>li.programs-megamenu-item .programs-megamenu::before {
+  content: '' !important;
+  position: absolute !important;
+  top: -35px !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 40px !important;
+  background: transparent !important;
+  display: block !important;
+  z-index: 10000 !important;
+}
+
+/* Invisible Hover Bridge for Standard Dropdowns */
+.main-menu .main-menu__list>li>ul::before,
+.stricky-header .main-menu__list>li>ul::before {
+  content: '' !important;
+  position: absolute !important;
+  top: -30px !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 35px !important;
+  background: transparent !important;
+  display: block !important;
+  z-index: 1000 !important;
+}
+
+@keyframes enrollModalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Navigation Bar Centering, No-Wrap & Optimal Space Utilization */
+.main-header-one__bottom-left {
+  display: flex !important;
+  align-items: center !important;
+  flex: 1 !important;
+  justify-content: space-between !important;
+}
+
+.main-menu__main-menu-box {
+  margin: 0 auto !important;
+  display: flex !important;
+  justify-content: center !important;
+  flex: 1 !important;
+}
+
+.main-menu__list {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 28px !important;
+  padding: 0 !important;
+  margin: 0 auto !important;
+}
+
+.main-menu__list > li {
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+}
+
+.main-menu__list > li > a {
+  white-space: nowrap !important;
+  word-break: keep-all !important;
+}
+
+@media (max-width: 1399px) and (min-width: 992px) {
+  .main-menu__list {
+    gap: 18px !important;
+  }
+  .main-menu__list > li > a {
+    font-size: 14.5px !important;
+  }
 }

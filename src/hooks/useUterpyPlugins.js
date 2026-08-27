@@ -10,7 +10,10 @@ export function useUterpyPlugins() {
 
       const $ = window.jQuery;
 
-      // Mobile Menu is now handled purely by React in MobileNav.jsx
+      // 1. Preloader Fadeout on Route Change
+      if ($('.preloader').length) {
+        $('.preloader').fadeOut(200);
+      }
 
 
       // 2. Search Overlay Toggle

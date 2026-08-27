@@ -11,6 +11,8 @@ import ScrollToTop from '../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../hooks/useUterpyPlugins';
 import { shopContent } from '../contents/shop.content';
 import { useCart } from '../context/CartContext';
+import SEO from '../seo/SEO';
+import { generateBookSchema, generateBreadcrumbSchema } from '../seo/schemas/schemaGenerators';
 
 export default function ShopDetails() {
   useUterpyPlugins();
@@ -48,6 +50,21 @@ export default function ShopDetails() {
       <Preloader />
 
       <div className="page-wrapper">
+        <SEO
+          title={`${product.title} | Ellangala’s Academy`}
+          description={product.description || `Read and order ${product.title} by Dr. Naveen Ellangala.`}
+          canonical={`/shop/${product.id}`}
+          image={product.img}
+          type="product"
+          structuredData={[
+            generateBookSchema(product),
+            generateBreadcrumbSchema([
+              { name: 'Home', path: '/' },
+              { name: 'Books', path: '/shop' },
+              { name: product.title, path: `/shop/${product.id}` }
+            ])
+          ]}
+        />
         <HeaderOne />
         <PageHeader title={product.title} pageName="Shop Details" />
 
@@ -334,7 +351,7 @@ export default function ShopDetails() {
                             </div>
                             <div className="text-box2">
                               <p>
-                                Authored by Naveen Ellangala, this workbook offers practical psychological insights,
+                                Authored by Dr. Naveen Ellangala, this workbook offers practical psychological insights,
                                 reflective exercises, and actionable guidance to nurture positive mental health, clarity,
                                 and meaningful living for readers and learners.
                               </p>
@@ -356,7 +373,7 @@ export default function ShopDetails() {
                                 </tr>
                                 <tr>
                                   <th style={{ backgroundColor: '#faf8f5' }}>Author</th>
-                                  <td>{product.author || 'Naveen Ellangala'}</td>
+                                  <td>{product.author || 'Dr. Naveen Ellangala'}</td>
                                 </tr>
                                 <tr>
                                   <th style={{ backgroundColor: '#faf8f5' }}>Language</th>

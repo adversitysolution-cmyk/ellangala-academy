@@ -27,7 +27,7 @@ export default function MobileNav() {
         <div className="mobile-nav__header-bar">
           <div className="logo-box">
             <Link to="/" onClick={handleClose} aria-label="logo image">
-              <img src="/assets/images/resources/logo-1.png" alt="Ellangala's Academy Logo" style={{ maxHeight: '50px', width: 'auto' }} />
+              <img src="/assets/images/resources/logo-1.png" alt="Ellangala's Academy Logo" style={{ maxHeight: '60px', width: 'auto' }} />
             </Link>
           </div>
           <span className="mobile-nav__close" onClick={handleClose} aria-label="Close menu">
@@ -38,7 +38,7 @@ export default function MobileNav() {
         {/* Top Mobile Action Button */}
         <div className="mobile-nav__cta-box">
           <Link to="/contact" onClick={handleClose} className="thm-btn mobile-nav__cta-btn">
-            <span>{header.requestBookText || "Request Book"}</span>
+            <span>{header.requestBookText || "Contact Us"}</span>
             <i className="fa fa-arrow-right"></i>
           </Link>
         </div>
@@ -53,7 +53,96 @@ export default function MobileNav() {
               </Link>
             </li>
 
-            {/* 2. Programs Mega Menu */}
+            {/* 2. About */}
+            <li className={`mobile-nav__item mobile-nav__item--dropdown ${openAbout ? 'open' : ''}`}>
+              <div className="mobile-nav__link-row">
+                <Link to="/about" onClick={handleClose} className="mobile-nav__link">
+                  <i className="fa fa-user-tie mobile-nav__item-icon"></i>
+                  <span>{header.nav.about}</span>
+                </Link>
+                <button
+                  type="button"
+                  aria-label="Toggle About dropdown"
+                  className="mobile-nav__sub-toggle"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setOpenAbout(!openAbout);
+                  }}
+                >
+                  <i className={`fa fa-chevron-${openAbout ? 'up' : 'down'}`}></i>
+                </button>
+              </div>
+
+              {openAbout && (
+                <ul className="mobile-nav__sub-menu list-unstyled">
+                  <li>
+                    <Link to="/founder" onClick={handleClose} className="mobile-nav__sub-link">
+                      <i className="fa fa-user-circle mobile-nav__sub-icon"></i>
+                      <span>Founder</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/about#our-team" onClick={handleClose} className="mobile-nav__sub-link">
+                      <i className="fa fa-users mobile-nav__sub-icon"></i>
+                      <span>Team</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/about#vision-mission"
+                      onClick={() => {
+                        handleClose();
+                        const el = document.getElementById('vision-mission');
+                        if (el) {
+                          const offset = el.getBoundingClientRect().top + window.pageYOffset + 20;
+                          window.scrollTo({ top: offset, behavior: 'smooth' });
+                        }
+                      }}
+                      className="mobile-nav__sub-link"
+                    >
+                      <i className="fa fa-bullseye mobile-nav__sub-icon"></i>
+                      <span>Vision &amp; Mission</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/about#philosophy"
+                      onClick={() => {
+                        handleClose();
+                        const el = document.getElementById('philosophy');
+                        if (el) {
+                          const offset = el.getBoundingClientRect().top + window.pageYOffset + 20;
+                          window.scrollTo({ top: offset, behavior: 'smooth' });
+                        }
+                      }}
+                      className="mobile-nav__sub-link"
+                    >
+                      <i className="fa fa-lightbulb mobile-nav__sub-icon"></i>
+                      <span>Our Philosophy</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/about#methodology"
+                      onClick={() => {
+                        handleClose();
+                        const el = document.getElementById('methodology');
+                        if (el) {
+                          const offset = el.getBoundingClientRect().top + window.pageYOffset + 20;
+                          window.scrollTo({ top: offset, behavior: 'smooth' });
+                        }
+                      }}
+                      className="mobile-nav__sub-link"
+                    >
+                      <i className="fa fa-sitemap mobile-nav__sub-icon"></i>
+                      <span>Our Methodology</span>
+                    </Link>
+                  </li>
+                </ul>
+              )}
+            </li>
+
+            {/* 3. Programs Mega Menu */}
             <li className={`mobile-nav__item mobile-nav__item--dropdown ${openPrograms ? 'open' : ''}`}>
               <div className="mobile-nav__link-row">
                 <Link to="/positive-workshops" onClick={handleClose} className="mobile-nav__link">
@@ -183,93 +272,12 @@ export default function MobileNav() {
               )}
             </li>
 
-            {/* 3. About */}
-            <li className={`mobile-nav__item mobile-nav__item--dropdown ${openAbout ? 'open' : ''}`}>
-              <div className="mobile-nav__link-row">
-                <Link to="/about" onClick={handleClose} className="mobile-nav__link">
-                  <i className="fa fa-user-tie mobile-nav__item-icon"></i>
-                  <span>{header.nav.about}</span>
-                </Link>
-                <button
-                  type="button"
-                  aria-label="Toggle About dropdown"
-                  className="mobile-nav__sub-toggle"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setOpenAbout(!openAbout);
-                  }}
-                >
-                  <i className={`fa fa-chevron-${openAbout ? 'up' : 'down'}`}></i>
-                </button>
-              </div>
-
-              {openAbout && (
-                <ul className="mobile-nav__sub-menu list-unstyled">
-                  <li>
-                    <Link to="/founder" onClick={handleClose} className="mobile-nav__sub-link">
-                      <i className="fa fa-user-circle mobile-nav__sub-icon"></i>
-                      <span>Founder</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/team" onClick={handleClose} className="mobile-nav__sub-link">
-                      <i className="fa fa-users mobile-nav__sub-icon"></i>
-                      <span>Team</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/about#vision-mission"
-                      onClick={() => {
-                        handleClose();
-                        const el = document.getElementById('vision-mission');
-                        if (el) {
-                          const offset = el.getBoundingClientRect().top + window.pageYOffset + 20;
-                          window.scrollTo({ top: offset, behavior: 'smooth' });
-                        }
-                      }}
-                      className="mobile-nav__sub-link"
-                    >
-                      <i className="fa fa-bullseye mobile-nav__sub-icon"></i>
-                      <span>Vision &amp; Mission</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/about#philosophy"
-                      onClick={() => {
-                        handleClose();
-                        const el = document.getElementById('philosophy');
-                        if (el) {
-                          const offset = el.getBoundingClientRect().top + window.pageYOffset + 20;
-                          window.scrollTo({ top: offset, behavior: 'smooth' });
-                        }
-                      }}
-                      className="mobile-nav__sub-link"
-                    >
-                      <i className="fa fa-lightbulb mobile-nav__sub-icon"></i>
-                      <span>Our Philosophy</span>
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      to="/about#methodology"
-                      onClick={() => {
-                        handleClose();
-                        const el = document.getElementById('methodology');
-                        if (el) {
-                          const offset = el.getBoundingClientRect().top + window.pageYOffset + 20;
-                          window.scrollTo({ top: offset, behavior: 'smooth' });
-                        }
-                      }}
-                      className="mobile-nav__sub-link"
-                    >
-                      <i className="fa fa-sitemap mobile-nav__sub-icon"></i>
-                      <span>Our Methodology</span>
-                    </Link>
-                  </li>
-                </ul>
-              )}
+            {/* 4. Positive MindGym App */}
+            <li className="mobile-nav__item">
+              <Link to="/mindgym/app" onClick={handleClose} className="mobile-nav__link">
+                <i className="fa fa-mobile-alt mobile-nav__item-icon"></i>
+                <span>{header.nav.mindgymApp || "Positive MindGym App"}</span>
+              </Link>
             </li>
 
             {/* 4. Resources */}
@@ -313,20 +321,17 @@ export default function MobileNav() {
               )}
             </li>
 
-            {/* 5. Blog (hidden)
             <li className="mobile-nav__item">
               <Link to="/blog" onClick={handleClose} className="mobile-nav__link">
                 <i className="fa fa-newspaper mobile-nav__item-icon"></i>
-                <span>{header.nav.blog}</span>
+                <span>{header.nav.blog || "Blog"}</span>
               </Link>
             </li>
-            */}
 
-            {/* 6. Contact */}
             <li className="mobile-nav__item">
-              <Link to="/contact" onClick={handleClose} className="mobile-nav__link">
-                <i className="fa fa-envelope-open-text mobile-nav__item-icon"></i>
-                <span>{header.nav.contact}</span>
+              <Link to="/events" onClick={handleClose} className="mobile-nav__link">
+                <i className="fa fa-calendar-alt mobile-nav__item-icon"></i>
+                <span>{header.nav.events || "Events"}</span>
               </Link>
             </li>
           </ul>

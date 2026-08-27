@@ -21,7 +21,6 @@ export const blogContent = {
           category: "Positive Psychology",
           date: "Nov 15, 2024",
           comments: "3 Comments",
-          author: "Dr. Naveen Ellangala",
           title: "Strengthening Mental Fitness: The Science of Positive Mind Gym & Emotional Hygiene",
           text1: "Mental health is often discussed only in the context of illness or crisis. However, at Ellangala Academy, our core philosophy is rooted in proactive mental fitness — the conscious daily cultivation of psychological stamina, emotional equilibrium, and cognitive clarity before adversity strikes. Through the concept of the Positive Mind Gym, we treat psychological resilience like muscular conditioning: an intentional, trainable skill set available to every individual.",
           heading2: "Moving from Passive Coping to Proactive Mental Conditioning",
@@ -52,7 +51,6 @@ export const blogContent = {
           category: "Indian Culture & Wisdom",
           date: "Nov 12, 2024",
           comments: "5 Comments",
-          author: "Dr. Naveen Ellangala",
           title: "Integrating Ancient Indian Wisdom with Modern Positive Psychology for Meaningful Living",
           text1: "Long before modern cognitive science formulated structured psychotherapeutic modalities, Indian philosophical traditions had mapped the intricate labyrinth of human consciousness, desires, and existential dilemmas. In my book 'Bhagavadgeetha for Meaningful Life', we examine how the timeless dialogues between Krishna and Arjuna represent the universal human struggle with confusion, duty, fear, and self-mastery.",
           heading2: "The Psychology of Sthitaprajna & Cognitive Equanimity",
@@ -64,6 +62,66 @@ export const blogContent = {
             image: "/assets/images/team/naveen-ellangala.jpg",
             name: "Dr. Naveen Ellangala",
             bio: "Founder and Chief Mentor at Ellangala Academy, Author of 'Bhagavadgeetha for Meaningful Life', and Pioneer in Wisdom-based Psychological Counseling."
+          }
+        }
+      },
+      {
+        id: "art-of-positive-parenting-emotional-resilience",
+        slug: "art-of-positive-parenting-emotional-resilience",
+        title: "The Art of Positive Parenting: Nurturing Emotional Resilience in Children",
+        img: "/assets/images/blog/blog-positive-psychology.png",
+        category: "Positive Parenting",
+        date: "Nov 08, 2024",
+        author: "By Dr. Naveen Ellangala",
+        comments: "0 Comment",
+        readTime: "8 Mins Read",
+        excerpt: "Parenting in the digital age requires moving beyond reactive discipline to intentional emotional coaching that helps children build self-regulation and confidence.",
+        details: {
+          headerTitle: "The Art of Positive Parenting",
+          category: "Positive Parenting",
+          date: "Nov 08, 2024",
+          comments: "2 Comments",
+          title: "The Art of Positive Parenting: Nurturing Emotional Resilience in Children",
+          text1: "Children observe how adults handle frustration, ambiguity, and interpersonal conflict. Positive Parenting at Ellangala Academy provides mothers and fathers with practical tools to establish empathetic communication without sacrificing healthy boundaries.",
+          heading2: "Building Emotional Self-Regulation from Early Childhood",
+          text2: "By validating a child's underlying feelings while setting clear limits on behaviors, parents help children internalize self-control. Through reflective dialogues and positive reinforcement, children learn that setbacks are learning opportunities rather than threats to self-worth.",
+          quote: "Parenting is not about controlling outcomes; it is about modeling emotional stability and guiding children to sculpt their own character.",
+          text3: "Our parent workshops provide step-by-step guidance to foster open dialogues, reduce screen-time friction, and build lifelong emotional bonding within families.",
+          articleImage: "/assets/images/blog/blog-positive-psychology.png",
+          author: {
+            image: "/assets/images/team/naveen-ellangala.jpg",
+            name: "Dr. Naveen Ellangala",
+            bio: "Founder and Chief Mentor at Ellangala Academy, Specialist in Child & Family Behavioral Psychology."
+          }
+        }
+      },
+      {
+        id: "mindset-transformation-workplace-psychological-capital",
+        slug: "mindset-transformation-workplace-psychological-capital",
+        title: "Mindset Transformation in the Workplace: Cultivating Psychological Capital & Purpose",
+        img: "/assets/images/services/positive-psychology-at-workplace.jpg",
+        category: "Workplace Wellness",
+        date: "Nov 02, 2024",
+        author: "By Dr. Naveen Ellangala",
+        comments: "0 Comment",
+        readTime: "7 Mins Read",
+        excerpt: "Discover how organizations build high-trust cultures by developing psychological capital — Hope, Efficacy, Resilience, and Optimism (HERO).",
+        details: {
+          headerTitle: "Workplace Psychological Capital",
+          category: "Workplace Wellness",
+          date: "Nov 02, 2024",
+          comments: "4 Comments",
+          title: "Mindset Transformation in the Workplace: Cultivating Psychological Capital & Purpose",
+          text1: "Modern corporate environments often demand high productivity while overlooking the psychological atmosphere in which employees operate. Positive Psychology at the Workplace demonstrates that psychological safety and shared purpose are the ultimate drivers of sustainable performance.",
+          heading2: "The Four Pillars of Psychological Capital (HERO)",
+          text2: "Developing Hope, Self-Efficacy, Resilience, and Optimism equips teams to handle organizational shifts with adaptability and collaboration. When leadership prioritizes empathy and psychological growth, workplace burnout diminishes significantly.",
+          quote: "A healthy workplace culture is built when individual psychological wellbeing aligns with shared collective vision.",
+          text3: "Through corporate workshops and executive coaching, Dr. Naveen Ellangala assists organizations in embedding positive psychology principles into leadership development and team dynamics.",
+          articleImage: "/assets/images/services/positive-psychology-at-workplace.jpg",
+          author: {
+            image: "/assets/images/team/naveen-ellangala.jpg",
+            name: "Dr. Naveen Ellangala",
+            bio: "Founder and Chief Mentor at Ellangala Academy, Corporate Wellness Coach and Behavioral Consultant."
           }
         }
       }

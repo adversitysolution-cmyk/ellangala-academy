@@ -85,7 +85,7 @@ export default function HeaderOne() {
                   <div className="main-header-one__bottom-left">
                     <div className="logo-one">
                       <Link to="/">
-                        <img src="/assets/images/resources/logo-1.png" alt="Ellangala's Academy Logo" style={{ maxHeight: '85px', width: 'auto' }} />
+                        <img src="/assets/images/resources/logo-1.png" alt="Ellangala's Academy Logo" style={{ maxHeight: '95px', width: 'auto' }} />
                       </Link>
                     </div>
 
@@ -93,6 +93,26 @@ export default function HeaderOne() {
                       <ul className="main-menu__list">
                         <li>
                           <Link to="/">{header.nav.home}</Link>
+                        </li>
+                        <li className="dropdown">
+                          <Link to="/about">{header.nav.about}</Link>
+                          <ul>
+                            <li>
+                              <Link to="/founder">Founder</Link>
+                            </li>
+                            <li>
+                              <Link to="/about#our-team">Team</Link>
+                            </li>
+                            <li>
+                              <Link to="/about#vision-mission" onClick={() => scrollToSection('vision-mission')}>Vision &amp; Mission</Link>
+                            </li>
+                            <li>
+                              <Link to="/about#philosophy" onClick={() => scrollToSection('philosophy')}>Our Philosophy</Link>
+                            </li>
+                            <li>
+                              <Link to="/about#methodology" onClick={() => scrollToSection('methodology')}>Our Methodology</Link>
+                            </li>
+                          </ul>
                         </li>
                         <li className="dropdown programs-megamenu-item">
                           <a href="#" onClick={(e) => e.preventDefault()}>{header.nav.services}</a>
@@ -268,25 +288,8 @@ export default function HeaderOne() {
                             </div>
                           </div>
                         </li>
-                        <li className="dropdown">
-                          <Link to="/about">{header.nav.about}</Link>
-                          <ul>
-                            <li>
-                              <Link to="/founder">Founder</Link>
-                            </li>
-                            <li>
-                              <Link to="/team">Team</Link>
-                            </li>
-                            <li>
-                              <Link to="/about#vision-mission" onClick={() => scrollToSection('vision-mission')}>Vision &amp; Mission</Link>
-                            </li>
-                            <li>
-                              <Link to="/about#philosophy" onClick={() => scrollToSection('philosophy')}>Our Philosophy</Link>
-                            </li>
-                            <li>
-                              <Link to="/about#methodology" onClick={() => scrollToSection('methodology')}>Our Methodology</Link>
-                            </li>
-                          </ul>
+                        <li>
+                          <Link to="/mindgym/app">{header.nav.mindgymApp || "Positive MindGym App"}</Link>
                         </li>
                         {/* Case menu item (hidden for now, easy to enable in future)
                         <li className="dropdown">
@@ -309,7 +312,7 @@ export default function HeaderOne() {
                           <a href="#">{header.nav.page}</a>
                           <ul>
                             <li>
-                              <Link to="/team">Team</Link>
+                              <Link to="/about#our-team">Team</Link>
                             </li>
                             <li>
                               <Link to="/faq">Faq</Link>
@@ -368,11 +371,11 @@ export default function HeaderOne() {
                             )}
                           </ul>
                         </li>
-                        {/* <li>
-                          <Link to="/blog">{header.nav.blog}</Link>
-                        </li> */}
                         <li>
-                          <Link to="/contact">{header.nav.contact}</Link>
+                          <Link to="/blog">{header.nav.blog || "Blog"}</Link>
+                        </li>
+                        <li>
+                          <Link to="/events">{header.nav.events || "Events"}</Link>
                         </li>
                       </ul>
                     </div>
@@ -393,7 +396,7 @@ export default function HeaderOne() {
                           borderRadius: '50%',
                           backgroundColor: '#FAF8F5',
                           color: 'var(--uterpy-black)',
-                          fontSize: '20px',
+                          fontSize: '18px',
                           border: '1px solid #ECE7DE',
                           transition: 'all 0.3s ease'
                         }}
@@ -435,7 +438,7 @@ export default function HeaderOne() {
                     </div>
                     <div className="main-header-one__bottom-right-btn d-none d-lg-block">
                       <Link to="/contact" className="thm-btn">
-                        {header.requestBookText || "Request Book"}
+                        {header.requestBookText || "Contact Us"}
                       </Link>
                     </div>
                     {/* Mobile Hamburger Toggle Button */}

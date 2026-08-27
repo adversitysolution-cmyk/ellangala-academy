@@ -10,9 +10,14 @@ import ScrollToTop from '../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../hooks/useUterpyPlugins';
 import { homeContent } from '../contents/home.content';
 import TestimonialsSection from '../components/common/TestimonialsSection';
+import SEO from '../seo/SEO';
+import { generateOrganizationSchema } from '../seo/schemas/schemaGenerators';
+
+import { useEnrollModal } from '../context/EnrollModalContext';
 
 export default function HomeOne() {
   useUterpyPlugins();
+  const { openEnrollModal } = useEnrollModal();
   const programsScrollRef = React.useRef(null);
   const [activeDot, setActiveDot] = React.useState(0);
 
@@ -59,6 +64,12 @@ export default function HomeOne() {
       <Preloader />
 
       <div className="page-wrapper">
+        <SEO
+          title="Ellangala’s Academy | Positive Psychology, Mind Training & MindGym"
+          description="Explore Positive Psychology, mind training, Positive MindGym, mentoring, workshops, books and practical resources by Dr. Naveen Ellangala for meaningful everyday living."
+          canonical="/"
+          structuredData={[generateOrganizationSchema()]}
+        />
         <HeaderOne />
 
         {/* Start Main Slider One */}

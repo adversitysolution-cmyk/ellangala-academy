@@ -7,7 +7,7 @@ export const homeContent = {
   // =========================================================
   slider: [
     {
-      bgImage: "/assets/images/slider/slider-v1-img1.jpg",
+      bgImage: "/assets/images/slider/slider1.jpeg",
       title: "Train your mind. \nLive with greater \nmeaning",
       subtitle: "Welcome to Ellangala’s Academy",
       primaryBtn: {
@@ -20,7 +20,7 @@ export const homeContent = {
       },
     },
     {
-      bgImage: "/assets/images/slider/resized_1824x862.jpg",
+      bgImage: "/assets/images/slider/slider2.jpeg",
       title: "Build awareness. \nStrengthen focus and \neveryday balance",
       subtitle: "Practical Mind Training for Everyday Life",
       primaryBtn: {
@@ -429,7 +429,7 @@ export const homeContent = {
   therapy: {
     tagline: "Founder & Vision",
     founderInfo: {
-      name: "Naveen Ellangala",
+      name: "Dr. Naveen Ellangala",
       role: "Founder · Positive Psychologist · Author",
     },
     title: "A journey shaped by \npsychology, wisdom \nand practice",
@@ -477,7 +477,7 @@ export const homeContent = {
     title: "What does the customer \nhave to say?",
     items: [
       {
-        text: "Naveen’s sessions gave me a clearer perspective on life, relationships, and personal growth. His practical approach made positive thinking simple and meaningful.",
+        text: "Dr. Naveen’s sessions gave me a clearer perspective on life, relationships, and personal growth. His practical approach made positive thinking simple and meaningful.",
         image: "/assets/images/testimonial/testimonial-v1-img1.jpg",
         name: "Ravi Kumar",
         role: "Program Participant",
@@ -489,7 +489,7 @@ export const homeContent = {
         role: "Workshop Participant",
       },
       {
-        text: "Naveen’s guidance helped our team build stronger communication and a positive mindset. The sessions were engaging, practical, and genuinely impactful.",
+        text: "Dr. Naveen’s guidance helped our team build stronger communication and a positive mindset. The sessions were engaging, practical, and genuinely impactful.",
         image: "/assets/images/testimonial/testimonial-v1-img3.jpg",
         name: "Manjunath Hegde",
         role: "Corporate Participant",
@@ -501,13 +501,13 @@ export const homeContent = {
         role: "Program Participant",
       },
       {
-        text: "The session offered a fresh perspective on personal development and mental wellbeing. Naveen explains complex ideas in a simple and inspiring way.",
+        text: "The session offered a fresh perspective on personal development and mental wellbeing. Dr. Naveen explains complex ideas in a simple and inspiring way.",
         image: "/assets/images/testimonial/testimonial-v1-img2.jpg",
         name: "Suresh Bhat",
         role: "Program Participant",
       },
       {
-        text: "Naveen’s workshop created meaningful changes in the way I think and respond to situations. His practical wisdom continues to influence both my personal and professional life.",
+        text: "Dr. Naveen’s workshop created meaningful changes in the way I think and respond to situations. His practical wisdom continues to influence both my personal and professional life.",
         image: "/assets/images/testimonial/testimonial-v1-img3.jpg",
         name: "Deepa Ramesh",
         role: "Workshop Participant",
@@ -521,7 +521,7 @@ export const homeContent = {
     members: [
       {
         image: "/assets/images/team/naveen-ellangala.jpg",
-        name: "Naveen Ellangala",
+        name: "Dr. Naveen Ellangala",
         designation: "Founder",
         qualification: "Positive Psychologist, Holistic Life Coach, Psychotherapist, International Certified NLP Counsellor, CBT Practitioner, Motivational Speaker, Writer, Poet, Hypnotherapist, Yoga Teacher, Carnatic Violinist, Reflexologist",
         link: "/team",

@@ -9,6 +9,8 @@ import SearchPopup from '../components/layout/SearchPopup';
 import ScrollToTop from '../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../hooks/useUterpyPlugins';
 import { faqContent } from '../contents/faq.content';
+import SEO from '../seo/SEO';
+import { generateBreadcrumbSchema } from '../seo/schemas/schemaGenerators';
 
 export default function FAQ() {
   useUterpyPlugins();
@@ -20,6 +22,17 @@ export default function FAQ() {
       <Preloader />
 
       <div className="page-wrapper">
+        <SEO
+          title="Frequently Asked Questions | Ellangala’s Academy"
+          description="Find answers to common questions about workshops, positive mentoring, MindGym sessions, book orders, and enrollment at Ellangala’s Academy."
+          canonical="/faq"
+          structuredData={[
+            generateBreadcrumbSchema([
+              { name: 'Home', path: '/' },
+              { name: 'FAQ', path: '/faq' }
+            ])
+          ]}
+        />
         <HeaderOne />
         <PageHeader title={faqContent.header.title} />
 

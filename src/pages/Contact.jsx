@@ -9,14 +9,38 @@ import SearchPopup from '../components/layout/SearchPopup';
 import ScrollToTop from '../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../hooks/useUterpyPlugins';
 import { contactContent } from '../contents/contact.content';
+import SEO from '../seo/SEO';
+import { generateBreadcrumbSchema, generateOrganizationSchema } from '../seo/schemas/schemaGenerators';
 
 export default function Contact() {
   useUterpyPlugins();
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
+    const form = new FormData(e.target);
+    const payload = Object.fromEntries(form.entries());
+
+    setIsSubmitting(true);
+    setSubmitError('');
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error || 'Could not send your message.');
+      }
+      setSubmitted(true);
+    } catch (err) {
+      setSubmitError(err.message || 'Could not send your message. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -25,6 +49,18 @@ export default function Contact() {
       <Preloader />
 
       <div className="page-wrapper">
+        <SEO
+          title="Contact Us | Ellangala’s Academy"
+          description="Get in touch with Ellangala’s Academy in Bengaluru. Contact us for positive psychology workshops, mentoring, MindGym visits, or speaking sessions."
+          canonical="/contact"
+          structuredData={[
+            generateOrganizationSchema(),
+            generateBreadcrumbSchema([
+              { name: 'Home', path: '/' },
+              { name: 'Contact Us', path: '/contact' }
+            ])
+          ]}
+        />
         <HeaderOne />
         <PageHeader title={contactContent.header.title} />
 
@@ -237,9 +273,12 @@ export default function Contact() {
                         <div className="contact-page__input-box">
                           <textarea name="message" placeholder={contactContent.form.messagePlaceholder} required></textarea>
                         </div>
+                        {submitError && (
+                          <p style={{ color: '#DC2626', fontSize: '14px', margin: '0 0 12px' }}>{submitError}</p>
+                        )}
                         <div className="contact-page__btn">
-                          <button type="submit">
-                            <span className="thm-btn">{contactContent.form.submitBtnText}</span>
+                          <button type="submit" disabled={isSubmitting}>
+                            <span className="thm-btn">{isSubmitting ? 'Sending...' : contactContent.form.submitBtnText}</span>
                           </button>
                         </div>
                       </div>

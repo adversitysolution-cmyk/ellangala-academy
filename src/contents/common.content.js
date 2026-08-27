@@ -12,12 +12,14 @@ export const commonContent = {
     phone: "+91 99867 44700",
     phoneCall: "+919986744700",
     freeCounselingText: "Free counseling",
-    requestBookText: "Request Book",
+    requestBookText: "Contact Us",
     socialTitle: "Our Social",
     nav: {
       home: "Home",
       services: "Programs",
+      mindgymApp: "Positive MindGym App",
       about: "About",
+      events: "Events",
       case: "Case",
       page: "Page",
       shop: "Resources",
@@ -41,10 +43,10 @@ export const commonContent = {
     booksList: [
       { name: "Books", path: "/resources?tab=books" },
       { name: "Affirmation Cards", path: "/resources?tab=affirmation-cards" },
-      { name: "Blogs & Articles", path: "/resources?tab=blogs" },
-      { name: "Videos on Talks", path: "/resources?tab=videos" },
-      { name: "Meditation & Music", path: "/resources?tab=meditation" },
-      { name: "Free Resources", path: "/resources?tab=free-resources" }
+      { name: "Blogs & Insights", path: "/blog" },
+      { name: "Videos on Talks", path: "/videos" },
+      { name: "Meditation & Music", path: "/meditation" },
+      { name: "Free Resources", path: "/free-resources" }
     ]
   },
 

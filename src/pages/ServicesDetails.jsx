@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams, useLocation, Link } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import HeaderOne from '../components/layout/HeaderOne';
 import FooterOne from '../components/layout/FooterOne';
 import PageHeader from '../components/common/PageHeader';
@@ -11,6 +11,8 @@ import SearchPopup from '../components/layout/SearchPopup';
 import ScrollToTop from '../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../hooks/useUterpyPlugins';
 import { serviceDetailsContent } from '../contents/serviceDetails.content';
+import { programsData } from '../contents/programsData.content';
+import ProgramDetailPage from '../components/common/ProgramDetailPage';
 import PositiveMindGymAppPage from './PositiveMindGymAppPage';
 
 export default function ServicesDetails({ serviceKey: propKey }) {
@@ -23,14 +25,32 @@ export default function ServicesDetails({ serviceKey: propKey }) {
     return <PositiveMindGymAppPage />;
   }
 
-  // Find content by propKey, slug, or matching pathname
+  // 1. Check if slug or propKey exists in centralized programsData
+  const targetKey = propKey || slug;
+  let currentProgramData = null;
+
+  if (targetKey && programsData[targetKey]) {
+    currentProgramData = programsData[targetKey];
+  } else {
+    // Find by matching pathname or slug key
+    const found = Object.values(programsData).find(
+      (item) => item.slug === targetKey || location.pathname.endsWith('/' + item.slug) || location.pathname.includes('/' + item.slug)
+    );
+    if (found) currentProgramData = found;
+  }
+
+  // If matched in programsData, render the unified ProgramDetailPage component
+  if (currentProgramData) {
+    return <ProgramDetailPage data={currentProgramData} />;
+  }
+
+  // 2. Fallback to existing serviceDetailsContent for generic services or counselling
   let content = null;
   if (propKey && serviceDetailsContent[propKey]) {
     content = serviceDetailsContent[propKey];
   } else if (slug && serviceDetailsContent[slug]) {
     content = serviceDetailsContent[slug];
   } else {
-    // Find by matching pathname
     const entry = Object.values(serviceDetailsContent).find(
       (item) => item.path === location.pathname
     );
@@ -50,7 +70,7 @@ export default function ServicesDetails({ serviceKey: propKey }) {
         <section className="services-details">
           <div className="container">
             <div className="row">
-              <ServiceSidebar />
+              <ServiceSidebar currentProgram={content.title} />
 
               <div className="col-xl-8">
                 <div className="services-details__content">

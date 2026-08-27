@@ -10,6 +10,7 @@ import SearchPopup from '../components/layout/SearchPopup';
 import ScrollToTop from '../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../hooks/useUterpyPlugins';
 import { useCart } from '../context/CartContext';
+import SEO from '../seo/SEO';
 
 export default function Cart() {
   useUterpyPlugins();
@@ -54,6 +55,7 @@ export default function Cart() {
       <Preloader />
 
       <div className="page-wrapper">
+        <SEO title="Shopping Cart | Ellangala’s Academy" noindex={true} />
         <HeaderOne />
         <PageHeader title="Cart" pageName="Cart" />
 

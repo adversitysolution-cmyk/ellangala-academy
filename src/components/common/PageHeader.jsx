@@ -13,12 +13,9 @@ export default function PageHeader({ title, pageName = title }) {
           backgroundRepeat: 'no-repeat',
         }}
       ></div>
-      <div className="shape1">
-        <img src="/assets/images/shapes/page-header-shape1.png" alt="#" />
-      </div>
 
       <div className="container" style={{ position: 'relative', zIndex: 5 }}>
-        <div className="page-header__inner text-center">
+        <div className="page-header__inner text-start">
           <h2>{title}</h2>
           <ul className="thm-breadcrumb">
             <li>

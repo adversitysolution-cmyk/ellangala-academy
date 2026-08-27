@@ -1434,7 +1434,7 @@
   position: absolute !important;
   top: 100% !important;
   left: 50% !important;
-  transform: translateX(-50%) translateY(15px) !important;
+  transform: translateX(-50%) translateY(6px) !important;
   width: 1100px !important;
   max-width: 95vw !important;
   background-color: #ffffff !important;
@@ -1448,8 +1448,22 @@
   z-index: 9999 !important;
   padding: 0 !important;
   margin: 0 !important;
-  overflow: hidden !important;
+  overflow: visible !important;
   pointer-events: none !important;
+}
+
+/* Invisible Hover Bridge for Mega Menu to prevent disappearing when cursor moves down */
+.main-menu .main-menu__list>li.programs-megamenu-item .programs-megamenu::before,
+.stricky-header .main-menu__list>li.programs-megamenu-item .programs-megamenu::before {
+  content: '' !important;
+  position: absolute !important;
+  top: -35px !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 40px !important;
+  background: transparent !important;
+  display: block !important;
+  z-index: 10000 !important;
 }
 
 .main-menu .main-menu__list>li.programs-megamenu-item:hover .programs-megamenu,
@@ -1458,6 +1472,25 @@
   visibility: visible !important;
   transform: translateX(-50%) translateY(0) !important;
   pointer-events: auto !important;
+}
+
+/* Submenu Down Arrow Indicator for items with submenus */
+.main-menu .main-menu__list > li.dropdown > a::after,
+.stricky-header .main-menu__list > li.dropdown > a::after {
+  content: '\f107' !important;
+  font-family: 'Font Awesome 5 Free' !important;
+  font-weight: 900 !important;
+  margin-left: 6px !important;
+  font-size: 12px !important;
+  display: inline-block !important;
+  transition: transform 0.25s ease !important;
+  vertical-align: middle !important;
+}
+
+.main-menu .main-menu__list > li.dropdown:hover > a::after,
+.stricky-header .main-menu__list > li.dropdown:hover > a::after {
+  transform: rotate(180deg) !important;
+  color: var(--uterpy-base, #CA8A38) !important;
 }
 
 .programs-megamenu__inner {
@@ -2207,23 +2240,41 @@
   }
 }
 
-/* 2. M-04: PageHeader Responsive Spacing */
+/* 2. M-04: PageHeader Responsive Spacing & Left Alignment */
 .page-header {
-  padding: clamp(65px, 8.5vw, 115px) 0 clamp(55px, 7.5vw, 100px) !important;
+  min-height: 160px !important;
+  padding: clamp(40px, 5vw, 60px) 0 clamp(35px, 4.5vw, 50px) !important;
+}
+
+.page-header .shape1 {
+  display: none !important;
+}
+
+.page-header__inner {
+  text-align: left !important;
 }
 
 @media (max-width: 767px) {
-  .page-header__title {
-    font-size: clamp(24px, 6.5vw, 34px) !important;
+  .page-header {
+    min-height: 140px !important;
+    padding: 30px 0 25px !important;
+  }
+
+  .page-header__title,
+  .page-header__inner h2 {
+    font-size: clamp(22px, 6vw, 30px) !important;
     line-height: 1.25 !important;
     word-wrap: break-word !important;
+    text-align: left !important;
   }
 
   .page-header .thm-breadcrumb {
-    padding-top: 10px !important;
+    padding-top: 8px !important;
     flex-wrap: wrap !important;
-    justify-content: center !important;
+    justify-content: flex-start !important;
+    text-align: left !important;
     font-size: 13.5px !important;
+    padding-left: 0 !important;
   }
 }
 
@@ -2457,4 +2508,9 @@ body, html {
 .page-wrapper {
   overflow-x: hidden !important;
   max-width: 100% !important;
+}
+
+/* Clean and simple logo container without upside background shape */
+.main-header-one__bottom-left .logo-one::before {
+  display: none !important;
 }

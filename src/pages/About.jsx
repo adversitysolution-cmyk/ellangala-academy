@@ -15,6 +15,8 @@ import AboutFoundationSection from '../components/about/AboutFoundationSection';
 import AboutPhilosophySection from '../components/about/AboutPhilosophySection';
 import AboutMethodologySection from '../components/about/AboutMethodologySection';
 import TestimonialsSection from '../components/common/TestimonialsSection';
+import SEO from '../seo/SEO';
+import { generateBreadcrumbSchema, generateOrganizationSchema } from '../seo/schemas/schemaGenerators';
 
 export default function About() {
   useUterpyPlugins();
@@ -51,6 +53,18 @@ export default function About() {
       <Preloader />
 
       <div className="page-wrapper">
+        <SEO
+          title="About Us | Ellangala’s Academy"
+          description="Learn about Ellangala’s Academy, our mission, positive psychology framework, MindGym vision, and commitment to mental fitness and human flourishing."
+          canonical="/about"
+          structuredData={[
+            generateOrganizationSchema(),
+            generateBreadcrumbSchema([
+              { name: 'Home', path: '/' },
+              { name: 'About Us', path: '/about' }
+            ])
+          ]}
+        />
         <HeaderOne />
         <PageHeader title={aboutContent.header.title} />
 
@@ -388,9 +402,7 @@ export default function About() {
                     </div>
                     <div className="team-one__single-content">
                       <div className="title-box text-center">
-                        <h2>
-                          <Link to={member.link}>{member.name}</Link>
-                        </h2>
+                        <h2>{member.name}</h2>
                         <p className="team-one__designation">{member.designation}</p>
                         {member.qualification && (
                           <p className="team-one__qualification">{member.qualification}</p>

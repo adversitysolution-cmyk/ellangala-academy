@@ -10,6 +10,8 @@ import ScrollToTop from '../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../hooks/useUterpyPlugins';
 import { homeContent } from '../contents/home.content';
 import '../assets/css/founder-profile.css';
+import SEO from '../seo/SEO';
+import { generatePersonSchema, generateBreadcrumbSchema } from '../seo/schemas/schemaGenerators';
 
 import founderHeroBg from '../Images/Founder PAge Hero.png';
 import founderBooksShowcaseImg from '../Images/ChatGPT Image Aug 18, 2026, 09_18_52 PM.png';
@@ -98,7 +100,7 @@ export default function FounderPage() {
       )
     },
     {
-      title: 'D.R.T (Diploma in Reflexology Therapy)',
+      title: 'D.R.T',
       icon: (
         <svg width="26" height="26" viewBox="0 0 24 24" fill="#CA8A38">
           <path d="M18 10c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-6-4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-6-4c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6 8c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
@@ -106,7 +108,7 @@ export default function FounderPage() {
       )
     },
     {
-      title: 'D.B.F (Diploma in Batchflower Therapy)',
+      title: 'D.B.F',
       icon: (
         <svg width="26" height="26" viewBox="0 0 24 24" fill="#CA8A38">
           <circle cx="12" cy="4" r="2.5" />
@@ -214,6 +216,19 @@ export default function FounderPage() {
       <Preloader />
 
       <div className="page-wrapper">
+        <SEO
+          title="Dr. Naveen Ellangala | Founder, Positive Psychologist & Author"
+          description="Explore the biography, 16+ years of experience, publications, research, and mind training vision of Dr. Naveen Ellangala, Founder of Ellangala’s Academy."
+          canonical="/founder"
+          image="/assets/images/team/naveen-ellangala.jpg"
+          structuredData={[
+            generatePersonSchema(),
+            generateBreadcrumbSchema([
+              { name: 'Home', path: '/' },
+              { name: 'Dr. Naveen Ellangala', path: '/founder' }
+            ])
+          ]}
+        />
         <HeaderOne />
 
         <main className="founder-page-wrapper">
@@ -500,99 +515,7 @@ export default function FounderPage() {
             </div>
           </section>
 
-          {/* =========================================================================
-               3.5 THERAPY ONE (FOUNDER & VISION EDITORIAL)
-               ========================================================================= */}
-          <section className="therapy-one">
-            <div className="container">
-              <div className="therapy-one__inner">
-                <div
-                  className="therapy-one__pattern"
-                  style={{ backgroundImage: 'url(/assets/images/pattern/therapy-v1-pattern.png)' }}
-                ></div>
-                <div
-                  className="therapy-one__bg"
-                  style={{ backgroundImage: 'url(/assets/images/backgrounds/therapy-v1-bg.jpg)' }}
-                ></div>
-                <div className="therapy-one__img1 wow slideInRight" data-wow-delay="100ms" data-wow-duration="2500ms">
-                  <img src="/assets/images/resources/therapy-v1-img1.png" alt="Founder" />
-                </div>
-                <div className="shape1"></div>
-                <div className="shape2"></div>
-                <div className="shape3"></div>
-                <div className="row">
-                  <div className="col-xl-5">
-                    <div className="therapy-one__left">
-                      <div className="sec-title">
-                        <div className="sec-title__tagline">
-                          <h6>{homeContent.therapy.tagline}</h6>
-                        </div>
-                        <h2 className="sec-title__title">
-                          {homeContent.therapy.title.split('\n').map((line, lIdx, arr) => (
-                            <React.Fragment key={lIdx}>
-                              {line}
-                              {lIdx < arr.length - 1 && <br />}
-                            </React.Fragment>
-                          ))}
-                        </h2>
-                        {homeContent.therapy.founderInfo && (
-                          <div className="therapy-one__founder-badge" style={{ marginTop: '14px' }}>
-                            <h4 style={{ fontSize: '18px', fontWeight: '700', color: 'var(--uterpy-black)', margin: '0 0 2px' }}>
-                              {homeContent.therapy.founderInfo.name}
-                            </h4>
-                            <p style={{ fontSize: '13.5px', fontWeight: '600', color: 'var(--uterpy-base)', margin: 0, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                              {homeContent.therapy.founderInfo.role}
-                            </p>
-                          </div>
-                        )}
-                      </div>
 
-                      <ul className="therapy-one__left-list">
-                        {homeContent.therapy.leftItems.map((item, idx) => (
-                          <li key={idx} className="wow fadeInLeft" data-wow-delay={item.delay} data-wow-duration="1500ms">
-                            <div className="icon-box">
-                              <span className={item.icon}></span>
-                            </div>
-                            <div className="content-box">
-                              <h2>{item.title}</h2>
-                              <p>{item.description}</p>
-                            </div>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-
-                  <div className="col-xl-7">
-                    <div className="therapy-one__right clearfix">
-                      <div className="therapy-one__right-content">
-                        <div
-                          className="therapy-one__right-content-bg"
-                          style={{ backgroundImage: 'url(/assets/images/backgrounds/therapy-v1-bg2.jpg)' }}
-                        ></div>
-                        <div className="inner">
-                          <div className="icon-box">
-                            <span className={homeContent.therapy.rightBox.icon}></span>
-                          </div>
-                          <div className="content-box">
-                            <h2>
-                              {homeContent.therapy.rightBox.title.split('\n').map((line, lIdx, arr) => (
-                                <React.Fragment key={lIdx}>
-                                  {line}
-                                  {lIdx < arr.length - 1 && <br />}
-                                </React.Fragment>
-                              ))}
-                            </h2>
-                            <p>{homeContent.therapy.rightBox.description}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
 
           {/* =========================================================================
                4. ORGANISATION SECTION (EXACT DESIGN MATCH)
@@ -750,8 +673,8 @@ export default function FounderPage() {
                       <div className="org-card-item__globe">
                         <i className="fa fa-globe"></i>
                       </div>
-                      <a href="https://www.jnanakoota.com" target="_blank" rel="noopener noreferrer">
-                        www.jnanakoota.com
+                      <a href="http://jnanakoota.org/" target="_blank" rel="noopener noreferrer">
+                        jnanakoota.org
                       </a>
                     </div>
                   </div>

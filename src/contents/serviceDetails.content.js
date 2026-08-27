@@ -793,7 +793,7 @@ export const serviceDetailsContent = {
     headerTitle: "Mind Gym Centre",
     title: "Positive MindGym Centre – Physical Mind Training & Wellness",
     tagline: "Our dedicated physical mind training center with structured experiential workshops, reflexology, and wellness sessions.",
-    image: "/assets/images/case/mind-gym.jpg",
+    image: "/assets/images/services/mindgymcentre.jpeg",
     text1: "Just as physical fitness requires a dedicated gym with specialized equipment and trainers, mental fitness flourishes in a purpose-built environment. Ellangala’s Academy’s Positive MindGym Centre is a state-of-the-art mental conditioning center designed to strengthen attention, emotional balance, cognitive resilience, and deep relaxation.",
     text2: "Our centre offers immersive in-person workshops, one-on-one psychological coaching, biofeedback relaxation pods, therapeutic reflexology, and specialized neuro-cognitive training tools for students, professionals, and families.",
     sectionTwoTitle: "Experiential Facilities at the MindGym Centre",

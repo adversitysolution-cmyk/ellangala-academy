@@ -10,6 +10,8 @@ import SearchPopup from '../components/layout/SearchPopup';
 import ScrollToTop from '../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../hooks/useUterpyPlugins';
 import { useCart } from '../context/CartContext';
+import { orderService } from '../admin/services/orderService';
+import SEO from '../seo/SEO';
 
 export default function Checkout() {
   useUterpyPlugins();
@@ -36,14 +38,45 @@ export default function Checkout() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handlePlaceOrder = (e) => {
+  const [isPlacingOrder, setIsPlacingOrder] = useState(false);
+  const [orderError, setOrderError] = useState('');
+
+  const handlePlaceOrder = async (e) => {
     e.preventDefault();
     if (!formData.firstName || !formData.phone || !formData.streetAddress) {
       alert('Please fill in your name, phone number, and delivery address.');
       return;
     }
-    setOrderPlaced(true);
-    clearCart();
+
+    setIsPlacingOrder(true);
+    setOrderError('');
+
+    try {
+      await orderService.addOrder({
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        phone: formData.phone,
+        streetAddress: formData.streetAddress,
+        city: formData.city,
+        state: formData.state,
+        zipcode: formData.zipcode,
+        country: formData.country,
+        cartItems: cartItems,
+        subtotal: subtotal,
+        shipping: shipping,
+        discountAmount: discountAmount,
+        total: total,
+        paymentMethod: formData.paymentMethod,
+        orderNotes: formData.orderNotes
+      });
+      setOrderPlaced(true);
+      clearCart();
+    } catch (err) {
+      setOrderError(err.message || 'Could not place your order. Please try again.');
+    } finally {
+      setIsPlacingOrder(false);
+    }
   };
 
   return (
@@ -52,6 +85,7 @@ export default function Checkout() {
       <Preloader />
 
       <div className="page-wrapper">
+        <SEO title="Checkout | Ellangala’s Academy" noindex={true} />
         <HeaderOne />
         <PageHeader title="Checkout" pageName="Checkout" />
 
@@ -304,14 +338,18 @@ export default function Checkout() {
                         </li>
                       </ul>
 
+                      {orderError && (
+                        <p className="text-danger mt-3 mb-0">{orderError}</p>
+                      )}
+
                       <div className="btn-box mt-4">
                         <button
                           type="button"
                           className="thm-btn w-100"
-                          disabled={cartItems.length === 0}
+                          disabled={cartItems.length === 0 || isPlacingOrder}
                           onClick={handlePlaceOrder}
                         >
-                          <span>Place Order</span>
+                          <span>{isPlacingOrder ? 'Placing Order...' : 'Place Order'}</span>
                         </button>
                       </div>
                     </div>
