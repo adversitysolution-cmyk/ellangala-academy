@@ -11,7 +11,7 @@ export default function BlogCreatePage() {
   const handleSubmit = async (formData) => {
     setIsSubmitting(true);
     try {
-      blogService.createBlog(formData);
+      await blogService.createBlog(formData);
       navigate('/admin/blogs');
     } catch (err) {
       console.error('Failed to create blog post:', err);

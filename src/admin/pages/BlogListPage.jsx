@@ -34,22 +34,22 @@ export default function BlogListPage() {
     loadBlogs();
   }, []);
 
-  const handlePublishToggle = (blog) => {
+  const handlePublishToggle = async (blog) => {
     if (blog.status === 'published') {
-      blogService.unpublishBlog(blog.id);
+      await blogService.unpublishBlog(blog.id);
     } else {
-      blogService.publishBlog(blog.id);
+      await blogService.publishBlog(blog.id);
     }
     loadBlogs();
   };
 
-  const handleArchive = (id) => {
-    blogService.archiveBlog(id);
+  const handleArchive = async (id) => {
+    await blogService.archiveBlog(id);
     loadBlogs();
   };
 
-  const handleDelete = (id) => {
-    blogService.deleteBlog(id);
+  const handleDelete = async (id) => {
+    await blogService.deleteBlog(id);
     setDeleteModalId(null);
     loadBlogs();
   };

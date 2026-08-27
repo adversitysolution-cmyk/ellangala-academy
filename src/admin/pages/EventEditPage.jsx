@@ -1,18 +1,41 @@
-import React from 'react';
-import { useParams, Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import AdminLayout from '../components/AdminLayout';
 import EventForm from '../components/EventForm';
 import { eventService } from '../../features/events/services/eventService';
 
 export default function EventEditPage() {
   const { id } = useParams();
-  const event = eventService.getEventById(id);
+  const navigate = useNavigate();
+  const [event, setEvent] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const handleSubmit = (formData) => {
-    if (id) {
-      eventService.updateEvent(id, formData);
+  useEffect(() => {
+    setLoading(true);
+    eventService.getEventById(id).then((evt) => {
+      setEvent(evt);
+      setLoading(false);
+    });
+  }, [id]);
+
+  const handleSubmit = async (formData) => {
+    try {
+      await eventService.updateEvent(id, formData);
+      navigate('/admin/events');
+    } catch (err) {
+      console.error('Failed to update event:', err);
     }
   };
+
+  if (loading) {
+    return (
+      <AdminLayout title="Edit Event">
+        <div style={{ backgroundColor: '#FFFFFF', padding: '40px', borderRadius: '12px', textAlign: 'center' }}>
+          <p style={{ color: '#64748B' }}>Loading event details...</p>
+        </div>
+      </AdminLayout>
+    );
+  }
 
   if (!event) {
     return (

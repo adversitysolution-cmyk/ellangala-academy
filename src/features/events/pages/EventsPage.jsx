@@ -31,8 +31,8 @@ export default function EventsPage() {
   const [pastEvents, setPastEvents] = useState([]);
 
   useEffect(() => {
-    setUpcomingEvents(eventService.getUpcomingEvents());
-    setPastEvents(eventService.getPastEvents());
+    eventService.getUpcomingEvents().then(setUpcomingEvents).catch(() => {});
+    eventService.getPastEvents().then(setPastEvents).catch(() => {});
   }, []);
 
   const featuredEvent = upcomingEvents.find(e => e.featured) || upcomingEvents[0];

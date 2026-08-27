@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSearchParams, useParams, Link } from 'react-router-dom';
 import HeaderOne from '../components/layout/HeaderOne';
 import FooterOne from '../components/layout/FooterOne';
@@ -10,24 +10,84 @@ import MobileNav from '../components/layout/MobileNav';
 import SearchPopup from '../components/layout/SearchPopup';
 import ScrollToTop from '../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../hooks/useUterpyPlugins';
+import { blogService } from '../admin/services/blogService';
+import Error404 from './Error404';
 import { blogContent } from '../contents/blog.content';
+import SEO from '../seo/SEO';
+import { generateArticleSchema, generateBreadcrumbSchema } from '../seo/schemas/schemaGenerators';
 
 export default function BlogDetails() {
   useUterpyPlugins();
   const [searchParams] = useSearchParams();
-  const { id: paramId } = useParams();
+  const { id: paramId, slug: paramSlug } = useParams();
   const [commentSubmitted, setCommentSubmitted] = useState(false);
+  const [post, setPost] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const posts = blogContent.list.posts;
-  const currentId = paramId || searchParams.get('id') || posts[0].id;
-  const post = posts.find((p) => p.id === currentId || p.slug === currentId) || posts[0];
-  const postDetails = post.details || posts[0].details;
-  const form = blogContent.form;
+  const identifier = paramSlug || paramId || searchParams.get('id');
+  const isAdminPreview = Boolean(searchParams.get('admin'));
+
+  useEffect(() => {
+    setLoading(true);
+    blogService.getBlogBySlug(identifier, { admin: isAdminPreview }).then((data) => {
+      setPost(data);
+      setLoading(false);
+    });
+  }, [identifier, isAdminPreview]);
+
+  if (loading) {
+    return (
+      <>
+        <CustomCursor />
+        <Preloader />
+      </>
+    );
+  }
+
+  // Return 404 if post doesn't exist or is not published
+  if (!post || (post.status !== 'published' && !isAdminPreview)) {
+    return <Error404 />;
+  }
+
+  const rawAuthor = post.details?.author || post.author;
+  const authorObj = typeof rawAuthor === 'object' && rawAuthor !== null ? rawAuthor : {
+    image: '/assets/images/team/naveen-ellangala.jpg',
+    name: typeof rawAuthor === 'string' ? rawAuthor : 'Dr. Naveen Ellangala',
+    bio: 'Founder and Chief Mentor at Ellangala Academy.'
+  };
+
+  const postDetails = {
+    headerTitle: post.details?.headerTitle || post.title,
+    category: post.details?.category || post.category || 'Positive Psychology',
+    date: post.details?.date || (post.publishedAt ? new Date(post.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Nov 15, 2024'),
+    comments: post.details?.comments || '0 Comments',
+    author: authorObj,
+    title: post.details?.title || post.title,
+    text1: post.details?.text1 || post.content || post.excerpt,
+    heading2: post.details?.heading2 || '',
+    text2: post.details?.text2 || '',
+    text3: post.details?.text3 || '',
+    quote: post.details?.quote || post.excerpt,
+    articleImage: post.details?.articleImage || post.image || '/assets/images/blog/blog-mind-gym.png',
+  };
+
+  const form = blogContent?.form || {
+    title: 'Leave a Comment',
+    namePlaceholder: 'Your Name',
+    emailPlaceholder: 'Email Address',
+    messagePlaceholder: 'Write a Message',
+    submitBtnText: 'Submit Comment'
+  };
 
   const handleCommentSubmit = (e) => {
     e.preventDefault();
     setCommentSubmitted(true);
   };
+
+  const seoTitle = post.seo?.title || `${post.title} | Ellangala’s Academy`;
+  const seoDesc = post.seo?.description || post.excerpt || post.title;
+  const seoImg = post.seo?.image || post.image;
+  const isNoindex = Boolean(post.seo?.noindex);
 
   return (
     <>
@@ -35,6 +95,22 @@ export default function BlogDetails() {
       <Preloader />
 
       <div className="page-wrapper">
+        <SEO
+          title={seoTitle}
+          description={seoDesc}
+          canonical={`/insights/${post.slug || post.id}`}
+          image={seoImg}
+          type="article"
+          noindex={isNoindex}
+          structuredData={[
+            generateArticleSchema(post),
+            generateBreadcrumbSchema([
+              { name: 'Home', path: '/' },
+              { name: 'Insights', path: '/insights' },
+              { name: post.title, path: `/insights/${post.slug || post.id}` }
+            ])
+          ]}
+        />
         <HeaderOne />
         <PageHeader title="Blog Details" breadcrumb="Blog Details" />
 
@@ -47,7 +123,7 @@ export default function BlogDetails() {
                   <div className="blog-list-page__single">
                     <div className="blog-list-page__single-img">
                       <img
-                        src={post.img}
+                        src={post.image || post.img || postDetails.articleImage}
                         alt={post.title}
                         style={{ width: '100%', height: 'clamp(220px, 45vw, 420px)', objectFit: 'cover' }}
                       />
@@ -61,7 +137,7 @@ export default function BlogDetails() {
                             </div>
                             <div className="text">
                               <p>
-                                <span>{post.date}</span>
+                                <span>{postDetails.date}</span>
                               </p>
                             </div>
                           </li>
@@ -71,7 +147,7 @@ export default function BlogDetails() {
                             </div>
                             <div className="text">
                               <p>
-                                <span>{post.comments}</span>
+                                <span>{postDetails.comments}</span>
                               </p>
                             </div>
                           </li>
@@ -81,7 +157,7 @@ export default function BlogDetails() {
                             </div>
                             <div className="text">
                               <p>
-                                <span>{post.author}</span>
+                                <span>{postDetails.author.name}</span>
                               </p>
                             </div>
                           </li>

@@ -39,7 +39,7 @@ export default function AdminDashboardPage() {
   useEffect(() => {
     enrollmentService.getEnrollments().then(setEnrollments).catch(() => {});
     orderService.getOrders().then(setOrders).catch(() => {});
-    setEvents(eventService.getEvents());
+    eventService.getEvents().then(setEvents).catch(() => {});
   }, []);
 
   const newEnquiriesCount = enrollments.filter(e => e.status === 'New').length;

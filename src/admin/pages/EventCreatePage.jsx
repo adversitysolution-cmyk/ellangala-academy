@@ -1,11 +1,19 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import AdminLayout from '../components/AdminLayout';
 import EventForm from '../components/EventForm';
 import { eventService } from '../../features/events/services/eventService';
 
 export default function EventCreatePage() {
-  const handleSubmit = (formData) => {
-    eventService.createEvent(formData);
+  const navigate = useNavigate();
+
+  const handleSubmit = async (formData) => {
+    try {
+      await eventService.createEvent(formData);
+      navigate('/admin/events');
+    } catch (err) {
+      console.error('Failed to create event:', err);
+    }
   };
 
   return (

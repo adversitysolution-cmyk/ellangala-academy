@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { EVENT_CATEGORIES } from '../../features/events/data/eventSeedData';
 import { Save, Plus, X, ArrowLeft, Image as ImageIcon, CheckCircle2 } from 'lucide-react';
 
-export default function EventForm({ initialData, onSave, isEditing = false }) {
+export default function EventForm({ initialData, onSubmit, isEditing = false }) {
   const navigate = useNavigate();
 
   const [title, setTitle] = useState(initialData?.title || '');
@@ -112,7 +112,7 @@ export default function EventForm({ initialData, onSave, isEditing = false }) {
       }
     };
 
-    onSave(payload);
+    onSubmit(payload);
 
     setToastMessage('Event saved successfully!');
     setTimeout(() => setToastMessage(''), 3000);

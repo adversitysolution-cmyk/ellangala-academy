@@ -11,16 +11,15 @@ export default function BlogEditPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    const existing = blogService.getBlogById(id) || blogService.getBlogBySlug(id);
-    if (existing) {
-      setBlogData(existing);
-    }
+    blogService.getBlogById(id).then((existing) => {
+      if (existing) setBlogData(existing);
+    });
   }, [id]);
 
   const handleSubmit = async (formData) => {
     setIsSubmitting(true);
     try {
-      blogService.updateBlog(id, formData);
+      await blogService.updateBlog(id, formData);
       navigate('/admin/blogs');
     } catch (err) {
       console.error('Failed to update blog post:', err);

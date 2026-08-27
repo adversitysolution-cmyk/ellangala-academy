@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import HeaderOne from '../../../components/layout/HeaderOne';
 import FooterOne from '../../../components/layout/FooterOne';
@@ -27,7 +27,8 @@ export default function EventRegisterPage() {
   useUterpyPlugins();
   const { slug } = useParams();
 
-  const event = eventService.getEventBySlug(slug);
+  const [event, setEvent] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const [fullName, setFullName] = useState('');
   const [phone, setPhone] = useState('');
@@ -39,6 +40,23 @@ export default function EventRegisterPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
+
+  useEffect(() => {
+    setLoading(true);
+    eventService.getEventBySlug(slug).then((evt) => {
+      setEvent(evt);
+      setLoading(false);
+    });
+  }, [slug]);
+
+  if (loading) {
+    return (
+      <>
+        <CustomCursor />
+        <Preloader />
+      </>
+    );
+  }
 
   if (!event) {
     return (

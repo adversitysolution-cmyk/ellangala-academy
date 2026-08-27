@@ -46,7 +46,7 @@ export default function EventListPage() {
   const [deleteModalId, setDeleteModalId] = useState(null);
 
   const loadEvents = () => {
-    setEvents(eventService.getEvents());
+    eventService.getEvents().then(setEvents).catch(() => {});
     enrollmentService.getEnrollments().then(setEnrollments).catch(() => {});
   };
 
@@ -98,26 +98,26 @@ export default function EventListPage() {
     return matchesSearch && matchesTab && matchesStatus && matchesMode && matchesCategory;
   });
 
-  const handleTogglePublish = (evt) => {
+  const handleTogglePublish = async (evt) => {
     if (evt.status === 'published') {
-      eventService.unpublishEvent(evt.id);
+      await eventService.unpublishEvent(evt.id);
     } else {
-      eventService.publishEvent(evt.id);
+      await eventService.publishEvent(evt.id);
     }
     loadEvents();
   };
 
-  const handleDuplicate = (id) => {
-    const dup = eventService.duplicateEvent(id);
+  const handleDuplicate = async (id) => {
+    const dup = await eventService.duplicateEvent(id);
     if (dup) {
       loadEvents();
       navigate(`/admin/events/${dup.id}/edit`);
     }
   };
 
-  const handleDeleteConfirm = () => {
+  const handleDeleteConfirm = async () => {
     if (deleteModalId) {
-      eventService.deleteEvent(deleteModalId);
+      await eventService.deleteEvent(deleteModalId);
       setDeleteModalId(null);
       loadEvents();
     }

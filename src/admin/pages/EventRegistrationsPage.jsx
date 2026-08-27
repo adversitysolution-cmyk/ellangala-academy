@@ -28,7 +28,7 @@ export default function EventRegistrationsPage() {
   }, [id]);
 
   const loadData = async () => {
-    const evt = eventService.getEventById(id);
+    const evt = await eventService.getEventById(id);
     setEvent(evt);
 
     if (evt) {
