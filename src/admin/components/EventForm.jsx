@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { EVENT_CATEGORIES } from '../../features/events/data/eventSeedData';
-import { Save, Plus, X, ArrowLeft, Image as ImageIcon, CheckCircle2 } from 'lucide-react';
+import { Save, Plus, X, ArrowLeft, Image as ImageIcon, Upload, CheckCircle2 } from 'lucide-react';
+import { uploadService } from '../services/uploadService';
 
 export default function EventForm({ initialData, onSubmit, isEditing = false }) {
   const navigate = useNavigate();
@@ -11,8 +12,28 @@ export default function EventForm({ initialData, onSubmit, isEditing = false }) 
   const [shortDescription, setShortDescription] = useState(initialData?.shortDescription || '');
   const [description, setDescription] = useState(initialData?.description || '');
   const [image, setImage] = useState(initialData?.image || '/assets/images/blog/blog-positive-psychology.png');
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [uploadError, setUploadError] = useState('');
+  const fileInputRef = useRef(null);
+
+  const handleImageFileChange = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadError('');
+    setIsUploadingImage(true);
+    try {
+      const { url } = await uploadService.uploadImage(file);
+      setImage(url);
+    } catch (err) {
+      setUploadError(err.message || 'Image upload failed.');
+    } finally {
+      setIsUploadingImage(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
 
   const [date, setDate] = useState(initialData?.date || new Date().toISOString().split('T')[0]);
+  const [endDate, setEndDate] = useState(initialData?.endDate || '');
   const [startTime, setStartTime] = useState(initialData?.startTime || '10:00');
   const [endTime, setEndTime] = useState(initialData?.endTime || '13:00');
 
@@ -84,6 +105,7 @@ export default function EventForm({ initialData, onSubmit, isEditing = false }) 
       description,
       image,
       date,
+      endDate: endDate || null,
       startTime,
       endTime,
       mode,
@@ -245,7 +267,7 @@ export default function EventForm({ initialData, onSubmit, isEditing = false }) 
           <div className="row g-3">
             <div className="col-md-4">
               <div className="admin-form-group">
-                <label className="admin-label">Event Date *</label>
+                <label className="admin-label">Event Start Date *</label>
                 <input
                   type="date"
                   required
@@ -253,6 +275,19 @@ export default function EventForm({ initialData, onSubmit, isEditing = false }) 
                   onChange={(e) => setDate(e.target.value)}
                   className="admin-input"
                 />
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className="admin-form-group">
+                <label className="admin-label">Event End Date</label>
+                <input
+                  type="date"
+                  value={endDate}
+                  min={date}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  className="admin-input"
+                />
+                <small style={{ color: '#667085', fontSize: '12px' }}>Leave blank for a single-day event. Used on certificates.</small>
               </div>
             </div>
             <div className="col-md-4">
@@ -349,15 +384,35 @@ export default function EventForm({ initialData, onSubmit, isEditing = false }) 
             <div className="col-md-7">
               <div className="admin-form-group">
                 <label className="admin-label">Image Path / URL *</label>
-                <input
-                  type="text"
-                  required
-                  placeholder="/assets/images/blog/blog-positive-psychology.png"
-                  value={image}
-                  onChange={(e) => setImage(e.target.value)}
-                  className="admin-input"
-                />
-                <span style={{ fontSize: '12px', color: '#667085', marginTop: '4px' }}>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <input
+                    type="text"
+                    required
+                    placeholder="/assets/images/blog/blog-positive-psychology.png"
+                    value={image}
+                    onChange={(e) => setImage(e.target.value)}
+                    className="admin-input"
+                    style={{ flex: 1 }}
+                  />
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp,image/gif"
+                    onChange={handleImageFileChange}
+                    style={{ display: 'none' }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={isUploadingImage}
+                    className="btn-secondary-outline"
+                    style={{ whiteSpace: 'nowrap' }}
+                  >
+                    <Upload size={14} /> {isUploadingImage ? 'Uploading...' : 'Upload'}
+                  </button>
+                </div>
+                {uploadError && <div style={{ fontSize: '11px', color: '#EF4444', marginTop: '6px' }}>{uploadError}</div>}
+                <span style={{ fontSize: '12px', color: '#667085', marginTop: '4px', display: 'block' }}>
                   Recommended resolution: 1200 × 675 pixels (16:9 ratio).
                 </span>
               </div>

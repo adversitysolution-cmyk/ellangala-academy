@@ -16,11 +16,15 @@ const transporter = nodemailer.createTransport({
 
 const MAIL_FROM = process.env.MAIL_FROM || '"Ellangala’s Academy" <orders@ellangala.com>';
 
+// Returns true on success, false on failure. Never throws — callers that need
+// to react to a failure (e.g. the certificate email queue) check the return.
 export async function sendMail({ to, subject, text, html }) {
-  if (!to) return;
+  if (!to) return false;
   try {
     await transporter.sendMail({ from: MAIL_FROM, to, subject, text, html });
+    return true;
   } catch (err) {
     console.error(`Failed to send email to ${to}:`, err.message);
+    return false;
   }
 }

@@ -44,7 +44,10 @@ export default function ShopDetails() {
     });
   }, [bookId]);
 
+  const outOfStock = product && product.stock != null && Number(product.stock) <= 0;
+
   const handleAddToCart = () => {
+    if (outOfStock) return;
     addToCart(product, quantity);
     navigate('/cart');
   };
@@ -148,7 +151,9 @@ export default function ShopDetails() {
                       {product.price}{' '}
                       <del>₹250.00</del>{' '}
                       <span className="text">{product.discount || '-40%'}</span>{' '}
-                      <span className="text2">(In stock)</span>
+                      <span className="text2" style={outOfStock ? { color: '#EF4444' } : undefined}>
+                        {outOfStock ? '(Out of stock)' : '(In stock)'}
+                      </span>
                     </h3>
                   </div>
 
@@ -272,8 +277,9 @@ export default function ShopDetails() {
                             e.preventDefault();
                             handleAddToCart();
                           }}
+                          style={outOfStock ? { opacity: 0.5, pointerEvents: 'none' } : undefined}
                         >
-                          Add to Cart
+                          {outOfStock ? 'Out of Stock' : 'Add to Cart'}
                         </a>
                       </div>
 

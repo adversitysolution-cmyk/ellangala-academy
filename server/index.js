@@ -12,9 +12,11 @@ import couponsApi from './routes/couponsApi.js';
 import contactApi from './routes/contactApi.js';
 import adminAuthApi from './routes/adminAuthApi.js';
 import uploadApi, { uploadsDir } from './routes/uploadApi.js';
+import certificatesApi from './routes/certificatesApi.js';
 import sitemapRoute from './routes/sitemapRoute.js';
 import { requireAdminAuth } from './middleware/adminAuth.js';
 import { ensureSchema } from './db/store.js';
+import { startCertificateWorker } from './lib/certificateWorker.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -38,6 +40,7 @@ app.use('/api', paymentsApi);
 app.use('/api', couponsApi);
 app.use('/api', contactApi);
 app.use('/api', uploadApi);
+app.use('/api', certificatesApi);
 
 // 2. Dynamic Sitemap Endpoint (Handled BEFORE SPA catch-all)
 app.use('/', sitemapRoute);
@@ -46,6 +49,8 @@ app.use('/', sitemapRoute);
 const distDir = path.join(rootDir, 'dist');
 app.use(express.static(distDir));
 app.use('/uploads', express.static(uploadsDir));
+// NOTE: certificate PDFs in certificatesDir are deliberately NOT served statically —
+// access only via token-gated /api/certificates/file/:token or admin download.
 
 // 4. SPA Fallback Router
 app.get('*', (req, res) => {
@@ -69,6 +74,7 @@ app.use((err, req, res, next) => {
 
 ensureSchema()
   .then(() => {
+    startCertificateWorker().catch((err) => console.error('Certificate worker failed to start:', err.message));
     app.listen(PORT, () => {
       console.log(`🚀 Ellangala’s Academy Server running on http://localhost:${PORT}`);
       console.log(`🌐 Dynamic Sitemap available at http://localhost:${PORT}/sitemap.xml`);

@@ -17,6 +17,7 @@ export default function ProductForm({ initialData, onSubmit, isEditing = false }
   const [alt, setAlt] = useState(initialData?.alt || '');
   const [description, setDescription] = useState(initialData?.description || '');
   const [sale, setSale] = useState(Boolean(initialData?.sale));
+  const [stock, setStock] = useState(initialData?.stock ?? '');
   const [status, setStatus] = useState(initialData?.status || 'published');
 
   const [highlightInput, setHighlightInput] = useState('');
@@ -68,6 +69,7 @@ export default function ProductForm({ initialData, onSubmit, isEditing = false }
       description,
       highlights,
       sale,
+      stock: stock === '' ? null : Number(stock),
       status: targetStatus || status
     };
 
@@ -178,6 +180,17 @@ export default function ProductForm({ initialData, onSubmit, isEditing = false }
               <div className="admin-form-group">
                 <label className="admin-label">Discount Label (Optional)</label>
                 <input type="text" value={discount} onChange={(e) => setDiscount(e.target.value)} className="admin-input" placeholder="e.g. 40% OFF" />
+              </div>
+            </div>
+          </div>
+          <div className="row g-3" style={{ marginTop: '4px' }}>
+            <div className="col-md-6">
+              <div className="admin-form-group">
+                <label className="admin-label">Stock Quantity</label>
+                <input type="number" min="0" value={stock} onChange={(e) => setStock(e.target.value)} className="admin-input" placeholder="Leave blank for unlimited" />
+                <span style={{ fontSize: '12px', color: '#667085', marginTop: '4px', display: 'block' }}>
+                  Set to 0 to mark "Out of Stock" and block add-to-cart. Blank = not tracked.
+                </span>
               </div>
             </div>
           </div>

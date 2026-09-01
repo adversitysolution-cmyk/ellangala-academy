@@ -7,6 +7,7 @@ import { blogContent } from '../../src/contents/blog.content.js';
 import { shopContent } from '../../src/contents/shop.content.js';
 import { invalidateSitemapCache } from '../lib/sitemapGenerator.js';
 import { computeDiscount, checkCouponUsable } from '../../src/shared/couponMath.js';
+import { seedCertificateDefaults } from './certificateStore.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -56,17 +57,20 @@ export async function ensureSchema() {
     await pool.query(stmt);
   }
   // Add columns introduced after a DB was first created (CREATE TABLE IF NOT EXISTS skips them).
-  for (const [col, ddl] of [
-    ['paymentRef', 'ADD COLUMN paymentRef VARCHAR(120)'],
-    ['couponCode', 'ADD COLUMN couponCode VARCHAR(60)']
+  for (const [table, ddl] of [
+    ['orders', 'ADD COLUMN paymentRef VARCHAR(120)'],
+    ['orders', 'ADD COLUMN couponCode VARCHAR(60)'],
+    ['products', 'ADD COLUMN stock INT DEFAULT NULL'],
+    ['events', 'ADD COLUMN endDate VARCHAR(20)']
   ]) {
     try {
-      await pool.query(`ALTER TABLE orders ${ddl}`);
+      await pool.query(`ALTER TABLE ${table} ${ddl}`);
     } catch (err) {
       if (err.code !== 'ER_DUP_FIELDNAME') throw err;
     }
   }
   await seedIfEmpty();
+  await seedCertificateDefaults();
 }
 
 async function seedIfEmpty() {
@@ -175,6 +179,7 @@ function rowToProduct(row) {
   return {
     ...row,
     sale: toBool(row.sale),
+    stock: row.stock == null ? null : Number(row.stock),
     createdAt: toIso(row.createdAt),
     updatedAt: toIso(row.updatedAt)
   };
@@ -220,8 +225,8 @@ export async function saveDbEvent(eventData) {
       publishedAt: eventData.status === 'published' && existing.status !== 'published' ? now : (toIso(existing.publishedAt) || now)
     };
     await conn.query(
-      `UPDATE events SET slug=?, title=?, category=?, shortDescription=?, description=?, image=?, date=?, startTime=?, endTime=?, timezone=?, mode=?, venue=?, address=?, city=?, googleMeetLink=?, meetingLink=?, organizer=?, speaker=?, registrationOpen=?, capacity=?, availableSeats=?, priceType=?, price=?, razorpayLink=?, paymentLink=?, status=?, featured=?, seo=?, updatedAt=?, publishedAt=? WHERE id=?`,
-      [merged.slug, merged.title, merged.category, merged.shortDescription, merged.description, merged.image, merged.date, merged.startTime, merged.endTime, merged.timezone, merged.mode, merged.venue, merged.address, merged.city, merged.googleMeetLink, merged.meetingLink, merged.organizer, merged.speaker, Boolean(merged.registrationOpen), merged.capacity ?? null, merged.availableSeats ?? null, merged.priceType, merged.price, merged.razorpayLink, merged.paymentLink, merged.status, Boolean(merged.featured), JSON.stringify(merged.seo || {}), toMysqlDatetime(merged.updatedAt), merged.publishedAt ? toMysqlDatetime(merged.publishedAt) : null, existing.id]
+      `UPDATE events SET slug=?, title=?, category=?, shortDescription=?, description=?, image=?, date=?, endDate=?, startTime=?, endTime=?, timezone=?, mode=?, venue=?, address=?, city=?, googleMeetLink=?, meetingLink=?, organizer=?, speaker=?, registrationOpen=?, capacity=?, availableSeats=?, priceType=?, price=?, razorpayLink=?, paymentLink=?, status=?, featured=?, seo=?, updatedAt=?, publishedAt=? WHERE id=?`,
+      [merged.slug, merged.title, merged.category, merged.shortDescription, merged.description, merged.image, merged.date, merged.endDate || null, merged.startTime, merged.endTime, merged.timezone, merged.mode, merged.venue, merged.address, merged.city, merged.googleMeetLink, merged.meetingLink, merged.organizer, merged.speaker, Boolean(merged.registrationOpen), merged.capacity ?? null, merged.availableSeats ?? null, merged.priceType, merged.price, merged.razorpayLink, merged.paymentLink, merged.status, Boolean(merged.featured), JSON.stringify(merged.seo || {}), toMysqlDatetime(merged.updatedAt), merged.publishedAt ? toMysqlDatetime(merged.publishedAt) : null, existing.id]
     );
     invalidateSitemapCache();
     return merged;
@@ -237,6 +242,7 @@ export async function saveDbEvent(eventData) {
     description: eventData.description || '',
     image: eventData.image || '/assets/images/blog/blog-positive-psychology.png',
     date: eventData.date || new Date().toISOString().split('T')[0],
+    endDate: eventData.endDate || null,
     startTime: eventData.startTime || '10:00',
     endTime: eventData.endTime || '12:00',
     timezone: eventData.timezone || 'Asia/Kolkata',
@@ -264,9 +270,9 @@ export async function saveDbEvent(eventData) {
   };
 
   await conn.query(
-    `INSERT INTO events (id, slug, title, category, shortDescription, description, image, date, startTime, endTime, timezone, mode, venue, address, city, googleMeetLink, meetingLink, organizer, speaker, registrationOpen, capacity, availableSeats, priceType, price, razorpayLink, paymentLink, status, featured, seo, createdAt, updatedAt, publishedAt)
-     VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
-    [record.id, record.slug, record.title, record.category, record.shortDescription, record.description, record.image, record.date, record.startTime, record.endTime, record.timezone, record.mode, record.venue, record.address, record.city, record.googleMeetLink, record.meetingLink, record.organizer, record.speaker, record.registrationOpen, record.capacity, record.availableSeats, record.priceType, record.price, record.razorpayLink, record.paymentLink, record.status, record.featured, JSON.stringify(record.seo), toMysqlDatetime(record.createdAt), toMysqlDatetime(record.updatedAt), record.publishedAt ? toMysqlDatetime(record.publishedAt) : null]
+    `INSERT INTO events (id, slug, title, category, shortDescription, description, image, date, endDate, startTime, endTime, timezone, mode, venue, address, city, googleMeetLink, meetingLink, organizer, speaker, registrationOpen, capacity, availableSeats, priceType, price, razorpayLink, paymentLink, status, featured, seo, createdAt, updatedAt, publishedAt)
+     VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+    [record.id, record.slug, record.title, record.category, record.shortDescription, record.description, record.image, record.date, record.endDate, record.startTime, record.endTime, record.timezone, record.mode, record.venue, record.address, record.city, record.googleMeetLink, record.meetingLink, record.organizer, record.speaker, record.registrationOpen, record.capacity, record.availableSeats, record.priceType, record.price, record.razorpayLink, record.paymentLink, record.status, record.featured, JSON.stringify(record.seo), toMysqlDatetime(record.createdAt), toMysqlDatetime(record.updatedAt), record.publishedAt ? toMysqlDatetime(record.publishedAt) : null]
   );
   invalidateSitemapCache();
   return record;
@@ -559,11 +565,14 @@ export async function saveDbProduct(productData) {
     existing = rows[0] || null;
   }
 
+  const normalizeStock = (val) => (val === '' || val == null ? null : Number(val));
+
   if (existing) {
     const merged = { ...rowToProduct(existing), ...productData, updatedAt: now };
+    merged.stock = normalizeStock(merged.stock);
     await pool.query(
-      `UPDATE products SET title=?, category=?, author=?, type=?, theme=?, price=?, discount=?, image=?, alt=?, description=?, highlights=?, sale=?, status=?, updatedAt=? WHERE id=?`,
-      [merged.title, merged.category, merged.author, merged.type, merged.theme, merged.price, merged.discount, merged.image, merged.alt, merged.description, JSON.stringify(merged.highlights || []), Boolean(merged.sale), merged.status, toMysqlDatetime(merged.updatedAt), existing.id]
+      `UPDATE products SET title=?, category=?, author=?, type=?, theme=?, price=?, discount=?, image=?, alt=?, description=?, highlights=?, sale=?, stock=?, status=?, updatedAt=? WHERE id=?`,
+      [merged.title, merged.category, merged.author, merged.type, merged.theme, merged.price, merged.discount, merged.image, merged.alt, merged.description, JSON.stringify(merged.highlights || []), Boolean(merged.sale), merged.stock, merged.status, toMysqlDatetime(merged.updatedAt), existing.id]
     );
     return merged;
   }
@@ -583,15 +592,16 @@ export async function saveDbProduct(productData) {
     description: productData.description || '',
     highlights: productData.highlights || [],
     sale: Boolean(productData.sale),
+    stock: normalizeStock(productData.stock),
     status: productData.status || 'published',
     createdAt: now,
     updatedAt: now
   };
 
   await pool.query(
-    `INSERT INTO products (id, title, category, author, type, theme, price, discount, image, alt, description, highlights, sale, status, createdAt, updatedAt)
-     VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
-    [record.id, record.title, record.category, record.author, record.type, record.theme, record.price, record.discount, record.image, record.alt, record.description, JSON.stringify(record.highlights), record.sale, record.status, toMysqlDatetime(record.createdAt), toMysqlDatetime(record.updatedAt)]
+    `INSERT INTO products (id, title, category, author, type, theme, price, discount, image, alt, description, highlights, sale, stock, status, createdAt, updatedAt)
+     VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+    [record.id, record.title, record.category, record.author, record.type, record.theme, record.price, record.discount, record.image, record.alt, record.description, JSON.stringify(record.highlights), record.sale, record.stock, record.status, toMysqlDatetime(record.createdAt), toMysqlDatetime(record.updatedAt)]
   );
   return record;
 }

@@ -73,7 +73,7 @@ export default function BlogListPage() {
     <AdminLayout
       title="Blogs & Insights Management"
       subtitle="Publish articles, manage SEO meta descriptions, dynamic sitemap entries, and editorial content"
-      actionSlot={
+      action={
         <button
           type="button"
           onClick={() => navigate('/admin/blogs/new')}

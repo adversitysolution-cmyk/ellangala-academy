@@ -19,6 +19,7 @@ import {
   Power,
   Copy,
   Trash2,
+  Award,
   AlertTriangle
 } from 'lucide-react';
 
@@ -386,6 +387,7 @@ export default function EventListPage() {
                                 { label: 'View Event', icon: Eye, to: `/events/${evt.slug}`, target: '_blank' },
                                 { label: 'Edit Event', icon: Edit, to: `/admin/events/${evt.id}/edit` },
                                 { label: 'View Registrations', icon: Users, to: `/admin/events/${evt.id}/registrations` },
+                                { label: 'Certificates', icon: Award, to: `/admin/events/${evt.id}/certificates` },
                                 { divider: true },
                                 {
                                   label: evt.status === 'published' ? 'Unpublish Event' : 'Publish Event',

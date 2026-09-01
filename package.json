@@ -20,11 +20,14 @@
     "multer": "^2.2.0",
     "mysql2": "^3.24.2",
     "nodemailer": "^9.0.5",
+    "pdfkit": "^0.20.2",
+    "qrcode": "^1.5.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-helmet-async": "^3.0.0",
     "react-quill-new": "^3.8.3",
-    "react-router-dom": "^7.1.5"
+    "react-router-dom": "^7.1.5",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   },
   "devDependencies": {
     "@types/react": "^19.0.8",

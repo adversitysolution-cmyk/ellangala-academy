@@ -22,6 +22,7 @@ import VideosOnTalksPage from '../pages/VideosOnTalksPage';
 import MeditationMusicPage from '../pages/MeditationMusicPage';
 import FreeResourcesPage from '../pages/FreeResourcesPage';
 import TrackOrderPage from '../pages/TrackOrderPage';
+import VerifyCertificate from '../pages/VerifyCertificate';
 
 // Layout & Context
 import MobileNav from '../components/layout/MobileNav';
@@ -47,6 +48,10 @@ import EventListPage from '../admin/pages/EventListPage';
 import EventCreatePage from '../admin/pages/EventCreatePage';
 import EventEditPage from '../admin/pages/EventEditPage';
 import EventRegistrationsPage from '../admin/pages/EventRegistrationsPage';
+import EventCertificatesPage from '../admin/pages/EventCertificatesPage';
+import CertificateImportPage from '../admin/pages/CertificateImportPage';
+import CertificateBatchPage from '../admin/pages/CertificateBatchPage';
+import CertificateTemplatesPage from '../admin/pages/CertificateTemplatesPage';
 
 // Admin Blogs Module Imports
 import BlogListPage from '../admin/pages/BlogListPage';
@@ -143,6 +148,10 @@ export default function AppRouter() {
               <Route path="/events/:slug" element={<EventDetailsPage />} />
               <Route path="/events/:slug/register" element={<EventRegisterPage />} />
 
+              {/* Public Certificate Verification */}
+              <Route path="/verify-certificate" element={<VerifyCertificate />} />
+              <Route path="/verify/c/:token" element={<VerifyCertificate />} />
+
               {/* Admin Portal Routes */}
               <Route path="/login" element={<AdminLoginPage />} />
               <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
@@ -225,6 +234,38 @@ export default function AppRouter() {
                 element={
                   <AdminProtectedRoute>
                     <EventRegistrationsPage />
+                  </AdminProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/events/:id/certificates"
+                element={
+                  <AdminProtectedRoute>
+                    <EventCertificatesPage />
+                  </AdminProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/events/:id/certificates/import"
+                element={
+                  <AdminProtectedRoute>
+                    <CertificateImportPage />
+                  </AdminProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/events/:id/certificates/batches/:batchId"
+                element={
+                  <AdminProtectedRoute>
+                    <CertificateBatchPage />
+                  </AdminProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/certificate-templates"
+                element={
+                  <AdminProtectedRoute>
+                    <CertificateTemplatesPage />
                   </AdminProtectedRoute>
                 }
               />

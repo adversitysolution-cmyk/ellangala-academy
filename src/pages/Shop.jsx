@@ -222,6 +222,9 @@ export default function Shop() {
                     <div className="shop-page__single-img">
                       <img src={item.image} alt={item.alt || item.title} />
                       {item.sale && <div className="text">Sale</div>}
+                      {item.stock != null && Number(item.stock) <= 0 && (
+                        <div className="text" style={{ background: '#EF4444' }}>Out of Stock</div>
+                      )}
                     </div>
                     <div className="shop-page__single-content">
                       <div className="btn-box text-center">
