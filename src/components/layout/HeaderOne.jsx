@@ -80,12 +80,12 @@ export default function HeaderOne() {
         <div className="main-header-one__bottom">
           <nav className="main-menu clearfix">
             <div className="main-menu__wrapper clearfix">
-              <div className="container">
+              <div className="main-header-one__container">
                 <div className="main-header-one__bottom-inner">
                   <div className="main-header-one__bottom-left">
                     <div className="logo-one">
                       <Link to="/">
-                        <img src="/assets/images/resources/logo-1.png" alt="Ellangala's Academy Logo" style={{ maxHeight: '95px', width: 'auto' }} />
+                        <img src="/assets/images/resources/logo-1.png" alt="Ellangala's Academy Logo" style={{ maxHeight: '72px', width: 'auto' }} />
                       </Link>
                     </div>
 
@@ -380,8 +380,8 @@ export default function HeaderOne() {
                       </ul>
                     </div>
                   </div>
-                  <div className="main-header-one__bottom-right" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <div className="main-header__cart-box" style={{ position: 'relative' }}>
+                  <div className="main-header-one__bottom-right" style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0, marginLeft: 'auto' }}>
+                    <div className="main-header__cart-box" style={{ position: 'relative', flexShrink: 0 }}>
                       <Link
                         to="/cart"
                         title="Shopping Cart"
@@ -391,12 +391,12 @@ export default function HeaderOne() {
                           display: 'inline-flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          width: '46px',
-                          height: '46px',
+                          width: '40px',
+                          height: '40px',
                           borderRadius: '50%',
                           backgroundColor: '#FAF8F5',
                           color: 'var(--uterpy-black)',
-                          fontSize: '18px',
+                          fontSize: '16px',
                           border: '1px solid #ECE7DE',
                           transition: 'all 0.3s ease'
                         }}
@@ -421,9 +421,9 @@ export default function HeaderOne() {
                               backgroundColor: '#f42647',
                               color: '#ffffff',
                               borderRadius: '50%',
-                              width: '19px',
-                              height: '19px',
-                              fontSize: '11px',
+                              width: '18px',
+                              height: '18px',
+                              fontSize: '10.5px',
                               fontWeight: '700',
                               display: 'flex',
                               alignItems: 'center',
@@ -436,13 +436,13 @@ export default function HeaderOne() {
                         )}
                       </Link>
                     </div>
-                    <div className="main-header-one__bottom-right-btn d-none d-lg-block">
-                      <Link to="/contact" className="thm-btn">
+                    <div className="main-header-one__bottom-right-btn d-none d-xl-block" style={{ flexShrink: 0 }}>
+                      <Link to="/contact" className="thm-btn" style={{ whiteSpace: 'nowrap', padding: '10px 20px', fontSize: '13.5px', borderRadius: '0px' }}>
                         {header.requestBookText || "Contact Us"}
                       </Link>
                     </div>
                     {/* Mobile Hamburger Toggle Button */}
-                    <div className="mobile-nav-toggle-box d-flex d-lg-none">
+                    <div className="mobile-nav-toggle-box d-flex d-xl-none">
                       <a
                         href="#"
                         className="mobile-nav__toggler"

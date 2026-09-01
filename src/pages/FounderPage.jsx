@@ -14,7 +14,8 @@ import SEO from '../seo/SEO';
 import { generatePersonSchema, generateBreadcrumbSchema } from '../seo/schemas/schemaGenerators';
 
 import founderHeroBg from '../Images/Founder PAge Hero.png';
-import founderBooksShowcaseImg from '../Images/ChatGPT Image Aug 18, 2026, 09_18_52 PM.png';
+import founderBooksShowcaseImg from '../Images/ChatGPT Image Sep 1, 2026, 07_43_59 PM.png';
+import founderPortraitBlueImg from '../Images/Team Members Images/Naveen Ellangala.png';
 
 // Image assets
 const founderBooksImg = '/assets/images/resources/therapy-v1-img1.png';
@@ -34,17 +35,19 @@ export default function FounderPage() {
     { num: 5, title: 'Be positive' },
     { num: 6, title: 'Self care' },
     { num: 7, title: 'Mind Reprogramming' },
-    { num: 8, title: 'Goal Setting & Study Skills' }
+    { num: 8, title: 'Goal Setting & Study Skills' },
+    { num: 9, title: 'Nane Nanna Shilpi' }
   ];
 
   const booksListCol2 = [
-    { num: 9, title: 'Nane Nanna Shilpi' },
     { num: 10, title: 'Positive Parenting' },
     { num: 11, title: 'Dhanatmaka Poshakatva' },
     { num: 12, title: 'The Student Success Mindset' },
     { num: 13, title: 'Vidhyarthi Sadhanege ondu kaipidi' },
-    { num: 14, title: 'Purandaradasara Keerthanegalu\nmattu vyaktitva vikasana', forthcoming: true, allowWrap: true },
-    { num: 15, title: 'Manassigondu Budhi mathu', forthcoming: true }
+    { num: 14, title: 'Purandaradasara Keerthanegalu\nmattu vyaktitva vikasana', allowWrap: true },
+    { num: 15, title: 'Manassigondu Budhi mathu' },
+    { num: 16, title: 'Bhagavadgita for Meaningful Life' },
+    { num: 17, title: 'MANAS SADHANA (A Journey Towards a Meaningful Life)', allowWrap: true }
   ];
 
   const qualList = [
@@ -288,22 +291,179 @@ export default function FounderPage() {
           <section className="about-one founder-intro-section" id="founder-intro">
             <div className="container">
               <div className="row align-items-center">
-                {/* LEFT: Premium Founder Portrait Card */}
-                <div className="col-lg-5 col-md-11 mb-4 mb-lg-0 d-flex justify-content-center align-items-start">
-                  <div className="founder-portrait-wrap" style={{ maxWidth: '465px', width: '100%', margin: '0 auto' }}>
-                    {/* Decorative Dot Grid */}
-                    <svg width="50" height="50" viewBox="0 0 60 60" fill="none" style={{ position: 'absolute', right: '-14px', top: '-14px', zIndex: 1, opacity: 0.7 }}>
-                      <pattern id="dot-grid" x="0" y="0" width="12" height="12" patternUnits="userSpaceOnUse">
-                        <circle cx="3" cy="3" r="2.5" fill="#D8A54B" />
-                      </pattern>
-                      <rect width="60" height="60" fill="url(#dot-grid)" />
+                {/* LEFT: Exact 1:1 Reference Founder Portrait & Floating Bio Card (+35% Total Scaled) */}
+                <div className="col-lg-5 col-md-11 mb-5 mb-lg-0 d-flex justify-content-center align-items-start">
+                  <div className="founder-exact-showcase" style={{
+                    position: 'relative',
+                    maxWidth: '550px',
+                    width: '100%',
+                    margin: '0 auto',
+                    paddingTop: '36px',
+                    paddingLeft: '32px',
+                    paddingRight: '16px'
+                  }}>
+                    
+                    {/* Background Organic Wave Accents */}
+                    <svg width="100%" height="100%" viewBox="0 0 570 770" fill="none" style={{
+                      position: 'absolute',
+                      top: 0,
+                      left: 0,
+                      zIndex: 0,
+                      pointerEvents: 'none',
+                      opacity: 0.65
+                    }}>
+                      <path d="M0,110 C165,28 385,190 570,55 L570,770 L0,770 Z" fill="#FBF8F3" opacity="0.5" />
+                      <path d="M-55,300 C110,245 275,465 630,355 L630,770 L-55,770 Z" fill="#F7F1E6" opacity="0.4" />
                     </svg>
 
-                    {/* Outer Frame Card */}
-                    <div className="founder-portrait-frame" style={{ background: '#FAF7F2', padding: '12px', borderRadius: '20px', border: '1px solid #F2EAE1', boxShadow: '0 14px 40px rgba(0,0,0,0.07)', position: 'relative', zIndex: 2 }}>
-                      <div className="founder-portrait-frame__inner" style={{ borderRadius: '16px', border: '4px solid #FFFFFF', boxShadow: '0 4px 20px rgba(0,0,0,0.08)', overflow: 'hidden', position: 'relative', background: '#EAE6DF' }}>
-                        <img src={portraitImg} alt="Dr. Naveen Ellangala" style={{ width: '100%', height: '535px', objectFit: 'cover', objectPosition: 'center top', display: 'block' }} />
-                        <div className="founder-portrait-corner" style={{ position: 'absolute', bottom: 0, right: 0, width: '28px', height: '28px', background: 'var(--fp-terracotta, #D8A54B)', borderTopLeftRadius: '14px' }}></div>
+                    {/* Decorative Dot Matrix (Top Left) */}
+                    <div style={{ position: 'absolute', top: '10px', left: '6px', zIndex: 0, opacity: 0.55 }}>
+                      <svg width="85" height="175" viewBox="0 0 85 175" fill="none">
+                        <pattern id="founder-dots-left" x="0" y="0" width="16" height="16" patternUnits="userSpaceOnUse">
+                          <circle cx="2.5" cy="2.5" r="1.8" fill="#D8A54B" />
+                        </pattern>
+                        <rect width="85" height="175" fill="url(#founder-dots-left)" />
+                      </svg>
+                    </div>
+
+                    {/* Decorative Dot Matrix (Right Side) */}
+                    <div style={{ position: 'absolute', right: '-12px', bottom: '175px', zIndex: 0, opacity: 0.35 }}>
+                      <svg width="55" height="110" viewBox="0 0 55 110" fill="none">
+                        <pattern id="founder-dots-right" x="0" y="0" width="16" height="16" patternUnits="userSpaceOnUse">
+                          <circle cx="2.5" cy="2.5" r="1.8" fill="#D8A54B" />
+                        </pattern>
+                        <rect width="55" height="110" fill="url(#founder-dots-right)" />
+                      </svg>
+                    </div>
+
+                    {/* Top-Left Gold Rounded Backdrop Shape */}
+                    <div style={{
+                      position: 'absolute',
+                      top: '20px',
+                      left: '14px',
+                      width: '158px',
+                      height: '158px',
+                      background: '#D49D42',
+                      borderRadius: '40px',
+                      zIndex: 1,
+                      boxShadow: '0 12px 34px rgba(212, 157, 66, 0.28)'
+                    }}></div>
+
+                    {/* Main Portrait Card */}
+                    <div style={{
+                      position: 'relative',
+                      zIndex: 2,
+                      borderRadius: '30px',
+                      overflow: 'hidden',
+                      background: '#1A1817',
+                      boxShadow: '0 24px 54px rgba(0, 0, 0, 0.14)'
+                    }}>
+                      <img
+                        src={founderPortraitBlueImg}
+                        alt="Dr. Naveen Ellangala"
+                        style={{
+                          width: '100%',
+                          height: '595px',
+                          objectFit: 'cover',
+                          objectPosition: 'center 12%',
+                          display: 'block'
+                        }}
+                      />
+                    </div>
+
+                    {/* Floating Midnight Bio Card (Slightly Wider Than Photo) */}
+                    <div style={{
+                      position: 'relative',
+                      zIndex: 4,
+                      marginTop: '-30px',
+                      width: 'calc(100% + 36px)',
+                      marginLeft: '-18px',
+                      background: '#0C1827',
+                      borderRadius: '26px',
+                      padding: '32px 28px 28px',
+                      boxShadow: '0 26px 56px rgba(2, 20, 42, 0.5)',
+                      border: '1px solid rgba(255, 255, 255, 0.06)'
+                    }}>
+                      {/* Gold Circular User Badge */}
+                      <div style={{
+                        position: 'absolute',
+                        top: '-31px',
+                        left: '20px',
+                        width: '62px',
+                        height: '62px',
+                        borderRadius: '50%',
+                        background: '#D49D42',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: '#FFFFFF',
+                        fontSize: '24px',
+                        boxShadow: '0 8px 22px rgba(212, 157, 66, 0.55)'
+                      }}>
+                        <i className="fa fa-user"></i>
+                      </div>
+
+                      {/* Handwritten Script Name */}
+                      <h3 style={{
+                        fontFamily: 'var(--fp-font-script, "Caveat", cursive)',
+                        fontSize: '40px',
+                        fontWeight: 600,
+                        color: 'var(--fp-terracotta, #D8A54B)',
+                        textAlign: 'center',
+                        margin: '4px 0 2px',
+                        letterSpacing: '0.5px',
+                        lineHeight: 1.15
+                      }}>
+                        Dr. Naveen Ellangala
+                      </h3>
+
+                      {/* Roles Tagline */}
+                      <p style={{
+                        fontFamily: 'var(--fp-font-sans, "DM Sans", sans-serif)',
+                        fontSize: '12.5px',
+                        fontWeight: 700,
+                        letterSpacing: '2.2px',
+                        textTransform: 'uppercase',
+                        color: 'rgba(255, 255, 255, 0.75)',
+                        textAlign: 'center',
+                        margin: '0 0 15px'
+                      }}>
+                        POSITIVE PSYCHOLOGIST &bull; AUTHOR &bull; COACH &bull; TRAINER
+                      </p>
+
+                      {/* Centered Gold Divider Line */}
+                      <div style={{
+                        width: '54px',
+                        height: '2.5px',
+                        background: '#D49D42',
+                        margin: '0 auto 16px',
+                        borderRadius: '2px',
+                        opacity: 0.9
+                      }}></div>
+
+                      {/* Quote Block */}
+                      <div style={{ display: 'flex', alignItems: 'flex-start', gap: '14px' }}>
+                        <span style={{
+                          fontFamily: 'Georgia, serif',
+                          color: '#D49D42',
+                          fontSize: '57px',
+                          lineHeight: '0.8',
+                          fontWeight: 700,
+                          flexShrink: 0,
+                          marginTop: '-2px',
+                          display: 'inline-block'
+                        }}>“</span>
+                        <p style={{
+                          fontFamily: 'var(--fp-font-sans, "DM Sans", sans-serif)',
+                          fontSize: '15.5px',
+                          lineHeight: '1.75',
+                          color: '#E2E8F0',
+                          margin: 0,
+                          fontWeight: '400',
+                          textAlign: 'left'
+                        }}>
+                          Helping individuals discover their inner strength, develop a positive mindset and live a meaningful life with purpose, balance and happiness.
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -331,14 +491,14 @@ export default function FounderPage() {
 
                       <h2 style={{
                         fontFamily: 'var(--fp-font-serif, "Playfair Display", serif)',
-                        fontSize: 'clamp(28px, 3.2vw, 36px)',
+                        fontSize: 'clamp(26px, 3vw, 34px)',
                         fontWeight: 800,
                         color: 'var(--fp-navy, #021B41)',
                         lineHeight: 1.25,
                         margin: 0
                       }}>
                         Empowering Lives Through <br />
-                        <span style={{ color: 'var(--fp-gold, #D8A54B)' }}>Positive Psychology</span>
+                        <span style={{ color: 'var(--fp-gold, #D8A54B)' }}>Positive Psychology, Mind Training & Meaningful Living</span>
                       </h2>
                     </div>
 
@@ -368,7 +528,7 @@ export default function FounderPage() {
                       </div>
                       <div style={{ flex: 1 }}>
                         <p style={{ fontSize: '15px', lineHeight: '1.75', color: '#3A4B63', margin: 0, fontWeight: '400' }}>
-                          Dr. Naveen Ellangala is a renowned Positive Psychologist and Holistic Life Coach with over 16 years of experience in mind training and personal transformation. He has positively impacted 20,000+ individuals across 300+ institutions, primarily working with Government schools and colleges in Kerala and Karnataka to promote mental well-being and essential life skills.
+                          <strong>Dr. Naveen Ellangala</strong> is a <strong>Positive Psychologist, Holistic Life Coach, author and mind-training practitioner</strong> with over <strong>16 years of experience</strong> in the areas of mental wellbeing, self-awareness, personal growth and meaningful living. Through his workshops, educational initiatives and practical mind-training programs, he has reached more than <strong>20,000 individuals across 300+ institutions</strong>, with extensive engagement among government schools and colleges in <strong>Kerala and Karnataka</strong>.
                         </p>
                       </div>
                     </div>
@@ -399,7 +559,7 @@ export default function FounderPage() {
                       </div>
                       <div style={{ flex: 1 }}>
                         <p style={{ fontSize: '15px', lineHeight: '1.75', color: '#3A4B63', margin: 0, fontWeight: '400' }}>
-                          He is the author of 15 books, including practical workbooks on Mental hygiene, Happiness, and Purposeful living, and a regular columnist for “O Manase” in Yasha Karnataka weekly magazine. His programs and ideas have been featured on TV and radio, and he has received several awards for his valuable contributions to mental well-being.
+                          He is the <strong>author of 17 books</strong>, including <strong>Bhagavadgita for Meaningful Life</strong>, <strong>MANAS SADHANA</strong>, and practical works exploring <strong>mental hygiene, Positive Psychology, self-awareness, happiness, mind training and purposeful living</strong>. He has also contributed as a columnist for <strong>“O Manase” in Yasha Karnataka weekly magazine</strong>, while his ideas and programs have been featured through <strong>television, radio and other public platforms</strong>. His contributions to mental wellbeing and education have also received recognition through various awards.
                         </p>
                       </div>
                     </div>
@@ -430,7 +590,7 @@ export default function FounderPage() {
                       </div>
                       <div style={{ flex: 1 }}>
                         <p style={{ fontSize: '15px', lineHeight: '1.75', color: '#3A4B63', margin: 0, fontWeight: '400' }}>
-                          As the creator of the signature concepts Mind Gym and Positive Mind Toolkit, Dr. Naveen has designed structured, activity-based mental fitness models that focus on mental hygiene, Emotional Intelligence (EQ), and Spiritual Intelligence (SQ) to support a meaningful and balanced life.
+                          Dr. Naveen is the creator of three key initiatives — <strong>Positive MindGym</strong>, <strong>Positive MindGym Center</strong> and the <strong>Positive Mind Toolkit</strong>. Together, they extend his vision of making <strong>mind training practical, structured and accessible for everyday life</strong>. These initiatives bring together guided practice, experiential learning and practical resources to strengthen areas such as <strong>mental fitness, self-awareness, focus, Emotional Intelligence (EQ), Spiritual Intelligence (SQ), positive thinking and meaningful living</strong>.
                         </p>
                       </div>
                     </div>
@@ -460,7 +620,7 @@ export default function FounderPage() {
                       </div>
                       <div style={{ flex: 1 }}>
                         <p style={{ fontSize: '15px', lineHeight: '1.75', color: '#3A4B63', margin: 0, fontWeight: '400' }}>
-                          He completed his PhD titled “A Study and Formulation of a PERMA Model of Positive Psychology Based on the Literary Works of Saint Purandaradasa,” a unique framework that helps individuals build a purposeful and meaningful life. Dr. Naveen integrates Positive Psychology and Spiritual Psychology to empower individuals to live consciously, meaningfully, and grow holistically.
+                          His doctoral research, titled <strong>“A Study and Formulation of a PERMA Model of Positive Psychology Based on the Literary Works of Saint Purandaradasa,”</strong> explores the relationship between <strong>Positive Psychology and Indian wisdom</strong> in the context of human flourishing and purposeful living. Through his work, Dr. Naveen brings together <strong>Positive Psychology, Spiritual Psychology, Indian wisdom and practical mind training</strong> to help individuals better understand themselves, develop healthier mental habits and approach life with greater <strong>awareness, balance and purpose</strong>.
                         </p>
                       </div>
                     </div>
@@ -798,7 +958,7 @@ export default function FounderPage() {
                       </div>
                     </div>
 
-                    {/* Right Column: 9 to 15 */}
+                    {/* Right Column: 10 to 17 */}
                     <div className="col-sm-6 col-12">
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                         {booksListCol2.map((b) => (
@@ -815,7 +975,6 @@ export default function FounderPage() {
                               ) : (
                                 b.title
                               )}
-                              {b.forthcoming && <span className="books-item-forthcoming">(forthcoming)</span>}
                             </div>
                           </div>
                         ))}

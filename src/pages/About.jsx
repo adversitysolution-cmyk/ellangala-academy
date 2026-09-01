@@ -123,7 +123,7 @@ export default function About() {
                     <img src="/assets/images/shapes/why-choose-v1-shape2.png" alt="#" />
                   </div>
                   <div className="why-choose-one__img1">
-                    <img src="/assets/images/resources/why-choose-v1-img1.jpg" alt="#" />
+                    <img src="/assets/images/resources/why-choose-v1-img1.png" alt="Why Choose Ellangala Academy" />
                   </div>
                 </div>
               </div>

@@ -96,7 +96,7 @@ export const homeContent = {
     title: "Practical ways to \ntrain the mind",
     items: [
       {
-        image: "/assets/images/case/positive-psychology-meaningful-life.jpg",
+        image: "/assets/images/services/Positive Workshop.png",
         icon: "fas fa-chalkboard-teacher",
         title: "Positive Workshop",
         link: "/positive-workshops",
@@ -106,17 +106,17 @@ export const homeContent = {
         delay: "0.1s",
       },
       {
-        image: "/assets/images/case/positive-mentoring.jpg",
+        image: "/assets/images/services/Positive Mentoring.png",
         icon: "fas fa-user-friends",
         title: "Positive Mentoring",
-        link: "/1-on-1-mentoring",
+        link: "/positive-mentoring",
         description:
           "Personalized 1-on-1 counseling, psychotherapy, hypnotherapy, and NLP coaching to overcome challenges and foster emotional wellbeing.",
         btnText: "Learn More",
         delay: "0.2s",
       },
       {
-        image: "/assets/images/services/positive-mindgym-app.jpg",
+        image: "/assets/images/services/Positive MindGym App.png",
         icon: "fas fa-brain",
         title: "Positive MindGym",
         link: "/mindgym",
@@ -186,7 +186,7 @@ export const homeContent = {
       {
         category: "Workshops",
         categoryLabel: "Positive Workshop",
-        image: "/assets/images/case/positive-psychology-meaningful-life.jpg",
+        image: "/assets/images/programs/positive-psychology-meaningful-life.png",
         icon: "icon-brain",
         title: "Positive Psychology for a Meaningful Life",
         link: "/programs/positive-psychology-meaningful-life",
@@ -195,7 +195,7 @@ export const homeContent = {
       {
         category: "Workshops",
         categoryLabel: "Positive Workshop",
-        image: "/assets/images/case/case-v1-img1.jpg",
+        image: "/assets/images/programs/spiritual-psychology-purposeful-life.png",
         icon: "icon-brain",
         title: "Spiritual Psychology for Daily Life",
         link: "/programs/spiritual-psychology-purposeful-life",
@@ -204,7 +204,7 @@ export const homeContent = {
       {
         category: "Workshops",
         categoryLabel: "Positive Workshop",
-        image: "/assets/images/case/case-v1-img3.jpg",
+        image: "/assets/images/programs/positive-parenting.png",
         icon: "icon-brain",
         title: "Positive Parenting",
         link: "/programs/positive-parenting",
@@ -213,7 +213,7 @@ export const homeContent = {
       {
         category: "Workshops",
         categoryLabel: "Positive Workshop",
-        image: "/assets/images/case/case-v1-img4.jpg",
+        image: "/assets/images/programs/positive-teaching.png",
         icon: "icon-brain",
         title: "Positive Teaching",
         link: "/programs/positive-teaching",
@@ -222,7 +222,7 @@ export const homeContent = {
       {
         category: "Workshops",
         categoryLabel: "Positive Workshop",
-        image: "/assets/images/case/case-v1-img5.jpg",
+        image: "/assets/images/programs/student-success-mindset.png",
         icon: "icon-brain",
         title: "Student Success Mindset",
         link: "/programs/student-success-mindset",
@@ -231,7 +231,7 @@ export const homeContent = {
       {
         category: "Workshops",
         categoryLabel: "Positive Workshop",
-        image: "/assets/images/case/mind-gym.jpg",
+        image: "/assets/images/programs/the-art-of-mind-training.png",
         icon: "icon-brain",
         title: "The Art of Mind Training",
         link: "/programs/the-art-of-mind-training",
@@ -240,7 +240,7 @@ export const homeContent = {
       {
         category: "Workshops",
         categoryLabel: "Positive Workshop",
-        image: "/assets/images/case/case-v1-img2.jpg",
+        image: "/assets/images/programs/positive-psychology-at-the-workplace.png",
         icon: "icon-brain",
         title: "Positive Psychology at the Workplace",
         link: "/programs/positive-psychology-at-the-workplace",
@@ -249,7 +249,7 @@ export const homeContent = {
       {
         category: "Workshops",
         categoryLabel: "Positive Workshop",
-        image: "/assets/images/case/indian-culture-and-science.jpg",
+        image: "/assets/images/programs/bhagavadgita-for-daily-life.png",
         icon: "icon-brain",
         title: "Bhagavad Gita for a Meaningful Life",
         link: "/programs/bhagavadgita-for-daily-life",
@@ -258,7 +258,7 @@ export const homeContent = {
       {
         category: "Workshops",
         categoryLabel: "Positive Workshop",
-        image: "/assets/images/case/positive-mind-toolkit.jpg",
+        image: "/assets/images/programs/mind-and-emotional-wellness.png",
         icon: "icon-brain",
         title: "Mind & Emotional Wellness",
         link: "/programs/mind-and-emotional-wellness",
@@ -269,7 +269,7 @@ export const homeContent = {
       {
         category: "Mentoring",
         categoryLabel: "Positive Mentoring",
-        image: "/assets/images/case/case-v1-img6.jpg",
+        image: "/assets/images/programs/student-mentoring.png",
         icon: "icon-brain",
         title: "Student Mentoring",
         link: "/mentoring/student-mentoring",
@@ -278,7 +278,7 @@ export const homeContent = {
       {
         category: "Mentoring",
         categoryLabel: "Positive Mentoring",
-        image: "/assets/images/case/case-v1-img7.jpg",
+        image: "/assets/images/programs/parent-mentoring.png",
         icon: "icon-brain",
         title: "Parent Mentoring",
         link: "/mentoring/parent-mentoring",
@@ -287,7 +287,7 @@ export const homeContent = {
       {
         category: "Mentoring",
         categoryLabel: "Positive Mentoring",
-        image: "/assets/images/case/case-v1-img8.jpg",
+        image: "/assets/images/programs/teacher-mentoring.png",
         icon: "icon-brain",
         title: "Teacher Mentoring",
         link: "/mentoring/teacher-mentoring",
@@ -296,7 +296,7 @@ export const homeContent = {
       {
         category: "Mentoring",
         categoryLabel: "Positive Mentoring",
-        image: "/assets/images/case/case-v1-img9.jpg",
+        image: "/assets/images/programs/personal-mentoring.png",
         icon: "icon-brain",
         title: "Personal Mentoring",
         link: "/mentoring/personal-mentoring",
@@ -305,7 +305,7 @@ export const homeContent = {
       {
         category: "Mentoring",
         categoryLabel: "Positive Mentoring",
-        image: "/assets/images/case/case-v1-img10.jpg",
+        image: "/assets/images/programs/life-mentoring.png",
         icon: "icon-brain",
         title: "Life Mentoring",
         link: "/mentoring/life-mentoring",
@@ -314,7 +314,7 @@ export const homeContent = {
       {
         category: "Mentoring",
         categoryLabel: "Positive Mentoring",
-        image: "/assets/images/case/case-v1-img11.jpg",
+        image: "/assets/images/programs/career-mentoring.png",
         icon: "icon-brain",
         title: "Career Mentoring",
         link: "/mentoring/career-mentoring",
@@ -323,7 +323,7 @@ export const homeContent = {
       {
         category: "Mentoring",
         categoryLabel: "Positive Mentoring",
-        image: "/assets/images/case/case-v1-img12.jpg",
+        image: "/assets/images/programs/purpose-mentoring.png",
         icon: "icon-brain",
         title: "Purpose Mentoring",
         link: "/mentoring/purpose-mentoring",
@@ -332,7 +332,7 @@ export const homeContent = {
       {
         category: "Mentoring",
         categoryLabel: "Positive Mentoring",
-        image: "/assets/images/case/positive-mentoring.jpg",
+        image: "/assets/images/programs/mindset-mentoring.png",
         icon: "icon-brain",
         title: "Mindset Mentoring",
         link: "/mentoring/mindset-mentoring",
@@ -341,7 +341,7 @@ export const homeContent = {
       {
         category: "Mentoring",
         categoryLabel: "Positive Mentoring",
-        image: "/assets/images/case/case-v2-img1.jpg",
+        image: "/assets/images/programs/spiritual-mentoring.png",
         icon: "icon-brain",
         title: "Spiritual Mentoring",
         link: "/mentoring/spiritual-mentoring",
@@ -412,7 +412,7 @@ export const homeContent = {
     {
       icon: "fas fa-book-open",
       iconStyle: "style2",
-      count: "15",
+      count: "17",
       hasPlus: false,
       label: "Books authored",
     },
@@ -446,16 +446,16 @@ export const homeContent = {
         icon: "fas fa-book-reader",
         title: "Author, Researcher & Educator",
         description:
-          "Author of 15 books, with research connecting Positive Psychology, Indian wisdom and contemporary approaches to human wellbeing.",
+          "Author of 17 books, with research connecting Positive Psychology, Indian wisdom and contemporary approaches to human wellbeing.",
         delay: "200ms",
       },
     ],
 
     rightBox: {
       icon: "fas fa-brain",
-      title: "Creator of Mind Gym & \nPositive Mind Toolkit",
+      title: "Bringing Psychology Into \nEveryday Life",
       description:
-        "Practical mind-training frameworks created to turn psychological understanding into awareness, healthier mental habits and everyday practice.",
+        "Turning psychological ideas, Indian wisdom and mind-training practices into simple, practical approaches that people can understand, reflect on and apply in daily life.",
     },
   },
 
@@ -473,8 +473,8 @@ export const homeContent = {
   // Keep the section hidden until approved feedback is available.
   // =========================================================
   testimonials: {
-    tagline: "Client Feedbacks",
-    title: "What does the customer \nhave to say?",
+    tagline: "WHAT OUR CLIENTS SAY",
+    title: "Hear From Individuals Whose \nLives Have Been Positively Transformed",
     items: [
       {
         text: "Dr. Naveen’s sessions gave me a clearer perspective on life, relationships, and personal growth. His practical approach made positive thinking simple and meaningful.",
@@ -574,6 +574,14 @@ export const homeContent = {
         qualification: "BSc (Criminology), Cyber Law, Forensic Science",
         link: "/team",
         animation: "fadeInUp",
+      },
+      {
+        image: "/assets/images/team/mrs-shreelakshmi-halambi.png",
+        name: "Mrs. Shreelakshmi Halambi",
+        designation: "Positive Mentor",
+        qualification: "M.Sc., B.Ed., Yoga Instructor Course (YIC), Certificate in Bhagavad Gita, Certification in Art Therapy, Beyond Academics – Positive Psychology (Ellangala's Academy), 16+ Years Teaching Experience",
+        link: "/team",
+        animation: "fadeInDown",
       },
     ],
   },

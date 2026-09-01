@@ -11,7 +11,7 @@ export const programsData = {
     category: "POSITIVE WORKSHOP",
     title: "Positive Psychology for a Meaningful Life",
     shortPositioning: "Exploring psychological strengths, wellbeing, and purpose for a balanced everyday life.",
-    heroImage: "/assets/images/case/positive-psychology-meaningful-life.jpg",
+    heroImage: "/assets/images/programs/positive-psychology-meaningful-life.png",
     whatIs: {
       title: "What Is Positive Psychology for a Meaningful Life?",
       content: "Positive Psychology for a Meaningful Life is an educational workshop that focuses on cultivating human strengths, positive emotions, and purposeful living. Rather than concentrating solely on dysfunction, this workshop introduces evidence-informed frameworks for enhancing everyday happiness, building resilient relationships, and discovering personal meaning in daily routines."
@@ -76,7 +76,7 @@ export const programsData = {
     category: "POSITIVE WORKSHOP",
     title: "Spiritual Psychology for Daily Life",
     shortPositioning: "Harmonizing psychological understanding with reflective spiritual wisdom for daily clarity.",
-    heroImage: "/assets/images/case/case-v1-img1.jpg",
+    heroImage: "/assets/images/programs/spiritual-psychology-purposeful-life.png",
     whatIs: {
       title: "What Is Spiritual Psychology for Daily Life?",
       content: "Spiritual Psychology for Daily Life blends psychological self-awareness with practical spiritual insights from timeless philosophy. This workshop offers a grounded space to explore inner tranquility, personal ethics, and deeper purpose, helping participants navigate existential questions without abstract dogma."
@@ -141,7 +141,7 @@ export const programsData = {
     category: "POSITIVE WORKSHOP",
     title: "Positive Parenting",
     shortPositioning: "Building empathetic communication, emotional awareness, and strong parent-child bonds.",
-    heroImage: "/assets/images/case/case-v1-img3.jpg",
+    heroImage: "/assets/images/programs/positive-parenting.png",
     whatIs: {
       title: "What Is Positive Parenting?",
       content: "Positive Parenting is an interactive workshop designed to reframe parent-child relationships through empathy, mutual respect, and constructive boundaries. Rather than relying on reactive discipline, this workshop equips parents with tools to understand child emotional development, manage parental stress, and foster a nurturing family atmosphere."
@@ -206,7 +206,7 @@ export const programsData = {
     category: "POSITIVE WORKSHOP",
     title: "Positive Teaching",
     shortPositioning: "Empowering educators with positive psychology, classroom engagement, and teacher wellbeing.",
-    heroImage: "/assets/images/case/case-v1-img4.jpg",
+    heroImage: "/assets/images/programs/positive-teaching.png",
     whatIs: {
       title: "What Is Positive Teaching?",
       content: "Positive Teaching is a specialized workshop for educators focused on creating psychologically safe, engaging, and encouraging learning environments. By integrating positive psychology into pedagogy, teachers learn to inspire student curiosity, manage classroom dynamics constructively, and maintain their own professional enthusiasm."
@@ -271,7 +271,7 @@ export const programsData = {
     category: "POSITIVE WORKSHOP",
     title: "Student Success Mindset",
     shortPositioning: "Cultivating focus, exam resilience, self-discipline, and academic confidence for students.",
-    heroImage: "/assets/images/case/case-v1-img5.jpg",
+    heroImage: "/assets/images/programs/student-success-mindset.png",
     whatIs: {
       title: "What Is Student Success Mindset?",
       content: "Student Success Mindset is an empowering workshop designed to help students overcome academic stress, procrastination, and fear of failure. Through practical mind training techniques, students build effective study habits, emotional self-regulation, and a confident growth mindset for academic and personal growth."
@@ -336,7 +336,7 @@ export const programsData = {
     category: "POSITIVE WORKSHOP",
     title: "The Art of Mind Training",
     shortPositioning: "Mastering mental discipline, emotional balance, and focused awareness through structured practice.",
-    heroImage: "/assets/images/case/mind-gym.jpg",
+    heroImage: "/assets/images/programs/the-art-of-mind-training.png",
     whatIs: {
       title: "What Is The Art of Mind Training?",
       content: "The Art of Mind Training is a foundational mental fitness workshop that teaches practical techniques for mastering attention, regulating emotions, and quieting mental chatter. Drawing from psychological science and contemplative practices, this workshop provides actionable tools to train the mind like a muscle."
@@ -401,7 +401,7 @@ export const programsData = {
     category: "POSITIVE WORKSHOP",
     title: "Positive Psychology at the Workplace",
     shortPositioning: "Fostering psychological safety, collaborative energy, workplace resilience, and leadership.",
-    heroImage: "/assets/images/case/case-v1-img2.jpg",
+    heroImage: "/assets/images/programs/positive-psychology-at-the-workplace.png",
     whatIs: {
       title: "What Is Positive Psychology at the Workplace?",
       content: "Positive Psychology at the Workplace is an interactive organizational workshop designed to improve team synergy, employee wellbeing, and compassionate leadership. By applying strength-based approaches to workplace dynamics, organizations build resilient teams capable of thriving through corporate change."
@@ -466,7 +466,7 @@ export const programsData = {
     category: "POSITIVE WORKSHOP",
     title: "Bhagavad Gita for a Meaningful Life",
     shortPositioning: "Translating timeless Indian philosophy into practical guidance for modern dilemmas, duty, and peace.",
-    heroImage: "/assets/images/case/indian-culture-and-science.jpg",
+    heroImage: "/assets/images/programs/bhagavadgita-for-daily-life.png",
     whatIs: {
       title: "What Is Bhagavad Gita for a Meaningful Life?",
       content: "Bhagavad Gita for a Meaningful Life is a practical reflective workshop that explores the psychological and philosophical wisdom of the Bhagavad Gita for contemporary living. The workshop unpacks key concepts such as Karma Yoga (selfless action), Sthitaprajna (equanimity), and Svadharma (personal duty) to help individuals make wise decisions with composure."
@@ -531,7 +531,7 @@ export const programsData = {
     category: "POSITIVE WORKSHOP",
     title: "Mind & Emotional Wellness",
     shortPositioning: "Nurturing emotional intelligence, stress reduction, inner calm, and psychological first-aid.",
-    heroImage: "/assets/images/case/positive-mind-toolkit.jpg",
+    heroImage: "/assets/images/programs/mind-and-emotional-wellness.png",
     whatIs: {
       title: "What Is Mind & Emotional Wellness?",
       content: "Mind & Emotional Wellness is a practical experiential workshop focused on nurturing emotional regulation, stress reduction, and psychological resilience. Participants learn to recognize emotional signals, soothe nervous system arousal, and practice evidence-based self-care tools for daily life."
@@ -600,7 +600,7 @@ export const programsData = {
     category: "POSITIVE MENTORING",
     title: "Student Mentoring",
     shortPositioning: "Personalized 1-on-1 guidance for academic focus, emotional resilience, and youth empowerment.",
-    heroImage: "/assets/images/case/case-v1-img6.jpg",
+    heroImage: "/assets/images/programs/student-mentoring.png",
     whatIs: {
       title: "What Is Student Mentoring?",
       content: "Student Mentoring provides a confidential, supportive one-on-one space for young learners to navigate academic pressure, personal growth, and self-doubt. Through positive psychological mentoring, students develop self-discipline, exam calm, clear learning strategies, and healthy self-worth."
@@ -665,7 +665,7 @@ export const programsData = {
     category: "POSITIVE MENTORING",
     title: "Parent Mentoring",
     shortPositioning: "1-on-1 guided counseling for resolving family challenges, communication gaps, and parental stress.",
-    heroImage: "/assets/images/case/case-v1-img7.jpg",
+    heroImage: "/assets/images/programs/parent-mentoring.png",
     whatIs: {
       title: "What Is Parent Mentoring?",
       content: "Parent Mentoring offers a private, compassionate mentoring space for parents facing specific challenges in raising children or adolescents. Through personalized sessions, parents learn to reframe behavioral difficulties, establish respectful communication, and restore harmony within the family."
@@ -730,7 +730,7 @@ export const programsData = {
     category: "POSITIVE MENTORING",
     title: "Teacher Mentoring",
     shortPositioning: "Personalized professional mentoring for educators to enhance classroom impact and wellbeing.",
-    heroImage: "/assets/images/case/case-v1-img8.jpg",
+    heroImage: "/assets/images/programs/teacher-mentoring.png",
     whatIs: {
       title: "What Is Teacher Mentoring?",
       content: "Teacher Mentoring is a dedicated 1-on-1 professional development pathway for educators seeking to improve student engagement, manage challenging classroom dynamics, and prevent workplace fatigue. Sessions offer individualized advice tailored to each teacher's specific educational context."
@@ -795,7 +795,7 @@ export const programsData = {
     category: "POSITIVE MENTORING",
     title: "Personal Mentoring",
     shortPositioning: "Confidential 1-on-1 guidance for navigating life transitions, self-growth, and emotional strength.",
-    heroImage: "/assets/images/case/case-v1-img9.jpg",
+    heroImage: "/assets/images/programs/personal-mentoring.png",
     whatIs: {
       title: "What Is Personal Mentoring?",
       content: "Personal Mentoring is an individualized growth journey designed to assist adults in resolving personal dilemmas, improving emotional balance, and breaking free from self-limiting beliefs. Mentoring provides a confidential space to gain clarity and take purposeful steps forward."
@@ -860,7 +860,7 @@ export const programsData = {
     category: "POSITIVE MENTORING",
     title: "Life Mentoring",
     shortPositioning: "Holistic 1-on-1 coaching for life balance, wellbeing, purpose, and daily fulfillment.",
-    heroImage: "/assets/images/case/case-v1-img10.jpg",
+    heroImage: "/assets/images/programs/life-mentoring.png",
     whatIs: {
       title: "What Is Life Mentoring?",
       content: "Life Mentoring is a comprehensive, holistic guidance process focused on helping individuals balance health, career, relationships, and personal purpose. By harmonizing internal values with external choices, participants establish a sustainable lifestyle filled with energy and fulfillment."
@@ -925,7 +925,7 @@ export const programsData = {
     category: "POSITIVE MENTORING",
     title: "Career Mentoring",
     shortPositioning: "Strategic 1-on-1 professional guidance for career clarity, transition, and authentic direction.",
-    heroImage: "/assets/images/case/case-v1-img11.jpg",
+    heroImage: "/assets/images/programs/career-mentoring.png",
     whatIs: {
       title: "What Is Career Mentoring?",
       content: "Career Mentoring is a strategic professional guidance service designed to help individuals discover their unique strengths, navigate career transitions, and overcome professional plateau. Through structured mentoring, professionals align their work with personal values and build meaningful career trajectories."
@@ -990,7 +990,7 @@ export const programsData = {
     category: "POSITIVE MENTORING",
     title: "Purpose Mentoring",
     shortPositioning: "Deep 1-on-1 reflective inquiry to discover core values, personal calling, and meaningful direction.",
-    heroImage: "/assets/images/case/case-v1-img12.jpg",
+    heroImage: "/assets/images/programs/purpose-mentoring.png",
     whatIs: {
       title: "What Is Purpose Mentoring?",
       content: "Purpose Mentoring is a deep, reflective 1-on-1 exploration process for individuals seeking to discover their authentic life calling and core values. Mentoring sessions assist in cutting through noise to clarify what truly matters and live an intentional, meaningful life."
@@ -1055,7 +1055,7 @@ export const programsData = {
     category: "POSITIVE MENTORING",
     title: "Mindset Mentoring",
     shortPositioning: "Cognitive 1-on-1 reframing to overcome self-limiting beliefs and foster growth resilience.",
-    heroImage: "/assets/images/case/case-v1-img1.jpg",
+    heroImage: "/assets/images/programs/mindset-mentoring.png",
     whatIs: {
       title: "What Is Mindset Mentoring?",
       content: "Mindset Mentoring is a focused cognitive mentoring service designed to help individuals reframe limiting belief systems, overcome self-doubt, and adopt a resilient Growth Mindset. Through targeted psychological tools, participants learn to transform internal obstacles into stepping stones."
@@ -1120,7 +1120,7 @@ export const programsData = {
     category: "POSITIVE MENTORING",
     title: "Spiritual Mentoring",
     shortPositioning: "Personalized 1-on-1 inner guidance rooted in Indian wisdom, self-inquiry, and emotional peace.",
-    heroImage: "/assets/images/case/case-v1-img2.jpg",
+    heroImage: "/assets/images/programs/spiritual-mentoring.png",
     whatIs: {
       title: "What Is Spiritual Mentoring?",
       content: "Spiritual Mentoring is an individualized contemplative guidance service rooted in Indian spiritual psychology and self-inquiry. Mentoring sessions provide a quiet space to cultivate witness consciousness, explore spiritual questions, and experience profound emotional tranquility in daily life."

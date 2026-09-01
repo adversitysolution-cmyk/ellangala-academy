@@ -19,7 +19,7 @@ const resourceCategories = [
     id: 'books',
     label: 'Books',
     subtitle: 'Physical Workbooks',
-    img: '/assets/images/books/Bagavadhgeetha for Meaningfull Life.png'
+    img: '/assets/images/books/Bhagavadgeetha for Meaningful Life.png'
   },
   {
     id: 'affirmation-cards',
@@ -32,12 +32,23 @@ const resourceCategories = [
 export default function Shop() {
   useUterpyPlugins();
   const { header } = shopContent.shop;
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState(shopContent.shop.products);
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
 
   useEffect(() => {
-    productService.getPublishedProducts().then(setProducts).catch(() => {});
+    productService
+      .getPublishedProducts()
+      .then((res) => {
+        if (Array.isArray(res) && res.length > 0) {
+          setProducts(res);
+        } else {
+          setProducts(shopContent.shop.products);
+        }
+      })
+      .catch(() => {
+        setProducts(shopContent.shop.products);
+      });
   }, []);
 
   const tabParam = searchParams.get('tab');
@@ -220,10 +231,11 @@ export default function Shop() {
                 >
                   <div className="shop-page__single">
                     <div className="shop-page__single-img">
-                      <img src={item.image} alt={item.alt || item.title} />
-                      {item.sale && <div className="text">Sale</div>}
-                      {item.stock != null && Number(item.stock) <= 0 && (
-                        <div className="text" style={{ background: '#EF4444' }}>Out of Stock</div>
+                      <img src={item.image || item.img} alt={item.alt || item.title} />
+                      {(item.inStock === false || (item.stock != null && Number(item.stock) <= 0)) ? (
+                        <div className="text" style={{ backgroundColor: '#64748B' }}>Out of Stock</div>
+                      ) : (
+                        item.sale && <div className="text">Sale</div>
                       )}
                     </div>
                     <div className="shop-page__single-content">
@@ -235,7 +247,16 @@ export default function Shop() {
                           <h4>
                             <Link to={`/shop-details?id=${item.id}`}>{item.title}</Link>
                           </h4>
-                          <p>{item.price}</p>
+                          {item.inStock === false ? (
+                            <p style={{ color: '#dc2626', fontWeight: '600', fontSize: '14px' }}>Currently Out of Stock</p>
+                          ) : (
+                            <p>
+                              {item.price}{' '}
+                              {item.originalPrice && item.originalPrice !== item.price && (
+                                <del style={{ color: '#94a3b8', fontSize: '13px', marginLeft: '4px' }}>{item.originalPrice}</del>
+                              )}
+                            </p>
+                          )}
                         </div>
                         <div className="rating-box">
                           <ul>

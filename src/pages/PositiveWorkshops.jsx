@@ -18,7 +18,7 @@ const positiveWorkshops = [
   {
     title: "Positive Psychology for a Meaningful Life",
     link: "/programs/positive-psychology-meaningful-life",
-    img: "/assets/images/case/positive-psychology-meaningful-life.jpg",
+    img: "/assets/images/programs/positive-psychology-meaningful-life.png",
     icon: "fas fa-brain",
     description: "Explore strengths, wellbeing, relationships and purpose for a more meaningful everyday life.",
     btnText: "Learn More",
@@ -27,7 +27,7 @@ const positiveWorkshops = [
   {
     title: "Spiritual Psychology for Daily Life",
     link: "/programs/spiritual-psychology-purposeful-life",
-    img: "/assets/images/case/case-v1-img1.jpg",
+    img: "/assets/images/programs/spiritual-psychology-purposeful-life.png",
     icon: "fas fa-spa",
     description: "Explore values, inner awareness, tranquility and meaning for a deeper sense of daily life purpose.",
     btnText: "Learn More",
@@ -36,7 +36,7 @@ const positiveWorkshops = [
   {
     title: "Positive Parenting",
     link: "/programs/positive-parenting",
-    img: "/assets/images/case/case-v1-img3.jpg",
+    img: "/assets/images/programs/positive-parenting.png",
     icon: "fas fa-hands-helping",
     description: "Practical perspectives for healthier communication, emotional awareness and stronger parent-child relationships.",
     btnText: "Learn More",
@@ -45,7 +45,7 @@ const positiveWorkshops = [
   {
     title: "Positive Teaching",
     link: "/programs/positive-teaching",
-    img: "/assets/images/case/case-v1-img4.jpg",
+    img: "/assets/images/programs/positive-teaching.png",
     icon: "fas fa-chalkboard-teacher",
     description: "Empowering educators with psychological tools, mindful engagement, and positive classroom dynamics.",
     btnText: "Learn More",
@@ -54,7 +54,7 @@ const positiveWorkshops = [
   {
     title: "Student Success Mindset",
     link: "/programs/student-success-mindset",
-    img: "/assets/images/case/case-v1-img5.jpg",
+    img: "/assets/images/programs/student-success-mindset.png",
     icon: "fas fa-user-graduate",
     description: "Build focus, confidence, exam resilience, self-awareness and healthier habits for academic learning.",
     btnText: "Learn More",
@@ -63,7 +63,7 @@ const positiveWorkshops = [
   {
     title: "The Art of Mind Training",
     link: "/programs/the-art-of-mind-training",
-    img: "/assets/images/case/mind-gym.jpg",
+    img: "/assets/images/programs/the-art-of-mind-training.png",
     icon: "fas fa-brain",
     description: "Structured mental fitness practices to master attention, regulate emotions, and foster clarity.",
     btnText: "Learn More",
@@ -72,7 +72,7 @@ const positiveWorkshops = [
   {
     title: "Positive Psychology at the Workplace",
     link: "/programs/positive-psychology-at-the-workplace",
-    img: "/assets/images/case/case-v1-img2.jpg",
+    img: "/assets/images/programs/positive-psychology-at-the-workplace.png",
     icon: "fas fa-briefcase",
     description: "Enhance productivity, collaborative leadership, stress management and workplace emotional wellbeing.",
     btnText: "Learn More",
@@ -81,7 +81,7 @@ const positiveWorkshops = [
   {
     title: "Bhagavad Gita for a Meaningful Life",
     link: "/programs/bhagavadgita-for-daily-life",
-    img: "/assets/images/case/indian-culture-and-science.jpg",
+    img: "/assets/images/programs/bhagavadgita-for-daily-life.png",
     icon: "fas fa-book-open",
     description: "Timeless philosophical wisdom for approaching responsibility, choices, and everyday life with greater balance.",
     btnText: "Learn More",
@@ -90,7 +90,7 @@ const positiveWorkshops = [
   {
     title: "Mind & Emotional Wellness",
     link: "/programs/mind-and-emotional-wellness",
-    img: "/assets/images/case/positive-mind-toolkit.jpg",
+    img: "/assets/images/programs/mind-and-emotional-wellness.png",
     icon: "fas fa-heart",
     description: "Holistic psychological practices to nurture calmness, manage anxiety, and cultivate lasting inner peace.",
     btnText: "Learn More",

@@ -10,9 +10,12 @@ import ScrollToTop from '../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../hooks/useUterpyPlugins';
 
 const videoUrls = [
-  "https://www.youtube.com/embed/bh2RJ96wZZ0",
-  "https://www.youtube.com/embed/FiEztX_upk0",
-  "https://www.youtube.com/embed/hASAGP4cb6M"
+  "https://www.youtube.com/embed/smb1UusRZ98",
+  "https://www.youtube.com/embed/pL4-qZpjI7s",
+  "https://www.youtube.com/embed/egew6Kk8REw",
+  "https://www.youtube.com/embed/QBDnfvPzp9Q",
+  "https://www.youtube.com/embed/RZ0TOcSDOqY",
+  "https://www.youtube.com/embed/puIiUtzLLHw"
 ];
 
 export default function VideosOnTalksPage() {
