@@ -1,4 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { computeDiscount } from '../shared/couponMath';
+import { validateCoupon } from '../admin/services/couponService';
 
 const CartContext = createContext();
 
@@ -27,10 +29,10 @@ export function CartProvider({ children }) {
     return INITIAL_CART;
   });
 
-  const [couponCode, setCouponCode] = useState('');
-  const [discountPercent, setDiscountPercent] = useState(0);
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [couponError, setCouponError] = useState('');
   const [couponSuccess, setCouponSuccess] = useState('');
+  const [couponLoading, setCouponLoading] = useState(false);
 
   const [shippingLocation, setShippingLocation] = useState({
     state: 'Karnataka',
@@ -98,35 +100,42 @@ export function CartProvider({ children }) {
     setCartItems([]);
   };
 
-  const applyCoupon = (code) => {
+  const applyCoupon = async (code) => {
     const trimmed = (code || '').trim().toUpperCase();
+    setCouponSuccess('');
     if (!trimmed) {
       setCouponError('Please enter a coupon code.');
-      setCouponSuccess('');
       return false;
     }
-    if (trimmed === 'ELLANGALA10' || trimmed === 'WELCOME10' || trimmed === 'OFFER10') {
-      setDiscountPercent(10);
-      setCouponCode(trimmed);
-      setCouponSuccess('10% discount coupon applied successfully!');
-      setCouponError('');
+    setCouponLoading(true);
+    setCouponError('');
+    try {
+      const currentSubtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+      const c = await validateCoupon(trimmed, currentSubtotal);
+      setAppliedCoupon({
+        code: c.code,
+        type: c.type,
+        value: c.value,
+        minSubtotal: c.minSubtotal,
+        maxDiscount: c.maxDiscount
+      });
+      setCouponSuccess(
+        c.type === 'percent'
+          ? `${c.value}% discount applied — you save ₹${c.discount}!`
+          : `₹${c.value} discount applied!`
+      );
       return true;
-    } else if (trimmed === 'SUPER20' || trimmed === 'SAVE20') {
-      setDiscountPercent(20);
-      setCouponCode(trimmed);
-      setCouponSuccess('20% discount coupon applied successfully!');
-      setCouponError('');
-      return true;
-    } else {
-      setCouponError('Invalid coupon code. Try ELLANGALA10');
-      setCouponSuccess('');
+    } catch (err) {
+      setAppliedCoupon(null);
+      setCouponError(err.message || 'Invalid coupon code.');
       return false;
+    } finally {
+      setCouponLoading(false);
     }
   };
 
   const removeCoupon = () => {
-    setCouponCode('');
-    setDiscountPercent(0);
+    setAppliedCoupon(null);
     setCouponSuccess('');
     setCouponError('');
   };
@@ -136,7 +145,9 @@ export function CartProvider({ children }) {
   };
 
   const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
-  const discountAmount = Math.round((subtotal * discountPercent) / 100);
+  const discountAmount = computeDiscount(appliedCoupon, subtotal);
+  const discountPercent = appliedCoupon?.type === 'percent' ? appliedCoupon.value : 0;
+  const couponCode = appliedCoupon?.code || '';
   const shipping = cartItems.length > 0 ? (subtotal >= 499 ? 0 : shippingLocation.rate) : 0;
   const total = Math.max(0, subtotal - discountAmount + shipping);
   const totalCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
@@ -150,10 +161,12 @@ export function CartProvider({ children }) {
         removeFromCart,
         clearCart,
         couponCode,
+        appliedCoupon,
         discountPercent,
         discountAmount,
         couponError,
         couponSuccess,
+        couponLoading,
         applyCoupon,
         removeCoupon,
         shippingLocation,

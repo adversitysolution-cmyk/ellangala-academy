@@ -11,12 +11,17 @@ import ScrollToTop from '../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../hooks/useUterpyPlugins';
 import { useCart } from '../context/CartContext';
 import { orderService } from '../admin/services/orderService';
+import { paymentService } from '../admin/services/paymentService';
 import SEO from '../seo/SEO';
 
 export default function Checkout() {
   useUterpyPlugins();
   const navigate = useNavigate();
-  const { cartItems, subtotal, shipping, discountAmount, discountPercent, total, shippingLocation, clearCart } = useCart();
+  const {
+    cartItems, subtotal, shipping, discountAmount, total, shippingLocation, clearCart,
+    couponCode, couponError, couponSuccess, couponLoading, applyCoupon, removeCoupon
+  } = useCart();
+  const [inputCoupon, setInputCoupon] = useState('');
 
   const [formData, setFormData] = useState({
     firstName: '',
@@ -68,9 +73,15 @@ export default function Checkout() {
         shipping: shipping,
         discountAmount: discountAmount,
         total: total,
+        couponCode: couponCode || undefined,
         paymentMethod: formData.paymentMethod,
         orderNotes: formData.orderNotes
       });
+
+      if (formData.paymentMethod === 'online') {
+        await paymentService.payForOrder(created.id);
+      }
+
       setPlacedOrder(created);
       setOrderPlaced(true);
       clearCart();
@@ -100,7 +111,7 @@ export default function Checkout() {
                   <i className="fas fa-check-circle text-success" style={{ fontSize: '64px', marginBottom: '20px' }}></i>
                   <h2 style={{ fontSize: '32px', fontWeight: '700', marginBottom: '15px' }}>Thank You For Your Order!</h2>
                   <p style={{ fontSize: '17px', color: '#555', lineHeight: '1.7', marginBottom: '10px' }}>
-                    Your book order has been successfully placed. We will contact you at <strong>{formData.phone}</strong> and ship your books to <strong>{formData.city}, {formData.state}</strong> shortly.
+                    Your book order has been successfully placed{formData.paymentMethod === 'online' ? ' and your payment was received' : ''}. We will contact you at <strong>{formData.phone}</strong> and ship your books to <strong>{formData.city}, {formData.state}</strong> shortly.
                   </p>
                   {placedOrder?.id && (
                     <p style={{ fontSize: '15px', color: '#0F231B', marginBottom: '25px' }}>
@@ -315,11 +326,11 @@ export default function Checkout() {
                           </div>
                         </li>
 
-                        {discountPercent > 0 && (
+                        {discountAmount > 0 && (
                           <li className="bg">
                             <div className="text-box">
                               <div className="title-box">
-                                <p>Discount ({discountPercent}%)</p>
+                                <p>Discount ({couponCode})</p>
                               </div>
                             </div>
                             <div className="price">
@@ -355,6 +366,62 @@ export default function Checkout() {
                         </li>
                       </ul>
 
+                      <div className="coupon-box mt-4">
+                        <div className="title-box mb-2"><p><strong>Have a coupon?</strong></p></div>
+                        {couponCode ? (
+                          <div className="alert alert-success d-flex justify-content-between align-items-center" style={{ padding: '8px 14px', marginBottom: 0 }}>
+                            <span><i className="fas fa-check-circle me-2"></i>{couponSuccess || `Coupon ${couponCode} applied`}</span>
+                            <button type="button" className="btn btn-sm btn-link text-danger p-0" onClick={removeCoupon}>Remove</button>
+                          </div>
+                        ) : (
+                          <>
+                            <div style={{ display: 'flex', gap: '8px' }}>
+                              <input
+                                type="text"
+                                placeholder="Enter coupon code"
+                                value={inputCoupon}
+                                onChange={(e) => setInputCoupon(e.target.value)}
+                                style={{ flex: 1, padding: '10px 14px', borderRadius: '8px', border: '1px solid #CBD5E1', fontSize: '14px' }}
+                              />
+                              <button
+                                type="button"
+                                className="thm-btn"
+                                disabled={couponLoading}
+                                onClick={() => applyCoupon(inputCoupon)}
+                                style={{ padding: '10px 18px', fontSize: '13px' }}
+                              >
+                                <span>{couponLoading ? '…' : 'Apply'}</span>
+                              </button>
+                            </div>
+                            {couponError && <p style={{ color: '#DC2626', fontSize: '13px', margin: '6px 0 0' }}>{couponError}</p>}
+                          </>
+                        )}
+                      </div>
+
+                      <div className="payment-method mt-4">
+                        <div className="title-box mb-2"><p><strong>Payment Method</strong></p></div>
+                        <label style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px', cursor: 'pointer' }}>
+                          <input
+                            type="radio"
+                            name="paymentMethod"
+                            value="cod"
+                            checked={formData.paymentMethod === 'cod'}
+                            onChange={handleChange}
+                          />
+                          <span>Cash on Delivery</span>
+                        </label>
+                        <label style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}>
+                          <input
+                            type="radio"
+                            name="paymentMethod"
+                            value="online"
+                            checked={formData.paymentMethod === 'online'}
+                            onChange={handleChange}
+                          />
+                          <span>Pay Online (UPI / Card / Netbanking)</span>
+                        </label>
+                      </div>
+
                       {orderError && (
                         <p className="text-danger mt-3 mb-0">{orderError}</p>
                       )}
@@ -366,7 +433,13 @@ export default function Checkout() {
                           disabled={cartItems.length === 0 || isPlacingOrder}
                           onClick={handlePlaceOrder}
                         >
-                          <span>{isPlacingOrder ? 'Placing Order...' : 'Place Order'}</span>
+                          <span>
+                            {isPlacingOrder
+                              ? 'Processing...'
+                              : formData.paymentMethod === 'online'
+                                ? `Pay ₹${total}.00`
+                                : 'Place Order'}
+                          </span>
                         </button>
                       </div>
                     </div>

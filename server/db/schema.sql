@@ -71,6 +71,8 @@ CREATE TABLE IF NOT EXISTS orders (
   totalAmount DECIMAL(10,2) DEFAULT 0,
   paymentMethod VARCHAR(20),
   paymentStatus VARCHAR(20),
+  paymentRef VARCHAR(120),
+  couponCode VARCHAR(60),
   status VARCHAR(20) DEFAULT 'New',
   internalNotes TEXT,
   createdAt DATETIME,
@@ -112,6 +114,23 @@ CREATE TABLE IF NOT EXISTS products (
   highlights JSON,
   sale BOOLEAN DEFAULT FALSE,
   status VARCHAR(20) DEFAULT 'published',
+  createdAt DATETIME,
+  updatedAt DATETIME
+);
+
+CREATE TABLE IF NOT EXISTS coupons (
+  pk INT AUTO_INCREMENT PRIMARY KEY,
+  id VARCHAR(191) UNIQUE,
+  code VARCHAR(60) UNIQUE NOT NULL,
+  type VARCHAR(10) DEFAULT 'percent',
+  value DECIMAL(10,2) DEFAULT 0,
+  minSubtotal DECIMAL(10,2) DEFAULT 0,
+  maxDiscount DECIMAL(10,2) DEFAULT 0,
+  usageLimit INT DEFAULT 0,
+  usedCount INT DEFAULT 0,
+  expiresAt DATE,
+  active BOOLEAN DEFAULT TRUE,
+  description VARCHAR(255),
   createdAt DATETIME,
   updatedAt DATETIME
 );

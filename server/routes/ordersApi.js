@@ -2,7 +2,9 @@ import {
   getDbOrders,
   getDbOrderById,
   createDbOrder,
-  updateDbOrderStatus
+  updateDbOrderStatus,
+  validateDbCoupon,
+  incrementCouponUsage
 } from '../db/store.js';
 import { asyncRouter } from '../lib/asyncRouter.js';
 import { sendMail } from '../lib/mailer.js';
@@ -35,8 +37,34 @@ router.post('/orders', async (req, res) => {
   if (!firstName || !phone || !streetAddress) {
     return res.status(400).json({ error: 'Name, phone and delivery address are required.' });
   }
-  const order = await createDbOrder(req.body);
+  // Re-check any coupon server-side — never trust the browser's discount amount.
+  // ponytail: subtotal still comes from the client; recompute it from DB product
+  // prices if order-total tampering becomes a real concern.
+  const payload = { ...req.body };
+  if (payload.couponCode) {
+    const subtotal = Number(payload.subtotal) || 0;
+    const check = await validateDbCoupon(payload.couponCode, subtotal);
+    if (!check.ok) {
+      return res.status(400).json({ error: check.error, couponRejected: true });
+    }
+    payload.discountAmount = check.discount;
+    payload.total = Math.max(0, subtotal - check.discount + (Number(payload.shipping) || 0));
+    payload.couponCode = check.coupon.code;
+  } else {
+    payload.couponCode = null;
+    payload.discountAmount = 0;
+  }
+
+  const order = await createDbOrder(payload);
   res.status(201).json(order);
+
+  // ponytail: counts usage at order-placement, so an abandoned online payment
+  // still consumes one. Move to the payment-verify step if that matters.
+  if (order.couponCode) {
+    incrementCouponUsage(order.couponCode).catch(err =>
+      console.error('Failed to increment coupon usage:', err.message)
+    );
+  }
 });
 
 // Public: POST /api/orders/track (order ID + email/phone lookup)

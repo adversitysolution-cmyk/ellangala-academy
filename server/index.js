@@ -7,6 +7,8 @@ import blogsApi from './routes/blogsApi.js';
 import ordersApi from './routes/ordersApi.js';
 import productsApi from './routes/productsApi.js';
 import enrollmentsApi from './routes/enrollmentsApi.js';
+import paymentsApi from './routes/paymentsApi.js';
+import couponsApi from './routes/couponsApi.js';
 import contactApi from './routes/contactApi.js';
 import adminAuthApi from './routes/adminAuthApi.js';
 import uploadApi, { uploadsDir } from './routes/uploadApi.js';
@@ -32,6 +34,8 @@ app.use('/api', blogsApi);
 app.use('/api', ordersApi);
 app.use('/api', productsApi);
 app.use('/api', enrollmentsApi);
+app.use('/api', paymentsApi);
+app.use('/api', couponsApi);
 app.use('/api', contactApi);
 app.use('/api', uploadApi);
 

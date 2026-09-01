@@ -6,6 +6,7 @@ import { initialEvents } from '../../src/features/events/data/eventSeedData.js';
 import { blogContent } from '../../src/contents/blog.content.js';
 import { shopContent } from '../../src/contents/shop.content.js';
 import { invalidateSitemapCache } from '../lib/sitemapGenerator.js';
+import { computeDiscount, checkCouponUsable } from '../../src/shared/couponMath.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -53,6 +54,17 @@ export async function ensureSchema() {
   const statements = schemaSql.split(';').map(s => s.trim()).filter(Boolean);
   for (const stmt of statements) {
     await pool.query(stmt);
+  }
+  // Add columns introduced after a DB was first created (CREATE TABLE IF NOT EXISTS skips them).
+  for (const [col, ddl] of [
+    ['paymentRef', 'ADD COLUMN paymentRef VARCHAR(120)'],
+    ['couponCode', 'ADD COLUMN couponCode VARCHAR(60)']
+  ]) {
+    try {
+      await pool.query(`ALTER TABLE orders ${ddl}`);
+    } catch (err) {
+      if (err.code !== 'ER_DUP_FIELDNAME') throw err;
+    }
   }
   await seedIfEmpty();
 }
@@ -111,6 +123,12 @@ async function seedIfEmpty() {
         status: 'published'
       });
     }
+  }
+
+  const [[{ n: couponCount }]] = await pool.query('SELECT COUNT(*) AS n FROM coupons');
+  if (couponCount === 0) {
+    await saveDbCoupon({ code: 'WELCOME10', type: 'percent', value: 10, maxDiscount: 200, description: 'New customer welcome offer' });
+    await saveDbCoupon({ code: 'SAVE20', type: 'percent', value: 20, minSubtotal: 999, maxDiscount: 400, description: 'Bulk order discount' });
   }
 }
 
@@ -380,7 +398,10 @@ export async function createDbOrder(orderData) {
     discount: orderData.discountAmount || 0,
     totalAmount: orderData.total || 0,
     paymentMethod: orderData.paymentMethod || 'cod',
-    paymentStatus: orderData.paymentMethod === 'online' ? 'Paid' : 'Pending',
+    // 'online' orders stay Pending until Razorpay signature is verified (markDbOrderPaid).
+    paymentStatus: 'Pending',
+    paymentRef: null,
+    couponCode: orderData.couponCode || null,
     status: 'New',
     internalNotes: orderData.orderNotes || '',
     createdAt: now,
@@ -388,11 +409,31 @@ export async function createDbOrder(orderData) {
   };
 
   await pool.query(
-    `INSERT INTO orders (id, customerName, phone, email, address, city, state, zipcode, country, items, subtotal, shipping, discount, totalAmount, paymentMethod, paymentStatus, status, internalNotes, createdAt, updatedAt)
-     VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
-    [record.id, record.customerName, record.phone, record.email, record.address, record.city, record.state, record.zipcode, record.country, JSON.stringify(record.items), record.subtotal, record.shipping, record.discount, record.totalAmount, record.paymentMethod, record.paymentStatus, record.status, record.internalNotes, toMysqlDatetime(record.createdAt), toMysqlDatetime(record.updatedAt)]
+    `INSERT INTO orders (id, customerName, phone, email, address, city, state, zipcode, country, items, subtotal, shipping, discount, totalAmount, paymentMethod, paymentStatus, paymentRef, couponCode, status, internalNotes, createdAt, updatedAt)
+     VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+    [record.id, record.customerName, record.phone, record.email, record.address, record.city, record.state, record.zipcode, record.country, JSON.stringify(record.items), record.subtotal, record.shipping, record.discount, record.totalAmount, record.paymentMethod, record.paymentStatus, record.paymentRef, record.couponCode, record.status, record.internalNotes, toMysqlDatetime(record.createdAt), toMysqlDatetime(record.updatedAt)]
   );
   return record;
+}
+
+// Stores the Razorpay order id we opened checkout with, so verify can confirm
+// the returned payment belongs to THIS order (not a replayed cheaper one).
+export async function setDbOrderPaymentRef(id, paymentRef) {
+  await pool.query(
+    'UPDATE orders SET paymentRef = ?, updatedAt = ? WHERE id = ?',
+    [paymentRef, toMysqlDatetime(new Date().toISOString()), id]
+  );
+}
+
+// Marks an order paid after its Razorpay payment signature is verified server-side.
+export async function markDbOrderPaid(id, paymentRef) {
+  const existing = await getDbOrderById(id);
+  if (!existing) return null;
+  await pool.query(
+    "UPDATE orders SET paymentStatus = 'Paid', paymentMethod = 'online', paymentRef = ?, updatedAt = ? WHERE id = ?",
+    [paymentRef, toMysqlDatetime(new Date().toISOString()), id]
+  );
+  return getDbOrderById(id);
 }
 
 export async function updateDbOrderStatus(id, { status, internalNotes } = {}) {
@@ -558,4 +599,101 @@ export async function saveDbProduct(productData) {
 export async function deleteDbProduct(id) {
   const [result] = await pool.query('DELETE FROM products WHERE id = ?', [id]);
   return result.affectedRows > 0;
+}
+
+// --- COUPON DB OPERATIONS ---
+function rowToCoupon(row) {
+  return {
+    ...row,
+    value: Number(row.value),
+    minSubtotal: Number(row.minSubtotal),
+    maxDiscount: Number(row.maxDiscount),
+    usageLimit: Number(row.usageLimit),
+    usedCount: Number(row.usedCount),
+    active: toBool(row.active),
+    expiresAt: row.expiresAt ? toIso(row.expiresAt).slice(0, 10) : null,
+    createdAt: toIso(row.createdAt),
+    updatedAt: toIso(row.updatedAt)
+  };
+}
+
+export async function getDbCoupons() {
+  const [rows] = await pool.query('SELECT * FROM coupons ORDER BY pk DESC');
+  return rows.map(rowToCoupon);
+}
+
+export async function getDbCouponByCode(code) {
+  const [rows] = await pool.query('SELECT * FROM coupons WHERE code = ? LIMIT 1', [String(code || '').trim().toUpperCase()]);
+  return rows[0] ? rowToCoupon(rows[0]) : null;
+}
+
+export async function saveDbCoupon(data) {
+  const now = new Date().toISOString();
+  const code = String(data.code || '').trim().toUpperCase();
+  if (!code) throw new Error('Coupon code is required.');
+  const type = data.type === 'fixed' ? 'fixed' : 'percent';
+  const value = Number(data.value) || 0;
+  if (value <= 0) throw new Error('Coupon value must be greater than zero.');
+  if (type === 'percent' && value > 100) throw new Error('Percentage discount cannot exceed 100.');
+
+  const fields = {
+    code,
+    type,
+    value,
+    minSubtotal: Number(data.minSubtotal) || 0,
+    maxDiscount: Number(data.maxDiscount) || 0,
+    usageLimit: Number(data.usageLimit) || 0,
+    active: data.active === undefined ? true : Boolean(data.active),
+    description: data.description || '',
+    expiresAt: data.expiresAt ? toMysqlDatetime(data.expiresAt).slice(0, 10) : null
+  };
+
+  let existing = null;
+  if (data.id) {
+    const [rows] = await pool.query('SELECT * FROM coupons WHERE id = ? LIMIT 1', [data.id]);
+    existing = rows[0] || null;
+  }
+
+  const [dup] = await pool.query(
+    existing ? 'SELECT id FROM coupons WHERE code = ? AND id != ?' : 'SELECT id FROM coupons WHERE code = ?',
+    existing ? [code, existing.id] : [code]
+  );
+  if (dup.length) throw new Error(`A coupon with code "${code}" already exists.`);
+
+  if (existing) {
+    await pool.query(
+      'UPDATE coupons SET code=?, type=?, value=?, minSubtotal=?, maxDiscount=?, usageLimit=?, active=?, description=?, expiresAt=?, updatedAt=? WHERE id=?',
+      [fields.code, fields.type, fields.value, fields.minSubtotal, fields.maxDiscount, fields.usageLimit, fields.active, fields.description, fields.expiresAt, toMysqlDatetime(now), existing.id]
+    );
+    return getDbCouponByCode(code);
+  }
+
+  const id = await nextId(pool, 'coupons', 'CPN');
+  await pool.query(
+    'INSERT INTO coupons (id, code, type, value, minSubtotal, maxDiscount, usageLimit, usedCount, active, description, expiresAt, createdAt, updatedAt) VALUES (?,?,?,?,?,?,?,0,?,?,?,?,?)',
+    [id, fields.code, fields.type, fields.value, fields.minSubtotal, fields.maxDiscount, fields.usageLimit, fields.active, fields.description, fields.expiresAt, toMysqlDatetime(now), toMysqlDatetime(now)]
+  );
+  return getDbCouponByCode(code);
+}
+
+export async function deleteDbCoupon(id) {
+  const [result] = await pool.query('DELETE FROM coupons WHERE id = ?', [id]);
+  return result.affectedRows > 0;
+}
+
+// Validates a code against a cart subtotal. Returns { ok, error, coupon, discount }.
+export async function validateDbCoupon(code, subtotal) {
+  const coupon = await getDbCouponByCode(code);
+  const usable = checkCouponUsable(coupon);
+  if (!usable.ok) return { ok: false, error: usable.error };
+  if (subtotal < coupon.minSubtotal) {
+    return { ok: false, error: `Add ₹${Math.ceil(coupon.minSubtotal - subtotal)} more to use this coupon.` };
+  }
+  const discount = computeDiscount(coupon, subtotal);
+  if (discount <= 0) return { ok: false, error: 'This coupon gives no discount on your cart.' };
+  return { ok: true, coupon, discount };
+}
+
+export async function incrementCouponUsage(code) {
+  await pool.query('UPDATE coupons SET usedCount = usedCount + 1 WHERE code = ?', [String(code || '').trim().toUpperCase()]);
 }

@@ -55,6 +55,7 @@ import BlogEditPage from '../admin/pages/BlogEditPage';
 
 // Admin Products Module Imports
 import ProductListPage from '../admin/pages/ProductListPage';
+import CouponListPage from '../admin/pages/CouponListPage';
 import ProductCreatePage from '../admin/pages/ProductCreatePage';
 import ProductEditPage from '../admin/pages/ProductEditPage';
 
@@ -284,6 +285,16 @@ export default function AppRouter() {
                 element={
                   <AdminProtectedRoute>
                     <ProductEditPage />
+                  </AdminProtectedRoute>
+                }
+              />
+
+              {/* Admin Coupons Route */}
+              <Route
+                path="/admin/coupons"
+                element={
+                  <AdminProtectedRoute>
+                    <CouponListPage />
                   </AdminProtectedRoute>
                 }
               />

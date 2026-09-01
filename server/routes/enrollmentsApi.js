@@ -2,9 +2,19 @@ import {
   getDbEnrollments,
   getDbEnrollmentById,
   createDbEnrollment,
-  updateDbEnrollmentStatus
+  updateDbEnrollmentStatus,
+  getDbEventById
 } from '../db/store.js';
 import { asyncRouter } from '../lib/asyncRouter.js';
+import { sendMail } from '../lib/mailer.js';
+import { buildRegistrationEmail } from '../lib/eventRegistrationEmail.js';
+
+async function sendEventRegistrationEmail(enrollment) {
+  if (!enrollment.email || enrollment.sourceType !== 'Event' || !enrollment.eventId) return;
+  const event = await getDbEventById(enrollment.eventId);
+  if (!event) return;
+  await sendMail(buildRegistrationEmail(enrollment, event));
+}
 
 const router = asyncRouter();
 
@@ -16,6 +26,9 @@ router.post('/enrollments', async (req, res) => {
   }
   const enrollment = await createDbEnrollment(req.body);
   res.status(201).json(enrollment);
+  sendEventRegistrationEmail(enrollment).catch(err =>
+    console.error('Failed to send event registration email:', err.message)
+  );
 });
 
 // Admin: GET /api/admin/enrollments

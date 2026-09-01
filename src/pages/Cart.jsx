@@ -20,10 +20,10 @@ export default function Cart() {
     updateQuantity,
     removeFromCart,
     couponCode,
-    discountPercent,
     discountAmount,
     couponError,
     couponSuccess,
+    couponLoading,
     applyCoupon,
     removeCoupon,
     shippingLocation,
@@ -315,19 +315,19 @@ export default function Cart() {
                     </div>
                   )}
 
-                  {/* Coupon Form Box (hidden as requested, easy to re-enable in future)
+                  {/* Coupon Form Box */}
                   <div className="cart-cupon__form-box">
                     <p className="cart-cupon__sub-title">Coupon code:</p>
                     <form onSubmit={handleApplyCoupon} className="default-form cart-cupon__form">
                       <input
                         type="text"
-                        placeholder="Type Code (e.g. ELLANGALA10)"
+                        placeholder="Enter coupon code"
                         className="cart-cupon__input"
                         value={inputCoupon}
                         onChange={(e) => setInputCoupon(e.target.value)}
                       />
-                      <button className="thm-btn" type="submit">
-                        <span>Add Code</span>
+                      <button className="thm-btn" type="submit" disabled={couponLoading}>
+                        <span>{couponLoading ? 'Checking…' : 'Add Code'}</span>
                       </button>
                     </form>
 
@@ -350,7 +350,6 @@ export default function Cart() {
                       </div>
                     )}
                   </div>
-                  */}
 
                   <div className="mt-4">
                     <Link to="/shop" className="cart-cupon__btn">
@@ -376,9 +375,9 @@ export default function Cart() {
                             <td>₹{subtotal}.00</td>
                           </tr>
 
-                          {discountPercent > 0 && (
+                          {discountAmount > 0 && (
                             <tr>
-                              <td>Discount ({discountPercent}%)</td>
+                              <td>Discount ({couponCode})</td>
                               <td style={{ color: '#28a745' }}>-₹{discountAmount}.00</td>
                             </tr>
                           )}

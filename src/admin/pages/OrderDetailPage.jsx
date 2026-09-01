@@ -146,6 +146,15 @@ export default function OrderDetailPage() {
                   <StatusBadge status={order.paymentStatus || 'Paid'} />
                 </div>
 
+                {order.discount > 0 && (
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #E5E7EB', paddingBottom: '12px' }}>
+                    <span style={{ fontSize: '14px', color: '#667085', fontWeight: '600' }}>
+                      Discount{order.couponCode ? ` (${order.couponCode})` : ''}
+                    </span>
+                    <span style={{ fontSize: '14px', fontWeight: '700', color: '#059669' }}>-₹{order.discount}</span>
+                  </div>
+                )}
+
                 <div>
                   <div style={{ fontSize: '12px', color: '#667085', fontWeight: '700', marginBottom: '8px' }}>ORDERED ITEMS</div>
                   {order.items && order.items.length > 0 ? (
