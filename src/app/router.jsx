@@ -104,6 +104,8 @@ export default function AppRouter() {
               <Route path="/workshops" element={<PositiveWorkshops />} />
               <Route path="/positive-mentoring" element={<PositiveMentoring />} />
               <Route path="/mentoring" element={<PositiveMentoring />} />
+              <Route path="/1-on-1-mentoring" element={<PositiveMentoring />} />
+              <Route path="/one-on-one-mentoring" element={<PositiveMentoring />} />
               <Route path="/mindgym" element={<MindGymPage />} />
               <Route path="/mind-gym-programs" element={<MindGymPage />} />
               <Route path="/mindgym/app" element={<PositiveMindGymAppPage />} />

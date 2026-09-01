@@ -9,6 +9,7 @@ import MobileNav from '../components/layout/MobileNav';
 import SearchPopup from '../components/layout/SearchPopup';
 import ScrollToTop from '../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../hooks/useUterpyPlugins';
+import { shopContent } from '../contents/shop.content';
 import { productService } from '../admin/services/productService';
 import { useCart } from '../context/CartContext';
 import SEO from '../seo/SEO';
@@ -33,13 +34,40 @@ export default function ShopDetails() {
 
   useEffect(() => {
     setLoading(true);
+    const fallbackList = shopContent.shop.products;
+    
     Promise.all([
-      bookId ? productService.getProductById(bookId) : Promise.resolve(null),
-      productService.getPublishedProducts()
+      bookId ? productService.getProductById(bookId).catch(() => null) : Promise.resolve(null),
+      productService.getPublishedProducts().catch(() => [])
     ]).then(([fetchedProduct, allProducts]) => {
-      const resolved = fetchedProduct || allProducts[0] || null;
+      const combinedAll = Array.isArray(allProducts) && allProducts.length > 0 ? allProducts : fallbackList;
+      const resolved =
+        fetchedProduct ||
+        combinedAll.find((p) => p.id === bookId || String(p.id).toLowerCase() === String(bookId).toLowerCase()) ||
+        fallbackList.find((p) => p.id === bookId || String(p.id).toLowerCase() === String(bookId).toLowerCase()) ||
+        combinedAll[0] ||
+        fallbackList[0] ||
+        null;
+        
       setProduct(resolved);
-      setRelatedProducts(resolved ? allProducts.filter((p) => p.id !== resolved.id).slice(0, 3) : []);
+      if (resolved) {
+        const related = combinedAll
+          .filter((p) => p.id !== resolved.id)
+          .slice(0, 3);
+        setRelatedProducts(related);
+      } else {
+        setRelatedProducts([]);
+      }
+      setLoading(false);
+    }).catch(() => {
+      const resolved =
+        fallbackList.find((p) => p.id === bookId || String(p.id).toLowerCase() === String(bookId).toLowerCase()) ||
+        fallbackList[0] ||
+        null;
+      setProduct(resolved);
+      if (resolved) {
+        setRelatedProducts(fallbackList.filter((p) => p.id !== resolved.id).slice(0, 3));
+      }
       setLoading(false);
     });
   }, [bookId]);
@@ -119,7 +147,7 @@ export default function ShopDetails() {
                           <div className="swiper-slide">
                             <div className="img-box">
                               <img
-                                src={product.image}
+                                src={product.image || product.img}
                                 alt={product.alt || product.title}
                                 style={{
                                   width: '100%',
@@ -147,14 +175,22 @@ export default function ShopDetails() {
                   </div>
 
                   <div className="shop-details__content-text1">
-                    <h3>
-                      {product.price}{' '}
-                      <del>₹250.00</del>{' '}
-                      <span className="text">{product.discount || '-40%'}</span>{' '}
-                      <span className="text2" style={outOfStock ? { color: '#EF4444' } : undefined}>
-                        {outOfStock ? '(Out of stock)' : '(In stock)'}
-                      </span>
-                    </h3>
+                    {(product.inStock === false || (product.stock != null && Number(product.stock) <= 0)) ? (
+                      <h3 style={{ color: '#dc2626' }}>
+                        <span className="text2" style={{ color: '#dc2626', fontWeight: '700', fontSize: '18px' }}>
+                          (Currently Out of Stock)
+                        </span>
+                      </h3>
+                    ) : (
+                      <h3>
+                        {product.price}{' '}
+                        {product.originalPrice && product.originalPrice !== product.price && (
+                          <del>{product.originalPrice}</del>
+                        )}{' '}
+                        {product.discount && <span className="text">{product.discount}</span>}{' '}
+                        <span className="text2">(In stock)</span>
+                      </h3>
+                    )}
                   </div>
 
                   <div className="shop-details__review">
@@ -185,117 +221,141 @@ export default function ShopDetails() {
                     </ul>
                   </div>
 
-                  <div className="shop-details__content-text3">
-                    <div className="title">
-                      <p>Quantity</p>
-                    </div>
-                    <div className="inner">
-                      <div className="product-quantity">
-                        <div
-                          className="product-quantity-box"
-                          style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            width: '142px',
-                            height: '56px',
-                            backgroundColor: '#f8f8f8',
-                            border: '1px solid #e2e2e2',
-                            borderRadius: '4px',
-                            padding: '0 8px'
-                          }}
-                        >
+                  {(product.inStock === false || (product.stock != null && Number(product.stock) <= 0)) ? (
+                    <div className="shop-details__content-text3">
+                      <div className="inner" style={{ marginTop: '15px' }}>
+                        <div className="btn-box">
                           <button
                             type="button"
-                            onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                            disabled
                             style={{
-                              width: '36px',
-                              height: '36px',
-                              borderRadius: '50%',
-                              backgroundColor: '#ffffff',
-                              border: '1px solid #e8e8e8',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              cursor: 'pointer',
-                              color: '#333333',
-                              boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
-                              transition: 'all 0.2s ease',
-                              padding: 0
-                            }}
-                            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#f0f0f0')}
-                            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#ffffff')}
-                            title="Decrease quantity"
-                          >
-                            <i className="fa fa-angle-down" style={{ fontSize: '16px', fontWeight: 'bold' }}></i>
-                          </button>
-
-                          <span
-                            style={{
-                              fontSize: '17px',
-                              fontWeight: '600',
-                              color: 'var(--uterpy-black)',
-                              minWidth: '32px',
-                              textAlign: 'center',
-                              userSelect: 'none'
+                              backgroundColor: '#94a3b8',
+                              color: '#ffffff',
+                              border: 'none',
+                              padding: '13px 32px',
+                              fontWeight: '700',
+                              cursor: 'not-allowed',
+                              fontSize: '15px',
+                              borderRadius: '0px'
                             }}
                           >
-                            {quantity}
-                          </span>
-
-                          <button
-                            type="button"
-                            onClick={() => setQuantity((q) => q + 1)}
-                            style={{
-                              width: '36px',
-                              height: '36px',
-                              borderRadius: '50%',
-                              backgroundColor: '#ffffff',
-                              border: '1px solid #e8e8e8',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              cursor: 'pointer',
-                              color: '#333333',
-                              boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
-                              transition: 'all 0.2s ease',
-                              padding: 0
-                            }}
-                            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#f0f0f0')}
-                            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#ffffff')}
-                            title="Increase quantity"
-                          >
-                            <i className="fa fa-angle-up" style={{ fontSize: '16px', fontWeight: 'bold' }}></i>
+                            Currently Out of Stock
                           </button>
                         </div>
                       </div>
-
-                      <div className="btn-box">
-                        <a
-                          href="#"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleAddToCart();
-                          }}
-                          style={outOfStock ? { opacity: 0.5, pointerEvents: 'none' } : undefined}
-                        >
-                          {outOfStock ? 'Out of Stock' : 'Add to Cart'}
-                        </a>
+                    </div>
+                  ) : (
+                    <div className="shop-details__content-text3">
+                      <div className="title">
+                        <p>Quantity</p>
                       </div>
+                      <div className="inner">
+                        <div className="product-quantity">
+                          <div
+                            className="product-quantity-box"
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              justifyContent: 'space-between',
+                              width: '142px',
+                              height: '56px',
+                              backgroundColor: '#f8f8f8',
+                              border: '1px solid #e2e2e2',
+                              borderRadius: '4px',
+                              padding: '0 8px'
+                            }}
+                          >
+                            <button
+                              type="button"
+                              onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                              style={{
+                                width: '36px',
+                                height: '36px',
+                                borderRadius: '50%',
+                                backgroundColor: '#ffffff',
+                                border: '1px solid #e8e8e8',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer',
+                                color: '#333333',
+                                boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
+                                transition: 'all 0.2s ease',
+                                padding: 0
+                              }}
+                              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#f0f0f0')}
+                              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#ffffff')}
+                              title="Decrease quantity"
+                            >
+                              <i className="fa fa-angle-down" style={{ fontSize: '16px', fontWeight: 'bold' }}></i>
+                            </button>
 
-                      <div
-                        className="icon-box"
-                        onClick={() => setIsWishlisted(!isWishlisted)}
-                        style={{ cursor: 'pointer' }}
-                        title="Add to Wishlist"
-                      >
-                        <span
-                          className={isWishlisted ? 'fas fa-heart' : 'icon-heart'}
-                          style={{ color: isWishlisted ? '#f42647' : 'inherit' }}
-                        ></span>
+                            <span
+                              style={{
+                                fontSize: '17px',
+                                fontWeight: '600',
+                                color: 'var(--uterpy-black)',
+                                minWidth: '32px',
+                                textAlign: 'center',
+                                userSelect: 'none'
+                              }}
+                            >
+                              {quantity}
+                            </span>
+
+                            <button
+                              type="button"
+                              onClick={() => setQuantity((q) => q + 1)}
+                              style={{
+                                width: '36px',
+                                height: '36px',
+                                borderRadius: '50%',
+                                backgroundColor: '#ffffff',
+                                border: '1px solid #e8e8e8',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer',
+                                color: '#333333',
+                                boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
+                                transition: 'all 0.2s ease',
+                                padding: 0
+                              }}
+                              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#f0f0f0')}
+                              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#ffffff')}
+                              title="Increase quantity"
+                            >
+                              <i className="fa fa-angle-up" style={{ fontSize: '16px', fontWeight: 'bold' }}></i>
+                            </button>
+                          </div>
+                        </div>
+
+                        <div className="btn-box">
+                          <a
+                            href="#"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleAddToCart();
+                            }}
+                          >
+                            Add to Cart
+                          </a>
+                        </div>
+
+                        <div
+                          className="icon-box"
+                          onClick={() => setIsWishlisted(!isWishlisted)}
+                          style={{ cursor: 'pointer' }}
+                          title="Add to Wishlist"
+                        >
+                          <span
+                            className={isWishlisted ? 'fas fa-heart' : 'icon-heart'}
+                            style={{ color: isWishlisted ? '#f42647' : 'inherit' }}
+                          ></span>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  )}
 
                   <div className="shop-details__content-text4">
                     <ul>
@@ -586,7 +646,7 @@ export default function ShopDetails() {
                 <div key={idx} className="col-xl-4 col-lg-6 col-md-6 wow animated fadeInUp" data-wow-delay={`${0.1 * (idx + 1)}s`}>
                   <div className="shop-page__single">
                     <div className="shop-page__single-img">
-                      <img src={item.image} alt={item.alt || item.title} />
+                      <img src={item.image || item.img} alt={item.alt || item.title} />
                       {item.sale && <div className="text">Sale</div>}
                     </div>
                     <div className="shop-page__single-content">

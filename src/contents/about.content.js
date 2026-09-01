@@ -57,7 +57,7 @@ export const aboutContent = {
     {
       icon: "fas fa-book-open",
       iconStyle: "style2",
-      count: "15",
+      count: "17",
       hasPlus: false,
       label: "Books authored"
     }

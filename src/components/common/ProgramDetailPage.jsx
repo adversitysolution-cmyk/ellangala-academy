@@ -86,11 +86,11 @@ export default function ProgramDetailPage({ data }) {
 
                     {/* Hero Image */}
                     {data.heroImage && (
-                      <div className="img-box" style={{ borderRadius: '14px', overflow: 'hidden', marginBottom: '36px', boxShadow: '0 8px 25px rgba(0,0,0,0.08)' }}>
+                      <div className="img-box" style={{ borderRadius: '14px', overflow: 'hidden', marginBottom: '36px', boxShadow: '0 8px 25px rgba(0,0,0,0.08)', backgroundColor: '#FAF8F5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <img
                           src={data.heroImage}
                           alt={data.title}
-                          style={{ width: '100%', maxHeight: '420px', objectFit: 'cover', display: 'block' }}
+                          style={{ width: '100%', maxHeight: '560px', objectFit: 'contain', display: 'block' }}
                         />
                       </div>
                     )}
