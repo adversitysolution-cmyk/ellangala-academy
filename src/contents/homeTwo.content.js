@@ -135,8 +135,8 @@ export const homeTwoContent = {
   },
 
   testimonials: {
-    tagline: "Client Feedbacks",
-    title: "What does the customer \nhave to say?",
+    tagline: "WHAT OUR CLIENTS SAY",
+    title: "Hear From Individuals Whose \nLives Have Been Positively Transformed",
     items: [
       {
         text: "Lorem Ipsum available, but the majority have suffered dimply free text Suspe ndisse suscipit sagittis dolore magna aliqua ipsum quia",

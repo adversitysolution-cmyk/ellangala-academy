@@ -184,12 +184,16 @@ export default function HomeOne() {
                   <div className="services-one__single">
                     <div className="services-one__single-img">
                       <div className="inner">
-                        <img src={svc.image} alt="#" />
+                        <Link to={svc.link} style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <img src={svc.image} alt={svc.title} />
+                        </Link>
                       </div>
                       <div className="services-one__single-img-icon">
-                        <div className="services-one__single-img-icon-inner">
-                          <span className={svc.icon}></span>
-                        </div>
+                        <Link to={svc.link}>
+                          <div className="services-one__single-img-icon-inner">
+                            <span className={svc.icon}></span>
+                          </div>
+                        </Link>
                       </div>
                     </div>
 
@@ -244,7 +248,7 @@ export default function HomeOne() {
                     <img src="/assets/images/shapes/why-choose-v1-shape2.png" alt="#" />
                   </div>
                   <div className="why-choose-one__img1">
-                    <img src="/assets/images/resources/why-choose-v1-img1.jpg" alt="#" />
+                    <img src="/assets/images/resources/why-choose-v1-img1.png" alt="Why Choose Ellangala Academy" />
                   </div>
                 </div>
               </div>
@@ -379,15 +383,15 @@ export default function HomeOne() {
                         backgroundColor: '#ffffff',
                       }}
                     >
-                      <div className="case-one__single-img" style={{ position: 'relative', width: '100%', aspectRatio: '420 / 380', overflow: 'hidden' }}>
-                        <Link to={cs.link}>
+                      <div className="case-one__single-img" style={{ position: 'relative', width: '100%', aspectRatio: '1 / 1', overflow: 'hidden', backgroundColor: '#FAF8F5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <Link to={cs.link} style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                           <img
                             src={cs.image}
                             alt={cs.title}
                             style={{
                               width: '100%',
                               height: '100%',
-                              objectFit: 'cover',
+                              objectFit: 'contain',
                               display: 'block',
                             }}
                           />

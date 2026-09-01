@@ -56,7 +56,8 @@ export function CartProvider({ children }) {
   };
 
   const addToCart = (product, qty = 1) => {
-    const numericPrice = parsePrice(product.price || product.numericPrice);
+    if (!product || product.inStock === false) return;
+    const numericPrice = product.numericPrice || parsePrice(product.price);
     setCartItems((prev) => {
       const existingIndex = prev.findIndex((item) => item.id === product.id);
       if (existingIndex > -1) {
@@ -72,7 +73,7 @@ export function CartProvider({ children }) {
           {
             id: product.id,
             title: product.title,
-            img: product.img,
+            img: product.image || product.img,
             price: numericPrice,
             quantity: qty,
             link: `/shop-details?id=${product.id}`

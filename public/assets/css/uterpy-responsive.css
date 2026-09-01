@@ -1409,32 +1409,6 @@
         margin-bottom: 45px;
     }
 
-    .counter-one__inner {
-        padding: 85px 0px 30px;
-    }
-
-    /*Therapy One*/
-    .therapy-one__img1 {
-        display: none;
-    }
-
-    .therapy-one__bg {
-        display: none;
-    }
-
-    .therapy-one__left {
-        margin-bottom: 60px;
-    }
-
-    .therapy-one__inner {
-        padding-left: 15px;
-        padding-right: 15px;
-    }
-
-    .therapy-one__inner .sec-title__title {
-        font-size: 35px;
-    }
-
     .therapy-one__left-list li {
         display: block;
     }

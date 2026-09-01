@@ -84,8 +84,8 @@ export const homeThreeContent = {
   },
 
   testimonials: {
-    tagline: "Client Feedbacks",
-    title: "What does the customer \nhave to say?",
+    tagline: "WHAT OUR CLIENTS SAY",
+    title: "Hear From Individuals Whose \nLives Have Been Positively Transformed",
     items: [
       {
         image: "/assets/images/testimonial/testimonial-v1-img1.jpg",

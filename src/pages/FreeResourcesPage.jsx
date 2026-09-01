@@ -10,9 +10,10 @@ import ScrollToTop from '../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../hooks/useUterpyPlugins';
 
 const videoUrls = [
-  "https://www.youtube.com/embed/bh2RJ96wZZ0",
-  "https://www.youtube.com/embed/FiEztX_upk0",
-  "https://www.youtube.com/embed/hASAGP4cb6M"
+  "https://www.youtube.com/embed/badU8RC8i8E",
+  "https://www.youtube.com/embed/pHDTXvkgwgk",
+  "https://www.youtube.com/embed/xLyaMchs6P0",
+  "https://www.youtube.com/embed/fBQd89ZW7H4"
 ];
 
 export default function FreeResourcesPage() {

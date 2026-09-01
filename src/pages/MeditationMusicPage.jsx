@@ -10,9 +10,9 @@ import ScrollToTop from '../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../hooks/useUterpyPlugins';
 
 const videoUrls = [
-  "https://www.youtube.com/embed/bh2RJ96wZZ0",
-  "https://www.youtube.com/embed/FiEztX_upk0",
-  "https://www.youtube.com/embed/hASAGP4cb6M"
+  "https://www.youtube.com/embed/HZwvTXi-aYA",
+  "https://www.youtube.com/embed/4sap0ChHOpM",
+  "https://www.youtube.com/embed/GjoJzPPa1_4"
 ];
 
 export default function MeditationMusicPage() {

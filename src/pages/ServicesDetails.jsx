@@ -83,8 +83,8 @@ export default function ServicesDetails({ serviceKey: propKey }) {
                     )}
                     {content.text1 && <p className="text1">{content.text1}</p>}
                     {content.image && (
-                      <div className="img-box">
-                        <img src={content.image} alt={content.title} />
+                      <div className="img-box" style={{ borderRadius: '14px', overflow: 'hidden', marginBottom: '36px', backgroundColor: '#FAF8F5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <img src={content.image} alt={content.title} style={{ width: '100%', maxHeight: '560px', objectFit: 'contain', display: 'block' }} />
                       </div>
                     )}
                     {content.text2 && <p className="text2">{content.text2}</p>}
