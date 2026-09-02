@@ -30,10 +30,26 @@ export default function BlogDetails() {
 
   useEffect(() => {
     setLoading(true);
-    blogService.getBlogBySlug(identifier, { admin: isAdminPreview }).then((data) => {
-      setPost(data);
-      setLoading(false);
-    });
+    blogService
+      .getBlogBySlug(identifier, { admin: isAdminPreview })
+      .then((data) => {
+        if (data) {
+          setPost(data);
+        } else {
+          const localMatch = (blogContent.list?.posts || []).find(
+            (p) => p.slug === identifier || p.id === identifier || String(p.id) === String(identifier)
+          );
+          setPost(localMatch || null);
+        }
+        setLoading(false);
+      })
+      .catch(() => {
+        const localMatch = (blogContent.list?.posts || []).find(
+          (p) => p.slug === identifier || p.id === identifier || String(p.id) === String(identifier)
+        );
+        setPost(localMatch || null);
+        setLoading(false);
+      });
   }, [identifier, isAdminPreview]);
 
   if (loading) {
@@ -46,7 +62,7 @@ export default function BlogDetails() {
   }
 
   // Return 404 if post doesn't exist or is not published
-  if (!post || (post.status !== 'published' && !isAdminPreview)) {
+  if (!post || (post.status && post.status !== 'published' && !isAdminPreview)) {
     return <Error404 />;
   }
 
@@ -69,7 +85,7 @@ export default function BlogDetails() {
     text2: post.details?.text2 || '',
     text3: post.details?.text3 || '',
     quote: post.details?.quote || post.excerpt,
-    articleImage: post.details?.articleImage || post.image || '/assets/images/blog/blog-mind-gym.png',
+    articleImage: post.details?.articleImage || post.image || post.img || '/assets/images/blog/blog-mind-gym.png',
   };
 
   const form = blogContent?.form || {
@@ -124,8 +140,9 @@ export default function BlogDetails() {
                   <div className="blog-list-page__single">
                     <div className="blog-list-page__single-img">
                       <img
-                        src={post.image || post.img || postDetails.articleImage}
+                        src={post.image || post.img || postDetails.articleImage || '/assets/images/blog/blog-mind-gym.png'}
                         alt={post.title}
+                        onError={(e) => { e.currentTarget.src = '/assets/images/blog/blog-mind-gym.png'; }}
                         style={{ width: '100%', height: 'clamp(220px, 45vw, 420px)', objectFit: 'cover' }}
                       />
                     </div>

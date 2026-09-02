@@ -25,11 +25,22 @@ function formatDate(dateStr) {
 
 export default function BlogList() {
   useUterpyPlugins();
-  const [publishedPosts, setPublishedPosts] = useState([]);
+  const [publishedPosts, setPublishedPosts] = useState(blogContent.list?.posts || []);
   const header = blogContent.list?.header || { title: 'Our Blog & Insights', breadcrumb: 'Blog' };
 
   useEffect(() => {
-    blogService.getPublishedBlogs().then(setPublishedPosts).catch(() => {});
+    blogService
+      .getPublishedBlogs()
+      .then((res) => {
+        if (Array.isArray(res) && res.length > 0) {
+          setPublishedPosts(res);
+        } else {
+          setPublishedPosts(blogContent.list?.posts || []);
+        }
+      })
+      .catch(() => {
+        setPublishedPosts(blogContent.list?.posts || []);
+      });
   }, []);
 
   return (
@@ -77,8 +88,11 @@ export default function BlogList() {
                     >
                       <div className="blog-list-page__single-img" style={{ position: 'relative', overflow: 'hidden', height: '240px' }}>
                         <img
-                          src={item.image}
+                          src={item.image || item.img || '/assets/images/blog/blog-mind-gym.png'}
                           alt={item.title}
+                          onError={(e) => {
+                            e.currentTarget.src = '/assets/images/blog/blog-mind-gym.png';
+                          }}
                           style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', transition: 'transform 0.4s ease' }}
                         />
                         <div
