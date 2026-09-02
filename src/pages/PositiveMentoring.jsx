@@ -144,7 +144,14 @@ export default function PositiveMentoring() {
                   <div className="services-one__single" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
                     <div className="services-one__single-img">
                       <div className="inner">
-                        <img src={item.img} alt={item.title} />
+                        <img
+                          src={item.img}
+                          alt={item.title}
+                          onError={(e) => {
+                            e.currentTarget.src = `/assets/images/programs/${item.title}.png`;
+                          }}
+                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        />
                       </div>
                       <div className="services-one__single-img-icon">
                         <div className="services-one__single-img-icon-inner">
