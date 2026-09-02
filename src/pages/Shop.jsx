@@ -52,7 +52,14 @@ export default function Shop() {
       .getPublishedProducts()
       .then((res) => {
         if (Array.isArray(res) && res.length > 0) {
-          setProducts(res);
+          const map = new Map();
+          for (const p of shopContent.shop.products) {
+            map.set(p.id, p);
+          }
+          for (const p of res) {
+            map.set(p.id, { ...(map.get(p.id) || {}), ...p });
+          }
+          setProducts(Array.from(map.values()));
         } else {
           setProducts(shopContent.shop.products);
         }

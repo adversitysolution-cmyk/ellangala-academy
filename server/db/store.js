@@ -94,6 +94,7 @@ async function seedIfEmpty() {
 
   for (const b of (blogContent.list.posts || [])) {
     const [existing] = await pool.query('SELECT id FROM blogs WHERE id = ? OR slug = ? LIMIT 1', [b.id, b.slug || b.id]);
+    const blogImg = b.image || b.img || '/assets/images/blog/blog-mind-gym.png';
     if (existing.length === 0) {
       await saveDbBlog({
         id: b.id,
@@ -102,18 +103,24 @@ async function seedIfEmpty() {
         excerpt: b.excerpt || '',
         content: b.details?.text1 ? `${b.details.text1}\n\n${b.details.text2 || ''}\n\n${b.details.text3 || ''}` : b.excerpt,
         category: b.category || 'Positive Psychology',
-        image: b.image || b.img || '/assets/images/blog/blog-mind-gym.png',
+        image: blogImg,
         author: b.author ? b.author.replace(/^By\s+/, '') : 'Dr. Naveen Ellangala',
         status: 'published',
         readTime: b.readTime || '10 Mins Read',
         details: b.details || null,
-        seo: { title: `${b.title} | Ellangala’s Academy`, description: b.excerpt, image: b.image || b.img || '/assets/images/blog/blog-mind-gym.png', noindex: false }
+        seo: { title: `${b.title} | Ellangala’s Academy`, description: b.excerpt, image: blogImg, noindex: false }
       });
+    } else {
+      await pool.query(
+        "UPDATE blogs SET status = 'published', image = ? WHERE (id = ? OR slug = ?)",
+        [blogImg, b.id, b.slug || b.id]
+      );
     }
   }
 
   for (const p of (shopContent.shop.products || [])) {
     const [existing] = await pool.query('SELECT id FROM products WHERE id = ? LIMIT 1', [p.id]);
+    const prodImg = p.image || p.img || '';
     if (existing.length === 0) {
       await saveDbProduct({
         id: p.id,
@@ -124,7 +131,7 @@ async function seedIfEmpty() {
         theme: p.theme || '',
         price: p.price || '',
         discount: p.discount || '',
-        image: p.image || p.img || '',
+        image: prodImg,
         alt: p.alt || p.title,
         description: p.description || '',
         highlights: p.highlights || [],
@@ -132,6 +139,11 @@ async function seedIfEmpty() {
         stock: p.stock ?? (p.inStock === false ? 0 : null),
         status: 'published'
       });
+    } else {
+      await pool.query(
+        "UPDATE products SET status = 'published', image = ?, title = ?, price = ?, discount = ? WHERE id = ?",
+        [prodImg, p.title, p.price || '', p.discount || '', p.id]
+      );
     }
   }
 

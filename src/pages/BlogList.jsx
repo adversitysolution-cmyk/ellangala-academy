@@ -43,7 +43,14 @@ export default function BlogList() {
       .getPublishedBlogs()
       .then((res) => {
         if (Array.isArray(res) && res.length > 0) {
-          setPublishedPosts(res);
+          const map = new Map();
+          for (const b of (blogContent.list?.posts || [])) {
+            map.set(b.id, b);
+          }
+          for (const b of res) {
+            map.set(b.id, { ...(map.get(b.id) || {}), ...b });
+          }
+          setPublishedPosts(Array.from(map.values()));
         } else {
           setPublishedPosts(blogContent.list?.posts || []);
         }

@@ -5,6 +5,7 @@ import {
   saveDbBlog,
   deleteDbBlog
 } from '../db/store.js';
+import { blogContent } from '../../src/contents/blog.content.js';
 import { generateContentSeo } from '../lib/seoGenerator.js';
 import { asyncRouter } from '../lib/asyncRouter.js';
 
@@ -13,18 +14,80 @@ const router = asyncRouter();
 // Public: GET /api/blogs (Returns published blogs by default)
 router.get('/blogs', async (req, res) => {
   const { status, all } = req.query;
+  let dbBlogs = [];
+  try {
+    dbBlogs = await getDbBlogs();
+  } catch (_) {}
+
+  const staticBlogs = (blogContent.list?.posts || []).map((b) => ({
+    id: b.id,
+    slug: b.slug || b.id,
+    title: b.title,
+    excerpt: b.excerpt || '',
+    content: b.details?.text1 ? `${b.details.text1}\n\n${b.details.text2 || ''}\n\n${b.details.text3 || ''}` : b.excerpt,
+    category: b.category || 'Positive Psychology',
+    image: b.image || b.img || '/assets/images/blog/blog-mind-gym.png',
+    author: b.author ? b.author.replace(/^By\s+/, '') : 'Dr. Naveen Ellangala',
+    status: 'published',
+    readTime: b.readTime || '8 Mins Read',
+    details: b.details || null,
+    seo: { title: `${b.title} | Ellangala’s Academy`, description: b.excerpt, image: b.image || b.img || '/assets/images/blog/blog-mind-gym.png', noindex: false }
+  }));
+
+  const allMerged = [];
+  const seen = new Set();
+
+  for (const b of dbBlogs) {
+    allMerged.push(b);
+    seen.add(b.id);
+    if (b.slug) seen.add(b.slug);
+  }
+
+  for (const sb of staticBlogs) {
+    if (!seen.has(sb.id) && !seen.has(sb.slug)) {
+      allMerged.push(sb);
+      seen.add(sb.id);
+      seen.add(sb.slug);
+    }
+  }
+
   if (all === 'true' || status === 'all') {
-    return res.json(await getDbBlogs());
+    return res.json(allMerged);
   }
   const statusFilter = status || 'published';
-  const blogs = (await getDbBlogs()).filter(b => b.status === statusFilter);
+  const blogs = allMerged.filter(b => (b.status || 'published') === statusFilter);
   res.json(blogs);
 });
 
 // Public: GET /api/blogs/:slug
 router.get('/blogs/:slug', async (req, res) => {
   const { slug } = req.params;
-  const blog = await getDbBlogBySlug(slug);
+  let blog = null;
+  try {
+    blog = await getDbBlogBySlug(slug);
+  } catch (_) {}
+
+  if (!blog) {
+    const match = (blogContent.list?.posts || []).find(
+      (b) => b.slug === slug || b.id === slug || String(b.id) === String(slug)
+    );
+    if (match) {
+      blog = {
+        id: match.id,
+        slug: match.slug || match.id,
+        title: match.title,
+        excerpt: match.excerpt || '',
+        content: match.details?.text1 ? `${match.details.text1}\n\n${match.details.text2 || ''}\n\n${match.details.text3 || ''}` : match.excerpt,
+        category: match.category || 'Positive Psychology',
+        image: match.image || match.img || '/assets/images/blog/blog-mind-gym.png',
+        author: match.author ? match.author.replace(/^By\s+/, '') : 'Dr. Naveen Ellangala',
+        status: 'published',
+        readTime: match.readTime || '8 Mins Read',
+        details: match.details || null,
+        seo: { title: `${match.title} | Ellangala’s Academy`, description: match.excerpt, image: match.image || match.img || '/assets/images/blog/blog-mind-gym.png', noindex: false }
+      };
+    }
+  }
 
   if (!blog) {
     return res.status(404).json({ error: 'Blog post not found' });
