@@ -56,6 +56,27 @@ concurrency 3). The HTTP request only enqueues.
 Email reuses `server/lib/mailer.js` (now returns `true`/`false` so the queue can
 mark `FAILED` and offer "Retry Failed Emails").
 
+## Template render modes
+
+`certificate_templates.renderMode`:
+
+- **`classic`** (default) — the PDF layout is generated from the template fields
+  (org name, heading, body text, signatory) plus optional logo / signature /
+  seal / background images. Landscape A4.
+- **`overlay`** — you upload a *finished* certificate design as the **Background**
+  (PNG/JPG, A4 portrait). Everything static — border, headings, the body
+  sentence, the signature — lives in that image. The generator stamps only:
+  participant name, a QR code, and the certificate number. Positions come from
+  `overlayConfig` (JSON, PDF points) merged over `DEFAULT_OVERLAY` in
+  `server/lib/certificatePdf.js`; blank fields fall back to the default. Because
+  a hand-made design's coordinates can't be derived, generate one test
+  certificate and nudge the numbers in the template editor.
+
+  `overlayConfig` shape: `{ orientation, name:{x,y,width,size,color,font,align},
+  qr:{x,y,size}, certId:{x,y,width,size,color,font,align} }` — every key optional.
+  Course name / dates are part of the uploaded image, so an overlay background is
+  event-specific (re-export it per event, or keep the dates generic).
+
 ## Extending attendance sources (future)
 
 `event_certificate_configs.eligibilityMode` and

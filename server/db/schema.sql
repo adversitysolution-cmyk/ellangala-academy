@@ -168,6 +168,8 @@ CREATE TABLE IF NOT EXISTS certificate_templates (
   signatureUrl VARCHAR(500),
   sealUrl VARCHAR(500),
   backgroundUrl VARCHAR(500),
+  renderMode VARCHAR(20) DEFAULT 'classic',
+  overlayConfig JSON,
   isActive BOOLEAN DEFAULT TRUE,
   createdAt DATETIME,
   updatedAt DATETIME
