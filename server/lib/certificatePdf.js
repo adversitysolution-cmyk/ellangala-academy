@@ -66,7 +66,7 @@ export async function renderCertificatePdf({ template, vars, assets = {} }) {
 // when the uploaded background still has the old body text baked in; match the
 // paper colour exactly. With a truly blank background, leave `erase` unset.
 const DEFAULT_OVERLAY = {
-  name:   { x: 300, y: 462, size: 17, color: NAVY, font: 'bold' },
+  name:   { x: 300, y: 450, size: 17, color: NAVY, font: 'bold' },
   body:   {
     x: 78, y: 506, width: 440, size: 16, lineGap: 6,
     color: '#2E2A24', accentColor: '#A9741F',

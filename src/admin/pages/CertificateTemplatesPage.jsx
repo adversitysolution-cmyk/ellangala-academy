@@ -19,7 +19,7 @@ const EMPTY = {
 
 // Overlay-mode position knobs (top-left PDF points). Blank = built-in default.
 const OVERLAY_FIELDS = [
-  ['name.x', 'Name X', 300], ['name.y', 'Name Y', 462], ['name.size', 'Name size', 17],
+  ['name.x', 'Name X', 300], ['name.y', 'Name Y', 450], ['name.size', 'Name size', 17],
   ['body.x', 'Body X', 78], ['body.y', 'Body Y', 506], ['body.size', 'Body size', 16], ['body.width', 'Body box width', 440],
   ['qr.x', 'QR X', 275], ['qr.y', 'QR Y', 600], ['qr.size', 'QR size', 52],
   ['certId.x', 'Cert-No X', 219], ['certId.y', 'Cert-No Y', 664], ['certId.size', 'Cert-No size', 8]
