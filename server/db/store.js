@@ -74,6 +74,11 @@ export async function ensureSchema() {
 }
 
 async function seedIfEmpty() {
+  const oldSeedIds = ['EVT-2026-0001', 'EVT-2026-0002', 'EVT-2026-0003', 'EVT-2026-0004'];
+  try {
+    await pool.query('DELETE FROM events WHERE id IN (?, ?, ?, ?)', oldSeedIds);
+  } catch (_) {}
+
   const now = new Date().toISOString();
   for (const e of initialEvents || []) {
     const [existing] = await pool.query('SELECT id FROM events WHERE id = ? OR slug = ? LIMIT 1', [e.id, e.slug || e.id]);
