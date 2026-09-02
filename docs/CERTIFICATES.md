@@ -67,9 +67,11 @@ mark `FAILED` and offer "Retry Failed Emails").
   **Background** (PNG/JPG, A4 portrait): frame, logos, headings, the "Mr./Ms."
   line and signature — but *no* participant name, programme name or dates. The
   generator stamps the event-specific parts on top:
-  - **name** — participant name on the "Mr./Ms." line
-  - **body** — the sentence, rendered from `{{event_name}}`, `{{start_date}}`,
-    `{{end_date}}`, `{{organization_name}}` etc. (editable per template)
+  - **name** — participant name on the "Mr./Ms." line (Times Bold)
+  - **body** — four stacked, centred calligraphy lines (bundled Petit Formal
+    Script, `server/lib/fonts/`): `pre` / `title` (gold) / `mid` / `post`, each
+    filled from `{{event_name}}`, `{{event_date_text}}`, `{{organization_name}}`
+    etc. Any line left blank is skipped; a single `body.text` block also works.
   - **qr** — links to `/verify/c/<token>`
   - **certId** — the certificate number
 
@@ -81,9 +83,9 @@ mark `FAILED` and offer "Retry Failed Emails").
 
   `overlayConfig` shape: `{ orientation,
   name:{x,y,width,size,color,font,align},
-  body:{x,y,width,size,color,font,align,lineGap,text},
+  body:{x,y,width,size,lineGap,align,color,accentColor,pre,title,mid,post,text},
   qr:{x,y,size}, certId:{x,y,width,size,color,font,align} }` — every key optional.
-  Because the body sentence is stamped dynamically, one blank background works
+  Because the body lines are stamped dynamically, one blank background works
   for **every** event.
 
   If you blank an existing filled design by painting over the old text, match

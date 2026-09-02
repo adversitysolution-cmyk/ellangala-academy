@@ -1,11 +1,27 @@
 import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import PDFDocument from 'pdfkit';
 import QRCode from 'qrcode';
 import { renderTemplate } from './certificateTemplate.js';
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 const GOLD = '#CA8A38';
 const NAVY = '#0A2347';
 const INK = '#1E293B';
+
+// Bundled calligraphy face for overlay body text (Petit Formal Script, OFL).
+const SCRIPT_FONT_PATH = path.join(__dirname, 'fonts', 'PetitFormalScript.ttf');
+
+// Register a .ttf under `name`; if it can't be read, fall back to a built-in so
+// a missing font never fails the batch.
+function useFont(doc, name, filePath, fallback = 'Times-Roman') {
+  try {
+    if (filePath && fs.existsSync(filePath)) { doc.registerFont(name, filePath); return name; }
+  } catch { /* fall through */ }
+  return fallback;
+}
 
 function safeImage(doc, path, ...args) {
   try {
@@ -39,15 +55,25 @@ export async function renderCertificatePdf({ template, vars, assets = {} }) {
 // default below.
 // ponytail: coordinates are calibration knobs, not constants — the physical
 // layout of a hand-made design can't be derived, only tuned against a render.
-const DEFAULT_BODY_TEXT =
-  'has successfully completed the "{{event_name}}" programme at {{organization_name}}, held from {{start_date}} to {{end_date}}.';
-
+// The body sentence is up to four stacked, centred, calligraphy lines:
+//   pre   — dark ink            "has successfully completed the"
+//   title — gold, its own line  "“{{event_name}}”"
+//   mid   — dark ink            "course at {{organization_name}},"
+//   post  — dark ink            "{{event_date_text}}."
+// Any part left blank is skipped. `{{...}}` placeholders are filled from vars.
 const DEFAULT_OVERLAY = {
   orientation: 'portrait',
   name:   { x: 352, y: 464, width: 200, size: 17, color: NAVY, font: 'Times-Bold', align: 'left' },
-  body:   { x: 70, y: 514, width: 455, size: 12.5, color: INK, font: 'Times-Roman', align: 'center', lineGap: 4, text: DEFAULT_BODY_TEXT },
-  certId: { x: 205, y: 686, width: 160, size: 8, color: '#555555', font: 'Helvetica', align: 'center' },
-  qr:     { x: 250, y: 600, size: 74 }
+  body:   {
+    x: 78, y: 508, width: 440, size: 14, lineGap: 1, align: 'center',
+    color: '#2E2A24', accentColor: '#A9741F',
+    pre: 'has successfully completed the',
+    title: '“{{event_name}}”',
+    mid: 'course at {{organization_name}},',
+    post: '{{event_date_text}}.'
+  },
+  certId: { x: 219, y: 660, width: 164, size: 8, color: '#555555', font: 'Helvetica', align: 'center' },
+  qr:     { x: 275, y: 598, size: 52 }
 };
 
 function mergeOverlay(cfg = {}) {
@@ -73,6 +99,7 @@ async function renderOverlay({ template, vars, assets }) {
   const H = doc.page.height;
   safeImage(doc, assets.backgroundPath, 0, 0, { width: W, height: H });
 
+  const script = useFont(doc, 'cert-script', SCRIPT_FONT_PATH);
   const { name, body, certId, qr } = cfg;
 
   if (name.size > 0 && vars.participant_name) {
@@ -82,11 +109,26 @@ async function renderOverlay({ template, vars, assets }) {
       });
   }
 
-  if (body.size > 0 && body.text) {
-    doc.font(body.font || 'Times-Roman').fontSize(body.size).fillColor(body.color || INK)
-      .text(renderTemplate(body.text, vars), body.x, body.y, {
-        width: body.width, align: body.align || 'center', lineGap: body.lineGap ?? 4
-      });
+  if (body.size > 0) {
+    const align = body.align || 'center';
+    const opts = { width: body.width, align, lineGap: body.lineGap ?? 3 };
+    doc.font(body.font || script).fontSize(body.size);
+    let first = true;
+    const line = (str, color) => {
+      const t = renderTemplate(str, vars).trim();
+      if (!t) return;
+      doc.fillColor(color);
+      if (first) { doc.text(t, body.x, body.y, opts); first = false; }
+      else doc.text(t, body.x, doc.y + (body.lineGap ?? 3), opts);
+    };
+    // support both the stacked-parts form and a single `text` block
+    if (body.text) line(body.text, body.color || INK);
+    else {
+      line(body.pre, body.color || INK);
+      line(body.title, body.accentColor || GOLD);
+      line(body.mid, body.color || INK);
+      line(body.post, body.color || INK);
+    }
   }
 
   if (qr.size > 0) {

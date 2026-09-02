@@ -20,9 +20,9 @@ const EMPTY = {
 // Overlay-mode position knobs (PDF points, A4 portrait). Blank = use built-in default.
 const OVERLAY_FIELDS = [
   ['name.x', 'Name X', 352], ['name.y', 'Name Y', 464], ['name.size', 'Name size', 17], ['name.width', 'Name box width', 200],
-  ['body.x', 'Body X', 70], ['body.y', 'Body Y', 514], ['body.size', 'Body size', 12.5], ['body.width', 'Body box width', 455],
-  ['qr.x', 'QR X', 250], ['qr.y', 'QR Y', 600], ['qr.size', 'QR size', 74],
-  ['certId.x', 'Cert-No X', 205], ['certId.y', 'Cert-No Y', 686], ['certId.size', 'Cert-No size', 8]
+  ['body.x', 'Body X', 78], ['body.y', 'Body Y', 508], ['body.size', 'Body size', 14], ['body.width', 'Body box width', 440],
+  ['qr.x', 'QR X', 275], ['qr.y', 'QR Y', 598], ['qr.size', 'QR size', 52],
+  ['certId.x', 'Cert-No X', 219], ['certId.y', 'Cert-No Y', 660], ['certId.size', 'Cert-No size', 8]
 ];
 const getPath = (o, p) => p.split('.').reduce((x, k) => (x == null ? undefined : x[k]), o);
 const setPath = (o, p, v) => {
@@ -112,15 +112,24 @@ export default function CertificateTemplatesPage() {
               </div>
             )}
             {form.renderMode === 'overlay' && (
-              <label style={{ display: 'block', fontSize: '13px', fontWeight: 700, color: '#334155', marginTop: '12px' }}>
-                Body sentence (overlay)
-                <textarea
-                  className="admin-textarea" rows={2} style={{ marginTop: '4px' }}
-                  placeholder={'has successfully completed the "{{event_name}}" programme at {{organization_name}}, held from {{start_date}} to {{end_date}}.'}
-                  value={getPath(form.overlayConfig, 'body.text') ?? ''}
-                  onChange={(e) => set('overlayConfig', setPath(form.overlayConfig, 'body.text', e.target.value || ''))}
-                />
-              </label>
+              <div style={{ marginTop: '12px' }}>
+                <div style={{ fontSize: '13px', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>
+                  Body lines (overlay) — stacked &amp; centred; the 2nd line prints in gold
+                </div>
+                {[
+                  ['body.pre', 'has successfully completed the'],
+                  ['body.title', '“{{event_name}}”'],
+                  ['body.mid', 'course at {{organization_name}},'],
+                  ['body.post', '{{event_date_text}}.']
+                ].map(([path, ph]) => (
+                  <input
+                    key={path} className="admin-input" style={{ marginBottom: '6px' }}
+                    placeholder={ph}
+                    value={getPath(form.overlayConfig, path) ?? ''}
+                    onChange={(e) => set('overlayConfig', setPath(form.overlayConfig, path, e.target.value || ''))}
+                  />
+                ))}
+              </div>
             )}
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px', marginTop: '16px' }}>
