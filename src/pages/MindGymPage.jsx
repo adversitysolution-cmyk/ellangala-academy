@@ -27,7 +27,7 @@ const mindGymPrograms = [
   {
     title: "POSITIVE MINDGYM CENTRE",
     link: "/mindgym/mind-gym",
-    img: "/assets/images/services/mindgymcentre.jpeg",
+    img: "/assets/images/services/positive-mindgym-centre.png",
     icon: "fas fa-landmark",
     description: "Our dedicated physical mind training center with structured experiential workshops, reflexology, and wellness sessions.",
     btnText: "Learn More",
@@ -36,7 +36,7 @@ const mindGymPrograms = [
   {
     title: "POSITIVE MIND TOOLKIT",
     link: "/mindgym/toolkit",
-    img: "/assets/images/case/positive-mind-toolkit.jpg",
+    img: "/assets/images/case/positive-mind-toolkit.png",
     icon: "fas fa-toolbox",
     description: "Simple practical techniques for calmness, mental clarity, focus, and handling challenging everyday emotional moments.",
     btnText: "Learn More",
@@ -90,7 +90,16 @@ export default function MindGymPage() {
                   <div className="services-one__single" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
                     <div className="services-one__single-img">
                       <div className="inner">
-                        <img src={item.img} alt={item.title} />
+                        <img
+                          src={item.img}
+                          alt={item.title}
+                          onError={(e) => {
+                            if (item.title === 'POSITIVE MINDGYM CENTRE') e.currentTarget.src = '/assets/images/services/mindgymcentre.jpeg';
+                            else if (item.title === 'POSITIVE MIND TOOLKIT') e.currentTarget.src = '/assets/images/case/positive-mind-toolkit.jpg';
+                            else e.currentTarget.src = '/assets/images/case/positive-mindgym-app.jpg';
+                          }}
+                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        />
                       </div>
                       <div className="services-one__single-img-icon">
                         <div className="services-one__single-img-icon-inner">
