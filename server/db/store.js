@@ -61,7 +61,9 @@ export async function ensureSchema() {
     ['orders', 'ADD COLUMN paymentRef VARCHAR(120)'],
     ['orders', 'ADD COLUMN couponCode VARCHAR(60)'],
     ['products', 'ADD COLUMN stock INT DEFAULT NULL'],
-    ['events', 'ADD COLUMN endDate VARCHAR(20)']
+    ['events', 'ADD COLUMN endDate VARCHAR(20)'],
+    ['certificate_templates', "ADD COLUMN renderMode VARCHAR(20) DEFAULT 'classic'"],
+    ['certificate_templates', 'ADD COLUMN overlayConfig JSON']
   ]) {
     try {
       await pool.query(`ALTER TABLE ${table} ${ddl}`);

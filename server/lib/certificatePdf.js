@@ -13,13 +13,90 @@ function safeImage(doc, path, ...args) {
   } catch { /* a missing/corrupt asset must not fail the whole batch */ }
 }
 
-// Renders one certificate to a PDF Buffer. Landscape A4.
+async function qrBuffer(data) {
+  return QRCode.toBuffer(data || 'certificate', {
+    type: 'png', margin: 1, width: 320, errorCorrectionLevel: 'M'
+  });
+}
+
+// Renders one certificate to a PDF Buffer.
 // `template` carries the static design/content; `vars` the dynamic values.
 // `assets` are optional absolute filesystem paths.
 export async function renderCertificatePdf({ template, vars, assets = {} }) {
-  const qrPng = await QRCode.toBuffer(vars.verification_url || vars.certificate_id || 'certificate', {
-    type: 'png', margin: 1, width: 320, errorCorrectionLevel: 'M'
+  if (template?.renderMode === 'overlay' && assets.backgroundPath) {
+    return renderOverlay({ template, vars, assets });
+  }
+  return renderClassic({ template, vars, assets });
+}
+
+// --- Overlay mode -----------------------------------------------------------
+// The uploaded background IS the finished design (borders, headings, body text,
+// signature — everything static). We only stamp the participant name, the QR and
+// the certificate id on top. All positions are in PDF points and tunable per
+// template via `overlayConfig`, because the exact spot only lines up after
+// eyeballing a real render — see docs/CERTIFICATES.md.
+// ponytail: coordinates are calibration knobs, not constants — the physical
+// layout of a hand-made design can't be derived, only tuned.
+const DEFAULT_OVERLAY = {
+  orientation: 'portrait',
+  name:   { x: 336, y: 466, width: 210, size: 15, color: NAVY, font: 'Times-Bold', align: 'center' },
+  certId: { x: 48,  y: 800, width: 500, size: 7.5, color: '#666666', font: 'Helvetica', align: 'center' },
+  qr:     { x: 246, y: 612, size: 72 }
+};
+
+function mergeOverlay(cfg = {}) {
+  return {
+    orientation: cfg.orientation || DEFAULT_OVERLAY.orientation,
+    name: { ...DEFAULT_OVERLAY.name, ...(cfg.name || {}) },
+    certId: { ...DEFAULT_OVERLAY.certId, ...(cfg.certId || {}) },
+    qr: { ...DEFAULT_OVERLAY.qr, ...(cfg.qr || {}) }
+  };
+}
+
+async function renderOverlay({ template, vars, assets }) {
+  const cfg = mergeOverlay(template.overlayConfig || {});
+  const doc = new PDFDocument({
+    size: 'A4', layout: cfg.orientation === 'landscape' ? 'landscape' : 'portrait', margin: 0
   });
+  const chunks = [];
+  doc.on('data', (c) => chunks.push(c));
+  const done = new Promise((resolve) => doc.on('end', () => resolve(Buffer.concat(chunks))));
+
+  const W = doc.page.width;
+  const H = doc.page.height;
+  safeImage(doc, assets.backgroundPath, 0, 0, { width: W, height: H });
+
+  const { name, certId, qr } = cfg;
+
+  if (name.size > 0 && vars.participant_name) {
+    doc.font(name.font || 'Times-Bold').fontSize(name.size).fillColor(name.color || NAVY)
+      .text(vars.participant_name, name.x, name.y, {
+        width: name.width, align: name.align || 'center', lineBreak: false
+      });
+  }
+
+  if (qr.size > 0) {
+    doc.image(await qrBuffer(vars.verification_url || vars.certificate_id), qr.x, qr.y,
+      { width: qr.size, height: qr.size });
+  }
+
+  if (certId.size > 0) {
+    const verifyHost = (vars.verification_url || '').replace(/^https?:\/\//, '').replace(/\?.*$/, '');
+    const line = [
+      vars.certificate_id && `Certificate No: ${vars.certificate_id}`,
+      verifyHost && `Verify at ${verifyHost}`
+    ].filter(Boolean).join('      ·      ');
+    doc.font(certId.font || 'Helvetica').fontSize(certId.size).fillColor(certId.color || '#666666')
+      .text(line, certId.x, certId.y, { width: certId.width, align: certId.align || 'center', lineBreak: false });
+  }
+
+  doc.end();
+  return done;
+}
+
+// --- Classic mode (generated layout) --------------------------------------
+async function renderClassic({ template, vars, assets }) {
+  const qrPng = await qrBuffer(vars.verification_url || vars.certificate_id);
 
   const doc = new PDFDocument({ size: 'A4', layout: 'landscape', margin: 0 });
   const chunks = [];

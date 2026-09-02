@@ -21,7 +21,14 @@ async function nextId(table, prefix) {
 
 // ======================= TEMPLATES =======================
 function rowToTemplate(r) {
-  return { ...r, isActive: toBool(r.isActive), createdAt: toIso(r.createdAt), updatedAt: toIso(r.updatedAt) };
+  let overlayConfig = r.overlayConfig ?? null;
+  if (typeof overlayConfig === 'string') {
+    try { overlayConfig = JSON.parse(overlayConfig); } catch { overlayConfig = null; }
+  }
+  return {
+    ...r, overlayConfig, renderMode: r.renderMode || 'classic',
+    isActive: toBool(r.isActive), createdAt: toIso(r.createdAt), updatedAt: toIso(r.updatedAt)
+  };
 }
 
 export async function getTemplates() {
@@ -40,15 +47,21 @@ export async function getActiveTemplate() {
 }
 
 const TEMPLATE_FIELDS = ['name', 'organizationName', 'signatoryName', 'signatoryTitle', 'address',
-  'headingText', 'bodyText', 'logoUrl', 'signatureUrl', 'sealUrl', 'backgroundUrl', 'isActive'];
+  'headingText', 'bodyText', 'logoUrl', 'signatureUrl', 'sealUrl', 'backgroundUrl',
+  'renderMode', 'overlayConfig', 'isActive'];
 
 export async function saveTemplate(data) {
   const ts = now();
   let existing = data.id ? await getTemplateById(data.id) : null;
   const merged = { ...existing, ...data };
-  const values = TEMPLATE_FIELDS.map((f) => (f === 'isActive'
-    ? (merged.isActive === undefined ? true : Boolean(merged.isActive))
-    : (merged[f] ?? null)));
+  const values = TEMPLATE_FIELDS.map((f) => {
+    if (f === 'isActive') return merged.isActive === undefined ? true : Boolean(merged.isActive);
+    if (f === 'overlayConfig') {
+      return merged.overlayConfig == null ? null
+        : (typeof merged.overlayConfig === 'string' ? merged.overlayConfig : JSON.stringify(merged.overlayConfig));
+    }
+    return merged[f] ?? null;
+  });
 
   if (existing) {
     await pool.query(

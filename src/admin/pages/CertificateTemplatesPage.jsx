@@ -13,7 +13,23 @@ const EMPTY = {
   name: '', organizationName: 'Ellangala’s Academy', signatoryName: 'Dr. Naveen Ellangala', signatoryTitle: 'Founder',
   address: '', headingText: 'Certificate of Completion',
   bodyText: 'This is to certify that {{participant_name}} has successfully completed the "{{event_name}}" course at {{organization_name}}, {{event_date_text}}.',
-  logoUrl: '', signatureUrl: '', sealUrl: '', backgroundUrl: '', isActive: true
+  logoUrl: '', signatureUrl: '', sealUrl: '', backgroundUrl: '',
+  renderMode: 'classic', overlayConfig: null, isActive: true
+};
+
+// Overlay-mode position knobs (PDF points, A4 portrait). Blank = use built-in default.
+const OVERLAY_FIELDS = [
+  ['name.x', 'Name X', 336], ['name.y', 'Name Y', 466], ['name.size', 'Name font size', 15], ['name.width', 'Name box width', 210],
+  ['qr.x', 'QR X', 246], ['qr.y', 'QR Y', 612], ['qr.size', 'QR size', 72],
+  ['certId.y', 'Cert-ID Y', 800], ['certId.size', 'Cert-ID font size', 7.5]
+];
+const getPath = (o, p) => p.split('.').reduce((x, k) => (x == null ? undefined : x[k]), o);
+const setPath = (o, p, v) => {
+  const ks = p.split('.'); const out = JSON.parse(JSON.stringify(o || {})); let cur = out;
+  ks.slice(0, -1).forEach((k) => { cur[k] = cur[k] || {}; cur = cur[k]; });
+  if (v === '' || v == null || Number.isNaN(v)) delete cur[ks[ks.length - 1]];
+  else cur[ks[ks.length - 1]] = v;
+  return out;
 };
 
 export default function CertificateTemplatesPage() {
@@ -78,8 +94,24 @@ export default function CertificateTemplatesPage() {
               Placeholders: {PLACEHOLDERS.map((p) => <code key={p} style={{ background: '#F1F5F9', padding: '1px 5px', borderRadius: '4px', marginRight: '4px' }}>{p}</code>)}
             </div>
 
+            <label style={{ display: 'block', fontSize: '13px', fontWeight: 700, color: '#334155', marginTop: '16px' }}>
+              Render mode
+              <select className="admin-select" style={{ marginTop: '4px' }} value={form.renderMode || 'classic'} onChange={(e) => set('renderMode', e.target.value)}>
+                <option value="classic">Classic — generate the layout (uses the fields above)</option>
+                <option value="overlay">Overlay — use an uploaded finished design, stamp only name + QR + ID</option>
+              </select>
+            </label>
+            {form.renderMode === 'overlay' && (
+              <div style={{ fontSize: '11.5px', color: '#64748B', marginTop: '6px' }}>
+                Upload your finished certificate as the <strong>Background</strong> (PNG/JPG, A4 portrait). The
+                heading, body sentence, signature and border all come from that image — only the participant
+                name, a QR code and the certificate number are added. Tune their positions below (PDF points;
+                blank = default). Generate one test certificate and adjust.
+              </div>
+            )}
+
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px', marginTop: '16px' }}>
-              {[['logoUrl', 'Logo'], ['signatureUrl', 'Signature'], ['sealUrl', 'Seal'], ['backgroundUrl', 'Background']].map(([k, label]) => (
+              {[['logoUrl', 'Logo'], ['signatureUrl', 'Signature'], ['sealUrl', 'Seal'], ['backgroundUrl', form.renderMode === 'overlay' ? 'Background (full design)' : 'Background']].map(([k, label]) => (
                 <div key={k}>
                   <div style={{ fontSize: '13px', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>{label}</div>
                   {form[k] ? <img src={form[k]} alt={label} style={{ maxHeight: '48px', display: 'block', marginBottom: '4px' }} /> : null}
@@ -87,6 +119,22 @@ export default function CertificateTemplatesPage() {
                 </div>
               ))}
             </div>
+
+            {form.renderMode === 'overlay' && (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '10px', marginTop: '14px' }}>
+                {OVERLAY_FIELDS.map(([path, label, def]) => (
+                  <label key={path} style={{ fontSize: '12px', fontWeight: 600, color: '#475569' }}>
+                    {label}
+                    <input
+                      className="admin-input" type="number" step="any" style={{ marginTop: '3px' }}
+                      placeholder={String(def)}
+                      value={getPath(form.overlayConfig, path) ?? ''}
+                      onChange={(e) => set('overlayConfig', setPath(form.overlayConfig, path, e.target.value === '' ? '' : Number(e.target.value)))}
+                    />
+                  </label>
+                ))}
+              </div>
+            )}
 
             <label style={{ fontSize: '13px', color: '#334155', display: 'flex', gap: '8px', alignItems: 'center', marginTop: '14px' }}>
               <input type="checkbox" checked={!!form.isActive} onChange={(e) => set('isActive', e.target.checked)} /> Active (available for events)
