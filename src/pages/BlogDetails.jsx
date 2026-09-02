@@ -286,7 +286,11 @@ export default function BlogDetails() {
                 </div>
               </div>
 
-              <BlogSidebar />
+              <BlogSidebar
+                currentSlug={post.slug || identifier}
+                currentId={post.id || identifier}
+                currentCategory={post.category || postDetails.category}
+              />
             </div>
           </div>
         </section>
