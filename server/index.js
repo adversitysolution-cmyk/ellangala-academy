@@ -23,7 +23,7 @@ const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 
 const app = express();
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 8080;
 
 app.use(cors());
 app.use(express.json());
@@ -74,17 +74,18 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Internal server error' });
 });
 
-ensureSchema()
-  .then(() => {
-    startCertificateWorker().catch((err) => console.error('Certificate worker failed to start:', err.message));
-    app.listen(PORT, () => {
-      console.log(`🚀 Ellangala’s Academy Server running on http://localhost:${PORT}`);
-      console.log(`🌐 Dynamic Sitemap available at http://localhost:${PORT}/sitemap.xml`);
+app.listen(PORT, () => {
+  console.log(`🚀 Ellangala’s Academy Server running on http://localhost:${PORT}`);
+  console.log(`🌐 Dynamic Sitemap available at http://localhost:${PORT}/sitemap.xml`);
+
+  ensureSchema()
+    .then(() => {
+      startCertificateWorker().catch((err) => console.error('Certificate worker failed to start:', err.message));
+      console.log('✅ Database schema verified and initialized.');
+    })
+    .catch((err) => {
+      console.warn('⚠️ Database connection notice (server still serving static files & fallback cache):', err.message);
     });
-  })
-  .catch((err) => {
-    console.error('Failed to initialize database:', err);
-    process.exit(1);
-  });
+});
 
 export default app;
