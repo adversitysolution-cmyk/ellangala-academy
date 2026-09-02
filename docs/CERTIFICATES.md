@@ -63,19 +63,38 @@ mark `FAILED` and offer "Retry Failed Emails").
 - **`classic`** (default) — the PDF layout is generated from the template fields
   (org name, heading, body text, signatory) plus optional logo / signature /
   seal / background images. Landscape A4.
-- **`overlay`** — you upload a *finished* certificate design as the **Background**
-  (PNG/JPG, A4 portrait). Everything static — border, headings, the body
-  sentence, the signature — lives in that image. The generator stamps only:
-  participant name, a QR code, and the certificate number. Positions come from
-  `overlayConfig` (JSON, PDF points) merged over `DEFAULT_OVERLAY` in
-  `server/lib/certificatePdf.js`; blank fields fall back to the default. Because
-  a hand-made design's coordinates can't be derived, generate one test
-  certificate and nudge the numbers in the template editor.
+- **`overlay`** — upload the design as the **Background** — a **PDF** (best;
+  stays vector, border never clips) or PNG/JPG, A4 portrait. Ideally a *blank*
+  version (frame, logos, headings, "Mr./Ms." line, signature — but no
+  participant name, programme name or dates). `pdf-lib` stamps the
+  event-specific parts on top:
+  - **name** — participant name on the "Mr./Ms." line (Times Bold, navy)
+  - **body** — up to four stacked, centred calligraphy lines (bundled
+    **Parisienne**, `server/lib/fonts/`): `pre` / `title` (gold) / `mid` /
+    `post`, filled from `{{event_name}}`, `{{event_date_text}}`,
+    `{{organization_name}}` etc. Any line blank is skipped; a single `body.text`
+    also works.
+  - **qr** — links to `/verify/c/<token>`
+  - **certId** — the certificate number
+  - **erase** — optional `{x,y,width,height,color}` rectangle drawn first, to
+    cover old body text if the uploaded design isn't blank (match the paper
+    colour). Omit for a blank design.
 
-  `overlayConfig` shape: `{ orientation, name:{x,y,width,size,color,font,align},
-  qr:{x,y,size}, certId:{x,y,width,size,color,font,align} }` — every key optional.
-  Course name / dates are part of the uploaded image, so an overlay background is
-  event-specific (re-export it per event, or keep the dates generic).
+  All coordinates are **top-left PDF points** (renderOverlay converts to
+  pdf-lib's bottom-left space). Positions come from `overlayConfig` merged over
+  `DEFAULT_OVERLAY` in `server/lib/certificatePdf.js`; a blank field uses the
+  default, `size: 0` skips an element. Generate one test certificate and nudge
+  the numbers in the template editor.
+
+  `overlayConfig` shape: `{ name:{x,y,size,color},
+  body:{x,y,width,size,lineGap,color,accentColor,pre,title,mid,post,text},
+  qr:{x,y,size}, certId:{x,y,width,size,color},
+  erase:{x,y,width,height,color} }` — every key optional. One blank background
+  works for **every** event.
+
+  Font note: a script face must have a plain Unicode cmap for `pdf-lib` —
+  Parisienne works, Petit Formal Script renders blank. Swap the `.ttf` in
+  `server/lib/fonts/` + `SCRIPT_FONT_PATH` to change it.
 
 ## Extending attendance sources (future)
 

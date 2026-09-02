@@ -1,11 +1,26 @@
 import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import PDFDocument from 'pdfkit';
 import QRCode from 'qrcode';
+import { PDFDocument as PDFLibDocument, StandardFonts, rgb } from 'pdf-lib';
+import fontkit from '@pdf-lib/fontkit';
 import { renderTemplate } from './certificateTemplate.js';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const GOLD = '#CA8A38';
 const NAVY = '#0A2347';
 const INK = '#1E293B';
+
+// Bundled calligraphy face for overlay body text (Parisienne, OFL).
+const SCRIPT_FONT_PATH = path.join(__dirname, 'fonts', 'Parisienne.ttf');
+
+function hexRgb(hex, fallback = [0, 0, 0]) {
+  const m = /^#?([0-9a-f]{6})$/i.exec(String(hex || '').trim());
+  const [r, g, b] = m ? [0, 2, 4].map((i) => parseInt(m[1].slice(i, i + 2), 16)) : fallback;
+  return rgb(r / 255, g / 255, b / 255);
+}
 
 function safeImage(doc, path, ...args) {
   try {
@@ -30,68 +45,139 @@ export async function renderCertificatePdf({ template, vars, assets = {} }) {
 }
 
 // --- Overlay mode -----------------------------------------------------------
-// The uploaded background IS the finished design (borders, headings, body text,
-// signature — everything static). We only stamp the participant name, the QR and
-// the certificate id on top. All positions are in PDF points and tunable per
-// template via `overlayConfig`, because the exact spot only lines up after
-// eyeballing a real render — see docs/CERTIFICATES.md.
+// The uploaded background is a BLANK version of the design (frame, logos,
+// headings, the "Mr./Ms." line, signature — everything that never changes).
+// Everything event-specific is stamped on top: participant name, the body
+// sentence (event title + dates, from {{placeholders}}), the QR and the
+// certificate number. Positions are PDF points, tunable per template via
+// `overlayConfig`; a field with size 0 is skipped, a blank field uses the
+// default below.
 // ponytail: coordinates are calibration knobs, not constants — the physical
-// layout of a hand-made design can't be derived, only tuned.
+// layout of a hand-made design can't be derived, only tuned against a render.
+// The body sentence is up to four stacked, centred, calligraphy lines:
+//   pre   — dark ink            "has successfully completed the"
+//   title — gold, its own line  "“{{event_name}}”"
+//   mid   — dark ink            "course at {{organization_name}},"
+//   post  — dark ink            "{{event_date_text}}."
+// Any part left blank is skipped. `{{...}}` placeholders are filled from vars.
+// All coordinates below are top-left PDF points (y grows downward), the same
+// mental model as the design tool; renderOverlay converts to pdf-lib's
+// bottom-left space. `erase` paints a rectangle before stamping — use it only
+// when the uploaded background still has the old body text baked in; match the
+// paper colour exactly. With a truly blank background, leave `erase` unset.
 const DEFAULT_OVERLAY = {
-  orientation: 'portrait',
-  name:   { x: 336, y: 466, width: 210, size: 15, color: NAVY, font: 'Times-Bold', align: 'center' },
-  certId: { x: 48,  y: 800, width: 500, size: 7.5, color: '#666666', font: 'Helvetica', align: 'center' },
-  qr:     { x: 246, y: 612, size: 72 }
+  name:   { x: 300, y: 450, size: 17, color: NAVY, font: 'bold' },
+  body:   {
+    x: 78, y: 506, width: 440, size: 16, lineGap: 6,
+    color: '#2E2A24', accentColor: '#A9741F',
+    pre: 'has successfully completed the',
+    title: '“{{event_name}}”',
+    mid: 'course at {{organization_name}},',
+    post: '{{event_date_text}}.'
+  },
+  certId: { x: 219, y: 664, width: 164, size: 8, color: '#555555' },
+  qr:     { x: 275, y: 600, size: 52 },
+  erase:  null // { x, y, width, height, color } — only for a still-filled design
 };
 
 function mergeOverlay(cfg = {}) {
   return {
-    orientation: cfg.orientation || DEFAULT_OVERLAY.orientation,
     name: { ...DEFAULT_OVERLAY.name, ...(cfg.name || {}) },
+    body: { ...DEFAULT_OVERLAY.body, ...(cfg.body || {}) },
     certId: { ...DEFAULT_OVERLAY.certId, ...(cfg.certId || {}) },
-    qr: { ...DEFAULT_OVERLAY.qr, ...(cfg.qr || {}) }
+    qr: { ...DEFAULT_OVERLAY.qr, ...(cfg.qr || {}) },
+    erase: cfg.erase || DEFAULT_OVERLAY.erase
   };
 }
 
+// Overlays the dynamic fields onto the background using pdf-lib, so a PDF
+// background stays vector-perfect (no rasterisation, no clipped border).
 async function renderOverlay({ template, vars, assets }) {
   const cfg = mergeOverlay(template.overlayConfig || {});
-  const doc = new PDFDocument({
-    size: 'A4', layout: cfg.orientation === 'landscape' ? 'landscape' : 'portrait', margin: 0
-  });
-  const chunks = [];
-  doc.on('data', (c) => chunks.push(c));
-  const done = new Promise((resolve) => doc.on('end', () => resolve(Buffer.concat(chunks))));
+  const bg = fs.readFileSync(assets.backgroundPath);
+  const isPdf = bg.slice(0, 5).toString() === '%PDF-';
 
-  const W = doc.page.width;
-  const H = doc.page.height;
-  safeImage(doc, assets.backgroundPath, 0, 0, { width: W, height: H });
+  let pdf, page;
+  if (isPdf) {
+    pdf = await PDFLibDocument.load(bg);
+    page = pdf.getPage(0);
+  } else {
+    pdf = await PDFLibDocument.create();
+    const img = assets.backgroundPath.toLowerCase().endsWith('.jpg') || assets.backgroundPath.toLowerCase().endsWith('.jpeg')
+      ? await pdf.embedJpg(bg) : await pdf.embedPng(bg);
+    page = pdf.addPage([595.28, 841.89]);
+    page.drawImage(img, { x: 0, y: 0, width: page.getWidth(), height: page.getHeight() });
+  }
+  pdf.registerFontkit(fontkit);
 
-  const { name, certId, qr } = cfg;
+  const PW = page.getWidth();
+  const PH = page.getHeight();
+  const topY = (y, size = 0) => PH - y - size; // top-left point -> pdf-lib baseline-ish
+
+  const bold = await pdf.embedFont(StandardFonts.TimesRomanBold);
+  const helv = await pdf.embedFont(StandardFonts.Helvetica);
+  let script = bold;
+  try {
+    if (fs.existsSync(SCRIPT_FONT_PATH)) script = await pdf.embedFont(fs.readFileSync(SCRIPT_FONT_PATH), { subset: true });
+  } catch { /* keep bold fallback */ }
+
+  const drawCentred = (text, font, size, color, boxX, boxW, yTop, faux = 0) => {
+    if (!text) return;
+    const w = font.widthOfTextAtSize(text, size);
+    const x = boxX + (boxW - w) / 2;
+    const y = topY(yTop, size);
+    // faux-bold: a couple of hairline-offset passes thicken a single-weight face
+    const offs = faux ? [[0, 0], [faux, 0], [0, faux], [faux, faux]] : [[0, 0]];
+    for (const [dx, dy] of offs) page.drawText(text, { x: x + dx, y: y + dy, size, font, color });
+  };
+
+  const { name, body, certId, qr, erase } = cfg;
+
+  if (erase && erase.width && erase.height) {
+    page.drawRectangle({
+      x: erase.x, y: PH - erase.y - erase.height, width: erase.width, height: erase.height,
+      color: hexRgb(erase.color, [251, 252, 251])
+    });
+  }
 
   if (name.size > 0 && vars.participant_name) {
-    doc.font(name.font || 'Times-Bold').fontSize(name.size).fillColor(name.color || NAVY)
-      .text(vars.participant_name, name.x, name.y, {
-        width: name.width, align: name.align || 'center', lineBreak: false
-      });
+    const font = name.font === 'script' ? script : bold;
+    page.drawText(vars.participant_name, {
+      x: name.x, y: topY(name.y, name.size), size: name.size, font, color: hexRgb(name.color, [10, 35, 71])
+    });
+  }
+
+  if (body.size > 0) {
+    const gap = (body.lineGap ?? 5) + body.size;
+    let y = body.y;
+    const ink = hexRgb(body.color, [46, 42, 36]);
+    const gold = hexRgb(body.accentColor, [169, 116, 31]);
+    const put = (raw, color, faux = 0) => {
+      const t = renderTemplate(raw, vars).trim();
+      if (!t) return;
+      drawCentred(t, script, body.size, color, body.x, body.width, y, faux);
+      y += gap;
+    };
+    if (body.text) put(body.text, ink);
+    else {
+      put(body.pre, ink);
+      put(body.title, gold, body.titleBold ?? 0.4); // programme name reads bolder, like the design
+      put(body.mid, ink);
+      put(body.post, ink);
+    }
   }
 
   if (qr.size > 0) {
-    doc.image(await qrBuffer(vars.verification_url || vars.certificate_id), qr.x, qr.y,
-      { width: qr.size, height: qr.size });
+    const png = await pdf.embedPng(await qrBuffer(vars.verification_url || vars.certificate_id));
+    page.drawImage(png, { x: qr.x, y: PH - qr.y - qr.size, width: qr.size, height: qr.size });
   }
 
-  if (certId.size > 0) {
-    const verifyHost = (vars.verification_url || '').replace(/^https?:\/\//, '').replace(/\?.*$/, '');
-    const line = [
-      vars.certificate_id && `Certificate No: ${vars.certificate_id}`,
-      verifyHost && `Verify at ${verifyHost}`
-    ].filter(Boolean).join('      ·      ');
-    doc.font(certId.font || 'Helvetica').fontSize(certId.size).fillColor(certId.color || '#666666')
-      .text(line, certId.x, certId.y, { width: certId.width, align: certId.align || 'center', lineBreak: false });
+  if (certId.size > 0 && vars.certificate_id) {
+    drawCentred(vars.certificate_id, helv, certId.size, hexRgb(certId.color, [85, 85, 85]),
+      certId.x, certId.width, certId.y);
   }
 
-  doc.end();
-  return done;
+  return Buffer.from(await pdf.save());
 }
 
 // --- Classic mode (generated layout) --------------------------------------

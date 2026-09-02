@@ -17,11 +17,17 @@ const EMPTY = {
   renderMode: 'classic', overlayConfig: null, isActive: true
 };
 
-// Overlay-mode position knobs (PDF points, A4 portrait). Blank = use built-in default.
+// Overlay-mode position knobs (top-left PDF points). Blank = built-in default.
 const OVERLAY_FIELDS = [
-  ['name.x', 'Name X', 336], ['name.y', 'Name Y', 466], ['name.size', 'Name font size', 15], ['name.width', 'Name box width', 210],
-  ['qr.x', 'QR X', 246], ['qr.y', 'QR Y', 612], ['qr.size', 'QR size', 72],
-  ['certId.y', 'Cert-ID Y', 800], ['certId.size', 'Cert-ID font size', 7.5]
+  ['name.x', 'Name X', 300], ['name.y', 'Name Y', 450], ['name.size', 'Name size', 17],
+  ['body.x', 'Body X', 78], ['body.y', 'Body Y', 506], ['body.size', 'Body size', 16], ['body.width', 'Body box width', 440],
+  ['qr.x', 'QR X', 275], ['qr.y', 'QR Y', 600], ['qr.size', 'QR size', 52],
+  ['certId.x', 'Cert-No X', 219], ['certId.y', 'Cert-No Y', 664], ['certId.size', 'Cert-No size', 8]
+];
+// Only needed when the uploaded design still has the old body text baked in.
+const ERASE_FIELDS = [
+  ['erase.x', 'Erase X', ''], ['erase.y', 'Erase Y', ''],
+  ['erase.width', 'Erase W', ''], ['erase.height', 'Erase H', '']
 ];
 const getPath = (o, p) => p.split('.').reduce((x, k) => (x == null ? undefined : x[k]), o);
 const setPath = (o, p, v) => {
@@ -98,30 +104,56 @@ export default function CertificateTemplatesPage() {
               Render mode
               <select className="admin-select" style={{ marginTop: '4px' }} value={form.renderMode || 'classic'} onChange={(e) => set('renderMode', e.target.value)}>
                 <option value="classic">Classic — generate the layout (uses the fields above)</option>
-                <option value="overlay">Overlay — use an uploaded finished design, stamp only name + QR + ID</option>
+                <option value="overlay">Overlay — stamp onto an uploaded blank design</option>
               </select>
             </label>
             {form.renderMode === 'overlay' && (
               <div style={{ fontSize: '11.5px', color: '#64748B', marginTop: '6px' }}>
-                Upload your finished certificate as the <strong>Background</strong> (PNG/JPG, A4 portrait). The
-                heading, body sentence, signature and border all come from that image — only the participant
-                name, a QR code and the certificate number are added. Tune their positions below (PDF points;
-                blank = default). Generate one test certificate and adjust.
+                Upload a <strong>blank</strong> version of your certificate as the <strong>Background</strong>
+                (PNG/JPG, A4 portrait) — frame, logos, headings, the “Mr./Ms.” line and signature, but
+                <strong> no participant name, programme name or dates</strong>. Those are stamped on per event:
+                participant name, the body sentence (below), a QR code and the certificate number. Tune
+                positions in PDF points (blank = default); generate one test and adjust.
+              </div>
+            )}
+            {form.renderMode === 'overlay' && (
+              <div style={{ marginTop: '12px' }}>
+                <div style={{ fontSize: '13px', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>
+                  Body lines (overlay) — stacked &amp; centred; the 2nd line prints in gold
+                </div>
+                {[
+                  ['body.pre', 'has successfully completed the'],
+                  ['body.title', '“{{event_name}}”'],
+                  ['body.mid', 'course at {{organization_name}},'],
+                  ['body.post', '{{event_date_text}}.']
+                ].map(([path, ph]) => (
+                  <input
+                    key={path} className="admin-input" style={{ marginBottom: '6px' }}
+                    placeholder={ph}
+                    value={getPath(form.overlayConfig, path) ?? ''}
+                    onChange={(e) => set('overlayConfig', setPath(form.overlayConfig, path, e.target.value || ''))}
+                  />
+                ))}
               </div>
             )}
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px', marginTop: '16px' }}>
-              {[['logoUrl', 'Logo'], ['signatureUrl', 'Signature'], ['sealUrl', 'Seal'], ['backgroundUrl', form.renderMode === 'overlay' ? 'Background (full design)' : 'Background']].map(([k, label]) => (
-                <div key={k}>
-                  <div style={{ fontSize: '13px', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>{label}</div>
-                  {form[k] ? <img src={form[k]} alt={label} style={{ maxHeight: '48px', display: 'block', marginBottom: '4px' }} /> : null}
-                  <input type="file" accept="image/*" onChange={(e) => uploadAsset(k, e.target.files?.[0])} style={{ fontSize: '12px' }} />
-                </div>
-              ))}
+              {[['logoUrl', 'Logo'], ['signatureUrl', 'Signature'], ['sealUrl', 'Seal'], ['backgroundUrl', form.renderMode === 'overlay' ? 'Background (blank design — PDF or PNG)' : 'Background']].map(([k, label]) => {
+                const isBg = k === 'backgroundUrl' && form.renderMode === 'overlay';
+                return (
+                  <div key={k}>
+                    <div style={{ fontSize: '13px', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>{label}</div>
+                    {form[k] && !/\.pdf($|\?)/i.test(form[k])
+                      ? <img src={form[k]} alt={label} style={{ maxHeight: '48px', display: 'block', marginBottom: '4px' }} />
+                      : (form[k] ? <div style={{ fontSize: '11px', color: '#64748B', marginBottom: '4px' }}>PDF: {form[k].split('/').pop()}</div> : null)}
+                    <input type="file" accept={isBg ? 'image/*,application/pdf' : 'image/*'} onChange={(e) => uploadAsset(k, e.target.files?.[0])} style={{ fontSize: '12px' }} />
+                  </div>
+                );
+              })}
             </div>
 
             {form.renderMode === 'overlay' && (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '10px', marginTop: '14px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '10px', marginTop: '14px' }}>
                 {OVERLAY_FIELDS.map(([path, label, def]) => (
                   <label key={path} style={{ fontSize: '12px', fontWeight: 600, color: '#475569' }}>
                     {label}
@@ -133,6 +165,34 @@ export default function CertificateTemplatesPage() {
                     />
                   </label>
                 ))}
+              </div>
+            )}
+            {form.renderMode === 'overlay' && (
+              <div style={{ marginTop: '12px' }}>
+                <div style={{ fontSize: '11.5px', color: '#64748B', marginBottom: '6px' }}>
+                  <strong>Erase box</strong> — only if the uploaded design still has old body text baked in.
+                  Set X/Y/W/H (points) to cover it, and a paper colour to match. Leave blank for a truly blank design.
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '10px' }}>
+                  {ERASE_FIELDS.map(([path, label]) => (
+                    <label key={path} style={{ fontSize: '12px', fontWeight: 600, color: '#475569' }}>
+                      {label}
+                      <input
+                        className="admin-input" type="number" step="any" style={{ marginTop: '3px' }}
+                        value={getPath(form.overlayConfig, path) ?? ''}
+                        onChange={(e) => set('overlayConfig', setPath(form.overlayConfig, path, e.target.value === '' ? '' : Number(e.target.value)))}
+                      />
+                    </label>
+                  ))}
+                  <label style={{ fontSize: '12px', fontWeight: 600, color: '#475569' }}>
+                    Erase colour
+                    <input
+                      className="admin-input" style={{ marginTop: '3px' }} placeholder="#FBFCFB"
+                      value={getPath(form.overlayConfig, 'erase.color') ?? ''}
+                      onChange={(e) => set('overlayConfig', setPath(form.overlayConfig, 'erase.color', e.target.value || ''))}
+                    />
+                  </label>
+                </div>
               </div>
             )}
 
