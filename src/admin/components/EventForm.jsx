@@ -8,6 +8,12 @@ export default function EventForm({ initialData, onSubmit, isEditing = false }) 
   const navigate = useNavigate();
 
   const [title, setTitle] = useState(initialData?.title || '');
+  const [subtitle, setSubtitle] = useState(initialData?.subtitle || initialData?.series || '');
+  const [language, setLanguage] = useState(initialData?.language || '');
+  const [duration, setDuration] = useState(initialData?.duration || '');
+  const [perspective, setPerspective] = useState(initialData?.perspective || '');
+  const [aboutProgram, setAboutProgram] = useState(initialData?.aboutProgram || '');
+  const [heroTagline, setHeroTagline] = useState(initialData?.heroTagline || '');
   const [category, setCategory] = useState(initialData?.category || EVENT_CATEGORIES[0]);
   const [shortDescription, setShortDescription] = useState(initialData?.shortDescription || '');
   const [description, setDescription] = useState(initialData?.description || '');
@@ -99,7 +105,15 @@ export default function EventForm({ initialData, onSubmit, isEditing = false }) 
     const finalStatus = targetStatus || status;
 
     const payload = {
+      ...(initialData || {}),
       title,
+      subtitle: subtitle || null,
+      series: subtitle || initialData?.series || null,
+      language: language || null,
+      duration: duration || null,
+      perspective: perspective || null,
+      aboutProgram: aboutProgram || null,
+      heroTagline: heroTagline || null,
       category,
       shortDescription,
       description,
@@ -210,7 +224,7 @@ export default function EventForm({ initialData, onSubmit, isEditing = false }) 
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Positive Parenting Masterclass"
+                  placeholder="e.g. Bhagavadgita for Meaningful Life"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   className="admin-input"
@@ -229,6 +243,45 @@ export default function EventForm({ initialData, onSubmit, isEditing = false }) 
                     <option key={cat} value={cat}>{cat}</option>
                   ))}
                 </select>
+              </div>
+            </div>
+          </div>
+
+          <div className="row g-3">
+            <div className="col-md-6">
+              <div className="admin-form-group">
+                <label className="admin-label">Subtitle / Series</label>
+                <input
+                  type="text"
+                  placeholder="e.g. 5th Transformational Learning Series"
+                  value={subtitle}
+                  onChange={(e) => setSubtitle(e.target.value)}
+                  className="admin-input"
+                />
+              </div>
+            </div>
+            <div className="col-md-3">
+              <div className="admin-form-group">
+                <label className="admin-label">Language</label>
+                <input
+                  type="text"
+                  placeholder="e.g. Kannada / English"
+                  value={language}
+                  onChange={(e) => setLanguage(e.target.value)}
+                  className="admin-input"
+                />
+              </div>
+            </div>
+            <div className="col-md-3">
+              <div className="admin-form-group">
+                <label className="admin-label">Duration</label>
+                <input
+                  type="text"
+                  placeholder="e.g. 12 Days / 3 Hours"
+                  value={duration}
+                  onChange={(e) => setDuration(e.target.value)}
+                  className="admin-input"
+                />
               </div>
             </div>
           </div>

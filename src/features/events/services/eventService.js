@@ -1,18 +1,23 @@
 import { adminFetch } from '../../../admin/services/apiClient';
+import { initialEvents } from '../data/eventSeedData';
 
 const API_BASE = '/api';
 
 export const eventService = {
   async getEvents() {
-    const res = await fetch(`${API_BASE}/events?all=true`);
-    if (!res.ok) throw new Error('Could not load events.');
-    return res.json();
+    try {
+      const res = await fetch(`${API_BASE}/events?all=true`);
+      if (res.ok) return res.json();
+    } catch (_) {}
+    return initialEvents;
   },
 
   async getPublishedEvents() {
-    const res = await fetch(`${API_BASE}/events`);
-    if (!res.ok) throw new Error('Could not load events.');
-    return res.json();
+    try {
+      const res = await fetch(`${API_BASE}/events`);
+      if (res.ok) return res.json();
+    } catch (_) {}
+    return initialEvents.filter(e => e.status === 'published' || e.status === 'cancelled' || e.status === 'completed');
   },
 
   async getUpcomingEvents() {
@@ -24,19 +29,23 @@ export const eventService = {
   async getPastEvents() {
     const events = await this.getPublishedEvents();
     const today = new Date().toISOString().split('T')[0];
-    return events.filter(e => e.date < today || e.status === 'completed');
+    return events.filter(e => (e.date < today && Boolean(e.date)) || e.status === 'completed');
   },
 
   async getEventBySlug(slug) {
-    const res = await fetch(`${API_BASE}/events/${encodeURIComponent(slug)}`);
-    if (!res.ok) return null;
-    return res.json();
+    try {
+      const res = await fetch(`${API_BASE}/events/${encodeURIComponent(slug)}`);
+      if (res.ok) return res.json();
+    } catch (_) {}
+    return initialEvents.find(e => e.slug === slug || e.id === slug) || null;
   },
 
   async getEventById(id) {
-    const res = await fetch(`${API_BASE}/events/${encodeURIComponent(id)}?admin=true`);
-    if (!res.ok) return null;
-    return res.json();
+    try {
+      const res = await fetch(`${API_BASE}/events/${encodeURIComponent(id)}?admin=true`);
+      if (res.ok) return res.json();
+    } catch (_) {}
+    return initialEvents.find(e => e.id === id || e.slug === id) || null;
   },
 
   async createEvent(data) {
