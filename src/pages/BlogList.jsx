@@ -14,12 +14,22 @@ import SEO from '../seo/SEO';
 import { generateBreadcrumbSchema, generateOrganizationSchema } from '../seo/schemas/schemaGenerators';
 import { blogContent } from '../contents/blog.content';
 
-function formatDate(dateStr) {
-  if (!dateStr) return '';
+function getDateParts(dateStr) {
+  if (!dateStr) return { day: '15', monthYear: 'Nov 24' };
   try {
-    return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) {
+      const parts = dateStr.replace(',', '').split(' ');
+      if (parts.length >= 2) {
+        return { day: parts[1] || '15', monthYear: `${parts[0]} ${parts[2]?.slice(-2) || '24'}` };
+      }
+      return { day: '15', monthYear: 'Nov 24' };
+    }
+    const day = d.getDate().toString().padStart(2, '0');
+    const monthYear = d.toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
+    return { day, monthYear };
   } catch {
-    return '';
+    return { day: '15', monthYear: 'Nov 24' };
   }
 }
 
@@ -64,111 +74,79 @@ export default function BlogList() {
         <HeaderOne />
         <PageHeader title={header.title} breadcrumb={header.breadcrumb} />
 
-        {/* Start Blog List Grid Page */}
-        <section className="blog-list-page" style={{ paddingTop: '60px', paddingBottom: '90px' }}>
+        {/* Start Blog One / Blog List */}
+        <section className="blog-one blog-one--blog-list" style={{ paddingTop: '90px', paddingBottom: '90px' }}>
           <div className="container">
-            <div className="row gy-4">
+            <div className="row gy-5">
               {publishedPosts.map((item, index) => {
                 const detailUrl = `/insights/${item.slug || item.id}`;
+                const dateParts = getDateParts(item.publishedAt || item.createdAt || item.date);
+
                 return (
-                  <div key={index} className="col-xl-6 col-lg-6 col-md-6 wow animated fadeInUp" data-wow-delay={`${0.1 * (index + 1)}s`}>
-                    <div
-                      className="blog-list-page__single"
-                      style={{
-                        height: '100%',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'space-between',
-                        backgroundColor: '#ffffff',
-                        borderRadius: '12px',
-                        border: '1px solid #ECE7DE',
-                        overflow: 'hidden',
-                        boxShadow: '0 4px 16px rgba(0,0,0,0.04)'
-                      }}
-                    >
-                      <div className="blog-list-page__single-img" style={{ position: 'relative', overflow: 'hidden', height: '240px' }}>
-                        <img
-                          src={item.image || item.img || '/assets/images/blog/blog-mind-gym.png'}
-                          alt={item.title}
-                          onError={(e) => {
-                            e.currentTarget.src = '/assets/images/blog/blog-mind-gym.png';
-                          }}
-                          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', transition: 'transform 0.4s ease' }}
-                        />
-                        <div
-                          style={{
-                            position: 'absolute',
-                            top: '16px',
-                            left: '16px',
-                            backgroundColor: 'var(--uterpy-base, #CA8A38)',
-                            color: '#ffffff',
-                            padding: '4px 12px',
-                            borderRadius: '4px',
-                            fontSize: '12px',
-                            fontWeight: '700',
-                            letterSpacing: '0.4px',
-                            textTransform: 'uppercase'
-                          }}
-                        >
-                          {item.category}
+                  <div key={index} className="col-xl-6 col-lg-6 d-flex wow animated fadeInUp" data-wow-delay={`${0.1 * ((index % 2) + 1)}s`}>
+                    <div className="blog-one__single" style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%' }}>
+                      <div className="blog-one__single-img">
+                        <div className="inner">
+                          <img
+                            src={item.image || item.img || '/assets/images/blog/blog-mind-gym.png'}
+                            alt={item.title}
+                            onError={(e) => {
+                              e.currentTarget.src = '/assets/images/blog/blog-mind-gym.png';
+                            }}
+                            style={{ width: '100%', height: '360px', objectFit: 'cover' }}
+                          />
                         </div>
                       </div>
 
-                      <div className="blog-list-page__single-content" style={{ padding: '24px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                        <div>
-                          <ul className="meta-box" style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', padding: 0, margin: '0 0 14px', listStyle: 'none' }}>
-                            <li style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: '#64748B' }}>
-                              <span className="icon-calendar-cells" style={{ color: 'var(--uterpy-base, #CA8A38)' }}></span>
-                              <Link to={detailUrl} style={{ color: '#64748B' }}>{formatDate(item.publishedAt || item.createdAt)}</Link>
+                      <div className="blog-one__single-content" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                        <div className="blog-one__single-content-top">
+                          <div className="shape1">
+                            <img src="/assets/images/shapes/blog-v1-shape1.png" alt="#" />
+                          </div>
+                          <div className="date-box">
+                            <h2>
+                              {dateParts.day} <br /> <span>{dateParts.monthYear}</span>
+                            </h2>
+                          </div>
+
+                          <ul className="meta-box">
+                            <li>
+                              <div className="icon">
+                                <span className="icon-user3"></span>
+                              </div>
+                              <div className="text">
+                                <p>
+                                  <Link to={detailUrl}>{item.author || 'Dr. Naveen Ellangala'}</Link>
+                                </p>
+                              </div>
                             </li>
-                            <li style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: '#64748B' }}>
-                              <span className="icon-user" style={{ color: 'var(--uterpy-base, #CA8A38)' }}></span>
-                              <Link to={detailUrl} style={{ color: '#64748B' }}>{item.author}</Link>
+
+                            <li>
+                              <div className="icon">
+                                <span className="icon-comment-o"></span>
+                              </div>
+                              <div className="text">
+                                <p>
+                                  <Link to={detailUrl}>{item.comments || '0 Comments'}</Link>
+                                </p>
+                              </div>
                             </li>
                           </ul>
 
-                          <h2 style={{ fontSize: '20px', fontWeight: '700', lineHeight: '1.4', marginBottom: '14px' }}>
-                            <Link to={detailUrl} style={{ color: '#0F231B', textDecoration: 'none' }}>
-                              {item.title}
+                          <div className="btn-box">
+                            <Link to={detailUrl}>
+                              Read More <span className="icon-right-arrow1"></span>
                             </Link>
-                          </h2>
-
-                          <p style={{ fontSize: '14.5px', color: '#475569', lineHeight: '1.65', marginBottom: '20px' }}>
-                            {item.excerpt}
-                          </p>
+                          </div>
                         </div>
 
-                        <div
-                          className="blog-list-page__single-content-bottom"
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            paddingTop: '16px',
-                            borderTop: '1px solid #F1F5F9'
-                          }}
-                        >
-                          <div className="btn-box">
-                            <Link
-                              to={detailUrl}
-                              style={{
-                                fontSize: '14px',
-                                fontWeight: '700',
-                                color: 'var(--uterpy-base, #CA8A38)',
-                                textDecoration: 'none',
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                gap: '6px'
-                              }}
-                            >
-                              <span>Continue reading</span>
-                              <span className="icon-right-arrow1"></span>
-                            </Link>
+                        <div className="blog-one__single-content-bottom" style={{ flex: 1, minHeight: '120px' }}>
+                          <div className="shape2">
+                            <img src="/assets/images/shapes/blog-v1-shape1.png" alt="" />
                           </div>
-                          <div style={{ fontSize: '12.5px', color: '#64748B', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                            <span className="icon-clock"></span>
-                            <span>{item.readTime}</span>
-                          </div>
+                          <h2>
+                            <Link to={detailUrl}>{item.title}</Link>
+                          </h2>
                         </div>
                       </div>
                     </div>
@@ -178,7 +156,7 @@ export default function BlogList() {
             </div>
           </div>
         </section>
-        {/* End Blog List Grid Page */}
+        {/* End Blog One */}
 
         <FooterOne />
       </div>
