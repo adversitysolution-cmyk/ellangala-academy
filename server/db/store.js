@@ -74,10 +74,10 @@ export async function ensureSchema() {
 }
 
 async function seedIfEmpty() {
-  const [[{ n: eventCount }]] = await pool.query('SELECT COUNT(*) AS n FROM events');
-  if (eventCount === 0) {
-    const now = new Date().toISOString();
-    for (const e of initialEvents || []) {
+  const now = new Date().toISOString();
+  for (const e of initialEvents || []) {
+    const [existing] = await pool.query('SELECT id FROM events WHERE id = ? OR slug = ? LIMIT 1', [e.id, e.slug || e.id]);
+    if (existing.length === 0) {
       await saveDbEvent({
         ...e,
         seo: { title: `${e.title} | Ellangala’s Academy`, description: e.shortDescription, image: e.image, noindex: false },

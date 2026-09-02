@@ -10,15 +10,18 @@ import SearchPopup from '../../../components/layout/SearchPopup';
 import ScrollToTop from '../../../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../../../hooks/useUterpyPlugins';
 import { eventService } from '../services/eventService';
-import { Calendar, Clock, MapPin, Sparkles, ArrowRight, Video } from 'lucide-react';
+import { initialEvents } from '../data/eventSeedData';
+import { useEnrollModal } from '../../../context/EnrollModalContext';
+import { Calendar, Clock, MapPin, Sparkles, ArrowRight, Video, Globe, Brain } from 'lucide-react';
 import SEO from '../../../seo/SEO';
 import { generateBreadcrumbSchema, generateOrganizationSchema } from '../../../seo/schemas/schemaGenerators';
 
 function formatDate(dateStr) {
   if (!dateStr) return '';
+  if (dateStr === '2026-09-09') return '9 Sept 2026';
   try {
     const d = new Date(dateStr);
-    return d.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
+    return d.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
   } catch {
     return dateStr;
   }
@@ -26,21 +29,51 @@ function formatDate(dateStr) {
 
 export default function EventsPage() {
   useUterpyPlugins();
+  const { openEnrollModal } = useEnrollModal();
   const [activeTab, setActiveTab] = useState('upcoming');
   const [upcomingEvents, setUpcomingEvents] = useState([]);
   const [pastEvents, setPastEvents] = useState([]);
 
   useEffect(() => {
-    eventService.getUpcomingEvents().then(setUpcomingEvents).catch(() => {});
-    eventService.getPastEvents().then(setPastEvents).catch(() => {});
+    const today = new Date().toISOString().split('T')[0];
+    const localUpcoming = initialEvents.filter(
+      (e) => (e.date >= today || !e.date) && e.status !== 'completed'
+    );
+    const localPast = initialEvents.filter(
+      (e) => (e.date < today && Boolean(e.date)) || e.status === 'completed'
+    );
+
+    eventService
+      .getUpcomingEvents()
+      .then((res) => {
+        if (Array.isArray(res) && res.length > 0) setUpcomingEvents(res);
+        else setUpcomingEvents(localUpcoming);
+      })
+      .catch(() => setUpcomingEvents(localUpcoming));
+
+    eventService
+      .getPastEvents()
+      .then((res) => {
+        if (Array.isArray(res) && res.length > 0) setPastEvents(res);
+        else setPastEvents(localPast);
+      })
+      .catch(() => setPastEvents(localPast));
   }, []);
 
-  const featuredEvent = upcomingEvents.find(e => e.featured) || upcomingEvents[0];
+  const featuredEvent = upcomingEvents.find((e) => e.featured) || upcomingEvents[0];
   const remainingUpcoming = featuredEvent
-    ? upcomingEvents.filter(e => e.id !== featuredEvent.id)
+    ? upcomingEvents.filter((e) => e.id !== featuredEvent.id)
     : upcomingEvents;
 
   const currentDisplayList = activeTab === 'upcoming' ? upcomingEvents : pastEvents;
+
+  const handleRegisterClick = (eventTitle, eventId) => {
+    openEnrollModal(eventTitle, {
+      sourceType: 'Event',
+      eventId: eventId,
+      eventTitle: eventTitle
+    });
+  };
 
   return (
     <>
@@ -91,7 +124,7 @@ export default function EventsPage() {
                 Learn. Connect. Grow Together.
               </h1>
               <p style={{ fontSize: '15.5px', color: '#64748B', lineHeight: '1.65' }}>
-                Explore upcoming workshops, MindGym sessions, talks and learning experiences from Ellangala’s Academy.
+                Explore upcoming workshops, MindGym sessions, talks and transformational learning series from Ellangala’s Academy.
               </p>
             </div>
 
@@ -137,7 +170,7 @@ export default function EventsPage() {
               </button>
             </div>
 
-            {/* Featured Event Section (Only shown on Upcoming tab if a featured event exists) */}
+            {/* Featured Event Section */}
             {activeTab === 'upcoming' && featuredEvent && (
               <div
                 style={{
@@ -151,12 +184,14 @@ export default function EventsPage() {
               >
                 <div className="row g-0 align-items-center">
                   <div className="col-lg-6">
-                    <div style={{ height: '100%', minHeight: '340px', position: 'relative', overflow: 'hidden' }}>
+                    <div style={{ height: '100%', minHeight: '380px', position: 'relative', overflow: 'hidden' }}>
                       <img
                         src={featuredEvent.image}
                         alt={featuredEvent.title}
-                        onError={(e) => { e.currentTarget.src = '/assets/images/blog/blog-positive-psychology.png'; }}
-                        style={{ width: '100%', height: '100%', objectFit: 'cover', minHeight: '340px' }}
+                        onError={(e) => {
+                          e.currentTarget.src = '/assets/images/events/bhagavadgita-meaningful-life-series-5.jpg';
+                        }}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', minHeight: '380px' }}
                       />
                       <div
                         style={{
@@ -179,58 +214,113 @@ export default function EventsPage() {
                   </div>
                   <div className="col-lg-6">
                     <div style={{ padding: '36px 40px' }}>
-                      <span
-                        style={{
-                          fontSize: '12px',
-                          fontWeight: '800',
-                          color: '#CA8A38',
-                          letterSpacing: '1px',
-                          textTransform: 'uppercase',
-                          display: 'block',
-                          marginBottom: '8px'
-                        }}
-                      >
-                        {featuredEvent.category}
-                      </span>
-                      <h2 style={{ fontSize: '26px', fontWeight: '800', color: '#0F231B', marginBottom: '14px', lineHeight: '1.3' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px', flexWrap: 'wrap' }}>
+                        <span
+                          style={{
+                            fontSize: '12px',
+                            fontWeight: '800',
+                            color: '#CA8A38',
+                            letterSpacing: '0.8px',
+                            textTransform: 'uppercase',
+                            backgroundColor: '#FAF5EC',
+                            padding: '3px 10px',
+                            borderRadius: '4px'
+                          }}
+                        >
+                          {featuredEvent.subtitle || featuredEvent.series || featuredEvent.category}
+                        </span>
+                        {featuredEvent.language && (
+                          <span style={{ fontSize: '12px', fontWeight: '800', color: '#2563EB', backgroundColor: '#EFF6FF', padding: '3px 10px', borderRadius: '4px' }}>
+                            {featuredEvent.language}
+                          </span>
+                        )}
+                      </div>
+
+                      <h2 style={{ fontSize: '26px', fontWeight: '800', color: '#0F231B', marginBottom: '12px', lineHeight: '1.3' }}>
                         <Link to={`/events/${featuredEvent.slug}`} style={{ color: '#0F231B', textDecoration: 'none' }}>
                           {featuredEvent.title}
                         </Link>
                       </h2>
-                      <p style={{ fontSize: '15px', color: '#475569', lineHeight: '1.65', marginBottom: '22px' }}>
+                      <p style={{ fontSize: '15px', color: '#475569', lineHeight: '1.65', marginBottom: '20px' }}>
                         {featuredEvent.shortDescription}
                       </p>
 
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '28px', fontSize: '14px', color: '#334155' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                          <Calendar size={16} style={{ color: '#CA8A38' }} />
-                          <span><strong>{formatDate(featuredEvent.date)}</strong></span>
-                        </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                          <Clock size={16} style={{ color: '#CA8A38' }} />
-                          <span>{featuredEvent.startTime} – {featuredEvent.endTime}</span>
-                        </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                          <MapPin size={16} style={{ color: '#CA8A38' }} />
-                          <span>{featuredEvent.mode === 'Online' ? 'Online Live Event' : `${featuredEvent.venue}, ${featuredEvent.city}`}</span>
-                        </div>
-                      </div>
-
-                      <Link
-                        to={`/events/${featuredEvent.slug}`}
-                        className="thm-btn"
+                      {/* Key Details Grid */}
+                      <div
                         style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '8px',
-                          padding: '12px 28px',
-                          borderRadius: '8px',
-                          fontSize: '14px'
+                          display: 'grid',
+                          gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))',
+                          gap: '10px',
+                          marginBottom: '26px',
+                          backgroundColor: '#FAF8F5',
+                          padding: '16px',
+                          borderRadius: '12px',
+                          border: '1px solid #ECE7DE'
                         }}
                       >
-                        <span>VIEW EVENT</span>
-                        <ArrowRight size={16} />
-                      </Link>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: '#334155' }}>
+                          <Calendar size={15} style={{ color: '#CA8A38', flexShrink: 0 }} />
+                          <span><strong>Start Date:</strong> {formatDate(featuredEvent.date)}</span>
+                        </div>
+                        {featuredEvent.duration && (
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: '#334155' }}>
+                            <Clock size={15} style={{ color: '#CA8A38', flexShrink: 0 }} />
+                            <span><strong>Duration:</strong> {featuredEvent.duration}</span>
+                          </div>
+                        )}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: '#334155' }}>
+                          <Clock size={15} style={{ color: '#CA8A38', flexShrink: 0 }} />
+                          <span><strong>Time:</strong> {featuredEvent.timeDisplay || `${featuredEvent.startTime} – ${featuredEvent.endTime}`}</span>
+                        </div>
+                        {featuredEvent.perspective && (
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: '#334155' }}>
+                            <Brain size={15} style={{ color: '#CA8A38', flexShrink: 0 }} />
+                            <span><strong>Perspective:</strong> {featuredEvent.perspective}</span>
+                          </div>
+                        )}
+                      </div>
+
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+                        <Link
+                          to={`/events/${featuredEvent.slug}`}
+                          className="thm-btn"
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            padding: '12px 24px',
+                            borderRadius: '8px',
+                            fontSize: '14px'
+                          }}
+                        >
+                          <span>View Details</span>
+                          <ArrowRight size={16} />
+                        </Link>
+
+                        <button
+                          type="button"
+                          onClick={() => handleRegisterClick(featuredEvent.title, featuredEvent.id)}
+                          style={{
+                            padding: '12px 24px',
+                            borderRadius: '8px',
+                            backgroundColor: '#1B2A38',
+                            color: '#FFFFFF',
+                            border: 'none',
+                            fontSize: '14px',
+                            fontWeight: '700',
+                            cursor: 'pointer',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            transition: 'all 0.2s ease'
+                          }}
+                          onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#CA8A38'; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#1B2A38'; }}
+                        >
+                          <span>Register Now</span>
+                          <Sparkles size={15} />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -299,7 +389,9 @@ export default function EventsPage() {
                           <img
                             src={event.image}
                             alt={event.title}
-                            onError={(e) => { e.currentTarget.src = '/assets/images/blog/blog-positive-psychology.png'; }}
+                            onError={(e) => {
+                              e.currentTarget.src = '/assets/images/events/bhagavadgita-meaningful-life-series-5.jpg';
+                            }}
                             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                           />
                           <div
@@ -359,10 +451,11 @@ export default function EventsPage() {
 
                         {/* Event Info */}
                         <div style={{ padding: '24px' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: '#CA8A38', fontWeight: '700', marginBottom: '10px' }}>
-                            <Calendar size={15} />
-                            <span>{formatDate(event.date)}</span>
-                          </div>
+                          {event.subtitle && (
+                            <div style={{ fontSize: '12px', fontWeight: '800', color: '#CA8A38', textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: '6px' }}>
+                              {event.subtitle}
+                            </div>
+                          )}
 
                           <h3 style={{ fontSize: '19px', fontWeight: '800', color: '#0F231B', lineHeight: '1.35', marginBottom: '10px' }}>
                             <Link to={`/events/${event.slug}`} style={{ color: '#0F231B', textDecoration: 'none' }}>
@@ -373,30 +466,104 @@ export default function EventsPage() {
                           <p style={{ fontSize: '14px', color: '#64748B', lineHeight: '1.6', marginBottom: '16px' }}>
                             {event.shortDescription}
                           </p>
+
+                          {/* Key Details List */}
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '13px', color: '#334155', backgroundColor: '#FAF8F5', padding: '12px 14px', borderRadius: '8px', border: '1px solid #ECE7DE' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                              <Calendar size={14} style={{ color: '#CA8A38' }} />
+                              <span><strong>Start:</strong> {formatDate(event.date)}</span>
+                              {event.duration && <span style={{ marginLeft: 'auto', color: '#64748B' }}>⏳ {event.duration}</span>}
+                            </div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                              <Clock size={14} style={{ color: '#CA8A38' }} />
+                              <span>{event.timeDisplay || `${event.startTime} – ${event.endTime}`}</span>
+                            </div>
+                            {event.language && (
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                <Globe size={14} style={{ color: '#CA8A38' }} />
+                                <span><strong>Language:</strong> {event.language}</span>
+                              </div>
+                            )}
+                            {event.perspective && (
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                <Brain size={14} style={{ color: '#CA8A38' }} />
+                                <span><strong>Perspective:</strong> {event.perspective}</span>
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </div>
 
-                      <div style={{ padding: '0 24px 24px 24px', borderTop: '1px solid #F1F5F9', paddingTop: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: '#475569', fontWeight: '600' }}>
-                          <MapPin size={14} style={{ color: '#CA8A38' }} />
-                          <span>{event.mode === 'Online' ? 'Online' : event.city}</span>
-                        </div>
-
+                      {/* Card Bottom CTA Bar */}
+                      <div
+                        style={{
+                          padding: '16px 24px 20px',
+                          borderTop: '1px solid #F1F5F9',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '10px'
+                        }}
+                      >
                         <Link
                           to={`/events/${event.slug}`}
                           style={{
-                            fontSize: '13.5px',
-                            fontWeight: '700',
+                            flex: 1,
+                            padding: '9px 12px',
+                            borderRadius: '6px',
+                            border: '1px solid #CA8A38',
                             color: '#CA8A38',
+                            fontSize: '13px',
+                            fontWeight: '700',
                             textDecoration: 'none',
+                            textAlign: 'center',
                             display: 'inline-flex',
                             alignItems: 'center',
-                            gap: '4px'
+                            justifyContent: 'center',
+                            gap: '4px',
+                            transition: 'all 0.2s ease'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = '#CA8A38';
+                            e.currentTarget.style.color = '#FFFFFF';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = 'transparent';
+                            e.currentTarget.style.color = '#CA8A38';
                           }}
                         >
-                          <span>VIEW DETAILS</span>
-                          <ArrowRight size={14} />
+                          <span>View Details</span>
+                          <ArrowRight size={13} />
                         </Link>
+
+                        <button
+                          type="button"
+                          onClick={() => handleRegisterClick(event.title, event.id)}
+                          style={{
+                            flex: 1,
+                            padding: '9px 12px',
+                            borderRadius: '6px',
+                            backgroundColor: '#1B2A38',
+                            color: '#FFFFFF',
+                            border: 'none',
+                            fontSize: '13px',
+                            fontWeight: '700',
+                            cursor: 'pointer',
+                            textAlign: 'center',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '4px',
+                            transition: 'all 0.2s ease'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = '#D4A359';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = '#1B2A38';
+                          }}
+                        >
+                          <span>Register Now</span>
+                        </button>
                       </div>
                     </div>
                   </div>
