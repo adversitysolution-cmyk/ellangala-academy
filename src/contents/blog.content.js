@@ -124,6 +124,126 @@ export const blogContent = {
             bio: "Founder and Chief Mentor at Ellangala Academy, Corporate Wellness Coach and Behavioral Consultant."
           }
         }
+      },
+      {
+        id: "the-student-success-mindset-focus-goal-setting-exam-mastery",
+        slug: "the-student-success-mindset-focus-goal-setting-exam-mastery",
+        title: "The Student Success Mindset: Mastering Goal Setting, Focus & Overcoming Exam Anxiety",
+        img: "/assets/images/services/Positive Workshop.png",
+        category: "Student Mentoring",
+        date: "Nov 20, 2024",
+        author: "By Dr. Naveen Ellangala",
+        comments: "0 Comment",
+        readTime: "9 Mins Read",
+        excerpt: "Academic excellence is not merely a measure of innate intelligence; it is an outcome of psychological endurance, strategic study habits, and conscious anxiety regulation.",
+        details: {
+          headerTitle: "The Student Success Mindset",
+          category: "Student Mentoring",
+          date: "Nov 20, 2024",
+          comments: "6 Comments",
+          title: "The Student Success Mindset: Mastering Goal Setting, Focus & Overcoming Exam Anxiety",
+          text1: "In modern educational landscapes, students often face immense competitive pressure that triggers chronic academic distress and exam paralysis. Based on the frameworks established in my book 'The Student Success Mindset' and 'Goal Setting & Study Skills', academic achievement is less about rote memorization and fundamentally about psychological conditioning. When students learn to master their emotional state before opening their textbooks, their capacity for sustained cognitive focus expands exponentially.",
+          heading2: "Overcoming Cognitive Overload & The Psychology of Goal Setting",
+          text2: "Most learners struggle not from a lack of intellect, but from fragmented attention and ambiguous goals. By transforming abstract desires ('I want to score high') into structured, incremental micro-milestones, students activate the dopamine-driven progress loop. Furthermore, learning systematic relaxation drills, memory mapping techniques, and positive self-talk dismantles the fear of failure that often sabotages students during high-stakes examinations.",
+          quote: "True academic success is built when a student transitions from fear-driven pressure to purpose-driven curiosity and disciplined daily practice.",
+          text3: "Through our specialized Student Mentoring workshops across Karnataka and India, Dr. Naveen Ellangala empowers young learners with actionable mental blueprints to conquer procrastination, sustain deep concentration, and sculpt an unshakeable belief in their own capabilities.",
+          articleImage: "/assets/images/services/Positive Workshop.png",
+          author: {
+            image: "/assets/images/team/naveen-ellangala.jpg",
+            name: "Dr. Naveen Ellangala",
+            bio: "Founder and Chief Mentor at Ellangala Academy, Author of 'The Student Success Mindset', and Pioneer in Youth Psychological Coaching."
+          }
+        }
+      },
+      {
+        id: "mind-reprogramming-rewiring-subconscious-patterns-self-care",
+        slug: "mind-reprogramming-rewiring-subconscious-patterns-self-care",
+        title: "Mind Reprogramming: Rewiring Subconscious Thought Patterns & Daily Self-Care Rituals",
+        img: "/assets/images/services/Positive MindGym App.png",
+        category: "Mind Training",
+        date: "Nov 24, 2024",
+        author: "By Dr. Naveen Ellangala",
+        comments: "0 Comment",
+        readTime: "8 Mins Read",
+        excerpt: "Explore the transformative cognitive framework to identify limiting subconscious loops, practice intentional self-care, and construct lifelong emotional equilibrium.",
+        details: {
+          headerTitle: "Mind Reprogramming & Self Care",
+          category: "Mind Training",
+          date: "Nov 24, 2024",
+          comments: "8 Comments",
+          title: "Mind Reprogramming: Rewiring Subconscious Thought Patterns & Daily Self-Care Rituals",
+          text1: "Over 90% of our daily choices, emotional reactions, and behavioral instincts are governed by subconscious cognitive conditioning formed during our formative years. In 'Mind Reprogramming – A Workbook' and 'Self Care', we outline how unnoticed cognitive distortions solidify into self-limiting beliefs. Reprogramming the mind is not about superficial wishful thinking; it is a systematic, conscious re-engineering of the subconscious neural highways.",
+          heading2: "The Power of Radical Self-Care and Neural Neuroplasticity",
+          text2: "Self-care is frequently misconstrued as commercial indulgence. In authentic Positive Psychology, self-care is the disciplined maintenance of cognitive clarity, emotional boundaries, and nervous system balance. When we consciously interrupt automatic negative thought loops through structured reflective writing and mental hygiene drills, the brain's neuroplasticity begins reinforcing empowering behavioral alternatives.",
+          quote: "You cannot change the harvest of your life without first changing the subconscious seeds you cultivate in your daily mind.",
+          text3: "The Positive MindGym frameworks designed by Ellangala Academy guide seekers through daily mental workouts, gratitude anchoring, and self-affirmation practices that restore internal harmony and emotional vitality.",
+          articleImage: "/assets/images/services/Positive MindGym App.png",
+          author: {
+            image: "/assets/images/team/naveen-ellangala.jpg",
+            name: "Dr. Naveen Ellangala",
+            bio: "Founder and Chief Mentor at Ellangala Academy, Author of 'Mind Reprogramming – A Workbook' and 'Self Care'."
+          }
+        }
+      },
+      {
+        id: "manas-sadhana-spiritual-psychology-inner-mastery-daily-life",
+        slug: "manas-sadhana-spiritual-psychology-inner-mastery-daily-life",
+        title: "Manas Sadhana: Harnessing Spiritual Psychology for Inner Mastery & Everyday Clarity",
+        img: "/assets/images/services/Positive Mentoring.png",
+        category: "Spiritual Psychology",
+        date: "Nov 28, 2024",
+        author: "By Dr. Naveen Ellangala",
+        comments: "0 Comment",
+        readTime: "11 Mins Read",
+        excerpt: "Discover how conscious self-observation and Indian spiritual psychology bridge the gap between abstract existential philosophy and practical, grounded life decisions.",
+        details: {
+          headerTitle: "Manas Sadhana & Inner Mastery",
+          category: "Spiritual Psychology",
+          date: "Nov 28, 2024",
+          comments: "5 Comments",
+          title: "Manas Sadhana: Harnessing Spiritual Psychology for Inner Mastery & Everyday Clarity",
+          text1: "Human suffering often arises from an unobserved mind that reacts impulsively to external stimuli. In my work 'Manas Sadhana – A Journey Towards a Meaningful Life' and 'Spiritual Psychology for Daily Life', spiritual psychology is presented not as a distant ascetic ideal, but as an indispensable navigational compass for modern living. Manas Sadhana represents the sacred practice of mental purification, conscious awareness, and value-based alignment.",
+          heading2: "Cultivating Sakshi Bhava (The Witness Consciousness)",
+          text2: "At the core of Indian spiritual psychology lies 'Sakshi Bhava' — the ability to step back and observe transient thoughts and emotional storms without becoming entangled in them. By cultivating this dispassionate witness state, an individual ceases to be a helpless victim of impulsive anger, greed, or despair, and instead responds with wisdom, compassion, and poise in every interpersonal interaction.",
+          quote: "Inner peace is not the absence of external storms; it is the presence of deep spiritual centeredness amidst the turbulence of life.",
+          text3: "Through our Spiritual Mentoring retreats and reflective discourses, Dr. Naveen Ellangala helps seekers harmonize their spiritual core with professional and personal responsibilities for an authentic, purposeful life.",
+          articleImage: "/assets/images/services/Positive Mentoring.png",
+          author: {
+            image: "/assets/images/team/naveen-ellangala.jpg",
+            name: "Dr. Naveen Ellangala",
+            bio: "Founder and Chief Mentor at Ellangala Academy, Spiritual Psychology Pioneer, and Author of 'Manas Sadhana'."
+          }
+        }
+      },
+      {
+        id: "mind-your-mind-emotional-fitness-mastering-overthinking",
+        slug: "mind-your-mind-emotional-fitness-mastering-overthinking",
+        title: "Mind Your Mind: Cultivating Cognitive Equilibrium & Overcoming Chronic Overthinking",
+        img: "/assets/images/resources/why-choose-v1-img1.png",
+        category: "Emotional Fitness",
+        date: "Dec 02, 2024",
+        author: "By Dr. Naveen Ellangala",
+        comments: "0 Comment",
+        readTime: "8 Mins Read",
+        excerpt: "Chronic overthinking drains mental energy and paralyzes action. Learn clinical psychological insights and mindful drills to regain cognitive control and unshakeable optimism.",
+        details: {
+          headerTitle: "Mind Your Mind & Emotional Fitness",
+          category: "Emotional Fitness",
+          date: "Dec 02, 2024",
+          comments: "7 Comments",
+          title: "Mind Your Mind: Cultivating Cognitive Equilibrium & Overcoming Chronic Overthinking",
+          text1: "In an age of endless digital stimulation and information overload, our minds are bombarded with continuous noise. In 'Mind your Mind' and 'Be Positive', we explore why the human brain defaults to hyper-vigilant rumination and how chronic overthinking acts as an invisible brake on personal fulfillment, emotional intimacy, and career advancement.",
+          heading2: "Breaking the Rumination Cycle with Cognitive Grounding",
+          text2: "Overthinking is a cognitive illusion of control — the false belief that analyzing a past mistake or anticipating every future catastrophe will prevent pain. Breaking this loop requires somatic grounding techniques, thought-stopping rituals, and constructive cognitive redirection. When we train ourselves to replace destructive 'What If' fears with empowering 'What Can I Do Now' actions, clarity immediately replaces confusion.",
+          quote: "You are the master of your mind, not its prisoner. When you mind your mind, you unlock the gateway to boundless peace and positive energy.",
+          text3: "Ellangala Academy's Emotional Wellness programs provide practical daily drills and guided meditation audio sessions to quiet the inner critic and anchor the mind in joyful present-moment presence.",
+          articleImage: "/assets/images/resources/why-choose-v1-img1.png",
+          author: {
+            image: "/assets/images/team/naveen-ellangala.jpg",
+            name: "Dr. Naveen Ellangala",
+            bio: "Founder and Chief Mentor at Ellangala Academy, Author of 'Mind your Mind' and 'Be Positive'."
+          }
+        }
       }
     ]
   },

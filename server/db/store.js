@@ -87,9 +87,9 @@ async function seedIfEmpty() {
     }
   }
 
-  const [[{ n: blogCount }]] = await pool.query('SELECT COUNT(*) AS n FROM blogs');
-  if (blogCount === 0) {
-    for (const b of (blogContent.list.posts || [])) {
+  for (const b of (blogContent.list.posts || [])) {
+    const [existing] = await pool.query('SELECT id FROM blogs WHERE id = ? OR slug = ? LIMIT 1', [b.id, b.slug || b.id]);
+    if (existing.length === 0) {
       await saveDbBlog({
         id: b.id,
         slug: b.slug || b.id,
@@ -97,19 +97,19 @@ async function seedIfEmpty() {
         excerpt: b.excerpt || '',
         content: b.details?.text1 ? `${b.details.text1}\n\n${b.details.text2 || ''}\n\n${b.details.text3 || ''}` : b.excerpt,
         category: b.category || 'Positive Psychology',
-        image: b.img || '/assets/images/blog/blog-mind-gym.png',
+        image: b.image || b.img || '/assets/images/blog/blog-mind-gym.png',
         author: b.author ? b.author.replace(/^By\s+/, '') : 'Dr. Naveen Ellangala',
         status: 'published',
         readTime: b.readTime || '10 Mins Read',
         details: b.details || null,
-        seo: { title: `${b.title} | Ellangala’s Academy`, description: b.excerpt, image: b.img, noindex: false }
+        seo: { title: `${b.title} | Ellangala’s Academy`, description: b.excerpt, image: b.image || b.img || '/assets/images/blog/blog-mind-gym.png', noindex: false }
       });
     }
   }
 
-  const [[{ n: productCount }]] = await pool.query('SELECT COUNT(*) AS n FROM products');
-  if (productCount === 0) {
-    for (const p of (shopContent.shop.products || [])) {
+  for (const p of (shopContent.shop.products || [])) {
+    const [existing] = await pool.query('SELECT id FROM products WHERE id = ? LIMIT 1', [p.id]);
+    if (existing.length === 0) {
       await saveDbProduct({
         id: p.id,
         title: p.title,
