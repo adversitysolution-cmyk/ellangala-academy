@@ -63,34 +63,38 @@ mark `FAILED` and offer "Retry Failed Emails").
 - **`classic`** (default) — the PDF layout is generated from the template fields
   (org name, heading, body text, signatory) plus optional logo / signature /
   seal / background images. Landscape A4.
-- **`overlay`** — you upload a **blank** version of the design as the
-  **Background** (PNG/JPG, A4 portrait): frame, logos, headings, the "Mr./Ms."
-  line and signature — but *no* participant name, programme name or dates. The
-  generator stamps the event-specific parts on top:
-  - **name** — participant name on the "Mr./Ms." line (Times Bold)
-  - **body** — four stacked, centred calligraphy lines (bundled Petit Formal
-    Script, `server/lib/fonts/`): `pre` / `title` (gold) / `mid` / `post`, each
-    filled from `{{event_name}}`, `{{event_date_text}}`, `{{organization_name}}`
-    etc. Any line left blank is skipped; a single `body.text` block also works.
+- **`overlay`** — upload the design as the **Background** — a **PDF** (best;
+  stays vector, border never clips) or PNG/JPG, A4 portrait. Ideally a *blank*
+  version (frame, logos, headings, "Mr./Ms." line, signature — but no
+  participant name, programme name or dates). `pdf-lib` stamps the
+  event-specific parts on top:
+  - **name** — participant name on the "Mr./Ms." line (Times Bold, navy)
+  - **body** — up to four stacked, centred calligraphy lines (bundled
+    **Parisienne**, `server/lib/fonts/`): `pre` / `title` (gold) / `mid` /
+    `post`, filled from `{{event_name}}`, `{{event_date_text}}`,
+    `{{organization_name}}` etc. Any line blank is skipped; a single `body.text`
+    also works.
   - **qr** — links to `/verify/c/<token>`
   - **certId** — the certificate number
+  - **erase** — optional `{x,y,width,height,color}` rectangle drawn first, to
+    cover old body text if the uploaded design isn't blank (match the paper
+    colour). Omit for a blank design.
 
-  Positions come from `overlayConfig` (JSON, PDF points) merged over
+  All coordinates are **top-left PDF points** (renderOverlay converts to
+  pdf-lib's bottom-left space). Positions come from `overlayConfig` merged over
   `DEFAULT_OVERLAY` in `server/lib/certificatePdf.js`; a blank field uses the
-  default, `size: 0` skips that element. A hand-made design's coordinates can't
-  be derived — generate one test certificate and nudge the numbers in the
-  template editor.
+  default, `size: 0` skips an element. Generate one test certificate and nudge
+  the numbers in the template editor.
 
-  `overlayConfig` shape: `{ orientation,
-  name:{x,y,width,size,color,font,align},
-  body:{x,y,width,size,lineGap,align,color,accentColor,pre,title,mid,post,text},
-  qr:{x,y,size}, certId:{x,y,width,size,color,font,align} }` — every key optional.
-  Because the body lines are stamped dynamically, one blank background works
-  for **every** event.
+  `overlayConfig` shape: `{ name:{x,y,size,color},
+  body:{x,y,width,size,lineGap,color,accentColor,pre,title,mid,post,text},
+  qr:{x,y,size}, certId:{x,y,width,size,color},
+  erase:{x,y,width,height,color} }` — every key optional. One blank background
+  works for **every** event.
 
-  If you blank an existing filled design by painting over the old text, match
-  the paper colour exactly (a patch that's even one shade off shows as a band) —
-  or better, re-export a blank version from the design tool.
+  Font note: a script face must have a plain Unicode cmap for `pdf-lib` —
+  Parisienne works, Petit Formal Script renders blank. Swap the `.ttf` in
+  `server/lib/fonts/` + `SCRIPT_FONT_PATH` to change it.
 
 ## Extending attendance sources (future)
 

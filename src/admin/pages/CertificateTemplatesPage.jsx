@@ -17,12 +17,17 @@ const EMPTY = {
   renderMode: 'classic', overlayConfig: null, isActive: true
 };
 
-// Overlay-mode position knobs (PDF points, A4 portrait). Blank = use built-in default.
+// Overlay-mode position knobs (top-left PDF points). Blank = built-in default.
 const OVERLAY_FIELDS = [
-  ['name.x', 'Name X', 352], ['name.y', 'Name Y', 464], ['name.size', 'Name size', 17], ['name.width', 'Name box width', 200],
-  ['body.x', 'Body X', 78], ['body.y', 'Body Y', 508], ['body.size', 'Body size', 14], ['body.width', 'Body box width', 440],
-  ['qr.x', 'QR X', 275], ['qr.y', 'QR Y', 598], ['qr.size', 'QR size', 52],
-  ['certId.x', 'Cert-No X', 219], ['certId.y', 'Cert-No Y', 660], ['certId.size', 'Cert-No size', 8]
+  ['name.x', 'Name X', 300], ['name.y', 'Name Y', 462], ['name.size', 'Name size', 17],
+  ['body.x', 'Body X', 78], ['body.y', 'Body Y', 506], ['body.size', 'Body size', 16], ['body.width', 'Body box width', 440],
+  ['qr.x', 'QR X', 275], ['qr.y', 'QR Y', 600], ['qr.size', 'QR size', 52],
+  ['certId.x', 'Cert-No X', 219], ['certId.y', 'Cert-No Y', 664], ['certId.size', 'Cert-No size', 8]
+];
+// Only needed when the uploaded design still has the old body text baked in.
+const ERASE_FIELDS = [
+  ['erase.x', 'Erase X', ''], ['erase.y', 'Erase Y', ''],
+  ['erase.width', 'Erase W', ''], ['erase.height', 'Erase H', '']
 ];
 const getPath = (o, p) => p.split('.').reduce((x, k) => (x == null ? undefined : x[k]), o);
 const setPath = (o, p, v) => {
@@ -133,17 +138,22 @@ export default function CertificateTemplatesPage() {
             )}
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px', marginTop: '16px' }}>
-              {[['logoUrl', 'Logo'], ['signatureUrl', 'Signature'], ['sealUrl', 'Seal'], ['backgroundUrl', form.renderMode === 'overlay' ? 'Background (full design)' : 'Background']].map(([k, label]) => (
-                <div key={k}>
-                  <div style={{ fontSize: '13px', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>{label}</div>
-                  {form[k] ? <img src={form[k]} alt={label} style={{ maxHeight: '48px', display: 'block', marginBottom: '4px' }} /> : null}
-                  <input type="file" accept="image/*" onChange={(e) => uploadAsset(k, e.target.files?.[0])} style={{ fontSize: '12px' }} />
-                </div>
-              ))}
+              {[['logoUrl', 'Logo'], ['signatureUrl', 'Signature'], ['sealUrl', 'Seal'], ['backgroundUrl', form.renderMode === 'overlay' ? 'Background (blank design — PDF or PNG)' : 'Background']].map(([k, label]) => {
+                const isBg = k === 'backgroundUrl' && form.renderMode === 'overlay';
+                return (
+                  <div key={k}>
+                    <div style={{ fontSize: '13px', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>{label}</div>
+                    {form[k] && !/\.pdf($|\?)/i.test(form[k])
+                      ? <img src={form[k]} alt={label} style={{ maxHeight: '48px', display: 'block', marginBottom: '4px' }} />
+                      : (form[k] ? <div style={{ fontSize: '11px', color: '#64748B', marginBottom: '4px' }}>PDF: {form[k].split('/').pop()}</div> : null)}
+                    <input type="file" accept={isBg ? 'image/*,application/pdf' : 'image/*'} onChange={(e) => uploadAsset(k, e.target.files?.[0])} style={{ fontSize: '12px' }} />
+                  </div>
+                );
+              })}
             </div>
 
             {form.renderMode === 'overlay' && (
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '10px', marginTop: '14px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '10px', marginTop: '14px' }}>
                 {OVERLAY_FIELDS.map(([path, label, def]) => (
                   <label key={path} style={{ fontSize: '12px', fontWeight: 600, color: '#475569' }}>
                     {label}
@@ -155,6 +165,34 @@ export default function CertificateTemplatesPage() {
                     />
                   </label>
                 ))}
+              </div>
+            )}
+            {form.renderMode === 'overlay' && (
+              <div style={{ marginTop: '12px' }}>
+                <div style={{ fontSize: '11.5px', color: '#64748B', marginBottom: '6px' }}>
+                  <strong>Erase box</strong> — only if the uploaded design still has old body text baked in.
+                  Set X/Y/W/H (points) to cover it, and a paper colour to match. Leave blank for a truly blank design.
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '10px' }}>
+                  {ERASE_FIELDS.map(([path, label]) => (
+                    <label key={path} style={{ fontSize: '12px', fontWeight: 600, color: '#475569' }}>
+                      {label}
+                      <input
+                        className="admin-input" type="number" step="any" style={{ marginTop: '3px' }}
+                        value={getPath(form.overlayConfig, path) ?? ''}
+                        onChange={(e) => set('overlayConfig', setPath(form.overlayConfig, path, e.target.value === '' ? '' : Number(e.target.value)))}
+                      />
+                    </label>
+                  ))}
+                  <label style={{ fontSize: '12px', fontWeight: 600, color: '#475569' }}>
+                    Erase colour
+                    <input
+                      className="admin-input" style={{ marginTop: '3px' }} placeholder="#FBFCFB"
+                      value={getPath(form.overlayConfig, 'erase.color') ?? ''}
+                      onChange={(e) => set('overlayConfig', setPath(form.overlayConfig, 'erase.color', e.target.value || ''))}
+                    />
+                  </label>
+                </div>
               </div>
             )}
 
