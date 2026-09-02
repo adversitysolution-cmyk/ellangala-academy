@@ -33,6 +33,19 @@ function getDateParts(dateStr) {
   }
 }
 
+export const resolveBlogImg = (item) => {
+  if (!item) return '/assets/images/blog/blog-mind-gym.jpg';
+  const match = (blogContent.list?.posts || []).find(
+    (b) => b.id === item.id || b.slug === item.slug || (b.title && item.title && b.title.trim().toLowerCase() === item.title.trim().toLowerCase())
+  );
+  if (match && (match.image || match.img)) {
+    return match.image || match.img;
+  }
+  if (item.image && typeof item.image === 'string' && item.image.trim()) return item.image;
+  if (item.img && typeof item.img === 'string' && item.img.trim()) return item.img;
+  return '/assets/images/blog/blog-mind-gym.jpg';
+};
+
 export default function BlogList() {
   useUterpyPlugins();
   const [publishedPosts, setPublishedPosts] = useState(blogContent.list?.posts || []);
@@ -88,6 +101,7 @@ export default function BlogList() {
               {publishedPosts.map((item, index) => {
                 const detailUrl = `/insights/${item.slug || item.id}`;
                 const dateParts = getDateParts(item.publishedAt || item.createdAt || item.date);
+                const blogImg = resolveBlogImg(item);
 
                 return (
                   <div key={index} className="col-xl-6 col-lg-6 d-flex wow animated fadeInUp" data-wow-delay={`${0.1 * ((index % 2) + 1)}s`}>
@@ -95,10 +109,10 @@ export default function BlogList() {
                       <div className="blog-one__single-img">
                         <div className="inner">
                           <img
-                            src={item.image || item.img || '/assets/images/blog/blog-mind-gym.png'}
+                            src={blogImg}
                             alt={item.title}
                             onError={(e) => {
-                              e.currentTarget.src = '/assets/images/blog/blog-mind-gym.png';
+                              e.currentTarget.src = '/assets/images/blog/blog-mind-gym.jpg';
                             }}
                             style={{ width: '100%', height: '360px', objectFit: 'cover' }}
                           />

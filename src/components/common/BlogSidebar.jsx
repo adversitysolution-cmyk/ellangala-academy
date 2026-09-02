@@ -61,6 +61,19 @@ export default function BlogSidebar({ currentSlug, currentId, currentCategory })
     setSuggestions(shuffled.slice(0, 4));
   };
 
+  const resolveBlogImg = (item) => {
+    if (!item) return '/assets/images/blog/blog-mind-gym.jpg';
+    const match = (blogContent.list?.posts || []).find(
+      (b) => b.id === item.id || b.slug === item.slug || (b.title && item.title && b.title.trim().toLowerCase() === item.title.trim().toLowerCase())
+    );
+    if (match && (match.image || match.img)) {
+      return match.image || match.img;
+    }
+    if (item.image && typeof item.image === 'string' && item.image.trim()) return item.image;
+    if (item.img && typeof item.img === 'string' && item.img.trim()) return item.img;
+    return '/assets/images/blog/blog-mind-gym.jpg';
+  };
+
   return (
     <div className="col-xl-4">
       <div className="sidebar">
@@ -72,7 +85,7 @@ export default function BlogSidebar({ currentSlug, currentId, currentCategory })
           <ul className="sidebar__post-list list-unstyled">
             {suggestions.map((post, idx) => {
               const detailUrl = `/insights/${post.slug || post.id}`;
-              const postImg = post.image || post.img || '/assets/images/blog/blog-mind-gym.jpg';
+              const postImg = resolveBlogImg(post);
               const postDate = formatDate(post.publishedAt || post.date || post.createdAt);
 
               return (

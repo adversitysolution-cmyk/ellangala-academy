@@ -31,12 +31,12 @@ const resourceCategories = [
 
 export const resolveProductImg = (item) => {
   if (!item) return '/assets/images/books/Bhagavadgeetha for Meaningful Life.png';
+  const match = shopContent.shop.products.find(
+    (p) => p.id === item.id || (p.title && item.title && p.title.trim().toLowerCase() === item.title.trim().toLowerCase())
+  );
+  if (match && (match.image || match.img)) return match.image || match.img;
   if (item.image && typeof item.image === 'string' && item.image.trim()) return item.image;
   if (item.img && typeof item.img === 'string' && item.img.trim()) return item.img;
-  const match = shopContent.shop.products.find(
-    (p) => p.id === item.id || (p.title && item.title && p.title.toLowerCase() === item.title.toLowerCase())
-  );
-  if (match) return match.image || match.img;
   return '/assets/images/books/Bhagavadgeetha for Meaningful Life.png';
 };
 

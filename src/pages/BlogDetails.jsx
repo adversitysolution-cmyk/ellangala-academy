@@ -73,6 +73,21 @@ export default function BlogDetails() {
     bio: 'Founder and Chief Mentor at Ellangala Academy.'
   };
 
+  const resolveBlogImg = (item) => {
+    if (!item) return '/assets/images/blog/blog-mind-gym.jpg';
+    const match = (blogContent.list?.posts || []).find(
+      (b) => b.id === item.id || b.slug === item.slug || (b.title && item.title && b.title.trim().toLowerCase() === item.title.trim().toLowerCase())
+    );
+    if (match && (match.image || match.img)) {
+      return match.image || match.img;
+    }
+    if (item.image && typeof item.image === 'string' && item.image.trim()) return item.image;
+    if (item.img && typeof item.img === 'string' && item.img.trim()) return item.img;
+    return '/assets/images/blog/blog-mind-gym.jpg';
+  };
+
+  const articleCoverImg = resolveBlogImg(post);
+
   const postDetails = {
     headerTitle: post.details?.headerTitle || post.title,
     category: post.details?.category || post.category || 'Positive Psychology',
@@ -85,7 +100,7 @@ export default function BlogDetails() {
     text2: post.details?.text2 || '',
     text3: post.details?.text3 || '',
     quote: post.details?.quote || post.excerpt,
-    articleImage: post.details?.articleImage || post.image || post.img || '/assets/images/blog/blog-mind-gym.png',
+    articleImage: articleCoverImg,
   };
 
   const form = blogContent?.form || {
@@ -103,7 +118,7 @@ export default function BlogDetails() {
 
   const seoTitle = post.seo?.title || `${post.title} | Ellangala’s Academy`;
   const seoDesc = post.seo?.description || post.excerpt || post.title;
-  const seoImg = post.seo?.image || post.image;
+  const seoImg = post.seo?.image || articleCoverImg;
   const isNoindex = Boolean(post.seo?.noindex);
 
   return (
@@ -140,9 +155,9 @@ export default function BlogDetails() {
                   <div className="blog-list-page__single">
                     <div className="blog-list-page__single-img">
                       <img
-                        src={post.image || post.img || postDetails.articleImage || '/assets/images/blog/blog-mind-gym.png'}
+                        src={articleCoverImg}
                         alt={post.title}
-                        onError={(e) => { e.currentTarget.src = '/assets/images/blog/blog-mind-gym.png'; }}
+                        onError={(e) => { e.currentTarget.src = '/assets/images/blog/blog-mind-gym.jpg'; }}
                         style={{ width: '100%', height: 'clamp(220px, 45vw, 420px)', objectFit: 'cover' }}
                       />
                     </div>
