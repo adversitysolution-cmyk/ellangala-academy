@@ -293,6 +293,12 @@
   margin: 0;
 }
 
+.admin-card__sub {
+  font-size: 13px;
+  color: var(--admin-text-muted);
+  margin-top: 3px;
+}
+
 .admin-card__body {
   padding: 24px;
 }

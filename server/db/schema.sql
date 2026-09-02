@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS events (
   startTime VARCHAR(20),
   endTime VARCHAR(20),
   timezone VARCHAR(50),
-  mode VARCHAR(20),
+  mode VARCHAR(100),
   venue VARCHAR(255),
   address VARCHAR(500),
   city VARCHAR(100),
