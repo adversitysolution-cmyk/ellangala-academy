@@ -9,10 +9,28 @@ import SearchPopup from '../components/layout/SearchPopup';
 import ScrollToTop from '../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../hooks/useUterpyPlugins';
 
-const videoUrls = [
-  "https://www.youtube.com/embed/HZwvTXi-aYA",
-  "https://www.youtube.com/embed/4sap0ChHOpM",
-  "https://www.youtube.com/embed/GjoJzPPa1_4"
+const meditationTracks = [
+  {
+    id: "HZwvTXi-aYA",
+    title: "Guided Meditation & Mindfulness Soundscape",
+    tag: "Meditation Music",
+    author: "Dr. Naveen Ellangala",
+    embedUrl: "https://www.youtube.com/embed/HZwvTXi-aYA?enablejsapi=1&rel=0&modestbranding=1"
+  },
+  {
+    id: "4sap0ChHOpM",
+    title: "Deep Relaxation & Emotional Calm Melody",
+    tag: "Mind Soundscape",
+    author: "Dr. Naveen Ellangala",
+    embedUrl: "https://www.youtube.com/embed/4sap0ChHOpM?enablejsapi=1&rel=0&modestbranding=1"
+  },
+  {
+    id: "GjoJzPPa1_4",
+    title: "Inner Harmony & Positive Energy Session",
+    tag: "Calming Music",
+    author: "Dr. Naveen Ellangala",
+    embedUrl: "https://www.youtube.com/embed/GjoJzPPa1_4?enablejsapi=1&rel=0&modestbranding=1"
+  }
 ];
 
 export default function MeditationMusicPage() {
@@ -40,39 +58,75 @@ export default function MeditationMusicPage() {
                 Guided Meditation &amp; Mindful Music
               </h2>
               <p style={{ fontSize: '15px', color: '#64748B', lineHeight: '1.65' }}>
-                Immerse yourself in guided meditation sessions and calming soundscapes created by Dr. Naveen Ellangala for emotional balance.
+                Immerse yourself in guided meditation sessions and calming soundscapes created by Dr. Naveen Ellangala for emotional balance, relaxation, and inner clarity.
               </p>
             </div>
 
             {/* Embedded YouTube Videos Grid */}
             <div className="row gy-4">
-              {videoUrls.map((url, index) => (
-                <div key={index} className="col-xl-4 col-lg-4 col-md-6">
+              {meditationTracks.map((item, index) => (
+                <div key={item.id || index} className="col-xl-4 col-lg-4 col-md-6">
                   <div
                     style={{
-                      position: 'relative',
-                      paddingBottom: '56.25%',
-                      height: 0,
-                      borderRadius: '12px',
+                      backgroundColor: '#FFFFFF',
+                      borderRadius: '16px',
                       overflow: 'hidden',
-                      boxShadow: '0 4px 18px rgba(0,0,0,0.08)',
-                      backgroundColor: '#000000'
+                      boxShadow: '0 6px 20px rgba(0,0,0,0.06)',
+                      border: '1px solid #F1ECE3',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      height: '100%',
+                      transition: 'transform 0.25s ease, box-shadow 0.25s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'translateY(-4px)';
+                      e.currentTarget.style.boxShadow = '0 12px 28px rgba(0,0,0,0.1)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.boxShadow = '0 6px 20px rgba(0,0,0,0.06)';
                     }}
                   >
-                    <iframe
-                      src={url}
-                      title={`Meditation Video ${index + 1}`}
+                    <div
                       style={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        width: '100%',
-                        height: '100%',
-                        border: 'none'
+                        position: 'relative',
+                        paddingBottom: '56.25%',
+                        height: 0,
+                        backgroundColor: '#000000'
                       }}
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    />
+                    >
+                      <iframe
+                        src={item.embedUrl}
+                        title={item.title}
+                        style={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          width: '100%',
+                          height: '100%',
+                          border: 'none'
+                        }}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                        loading="lazy"
+                      />
+                    </div>
+                    <div style={{ padding: '20px 22px 22px', display: 'flex', flexDirection: 'column', flex: 1 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                        <span style={{ fontSize: '12px', fontWeight: '700', color: '#CA8A38', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                          {item.tag}
+                        </span>
+                        <span style={{ fontSize: '12px', color: '#94A3B8' }}>
+                          <i className="fa fa-play-circle" style={{ marginRight: '4px', color: '#CA8A38' }}></i> Play Inside
+                        </span>
+                      </div>
+                      <h4 style={{ fontSize: '17px', fontWeight: '700', color: '#0F231B', marginBottom: '6px', lineHeight: '1.4' }}>
+                        {item.title}
+                      </h4>
+                      <p style={{ fontSize: '13px', color: '#64748B', margin: 0 }}>
+                        {item.author}
+                      </p>
+                    </div>
                   </div>
                 </div>
               ))}
