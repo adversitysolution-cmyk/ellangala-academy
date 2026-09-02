@@ -63,19 +63,28 @@ mark `FAILED` and offer "Retry Failed Emails").
 - **`classic`** (default) — the PDF layout is generated from the template fields
   (org name, heading, body text, signatory) plus optional logo / signature /
   seal / background images. Landscape A4.
-- **`overlay`** — you upload a *finished* certificate design as the **Background**
-  (PNG/JPG, A4 portrait). Everything static — border, headings, the body
-  sentence, the signature — lives in that image. The generator stamps only:
-  participant name, a QR code, and the certificate number. Positions come from
-  `overlayConfig` (JSON, PDF points) merged over `DEFAULT_OVERLAY` in
-  `server/lib/certificatePdf.js`; blank fields fall back to the default. Because
-  a hand-made design's coordinates can't be derived, generate one test
-  certificate and nudge the numbers in the template editor.
+- **`overlay`** — you upload a **blank** version of the design as the
+  **Background** (PNG/JPG, A4 portrait): frame, logos, headings, the "Mr./Ms."
+  line and signature — but *no* participant name, programme name or dates. The
+  generator stamps the event-specific parts on top:
+  - **name** — participant name on the "Mr./Ms." line
+  - **body** — the sentence, rendered from `{{event_name}}`, `{{start_date}}`,
+    `{{end_date}}`, `{{organization_name}}` etc. (editable per template)
+  - **qr** — links to `/verify/c/<token>`
+  - **certId** — the certificate number
 
-  `overlayConfig` shape: `{ orientation, name:{x,y,width,size,color,font,align},
+  Positions come from `overlayConfig` (JSON, PDF points) merged over
+  `DEFAULT_OVERLAY` in `server/lib/certificatePdf.js`; a blank field uses the
+  default, `size: 0` skips that element. A hand-made design's coordinates can't
+  be derived — generate one test certificate and nudge the numbers in the
+  template editor.
+
+  `overlayConfig` shape: `{ orientation,
+  name:{x,y,width,size,color,font,align},
+  body:{x,y,width,size,color,font,align,lineGap,text},
   qr:{x,y,size}, certId:{x,y,width,size,color,font,align} }` — every key optional.
-  Course name / dates are part of the uploaded image, so an overlay background is
-  event-specific (re-export it per event, or keep the dates generic).
+  Because the body sentence is stamped dynamically, one blank background works
+  for **every** event.
 
 ## Extending attendance sources (future)
 

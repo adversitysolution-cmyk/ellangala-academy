@@ -19,9 +19,10 @@ const EMPTY = {
 
 // Overlay-mode position knobs (PDF points, A4 portrait). Blank = use built-in default.
 const OVERLAY_FIELDS = [
-  ['name.x', 'Name X', 336], ['name.y', 'Name Y', 466], ['name.size', 'Name font size', 15], ['name.width', 'Name box width', 210],
-  ['qr.x', 'QR X', 246], ['qr.y', 'QR Y', 612], ['qr.size', 'QR size', 72],
-  ['certId.y', 'Cert-ID Y', 800], ['certId.size', 'Cert-ID font size', 7.5]
+  ['name.x', 'Name X', 283], ['name.y', 'Name Y', 462], ['name.size', 'Name size', 16], ['name.width', 'Name box width', 200],
+  ['body.x', 'Body X', 70], ['body.y', 'Body Y', 514], ['body.size', 'Body size', 12.5], ['body.width', 'Body box width', 455],
+  ['qr.x', 'QR X', 250], ['qr.y', 'QR Y', 600], ['qr.size', 'QR size', 74],
+  ['certId.x', 'Cert-No X', 205], ['certId.y', 'Cert-No Y', 686], ['certId.size', 'Cert-No size', 8]
 ];
 const getPath = (o, p) => p.split('.').reduce((x, k) => (x == null ? undefined : x[k]), o);
 const setPath = (o, p, v) => {
@@ -98,16 +99,28 @@ export default function CertificateTemplatesPage() {
               Render mode
               <select className="admin-select" style={{ marginTop: '4px' }} value={form.renderMode || 'classic'} onChange={(e) => set('renderMode', e.target.value)}>
                 <option value="classic">Classic — generate the layout (uses the fields above)</option>
-                <option value="overlay">Overlay — use an uploaded finished design, stamp only name + QR + ID</option>
+                <option value="overlay">Overlay — stamp onto an uploaded blank design</option>
               </select>
             </label>
             {form.renderMode === 'overlay' && (
               <div style={{ fontSize: '11.5px', color: '#64748B', marginTop: '6px' }}>
-                Upload your finished certificate as the <strong>Background</strong> (PNG/JPG, A4 portrait). The
-                heading, body sentence, signature and border all come from that image — only the participant
-                name, a QR code and the certificate number are added. Tune their positions below (PDF points;
-                blank = default). Generate one test certificate and adjust.
+                Upload a <strong>blank</strong> version of your certificate as the <strong>Background</strong>
+                (PNG/JPG, A4 portrait) — frame, logos, headings, the “Mr./Ms.” line and signature, but
+                <strong> no participant name, programme name or dates</strong>. Those are stamped on per event:
+                participant name, the body sentence (below), a QR code and the certificate number. Tune
+                positions in PDF points (blank = default); generate one test and adjust.
               </div>
+            )}
+            {form.renderMode === 'overlay' && (
+              <label style={{ display: 'block', fontSize: '13px', fontWeight: 700, color: '#334155', marginTop: '12px' }}>
+                Body sentence (overlay)
+                <textarea
+                  className="admin-textarea" rows={2} style={{ marginTop: '4px' }}
+                  placeholder={'has successfully completed the "{{event_name}}" programme at {{organization_name}}, held from {{start_date}} to {{end_date}}.'}
+                  value={getPath(form.overlayConfig, 'body.text') ?? ''}
+                  onChange={(e) => set('overlayConfig', setPath(form.overlayConfig, 'body.text', e.target.value || ''))}
+                />
+              </label>
             )}
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px', marginTop: '16px' }}>
