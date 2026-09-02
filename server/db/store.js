@@ -119,11 +119,12 @@ async function seedIfEmpty() {
         theme: p.theme || '',
         price: p.price || '',
         discount: p.discount || '',
-        image: p.img || '',
+        image: p.image || p.img || '',
         alt: p.alt || p.title,
         description: p.description || '',
         highlights: p.highlights || [],
         sale: Boolean(p.sale),
+        stock: p.stock ?? (p.inStock === false ? 0 : null),
         status: 'published'
       });
     }

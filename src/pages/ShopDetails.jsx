@@ -15,6 +15,17 @@ import { useCart } from '../context/CartContext';
 import SEO from '../seo/SEO';
 import { generateBookSchema, generateBreadcrumbSchema } from '../seo/schemas/schemaGenerators';
 
+const resolveProductImg = (item) => {
+  if (!item) return '/assets/images/books/Bhagavadgeetha for Meaningful Life.png';
+  if (item.image && typeof item.image === 'string' && item.image.trim()) return item.image;
+  if (item.img && typeof item.img === 'string' && item.img.trim()) return item.img;
+  const match = shopContent.shop.products.find(
+    (p) => p.id === item.id || (p.title && item.title && p.title.toLowerCase() === item.title.toLowerCase())
+  );
+  if (match) return match.image || match.img;
+  return '/assets/images/books/Bhagavadgeetha for Meaningful Life.png';
+};
+
 export default function ShopDetails() {
   useUterpyPlugins();
   const navigate = useNavigate();
@@ -147,7 +158,7 @@ export default function ShopDetails() {
                           <div className="swiper-slide">
                             <div className="img-box">
                               <img
-                                src={product.image || product.img}
+                                src={resolveProductImg(product)}
                                 alt={product.alt || product.title}
                                 style={{
                                   width: '100%',
@@ -155,6 +166,14 @@ export default function ShopDetails() {
                                   display: 'block',
                                   borderRadius: '30px',
                                   objectFit: 'cover'
+                                }}
+                                onError={(e) => {
+                                  const match = shopContent.shop.products.find(
+                                    (p) => p.id === product.id || (p.title && product.title && p.title.toLowerCase() === product.title.toLowerCase())
+                                  );
+                                  if (match && (match.image || match.img) && e.currentTarget.src !== (match.image || match.img)) {
+                                    e.currentTarget.src = match.image || match.img;
+                                  }
                                 }}
                               />
                             </div>
@@ -646,7 +665,18 @@ export default function ShopDetails() {
                 <div key={idx} className="col-xl-4 col-lg-6 col-md-6 wow animated fadeInUp" data-wow-delay={`${0.1 * (idx + 1)}s`}>
                   <div className="shop-page__single">
                     <div className="shop-page__single-img">
-                      <img src={item.image || item.img} alt={item.alt || item.title} />
+                      <img
+                        src={resolveProductImg(item)}
+                        alt={item.alt || item.title}
+                        onError={(e) => {
+                          const match = shopContent.shop.products.find(
+                            (p) => p.id === item.id || (p.title && item.title && p.title.toLowerCase() === item.title.toLowerCase())
+                          );
+                          if (match && (match.image || match.img) && e.currentTarget.src !== (match.image || match.img)) {
+                            e.currentTarget.src = match.image || match.img;
+                          }
+                        }}
+                      />
                       {item.sale && <div className="text">Sale</div>}
                     </div>
                     <div className="shop-page__single-content">

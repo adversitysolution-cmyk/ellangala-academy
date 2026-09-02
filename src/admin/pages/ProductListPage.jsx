@@ -116,9 +116,9 @@ export default function ProductListPage() {
                           <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                             <div style={{ width: '48px', height: '48px', borderRadius: '8px', overflow: 'hidden', backgroundColor: '#0A2347', flexShrink: 0 }}>
                               <img
-                                src={p.image}
+                                src={p.image || p.img || '/assets/images/books/Bhagavadgeetha for Meaningful Life.png'}
                                 alt={p.title}
-                                onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                                onError={(e) => { e.currentTarget.src = '/assets/images/books/Bhagavadgeetha for Meaningful Life.png'; }}
                                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                               />
                             </div>

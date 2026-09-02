@@ -29,6 +29,17 @@ const resourceCategories = [
   }
 ];
 
+export const resolveProductImg = (item) => {
+  if (!item) return '/assets/images/books/Bhagavadgeetha for Meaningful Life.png';
+  if (item.image && typeof item.image === 'string' && item.image.trim()) return item.image;
+  if (item.img && typeof item.img === 'string' && item.img.trim()) return item.img;
+  const match = shopContent.shop.products.find(
+    (p) => p.id === item.id || (p.title && item.title && p.title.toLowerCase() === item.title.toLowerCase())
+  );
+  if (match) return match.image || match.img;
+  return '/assets/images/books/Bhagavadgeetha for Meaningful Life.png';
+};
+
 export default function Shop() {
   useUterpyPlugins();
   const { header } = shopContent.shop;
@@ -231,7 +242,18 @@ export default function Shop() {
                 >
                   <div className="shop-page__single">
                     <div className="shop-page__single-img">
-                      <img src={item.image || item.img} alt={item.alt || item.title} />
+                      <img
+                        src={resolveProductImg(item)}
+                        alt={item.alt || item.title}
+                        onError={(e) => {
+                          const match = shopContent.shop.products.find(
+                            (p) => p.id === item.id || (p.title && item.title && p.title.toLowerCase() === item.title.toLowerCase())
+                          );
+                          if (match && (match.image || match.img) && e.currentTarget.src !== (match.image || match.img)) {
+                            e.currentTarget.src = match.image || match.img;
+                          }
+                        }}
+                      />
                       {(item.inStock === false || (item.stock != null && Number(item.stock) <= 0)) ? (
                         <div className="text" style={{ backgroundColor: '#64748B' }}>Out of Stock</div>
                       ) : (
