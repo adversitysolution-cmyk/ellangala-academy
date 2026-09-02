@@ -341,6 +341,7 @@ router.get('/admin/events/:eventId/certificates', async (req, res) => {
   res.json({
     event: eventSummary(event),
     config,
+    templates: await cs.getTemplates(),
     certificates,
     batches,
     stats: { ...stats, registered: registrationCount, attendanceUploaded },

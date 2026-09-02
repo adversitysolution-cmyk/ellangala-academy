@@ -4,29 +4,18 @@ import { validateCoupon } from '../admin/services/couponService';
 
 const CartContext = createContext();
 
-const INITIAL_CART = [
-  {
-    id: 'bhagavadgeetha-for-meaningful-life',
-    title: 'Bhagavadgeetha for Meaningful Life',
-    img: '/assets/images/books/Bagavadhgeetha for Meaningfull Life.png',
-    price: 180,
-    quantity: 1,
-    link: '/shop-details?id=bhagavadgeetha-for-meaningful-life'
-  }
-];
-
 export function CartProvider({ children }) {
   const [cartItems, setCartItems] = useState(() => {
     try {
       const saved = localStorage.getItem('ellangala_cart');
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed)) return parsed;
       }
     } catch (e) {
       console.error(e);
     }
-    return INITIAL_CART;
+    return [];
   });
 
   const [appliedCoupon, setAppliedCoupon] = useState(null);

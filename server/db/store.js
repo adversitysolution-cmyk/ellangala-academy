@@ -69,20 +69,21 @@ export async function ensureSchema() {
       if (err.code !== 'ER_DUP_FIELDNAME') throw err;
     }
   }
+  // Widen columns that outgrew their original size (idempotent — safe to re-run).
+  await pool.query("ALTER TABLE events MODIFY mode VARCHAR(100)").catch(() => {});
   await seedIfEmpty();
   await seedCertificateDefaults();
 }
 
 async function seedIfEmpty() {
-  const oldSeedIds = ['EVT-2026-0001', 'EVT-2026-0002', 'EVT-2026-0003', 'EVT-2026-0004'];
-  try {
-    await pool.query('DELETE FROM events WHERE id IN (?, ?, ?, ?)', oldSeedIds);
-  } catch (_) {}
-
   const now = new Date().toISOString();
-  for (const e of initialEvents || []) {
-    const [existing] = await pool.query('SELECT id FROM events WHERE id = ? OR slug = ? LIMIT 1', [e.id, e.slug || e.id]);
-    if (existing.length === 0) {
+
+  // Seed the sample events ONLY into a completely empty table. Never delete rows
+  // here: admin-created events get ids like EVT-2026-0001, so a blind
+  // `DELETE FROM events WHERE id IN (...)` on every boot wipes real events.
+  const [[{ n: eventCount }]] = await pool.query('SELECT COUNT(*) AS n FROM events');
+  if (eventCount === 0) {
+    for (const e of initialEvents || []) {
       await saveDbEvent({
         ...e,
         seo: { title: `${e.title} | Ellangala’s Academy`, description: e.shortDescription, image: e.image, noindex: false },

@@ -155,7 +155,7 @@ export default function BlogForm({ initialData = null, onSubmit, isSubmitting = 
         <button
           type="button"
           onClick={() => navigate('/admin/blogs')}
-          className="admin-btn admin-btn--secondary"
+          className="btn-secondary-outline"
         >
           <ArrowLeft size={16} /> Back to Blogs
         </button>
@@ -164,14 +164,14 @@ export default function BlogForm({ initialData = null, onSubmit, isSubmitting = 
           <button
             type="button"
             onClick={() => navigate('/admin/blogs')}
-            className="admin-btn admin-btn--secondary"
+            className="btn-secondary-outline"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={isSubmitting}
-            className="admin-btn admin-btn--primary"
+            className="btn-primary-gold"
           >
             <Check size={16} /> {isSubmitting ? 'Saving...' : (initialData ? 'Update Article' : 'Publish Article')}
           </button>
@@ -186,13 +186,13 @@ export default function BlogForm({ initialData = null, onSubmit, isSubmitting = 
             <div className="admin-card__header">
               <div>
                 <div className="admin-card__title">Article Content</div>
-                <div className="admin-card__subtitle">Title, excerpt, and main body text</div>
+                <div className="admin-card__sub">Title, excerpt, and main body text</div>
               </div>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <div className="admin-card__body" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <div>
-                <label className="admin-form-label required">Article Title</label>
+                <label className="admin-label">Article Title</label>
                 <input
                   type="text"
                   required
@@ -204,7 +204,7 @@ export default function BlogForm({ initialData = null, onSubmit, isSubmitting = 
               </div>
 
               <div>
-                <label className="admin-form-label required">URL Slug</label>
+                <label className="admin-label">URL Slug</label>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <span style={{ fontSize: '13px', color: '#64748B', fontWeight: '600' }}>
                     {siteConfig.url}/insights/
@@ -221,7 +221,7 @@ export default function BlogForm({ initialData = null, onSubmit, isSubmitting = 
               </div>
 
               <div>
-                <label className="admin-form-label required">Short Excerpt / Summary</label>
+                <label className="admin-label">Short Excerpt / Summary</label>
                 <textarea
                   required
                   rows={3}
@@ -233,7 +233,7 @@ export default function BlogForm({ initialData = null, onSubmit, isSubmitting = 
               </div>
 
               <div>
-                <label className="admin-form-label required">Full Content / Article Body</label>
+                <label className="admin-label">Full Content / Article Body</label>
                 <ReactQuill
                   theme="snow"
                   value={formData.content}
@@ -257,7 +257,7 @@ export default function BlogForm({ initialData = null, onSubmit, isSubmitting = 
                 <Globe size={20} color="#CA8A38" />
                 <div>
                   <div className="admin-card__title">Search Engine Optimization (SEO)</div>
-                  <div className="admin-card__subtitle">Customize SEO meta tags, OpenGraph preview & canonical settings</div>
+                  <div className="admin-card__sub">Customize SEO meta tags, OpenGraph preview & canonical settings</div>
                 </div>
               </div>
 
@@ -267,7 +267,7 @@ export default function BlogForm({ initialData = null, onSubmit, isSubmitting = 
             </div>
 
             {showSeoSection && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', paddingTop: '10px' }}>
+              <div className="admin-card__body" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                 {/* Live Google Search Result Preview */}
                 <div
                   style={{
@@ -294,7 +294,7 @@ export default function BlogForm({ initialData = null, onSubmit, isSubmitting = 
 
                 <div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <label className="admin-form-label">Custom SEO Title (Optional)</label>
+                    <label className="admin-label">Custom SEO Title (Optional)</label>
                     <span style={{ fontSize: '11px', color: titleOverLimit ? '#EF4444' : '#64748B' }}>
                       {effectiveTitle.length} / 60 chars
                     </span>
@@ -315,7 +315,7 @@ export default function BlogForm({ initialData = null, onSubmit, isSubmitting = 
 
                 <div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <label className="admin-form-label">Custom Meta Description (Optional)</label>
+                    <label className="admin-label">Custom Meta Description (Optional)</label>
                     <span style={{ fontSize: '11px', color: descOverLimit ? '#EF4444' : '#64748B' }}>
                       {effectiveDesc.length} / 160 chars
                     </span>
@@ -335,7 +335,7 @@ export default function BlogForm({ initialData = null, onSubmit, isSubmitting = 
                 </div>
 
                 <div>
-                  <label className="admin-form-label">Custom Social / OG Image URL (Optional)</label>
+                  <label className="admin-label">Custom Social / OG Image URL (Optional)</label>
                   <input
                     type="text"
                     value={formData.seo.image}
@@ -376,11 +376,11 @@ export default function BlogForm({ initialData = null, onSubmit, isSubmitting = 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
           {/* Status & Publishing */}
           <div className="admin-card">
-            <div className="admin-card__title" style={{ marginBottom: '16px' }}>Publishing Status</div>
+            <div className="admin-card__header"><div className="admin-card__title">Publishing Status</div></div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div className="admin-card__body" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div>
-                <label className="admin-form-label">Status</label>
+                <label className="admin-label">Status</label>
                 <select
                   value={formData.status}
                   onChange={(e) => handleChange('status', e.target.value)}
@@ -393,7 +393,7 @@ export default function BlogForm({ initialData = null, onSubmit, isSubmitting = 
               </div>
 
               <div>
-                <label className="admin-form-label">Category</label>
+                <label className="admin-label">Category</label>
                 <select
                   value={formData.category}
                   onChange={(e) => handleChange('category', e.target.value)}
@@ -408,7 +408,7 @@ export default function BlogForm({ initialData = null, onSubmit, isSubmitting = 
               </div>
 
               <div>
-                <label className="admin-form-label">Author Name</label>
+                <label className="admin-label">Author Name</label>
                 <input
                   type="text"
                   value={formData.author}
@@ -418,7 +418,7 @@ export default function BlogForm({ initialData = null, onSubmit, isSubmitting = 
               </div>
 
               <div>
-                <label className="admin-form-label">Estimated Read Time</label>
+                <label className="admin-label">Estimated Read Time</label>
                 <input
                   type="text"
                   value={formData.readTime}
@@ -432,10 +432,10 @@ export default function BlogForm({ initialData = null, onSubmit, isSubmitting = 
 
           {/* Cover Image Preview */}
           <div className="admin-card">
-            <div className="admin-card__title" style={{ marginBottom: '16px' }}>Cover Image</div>
+            <div className="admin-card__header"><div className="admin-card__title">Cover Image</div></div>
 
-            <div>
-              <label className="admin-form-label">Image URL / Asset Path</label>
+            <div className="admin-card__body">
+              <label className="admin-label">Image URL / Asset Path</label>
               <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
                 <input
                   type="text"
@@ -456,7 +456,7 @@ export default function BlogForm({ initialData = null, onSubmit, isSubmitting = 
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
                   disabled={isUploadingImage}
-                  className="admin-btn admin-btn--secondary"
+                  className="btn-secondary-outline"
                   style={{ whiteSpace: 'nowrap' }}
                 >
                   <Upload size={14} /> {isUploadingImage ? 'Uploading...' : 'Upload'}
