@@ -45,9 +45,11 @@ app.use('/api', certificatesApi);
 // 2. Dynamic Sitemap Endpoint (Handled BEFORE SPA catch-all)
 app.use('/', sitemapRoute);
 
-// 3. Serve Static Assets from Dist (Production) + persistent uploaded images
+// 3. Serve Static Assets from Dist (Production) + public assets + persistent uploaded images
 const distDir = path.join(rootDir, 'dist');
+const publicDir = path.join(rootDir, 'public');
 app.use(express.static(distDir));
+app.use(express.static(publicDir));
 app.use('/uploads', express.static(uploadsDir));
 // NOTE: certificate PDFs in certificatesDir are deliberately NOT served statically —
 // access only via token-gated /api/certificates/file/:token or admin download.
