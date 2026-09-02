@@ -11,15 +11,21 @@ jobs:
     steps:
       - name: Deploy over SSH
         uses: appleboy/ssh-action@v1.2.0
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
+          envs: GH_TOKEN
           script: |
             set -e
             cd /opt/mindgym-academy
-            git fetch origin main
-            git reset --hard origin/main
+            # Fetch with the workflow token so the VPS isn't hit by GitHub's
+            # unauthenticated rate limit (the cause of the flaky "could not read
+            # Username" failures). The token is not persisted in .git/config.
+            git fetch "https://x-access-token:${GH_TOKEN}@github.com/adversitysolution-cmyk/ellangala-academy.git" main
+            git reset --hard FETCH_HEAD
             npm ci
             npm run build
             pm2 restart mindgym-academy --update-env
