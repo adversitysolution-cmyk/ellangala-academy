@@ -121,10 +121,14 @@ async function renderOverlay({ template, vars, assets }) {
     if (fs.existsSync(SCRIPT_FONT_PATH)) script = await pdf.embedFont(fs.readFileSync(SCRIPT_FONT_PATH), { subset: true });
   } catch { /* keep bold fallback */ }
 
-  const drawCentred = (text, font, size, color, boxX, boxW, yTop) => {
+  const drawCentred = (text, font, size, color, boxX, boxW, yTop, faux = 0) => {
     if (!text) return;
     const w = font.widthOfTextAtSize(text, size);
-    page.drawText(text, { x: boxX + (boxW - w) / 2, y: topY(yTop, size), size, font, color });
+    const x = boxX + (boxW - w) / 2;
+    const y = topY(yTop, size);
+    // faux-bold: a couple of hairline-offset passes thicken a single-weight face
+    const offs = faux ? [[0, 0], [faux, 0], [0, faux], [faux, faux]] : [[0, 0]];
+    for (const [dx, dy] of offs) page.drawText(text, { x: x + dx, y: y + dy, size, font, color });
   };
 
   const { name, body, certId, qr, erase } = cfg;
@@ -148,14 +152,19 @@ async function renderOverlay({ template, vars, assets }) {
     let y = body.y;
     const ink = hexRgb(body.color, [46, 42, 36]);
     const gold = hexRgb(body.accentColor, [169, 116, 31]);
-    const put = (raw, color) => {
+    const put = (raw, color, faux = 0) => {
       const t = renderTemplate(raw, vars).trim();
       if (!t) return;
-      drawCentred(t, script, body.size, color, body.x, body.width, y);
+      drawCentred(t, script, body.size, color, body.x, body.width, y, faux);
       y += gap;
     };
     if (body.text) put(body.text, ink);
-    else { put(body.pre, ink); put(body.title, gold); put(body.mid, ink); put(body.post, ink); }
+    else {
+      put(body.pre, ink);
+      put(body.title, gold, body.titleBold ?? 0.4); // programme name reads bolder, like the design
+      put(body.mid, ink);
+      put(body.post, ink);
+    }
   }
 
   if (qr.size > 0) {
