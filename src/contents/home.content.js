@@ -352,7 +352,7 @@ export const homeContent = {
       {
         category: "MindGym",
         categoryLabel: "Positive MindGym",
-        image: "/assets/images/services/positive-mindgym-app.jpg",
+        image: "/assets/images/case/positive-mindgym-app.jpg",
         icon: "icon-brain",
         title: "Positive MindGym App",
         link: "/mindgym/app",
@@ -361,7 +361,7 @@ export const homeContent = {
       {
         category: "MindGym",
         categoryLabel: "Positive MindGym",
-        image: "/assets/images/services/mind-gym.jpg",
+        image: "/assets/images/services/positive-mindgym-centre.png",
         icon: "icon-brain",
         title: "Positive MindGym Centre",
         link: "/mindgym/mind-gym",
@@ -370,7 +370,7 @@ export const homeContent = {
       {
         category: "MindGym",
         categoryLabel: "Positive MindGym",
-        image: "/assets/images/services/positive-mind-toolkit.jpg",
+        image: "/assets/images/case/positive-mind-toolkit.png",
         icon: "icon-brain",
         title: "Positive Mind Toolkit",
         link: "/mindgym/toolkit",
