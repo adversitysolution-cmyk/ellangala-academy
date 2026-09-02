@@ -44,7 +44,7 @@ const DEFAULT_BODY_TEXT =
 
 const DEFAULT_OVERLAY = {
   orientation: 'portrait',
-  name:   { x: 283, y: 462, width: 200, size: 16, color: NAVY, font: 'Times-Bold', align: 'center' },
+  name:   { x: 352, y: 464, width: 200, size: 17, color: NAVY, font: 'Times-Bold', align: 'left' },
   body:   { x: 70, y: 514, width: 455, size: 12.5, color: INK, font: 'Times-Roman', align: 'center', lineGap: 4, text: DEFAULT_BODY_TEXT },
   certId: { x: 205, y: 686, width: 160, size: 8, color: '#555555', font: 'Helvetica', align: 'center' },
   qr:     { x: 250, y: 600, size: 74 }

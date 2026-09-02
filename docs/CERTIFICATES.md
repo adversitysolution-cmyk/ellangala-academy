@@ -86,6 +86,10 @@ mark `FAILED` and offer "Retry Failed Emails").
   Because the body sentence is stamped dynamically, one blank background works
   for **every** event.
 
+  If you blank an existing filled design by painting over the old text, match
+  the paper colour exactly (a patch that's even one shade off shows as a band) —
+  or better, re-export a blank version from the design tool.
+
 ## Extending attendance sources (future)
 
 `event_certificate_configs.eligibilityMode` and
