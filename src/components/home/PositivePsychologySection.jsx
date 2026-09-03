@@ -312,7 +312,9 @@ export default function PositivePsychologySection() {
             >
               {/* App Store Button - Website thm-btn */}
               <a
-                href="#app-store"
+                href="https://apps.apple.com/in/app/positive-mindgym/id6769993640"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="thm-btn"
                 style={{
                   borderRadius: '12px',
@@ -337,7 +339,9 @@ export default function PositivePsychologySection() {
 
               {/* Google Play Button - Website thm-btn */}
               <a
-                href="#google-play"
+                href="https://play.google.com/store/apps/details?id=in.adversitysolutions.mindgym"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="thm-btn"
                 style={{
                   borderRadius: '12px',

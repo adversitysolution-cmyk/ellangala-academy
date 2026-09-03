@@ -175,8 +175,10 @@ export default function FooterOne({ hideSubscribe = false }) {
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxWidth: '210px' }}>
                       {/* Apple App Store */}
-                      <Link
-                        to="/mindgym/app"
+                      <a
+                        href="https://apps.apple.com/in/app/positive-mindgym/id6769993640"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         style={{
                           display: 'flex',
                           alignItems: 'center',
@@ -207,11 +209,13 @@ export default function FooterOne({ hideSubscribe = false }) {
                           <span style={{ fontSize: '9.5px', textTransform: 'uppercase', letterSpacing: '0.5px', opacity: 0.85 }}>Download on the</span>
                           <strong style={{ fontSize: '13px', fontWeight: '700' }}>App Store</strong>
                         </div>
-                      </Link>
+                      </a>
 
                       {/* Google Play Store */}
-                      <Link
-                        to="/mindgym/app"
+                      <a
+                        href="https://play.google.com/store/apps/details?id=in.adversitysolutions.mindgym"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         style={{
                           display: 'flex',
                           alignItems: 'center',
@@ -245,7 +249,7 @@ export default function FooterOne({ hideSubscribe = false }) {
                           <span style={{ fontSize: '9.5px', textTransform: 'uppercase', letterSpacing: '0.5px', opacity: 0.85 }}>GET IT ON</span>
                           <strong style={{ fontSize: '13px', fontWeight: '700' }}>Google Play</strong>
                         </div>
-                      </Link>
+                      </a>
                     </div>
                   </div>
                 </div>
