@@ -8,6 +8,9 @@ import imgMorningPractice from '../../Images/POSITIVE MINDGYM APP/WhatsApp Image
 import imgStudentsCornerFull from '../../Images/POSITIVE MINDGYM APP/WhatsApp Image 2026-08-18 at 9.58.48 PM (1).jpeg';
 import imgBoxBreathing from '../../Images/POSITIVE MINDGYM APP/WhatsApp Image 2026-08-18 at 9.58.48 PM.jpeg';
 
+import imgStudentsCornerTools from '../../Images/POSITIVE MINDGYM APP/WhatsApp Image 2026-08-18 at 9.58.48 PM (2).jpeg';
+import imgMorningPractice2 from '../../Images/POSITIVE MINDGYM APP/WhatsApp Image 2026-08-18 at 9.58.49 PM (1).jpeg';
+
 export default function PositivePsychologySection() {
   const [activeDot, setActiveDot] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
@@ -19,7 +22,9 @@ export default function PositivePsychologySection() {
     { id: 2, title: 'Mind Score', img: imgHomeMindScore },
     { id: 3, title: 'Daily Workout', img: imgDailyWorkout },
     { id: 4, title: 'Student Corner', img: imgStudentsCornerFull },
-    { id: 5, title: 'Box Breathing', img: imgBoxBreathing },
+    { id: 5, title: 'Practice Tools', img: imgStudentsCornerTools },
+    { id: 6, title: 'Box Breathing', img: imgBoxBreathing },
+    { id: 7, title: 'Chanting Practice', img: imgMorningPractice2 },
   ];
 
   // Auto-scroll slideshow with interval
@@ -45,23 +50,58 @@ export default function PositivePsychologySection() {
     >
       {/* ─── Embedded Keyframe & Micro-movement Styles ─── */}
       <style>{`
-        @keyframes gentleFloatFront {
-          0%, 100% { transform: perspective(1000px) rotateY(-2deg) translateY(0px); }
-          50% { transform: perspective(1000px) rotateY(-3deg) translateY(-10px); }
+        @keyframes gentleFloatCenter {
+          0%, 100% { transform: translateX(-50%) perspective(1000px) rotateY(0deg) translateY(0px); }
+          50% { transform: translateX(-50%) perspective(1000px) rotateY(0deg) translateY(-10px); }
         }
-        @keyframes gentleFloatMid {
+        @keyframes gentleFloatMidLeft {
+          0%, 100% { transform: perspective(1000px) rotateY(5deg) scale(0.95) translateY(0px); }
+          50% { transform: perspective(1000px) rotateY(6deg) scale(0.95) translateY(-7px); }
+        }
+        @keyframes gentleFloatFarLeft {
+          0%, 100% { transform: perspective(1000px) rotateY(9deg) scale(0.88) translateY(0px); }
+          50% { transform: perspective(1000px) rotateY(10deg) scale(0.88) translateY(-4px); }
+        }
+        @keyframes gentleFloatMidRight {
           0%, 100% { transform: perspective(1000px) rotateY(-5deg) scale(0.95) translateY(0px); }
           50% { transform: perspective(1000px) rotateY(-6deg) scale(0.95) translateY(-7px); }
         }
-        @keyframes gentleFloatBack {
-          0%, 100% { transform: perspective(1000px) rotateY(-8deg) scale(0.88) translateY(0px); }
-          50% { transform: perspective(1000px) rotateY(-9deg) scale(0.88) translateY(-4px); }
+        @keyframes gentleFloatFarRight {
+          0%, 100% { transform: perspective(1000px) rotateY(-9deg) scale(0.88) translateY(0px); }
+          50% { transform: perspective(1000px) rotateY(-10deg) scale(0.88) translateY(-4px); }
         }
         .phone-track-transition {
           transition: transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
         }
         .phone-card-hover {
           transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s ease;
+        }
+        @media (max-width: 1200px) {
+          .hero-mockup-wrapper {
+            transform: scale(0.92);
+            transform-origin: center center;
+          }
+        }
+        @media (max-width: 991px) {
+          .hero-mockup-wrapper {
+            transform: scale(0.82);
+            transform-origin: center center;
+            margin: 20px auto;
+          }
+        }
+        @media (max-width: 600px) {
+          .hero-mockup-wrapper {
+            transform: scale(0.62);
+            transform-origin: center center;
+            margin: -40px auto;
+          }
+        }
+        @media (max-width: 420px) {
+          .hero-mockup-wrapper {
+            transform: scale(0.5);
+            transform-origin: center center;
+            margin: -70px auto;
+          }
         }
       `}</style>
 
@@ -527,13 +567,13 @@ export default function PositivePsychologySection() {
           </div>
 
           {/* ======================================================== */}
-          {/* RIGHT COLUMN: 3 LAYERED PHONES WITH TACTILE MOBILE SCROLL*/}
+          {/* RIGHT COLUMN: 5 SYMMETRICALLY LAYERED 3D PHONE MOCKUPS   */}
           {/* ======================================================== */}
           <div
             className="col-xl-6 col-lg-6 col-md-12"
             style={{
               position: 'relative',
-              minHeight: '580px',
+              minHeight: '600px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -543,10 +583,11 @@ export default function PositivePsychologySection() {
           >
             {/* Phone Group Container */}
             <div
+              className="hero-mockup-wrapper"
               style={{
                 position: 'relative',
                 width: '100%',
-                maxWidth: '620px',
+                maxWidth: '660px',
                 height: '560px',
                 display: 'flex',
                 justifyContent: 'center',
@@ -554,25 +595,25 @@ export default function PositivePsychologySection() {
               }}
             >
               {/* ──────────────────────────────────────────────────────────── */}
-              {/* THIRD PHONE (Back Right - Sliding Screen Track)              */}
+              {/* 1. FAR LEFT PHONE (Back Left - Layer 1)                     */}
               {/* ──────────────────────────────────────────────────────────── */}
               <div
                 className="phone-card-hover"
                 style={{
                   position: 'absolute',
-                  right: '0px',
-                  top: '36px',
-                  width: '235px',
-                  height: '475px',
-                  borderRadius: '34px',
+                  left: '0px',
+                  top: '42px',
+                  width: '215px',
+                  height: '455px',
+                  borderRadius: '32px',
                   backgroundColor: '#061325',
-                  padding: '7px',
-                  boxShadow: '0 20px 50px rgba(6, 24, 50, 0.22)',
+                  padding: '6.5px',
+                  boxShadow: '0 18px 45px rgba(6, 24, 50, 0.20)',
                   zIndex: 1,
-                  opacity: 0.92,
+                  opacity: 0.88,
                   border: '2px solid #2B384E',
                   overflow: 'hidden',
-                  animation: 'gentleFloatBack 5s ease-in-out infinite',
+                  animation: 'gentleFloatFarLeft 5.2s ease-in-out infinite',
                 }}
               >
                 <div
@@ -580,82 +621,80 @@ export default function PositivePsychologySection() {
                     backgroundColor: '#000',
                     width: '100%',
                     height: '100%',
-                    borderRadius: '27px',
+                    borderRadius: '25px',
                     overflow: 'hidden',
                     position: 'relative',
                   }}
                 >
-                  {/* Dynamic Island Pill */}
                   <div
                     style={{
                       position: 'absolute',
                       top: '6px',
                       left: '50%',
                       transform: 'translateX(-50%)',
-                      width: '46px',
-                      height: '12px',
+                      width: '42px',
+                      height: '11px',
                       backgroundColor: '#000000',
                       borderRadius: '10px',
                       zIndex: 10,
                       boxShadow: '0 1px 4px rgba(0,0,0,0.5)',
                     }}
                   />
-                  {/* Vertical Scroll Track */}
                   <div
-                    className="phone-track-transition"
                     style={{
-                      display: 'flex',
-                      flexDirection: 'column',
+                      position: 'relative',
+                      width: '100%',
                       height: '100%',
-                      transform: `translateY(-${((activeDot + 2) % appScreens.length) * 100}%)`,
+                      overflow: 'hidden',
                     }}
                   >
-                    {appScreens.map((item) => (
-                      <div
-                        key={`back-${item.id}`}
-                        style={{
-                          flex: '0 0 100%',
-                          width: '100%',
-                          height: '100%',
-                          position: 'relative',
-                        }}
-                      >
+                    {appScreens.map((item, idx) => {
+                      const isCurrent = idx === (activeDot % appScreens.length);
+                      return (
                         <img
+                          key={`far-left-${item.id}`}
                           src={item.img}
                           alt={item.title}
                           style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
                             width: '100%',
                             height: '100%',
                             objectFit: 'cover',
                             objectPosition: 'top center',
-                            display: 'block',
+                            opacity: isCurrent ? 1 : 0,
+                            transform: isCurrent ? 'translateX(0) scale(1)' : 'translateX(-14px) scale(0.98)',
+                            transition: 'opacity 0.65s ease, transform 0.65s ease',
+                            pointerEvents: 'none',
                           }}
                         />
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               </div>
 
               {/* ──────────────────────────────────────────────────────────── */}
-              {/* SECOND PHONE (Middle - Sliding Screen Track)                */}
+              {/* 2. MID LEFT PHONE (Middle Left - Layer 2)                   */}
               {/* ──────────────────────────────────────────────────────────── */}
               <div
                 className="phone-card-hover"
                 style={{
                   position: 'absolute',
-                  right: '85px',
-                  top: '18px',
-                  width: '250px',
-                  height: '505px',
+                  left: '75px',
+                  top: '20px',
+                  width: '238px',
+                  height: '492px',
                   borderRadius: '36px',
                   backgroundColor: '#061325',
-                  padding: '8px',
-                  boxShadow: '0 25px 60px rgba(6, 24, 50, 0.26)',
+                  padding: '7.5px',
+                  boxShadow: '0 22px 55px rgba(6, 24, 50, 0.25)',
                   zIndex: 2,
+                  opacity: 0.95,
                   border: '2px solid #334155',
                   overflow: 'hidden',
-                  animation: 'gentleFloatMid 4.5s ease-in-out infinite 0.3s',
+                  animation: 'gentleFloatMidLeft 4.6s ease-in-out infinite 0.2s',
                 }}
               >
                 <div
@@ -668,76 +707,77 @@ export default function PositivePsychologySection() {
                     position: 'relative',
                   }}
                 >
-                  {/* Dynamic Island Pill */}
                   <div
                     style={{
                       position: 'absolute',
                       top: '6px',
                       left: '50%',
                       transform: 'translateX(-50%)',
-                      width: '52px',
-                      height: '13px',
+                      width: '48px',
+                      height: '12px',
                       backgroundColor: '#000000',
                       borderRadius: '10px',
                       zIndex: 10,
                       boxShadow: '0 1px 4px rgba(0,0,0,0.5)',
                     }}
                   />
-                  {/* Vertical Scroll Track */}
                   <div
-                    className="phone-track-transition"
                     style={{
-                      display: 'flex',
-                      flexDirection: 'column',
+                      position: 'relative',
+                      width: '100%',
                       height: '100%',
-                      transform: `translateY(-${((activeDot + 1) % appScreens.length) * 100}%)`,
+                      overflow: 'hidden',
                     }}
                   >
-                    {appScreens.map((item) => (
-                      <div
-                        key={`mid-${item.id}`}
-                        style={{
-                          flex: '0 0 100%',
-                          width: '100%',
-                          height: '100%',
-                          position: 'relative',
-                        }}
-                      >
+                    {appScreens.map((item, idx) => {
+                      const isCurrent =
+                        idx === ((activeDot - 1 + appScreens.length) % appScreens.length);
+                      return (
                         <img
+                          key={`mid-left-${item.id}`}
                           src={item.img}
                           alt={item.title}
                           style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
                             width: '100%',
                             height: '100%',
                             objectFit: 'cover',
                             objectPosition: 'top center',
-                            display: 'block',
+                            opacity: isCurrent ? 1 : 0,
+                            transform: isCurrent ? 'translateX(0) scale(1)' : 'translateX(-14px) scale(0.98)',
+                            transition: 'opacity 0.65s ease, transform 0.65s ease',
+                            pointerEvents: 'none',
                           }}
                         />
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               </div>
 
               {/* ──────────────────────────────────────────────────────────── */}
-              {/* FRONT PHONE (Foreground Dominant - Smooth Mobile Scroll Track)*/}
+              {/* 3. CENTER PHONE (Foreground Hero - Layer 5 Dominant)        */}
               {/* ──────────────────────────────────────────────────────────── */}
               <div
                 className="phone-card-hover"
                 style={{
-                  position: 'relative',
-                  width: '270px',
+                  position: 'absolute',
+                  left: '50%',
+                  top: '0px',
+                  width: '268px',
                   height: '540px',
                   borderRadius: '40px',
                   backgroundColor: '#061325',
                   padding: '9px',
                   boxShadow:
-                    '0 32px 80px rgba(6, 36, 78, 0.35), 0 8px 24px rgba(0,0,0,0.18)',
-                  zIndex: 3,
-                  border: '2.5px solid #334155',
+                    '0 32px 80px rgba(6, 36, 78, 0.38), 0 8px 24px rgba(0,0,0,0.18)',
+                  zIndex: 5,
+                  opacity: 1,
+                  border: '2.5px solid #3B4B66',
                   overflow: 'hidden',
-                  animation: 'gentleFloatFront 4s ease-in-out infinite 0.6s',
+                  animation: 'gentleFloatCenter 4s ease-in-out infinite 0.5s',
                 }}
               >
                 <div
@@ -750,7 +790,6 @@ export default function PositivePsychologySection() {
                     position: 'relative',
                   }}
                 >
-                  {/* Dynamic Island Pill */}
                   <div
                     style={{
                       position: 'absolute',
@@ -765,39 +804,202 @@ export default function PositivePsychologySection() {
                       boxShadow: '0 1px 4px rgba(0,0,0,0.5)',
                     }}
                   />
-                  {/* Vertical Scroll Track */}
                   <div
-                    className="phone-track-transition"
                     style={{
-                      display: 'flex',
-                      flexDirection: 'column',
+                      position: 'relative',
+                      width: '100%',
                       height: '100%',
-                      transform: `translateY(-${activeDot * 100}%)`,
+                      overflow: 'hidden',
                     }}
                   >
-                    {appScreens.map((item) => (
-                      <div
-                        key={`front-${item.id}`}
-                        style={{
-                          flex: '0 0 100%',
-                          width: '100%',
-                          height: '100%',
-                          position: 'relative',
-                        }}
-                      >
+                    {appScreens.map((item, idx) => {
+                      const isCurrent =
+                        idx === ((activeDot - 2 + appScreens.length) % appScreens.length);
+                      return (
                         <img
+                          key={`center-${item.id}`}
                           src={item.img}
                           alt={item.title}
                           style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
                             width: '100%',
                             height: '100%',
                             objectFit: 'cover',
                             objectPosition: 'top center',
-                            display: 'block',
+                            opacity: isCurrent ? 1 : 0,
+                            transform: isCurrent ? 'translateX(0) scale(1)' : 'translateX(-14px) scale(0.98)',
+                            transition: 'opacity 0.65s ease, transform 0.65s ease',
+                            pointerEvents: 'none',
                           }}
                         />
-                      </div>
-                    ))}
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+
+              {/* ──────────────────────────────────────────────────────────── */}
+              {/* 4. MID RIGHT PHONE (Middle Right - Layer 2)                 */}
+              {/* ──────────────────────────────────────────────────────────── */}
+              <div
+                className="phone-card-hover"
+                style={{
+                  position: 'absolute',
+                  right: '75px',
+                  top: '20px',
+                  width: '238px',
+                  height: '492px',
+                  borderRadius: '36px',
+                  backgroundColor: '#061325',
+                  padding: '7.5px',
+                  boxShadow: '0 22px 55px rgba(6, 24, 50, 0.25)',
+                  zIndex: 2,
+                  opacity: 0.95,
+                  border: '2px solid #334155',
+                  overflow: 'hidden',
+                  animation: 'gentleFloatMidRight 4.6s ease-in-out infinite 0.3s',
+                }}
+              >
+                <div
+                  style={{
+                    backgroundColor: '#000',
+                    width: '100%',
+                    height: '100%',
+                    borderRadius: '28px',
+                    overflow: 'hidden',
+                    position: 'relative',
+                  }}
+                >
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: '6px',
+                      left: '50%',
+                      transform: 'translateX(-50%)',
+                      width: '48px',
+                      height: '12px',
+                      backgroundColor: '#000000',
+                      borderRadius: '10px',
+                      zIndex: 10,
+                      boxShadow: '0 1px 4px rgba(0,0,0,0.5)',
+                    }}
+                  />
+                  <div
+                    style={{
+                      position: 'relative',
+                      width: '100%',
+                      height: '100%',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    {appScreens.map((item, idx) => {
+                      const isCurrent =
+                        idx === ((activeDot - 3 + appScreens.length) % appScreens.length);
+                      return (
+                        <img
+                          key={`mid-right-${item.id}`}
+                          src={item.img}
+                          alt={item.title}
+                          style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                            objectPosition: 'top center',
+                            opacity: isCurrent ? 1 : 0,
+                            transform: isCurrent ? 'translateX(0) scale(1)' : 'translateX(-14px) scale(0.98)',
+                            transition: 'opacity 0.65s ease, transform 0.65s ease',
+                            pointerEvents: 'none',
+                          }}
+                        />
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+
+              {/* ──────────────────────────────────────────────────────────── */}
+              {/* 5. FAR RIGHT PHONE (Back Right - Layer 1)                    */}
+              {/* ──────────────────────────────────────────────────────────── */}
+              <div
+                className="phone-card-hover"
+                style={{
+                  position: 'absolute',
+                  right: '0px',
+                  top: '42px',
+                  width: '215px',
+                  height: '455px',
+                  borderRadius: '32px',
+                  backgroundColor: '#061325',
+                  padding: '6.5px',
+                  boxShadow: '0 18px 45px rgba(6, 24, 50, 0.20)',
+                  zIndex: 1,
+                  opacity: 0.88,
+                  border: '2px solid #2B384E',
+                  overflow: 'hidden',
+                  animation: 'gentleFloatFarRight 5.2s ease-in-out infinite 0.1s',
+                }}
+              >
+                <div
+                  style={{
+                    backgroundColor: '#000',
+                    width: '100%',
+                    height: '100%',
+                    borderRadius: '25px',
+                    overflow: 'hidden',
+                    position: 'relative',
+                  }}
+                >
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: '6px',
+                      left: '50%',
+                      transform: 'translateX(-50%)',
+                      width: '42px',
+                      height: '11px',
+                      backgroundColor: '#000000',
+                      borderRadius: '10px',
+                      zIndex: 10,
+                      boxShadow: '0 1px 4px rgba(0,0,0,0.5)',
+                    }}
+                  />
+                  <div
+                    style={{
+                      position: 'relative',
+                      width: '100%',
+                      height: '100%',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    {appScreens.map((item, idx) => {
+                      const isCurrent =
+                        idx === ((activeDot - 4 + appScreens.length) % appScreens.length);
+                      return (
+                        <img
+                          key={`far-right-${item.id}`}
+                          src={item.img}
+                          alt={item.title}
+                          style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                            objectPosition: 'top center',
+                            opacity: isCurrent ? 1 : 0,
+                            transform: isCurrent ? 'translateX(0) scale(1)' : 'translateX(-14px) scale(0.98)',
+                            transition: 'opacity 0.65s ease, transform 0.65s ease',
+                            pointerEvents: 'none',
+                          }}
+                        />
+                      );
+                    })}
                   </div>
                 </div>
               </div>

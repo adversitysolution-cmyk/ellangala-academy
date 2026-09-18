@@ -1,40 +1,40 @@
 export const faqContent = {
   header: {
-    title: "Faq"
+    title: "Frequently Asked Questions"
   },
   sectionTitle: "Things to Keep in Mind",
   faqs: [
     {
-      q: "What happens in a counselling session?",
-      a: "Individual counseling is a desired and important component of effective career counseling. Several studies have shown computer-assisted guidance systems to be effective in enhancing career outcomes"
+      q: "What happens in a positive mentoring or counselling session?",
+      a: "Our sessions provide a supportive, confidential space to explore your thoughts and emotional patterns, identify your strengths, and develop practical mental fitness habits for everyday life."
     },
     {
-      q: "Omnis iste natus error sit voluptatem accusantium doloremque",
-      a: "Individual counseling is a desired and important component of effective career counseling. Several studies have shown computer-assisted guidance systems to be effective in enhancing career outcomes"
+      q: "How does Positive Psychology differ from traditional therapy?",
+      a: "While traditional approaches often focus primarily on treating disorders, Positive Psychology emphasizes building character strengths, resilience, optimism, emotional hygiene, and a meaningful life."
     },
     {
-      q: "What kinds of people seek counselling?",
-      a: "Individual counseling is a desired and important component of effective career counseling. Several studies have shown computer-assisted guidance systems to be effective in enhancing career outcomes"
+      q: "Who can participate in Ellangala’s Academy workshops?",
+      a: "Our workshops are designed for diverse audiences including school and college students, parents, teachers, working professionals, and individuals seeking personal growth and clarity."
     },
     {
-      q: "Idea of denouncing pleasure and praising pain was born",
-      a: "Individual counseling is a desired and important component of effective career counseling. Several studies have shown computer-assisted guidance systems to be effective in enhancing career outcomes"
+      q: "What is the Positive MindGym program?",
+      a: "Positive MindGym is a structured mental fitness initiative combining guided mind-training exercises, reflection routines, and the Positive MindGym mobile app to strengthen daily focus, EQ, and SQ."
     },
     {
-      q: "At vero eos et accusamus et iusto odio dignissimos ducimu",
-      a: "Individual counseling is a desired and important component of effective career counseling. Several studies have shown computer-assisted guidance systems to be effective in enhancing career outcomes"
+      q: "How can I purchase books authored by Dr. Naveen Ellangala?",
+      a: "All 17 books and affirmation card sets are available in our Resources section with secure online ordering and delivery across India."
     }
   ],
   sidebar: {
-    title: "Do You Have Questions? \n Please drop below",
-    namePlaceholder: "Name",
-    emailPlaceholder: "Email address",
-    questionPlaceholder: "Question",
-    submitBtnText: "Send Request "
+    title: "Do You Have Questions?",
+    subtitle: "We Are Here to Help",
+    description: "Have a query about our programs, workshops, positive mentoring, or book orders? Connect with our team directly.",
+    btnText: "Contact Us"
   },
   bottom: {
-    email: "Support@gamil.com",
-    emailLink: "mailto:support@gamil.com",
-    text: "Frequently Asked Questions about therapy project?"
+    email: "info@ellangala.com",
+    emailLink: "mailto:info@ellangala.com",
+    text: "Have more questions about our programs, workshops or mentoring?"
   }
 };
+

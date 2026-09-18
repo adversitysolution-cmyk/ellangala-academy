@@ -1,9 +1,12 @@
 import { siteConfig } from '../../src/seo/siteConfig.js';
 import { getStore } from '../db/store.js';
+import { shopContent } from '../../src/contents/shop.content.js';
+import { programsData } from '../../src/contents/programsData.content.js';
+import { blogContent } from '../../src/contents/blog.content.js';
 
 let cachedXml = null;
 let lastCacheTime = 0;
-const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
+const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes cache
 
 export function escapeXml(unsafe = '') {
   if (typeof unsafe !== 'string') return '';
@@ -33,21 +36,22 @@ export function invalidateSitemapCache() {
 }
 
 export function generateSitemapXml(urls = []) {
-  const urlNodes = urls.map((u) => {
+  const seenUrls = new Set();
+  const uniqueUrlNodes = [];
+
+  for (const u of urls) {
+    if (!u.loc || seenUrls.has(u.loc)) continue;
+    seenUrls.add(u.loc);
+
     const loc = escapeXml(u.loc);
-    const lastmod = u.lastmod ? `<lastmod>${escapeXml(formatIsoDate(u.lastmod))}</lastmod>` : '';
-    const changefreq = u.changefreq ? `<changefreq>${escapeXml(u.changefreq)}</changefreq>` : '';
-    const priority = u.priority ? `<priority>${escapeXml(u.priority)}</priority>` : '';
+    const lastmod = u.lastmod ? `\n    <lastmod>${escapeXml(formatIsoDate(u.lastmod))}</lastmod>` : '';
+    const changefreq = u.changefreq ? `\n    <changefreq>${escapeXml(u.changefreq)}</changefreq>` : '';
+    const priority = u.priority ? `\n    <priority>${escapeXml(u.priority)}</priority>` : '';
 
-    return `  <url>
-    <loc>${loc}</loc>${lastmod ? '\n    ' + lastmod : ''}${changefreq ? '\n    ' + changefreq : ''}${priority ? '\n    ' + priority : ''}
-  </url>`;
-  }).join('\n');
+    uniqueUrlNodes.push(`  <url>\n    <loc>${loc}</loc>${lastmod}${changefreq}${priority}\n  </url>`);
+  }
 
-  return `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urlNodes}
-</urlset>`;
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${uniqueUrlNodes.join('\n')}\n</urlset>`;
 }
 
 export async function getDynamicSitemapXml() {
@@ -56,53 +60,91 @@ export async function getDynamicSitemapXml() {
     return cachedXml;
   }
 
-  const store = await getStore();
-  const events = store.events || [];
-  const blogs = store.blogs || [];
+  const baseDomain = siteConfig.url || 'https://ellangala.com';
 
-  // Static Indexable Routes
+  // 1. Core Primary Static Routes
   const staticRoutes = [
-    { loc: `${siteConfig.url}/`, priority: '1.0', changefreq: 'daily' },
-    { loc: `${siteConfig.url}/about`, priority: '0.8', changefreq: 'monthly' },
-    { loc: `${siteConfig.url}/founder`, priority: '0.9', changefreq: 'monthly' },
-    { loc: `${siteConfig.url}/positive-workshops`, priority: '0.9', changefreq: 'weekly' },
-    { loc: `${siteConfig.url}/positive-mentoring`, priority: '0.9', changefreq: 'weekly' },
-    { loc: `${siteConfig.url}/mindgym`, priority: '0.9', changefreq: 'weekly' },
-    { loc: `${siteConfig.url}/mindgym/app`, priority: '0.8', changefreq: 'monthly' },
-    { loc: `${siteConfig.url}/team`, priority: '0.7', changefreq: 'monthly' },
-    { loc: `${siteConfig.url}/shop`, priority: '0.9', changefreq: 'weekly' },
-    { loc: `${siteConfig.url}/shop/book-1`, priority: '0.8', changefreq: 'monthly' },
-    { loc: `${siteConfig.url}/shop/book-2`, priority: '0.8', changefreq: 'monthly' },
-    { loc: `${siteConfig.url}/shop/book-3`, priority: '0.8', changefreq: 'monthly' },
-    { loc: `${siteConfig.url}/resources/videos`, priority: '0.8', changefreq: 'weekly' },
-    { loc: `${siteConfig.url}/resources/meditation`, priority: '0.8', changefreq: 'weekly' },
-    { loc: `${siteConfig.url}/resources/free-downloads`, priority: '0.8', changefreq: 'weekly' },
-    { loc: `${siteConfig.url}/events`, priority: '0.9', changefreq: 'daily' },
-    { loc: `${siteConfig.url}/blog`, priority: '0.8', changefreq: 'weekly' },
-    { loc: `${siteConfig.url}/insights`, priority: '0.8', changefreq: 'weekly' },
-    { loc: `${siteConfig.url}/contact`, priority: '0.8', changefreq: 'monthly' },
-    { loc: `${siteConfig.url}/faq`, priority: '0.7', changefreq: 'monthly' }
+    { loc: `${baseDomain}/`, priority: '1.0', changefreq: 'daily' },
+    { loc: `${baseDomain}/founder`, priority: '0.95', changefreq: 'weekly' },
+    { loc: `${baseDomain}/research`, priority: '0.9', changefreq: 'monthly' },
+    { loc: `${baseDomain}/about`, priority: '0.85', changefreq: 'monthly' },
+    { loc: `${baseDomain}/positive-workshops`, priority: '0.9', changefreq: 'weekly' },
+    { loc: `${baseDomain}/positive-mentoring`, priority: '0.9', changefreq: 'weekly' },
+    { loc: `${baseDomain}/mindgym`, priority: '0.9', changefreq: 'weekly' },
+    { loc: `${baseDomain}/mindgym/app`, priority: '0.85', changefreq: 'monthly' },
+    { loc: `${baseDomain}/resources`, priority: '0.9', changefreq: 'weekly' },
+    { loc: `${baseDomain}/shop`, priority: '0.9', changefreq: 'weekly' },
+    { loc: `${baseDomain}/resources/videos`, priority: '0.8', changefreq: 'weekly' },
+    { loc: `${baseDomain}/resources/meditation`, priority: '0.8', changefreq: 'weekly' },
+    { loc: `${baseDomain}/resources/free-downloads`, priority: '0.8', changefreq: 'weekly' },
+    { loc: `${baseDomain}/events`, priority: '0.9', changefreq: 'daily' },
+    { loc: `${baseDomain}/blog`, priority: '0.85', changefreq: 'weekly' },
+    { loc: `${baseDomain}/insights`, priority: '0.85', changefreq: 'weekly' },
+    { loc: `${baseDomain}/contact`, priority: '0.8', changefreq: 'monthly' },
+    { loc: `${baseDomain}/faq`, priority: '0.7', changefreq: 'monthly' },
+    { loc: `${baseDomain}/verify-certificate`, priority: '0.7', changefreq: 'monthly' }
   ];
 
-  // Dynamic Published Events
-  const publishedEvents = events.filter(e => e.status === 'published' && e.seo?.noindex !== true);
-  const eventUrls = publishedEvents.map(e => ({
-    loc: `${siteConfig.url}/events/${e.slug}`,
-    lastmod: e.updatedAt || e.publishedAt || e.createdAt || e.date,
-    changefreq: 'weekly',
+  // 2. Program Details Routes
+  const programSlugs = Object.keys(programsData || {});
+  const programRoutes = programSlugs.map(slug => ({
+    loc: `${baseDomain}/programs/${slug}`,
+    changefreq: 'monthly',
+    priority: '0.85'
+  }));
+
+  // 3. Shop & Book Products Routes (All 17 books and publications)
+  const products = shopContent?.shop?.products || [];
+  const productRoutes = products.map(prod => ({
+    loc: `${baseDomain}/shop/${prod.id}`,
+    changefreq: 'monthly',
     priority: '0.8'
   }));
 
-  // Dynamic Published Blogs
-  const publishedBlogs = blogs.filter(b => b.status === 'published' && b.seo?.noindex !== true);
-  const blogUrls = publishedBlogs.map(b => ({
-    loc: `${siteConfig.url}/insights/${b.slug}`,
-    lastmod: b.updatedAt || b.publishedAt || b.createdAt,
-    changefreq: 'weekly',
-    priority: '0.8'
-  }));
+  // 4. Dynamic Published Events from DB
+  let eventUrls = [];
+  let blogUrls = [];
 
-  const allUrls = [...staticRoutes, ...eventUrls, ...blogUrls];
+  try {
+    const store = await getStore();
+    const events = store.events || [];
+    const blogs = store.blogs || [];
+
+    const publishedEvents = events.filter(e => e.status === 'published' && e.seo?.noindex !== true);
+    eventUrls = publishedEvents.map(e => ({
+      loc: `${baseDomain}/events/${e.slug}`,
+      lastmod: e.updatedAt || e.publishedAt || e.createdAt || e.date,
+      changefreq: 'weekly',
+      priority: '0.85'
+    }));
+
+    const publishedBlogs = blogs.filter(b => b.status === 'published' && b.seo?.noindex !== true);
+    blogUrls = publishedBlogs.map(b => ({
+      loc: `${baseDomain}/insights/${b.slug}`,
+      lastmod: b.updatedAt || b.publishedAt || b.createdAt,
+      changefreq: 'weekly',
+      priority: '0.85'
+    }));
+  } catch (err) {
+    console.warn('⚠️ Sitemap generator using static fallback for events/blogs:', err.message);
+  }
+
+  // 5. Fallback Static Blogs if DB has no blogs
+  if (blogUrls.length === 0 && blogContent?.list?.posts) {
+    blogUrls = blogContent.list.posts.map(post => ({
+      loc: `${baseDomain}/insights/${post.slug || post.id}`,
+      changefreq: 'weekly',
+      priority: '0.85'
+    }));
+  }
+
+  const allUrls = [
+    ...staticRoutes,
+    ...programRoutes,
+    ...productRoutes,
+    ...eventUrls,
+    ...blogUrls
+  ];
 
   cachedXml = generateSitemapXml(allUrls);
   lastCacheTime = now;

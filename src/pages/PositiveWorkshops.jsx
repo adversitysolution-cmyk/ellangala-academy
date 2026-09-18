@@ -238,6 +238,67 @@ export default function PositiveWorkshops() {
         </section>
         {/* End Positive Workshops Section */}
 
+        {/* Start Regional & Institutional Reach Section (Karnataka & Kerala) */}
+        <section style={{ padding: '70px 0', backgroundColor: '#F8FAFC', borderTop: '1px solid #E2E8F0' }}>
+          <div className="container">
+            <div className="row align-items-center">
+              <div className="col-lg-7">
+                <span style={{ backgroundColor: '#EFF6FF', color: '#1E40AF', padding: '6px 14px', borderRadius: '20px', fontSize: '12px', fontWeight: '700', letterSpacing: '1px', textTransform: 'uppercase' }}>
+                  Regional Institutional Reach
+                </span>
+                <h2 style={{ fontSize: '30px', fontWeight: '800', color: '#0F172A', margin: '14px 0 16px' }}>
+                  Empowering 300+ Institutions Across Karnataka &amp; Kerala
+                </h2>
+                <p style={{ color: '#475569', fontSize: '16px', lineHeight: '1.8' }}>
+                  Dr. Naveen Ellangala and Ellangala’s Academy deliver customized, high-impact experiential workshops for schools, PU colleges, universities, and corporate organizations throughout <strong>Bengaluru, Mysuru, Mangaluru, Hubballi, Udupi, and across Kerala</strong>.
+                </p>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', marginTop: '20px' }}>
+                  <div style={{ backgroundColor: '#FFFFFF', padding: '16px 20px', borderRadius: '10px', border: '1px solid #E2E8F0', flex: '1 1 200px' }}>
+                    <strong style={{ display: 'block', fontSize: '20px', color: '#CA8A38' }}>300+</strong>
+                    <span style={{ fontSize: '13px', color: '#64748B' }}>Institutions Trained</span>
+                  </div>
+                  <div style={{ backgroundColor: '#FFFFFF', padding: '16px 20px', borderRadius: '10px', border: '1px solid #E2E8F0', flex: '1 1 200px' }}>
+                    <strong style={{ display: 'block', fontSize: '20px', color: '#CA8A38' }}>16+ Years</strong>
+                    <span style={{ fontSize: '13px', color: '#64748B' }}>Field Experience</span>
+                  </div>
+                  <div style={{ backgroundColor: '#FFFFFF', padding: '16px 20px', borderRadius: '10px', border: '1px solid #E2E8F0', flex: '1 1 200px' }}>
+                    <strong style={{ display: 'block', fontSize: '20px', color: '#CA8A38' }}>Bilingual</strong>
+                    <span style={{ fontSize: '13px', color: '#64748B' }}>English &amp; Kannada</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="col-lg-5 mt-4 mt-lg-0">
+                <div style={{ backgroundColor: '#FFFFFF', padding: '32px', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 8px 24px rgba(0,0,0,0.04)' }}>
+                  <h4 style={{ fontSize: '20px', fontWeight: '800', color: '#0F172A', marginBottom: '12px' }}>
+                    Book an Institutional Workshop
+                  </h4>
+                  <p style={{ fontSize: '14px', color: '#64748B', lineHeight: '1.6', marginBottom: '20px' }}>
+                    Invite Dr. Naveen Ellangala to conduct student motivation, teacher training, or corporate positive psychology sessions at your campus.
+                  </p>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    <button
+                      type="button"
+                      onClick={() => openEnrollModal("Institutional Workshop (Karnataka / Kerala)")}
+                      className="thm-btn"
+                      style={{ padding: '12px 20px', textAlign: 'center', width: '100%' }}
+                    >
+                      Request Institutional Proposal
+                    </button>
+                    <a
+                      href="tel:+919986744700"
+                      style={{ textAlign: 'center', fontSize: '14px', color: '#CA8A38', fontWeight: '700', textDecoration: 'none', padding: '8px 0' }}
+                    >
+                      <i className="fa fa-phone" style={{ marginRight: '6px' }}></i> Direct Desk: +91 99867 44700
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        {/* End Regional & Institutional Reach Section */}
+
         <FooterOne />
       </div>
 

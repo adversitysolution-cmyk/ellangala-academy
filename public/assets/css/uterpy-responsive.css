@@ -2235,6 +2235,10 @@
         margin-top: 15px;
     }
 
+    .faq-page__bottom .text p {
+        white-space: normal !important;
+    }
+
     .faq-page__left {
         margin-right: 0px;
     }

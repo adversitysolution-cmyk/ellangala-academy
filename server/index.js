@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 import eventsApi from './routes/eventsApi.js';
 import blogsApi from './routes/blogsApi.js';
@@ -17,6 +18,7 @@ import sitemapRoute from './routes/sitemapRoute.js';
 import { requireAdminAuth } from './middleware/adminAuth.js';
 import { ensureSchema } from './db/store.js';
 import { startCertificateWorker } from './lib/certificateWorker.js';
+import { resolvePageMetadata, buildHeadTagsHtml } from './lib/pageMetadataResolver.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -45,7 +47,32 @@ app.use('/api', certificatesApi);
 // 2. Dynamic Sitemap Endpoint (Handled BEFORE SPA catch-all)
 app.use('/', sitemapRoute);
 
-// 3. Serve Static Assets from Dist (Production) + public assets + persistent uploaded images
+// 3. Permanent (301) Redirects for Legacy / Old WordPress & Team URLs
+const legacyRedirects = [
+  { pattern: /^\/our-team(\/.*)?$/i, target: '/founder' },
+  { pattern: /^\/team\/mr-naveen-ellangala(\/.*)?$/i, target: '/founder' },
+  { pattern: /^\/team\/dr-naveen-ellangala(\/.*)?$/i, target: '/founder' },
+  { pattern: /^\/team\/naveen-ellangala(\/.*)?$/i, target: '/founder' },
+  { pattern: /^\/mr-naveen-ellangala(\/.*)?$/i, target: '/founder' },
+  { pattern: /^\/dr-naveen-ellangala(\/.*)?$/i, target: '/founder' },
+  { pattern: /^\/naveen-ellangala(\/.*)?$/i, target: '/founder' },
+  { pattern: /^\/about\/founder(\/.*)?$/i, target: '/founder' },
+  { pattern: /^\/about\/dr-naveen-ellangala(\/.*)?$/i, target: '/founder' },
+  { pattern: /^\/about\/naveen-ellangala(\/.*)?$/i, target: '/founder' },
+  { pattern: /^\/founder\.html$/i, target: '/founder' }
+];
+
+app.use((req, res, next) => {
+  const reqPath = req.path;
+  for (const r of legacyRedirects) {
+    if (r.pattern.test(reqPath)) {
+      return res.redirect(301, r.target);
+    }
+  }
+  next();
+});
+
+// 4. Serve Static Assets from Dist (Production) + public assets + persistent uploaded images
 const distDir = path.join(rootDir, 'dist');
 const publicDir = path.join(rootDir, 'public');
 app.use(express.static(distDir));
@@ -54,17 +81,41 @@ app.use('/uploads', express.static(uploadsDir));
 // NOTE: certificate PDFs in certificatesDir are deliberately NOT served statically —
 // access only via token-gated /api/certificates/file/:token or admin download.
 
-// 4. SPA Fallback Router
-app.get('*', (req, res) => {
-  const indexPath = path.join(distDir, 'index.html');
-  if (req.accepts('html')) {
-    res.sendFile(indexPath, (err) => {
-      if (err) {
-        res.status(404).send('Not Found');
-      }
-    });
-  } else {
-    res.status(404).json({ error: 'Not found' });
+// 5. Dynamic Metadata & SPA Fallback Router (SSR Metadata & Schema Injection)
+app.get('*', async (req, res) => {
+  if (!req.accepts('html')) {
+    return res.status(404).json({ error: 'Not found' });
+  }
+
+  try {
+    const indexPath = fs.existsSync(path.join(distDir, 'index.html'))
+      ? path.join(distDir, 'index.html')
+      : path.join(rootDir, 'index.html');
+
+    if (!fs.existsSync(indexPath)) {
+      return res.status(404).send('Not Found');
+    }
+
+    const htmlTemplate = fs.readFileSync(indexPath, 'utf-8');
+    const pageMeta = await resolvePageMetadata(req.path);
+    const headInjection = buildHeadTagsHtml(pageMeta);
+
+    // Replace the SEO injection block
+    let finalHtml = htmlTemplate;
+    const injectionRegex = /<!-- SEO_HEAD_INJECTION -->[\s\S]*?<!-- \/SEO_HEAD_INJECTION -->/;
+
+    if (injectionRegex.test(finalHtml)) {
+      finalHtml = finalHtml.replace(injectionRegex, headInjection);
+    } else {
+      // Fallback: insert right after <head>
+      finalHtml = finalHtml.replace('<head>', `<head>\n    ${headInjection}`);
+    }
+
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.status(200).send(finalHtml);
+  } catch (err) {
+    console.error('Error serving dynamic HTML:', err);
+    res.status(500).send('Internal Server Error');
   }
 });
 

@@ -99,17 +99,21 @@ export default function FooterOne({ hideSubscribe = false }) {
                     </li>
                   </ul>
 
-                  <div className="footer-widget__contact-text">
+                  <Link
+                    to="/contact"
+                    className="footer-widget__contact-text"
+                    style={{ textDecoration: 'none', cursor: 'pointer' }}
+                  >
                     <div className="text-box">
                       <p>
-                        <a href="#">{footer.letsTalkText}</a>
+                        {footer.letsTalkText}
                       </p>
                     </div>
 
                     <div className="icon-box">
                       <span className="icon-marketing"></span>
                     </div>
-                  </div>
+                  </Link>
                 </div>
               </div>
               {/* End Footer Widget Column */}
@@ -129,6 +133,9 @@ export default function FooterOne({ hideSubscribe = false }) {
                     </li>
                     <li>
                       <Link to="/founder">Founder Profile</Link>
+                    </li>
+                    <li>
+                      <Link to="/research">Doctoral Research</Link>
                     </li>
                     <li>
                       <Link to="/resources">Resources</Link>

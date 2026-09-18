@@ -14,7 +14,7 @@ export const programsData = {
     heroImage: "/assets/images/programs/positive-psychology-meaningful-life.png",
     whatIs: {
       title: "What Is Positive Psychology for a Meaningful Life?",
-      content: "Positive Psychology for a Meaningful Life is an educational workshop that focuses on cultivating human strengths, positive emotions, and purposeful living. Rather than concentrating solely on dysfunction, this workshop introduces evidence-informed frameworks for enhancing everyday happiness, building resilient relationships, and discovering personal meaning in daily routines."
+      content: "Positive Psychology for a Meaningful Life is an educational workshop that focuses on cultivating human strengths, positive emotions, and purposeful living. Grounded in Dr. Naveen Ellangala’s doctoral research on the PERMA Model and Indian wisdom, this workshop introduces evidence-informed frameworks for enhancing everyday happiness, building resilient relationships, and discovering personal meaning in daily routines."
     },
     whyItMatters: {
       title: "Why It Matters",
@@ -79,7 +79,7 @@ export const programsData = {
     heroImage: "/assets/images/programs/spiritual-psychology-purposeful-life.png",
     whatIs: {
       title: "What Is Spiritual Psychology for Daily Life?",
-      content: "Spiritual Psychology for Daily Life blends psychological self-awareness with practical spiritual insights from timeless philosophy. This workshop offers a grounded space to explore inner tranquility, personal ethics, and deeper purpose, helping participants navigate existential questions without abstract dogma."
+      content: "Spiritual Psychology for Daily Life blends psychological self-awareness with practical spiritual insights from timeless Indian philosophy. Grounded in Dr. Naveen Ellangala’s doctoral research bridging Positive Psychology with Haridasa wisdom, this workshop offers a practical space to explore inner tranquility, personal ethics, and deeper purpose."
     },
     whyItMatters: {
       title: "Why It Matters",

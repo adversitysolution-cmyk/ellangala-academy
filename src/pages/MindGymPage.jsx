@@ -192,6 +192,33 @@ export default function MindGymPage() {
         </section>
         {/* End MindGym Section */}
 
+        {/* Start Scientific & Doctoral Research Grounding Section */}
+        <section style={{ padding: '60px 0 80px', backgroundColor: '#F8FAFC', borderTop: '1px solid #E2E8F0' }}>
+          <div className="container">
+            <div style={{ backgroundColor: '#FFFFFF', borderRadius: '16px', padding: '40px 32px', border: '1px solid #E2E8F0', boxShadow: '0 8px 24px rgba(0,0,0,0.04)' }}>
+              <div className="row align-items-center">
+                <div className="col-lg-8">
+                  <span style={{ backgroundColor: '#FEF3C7', color: '#92400E', padding: '6px 14px', borderRadius: '20px', fontSize: '12px', fontWeight: '700', textTransform: 'uppercase' }}>
+                    Theoretical & Research Foundation
+                  </span>
+                  <h3 style={{ fontSize: '26px', fontWeight: '800', color: '#0F172A', margin: '14px 0 10px' }}>
+                    Rooted in Original Doctoral Research
+                  </h3>
+                  <p style={{ color: '#475569', fontSize: '15px', lineHeight: '1.7', margin: 0 }}>
+                    The exercises and conditioning modules inside the <strong>Positive MindGym</strong> are directly grounded in Dr. Naveen Ellangala’s doctoral dissertation: <em>“A Study and Formulation of a PERMA Model of Positive Psychology Based on the Literary Works of Saint Purandaradasa.”</em> This indigenous model translates deep philosophical wisdom into accessible everyday psychological conditioning.
+                  </p>
+                </div>
+                <div className="col-lg-4 text-lg-end mt-4 mt-lg-0">
+                  <Link to="/research" className="thm-btn" style={{ padding: '12px 28px' }}>
+                    Explore Doctoral Research →
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        {/* End Scientific & Doctoral Research Grounding Section */}
+
         <FooterOne />
       </div>
 

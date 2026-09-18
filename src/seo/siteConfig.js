@@ -15,19 +15,20 @@ export const siteConfig = {
     bio: "Positive Psychologist, Author, and Founder of Ellangala’s Academy with over 16 years of experience in mind training, mental fitness, and human transformation."
   },
   contact: {
-    email: "contact@ellangala.com",
-    phone: "+91 98450 12345",
-    address: "Ellangala’s Academy, Nayandahalli, Outer Ring Road, Bengaluru, Karnataka 560039",
+    email: "info@ellangala.com",
+    phone: "+91-99867-44700",
+    streetAddress: "410, C Block, Radiant Karel, Nayandahalli",
+    address: "410, C Block, Radiant Karel, Nayandahalli, Bengaluru, Karnataka – 560039",
     city: "Bengaluru",
     state: "Karnataka",
-    country: "India",
-    postalCode: "560039"
+    country: "IN",
+    postalCode: "560039",
+    openingHours: "Mo-Fr 08:00-18:30"
   },
   socialLinks: [
-    "https://facebook.com/ellangalaacademy",
-    "https://instagram.com/ellangalaacademy",
-    "https://youtube.com/ellangalaacademy",
-    "https://linkedin.com/company/ellangala-academy"
+    "https://www.facebook.com/share/1UB9HNkoav/",
+    "https://www.instagram.com/dr.naveen_ellangala?igsh=dncwc25rd2NyaHdi",
+    "https://www.linkedin.com/in/dr-naveen-ellangala-60933b75?utm_source=share_via&utm_content=profile&utm_medium=member_android"
   ]
 };
 

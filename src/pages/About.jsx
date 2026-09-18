@@ -226,6 +226,60 @@ export default function About() {
         <AboutMethodologySection />
         {/* End Our Methodology Section */}
 
+        {/* Start Original Doctoral Research & Trademarked Assets Spotlight */}
+        <section className="about-research-spotlight" style={{ padding: '80px 0', backgroundColor: '#F8FAFC', borderTop: '1px solid #E2E8F0', borderBottom: '1px solid #E2E8F0', position: 'relative', zIndex: 4 }}>
+          <div className="container">
+            <div className="row align-items-center">
+              <div className="col-lg-7">
+                <span style={{ backgroundColor: '#FEF3C7', color: '#92400E', padding: '6px 14px', borderRadius: '20px', fontSize: '12px', fontWeight: '700', letterSpacing: '1px', textTransform: 'uppercase' }}>
+                  Original Doctoral Research & Differentiation
+                </span>
+                <h2 style={{ fontSize: '30px', fontWeight: '800', color: '#0F172A', margin: '14px 0 16px' }}>
+                  A Formulation of PERMA Model Based on Saint Purandaradasa
+                </h2>
+                <p style={{ color: '#475569', fontSize: '16px', lineHeight: '1.7', marginBottom: '16px' }}>
+                  Dr. Naveen Ellangala’s doctoral dissertation establishes a unique synthesis between <strong>Martin Seligman’s PERMA Model</strong> of Positive Psychology and the 16th-century Haridasa philosophical compositions of <strong>Saint Purandaradasa</strong>. This indigenous framework translates classical spiritual wisdom into modern cognitive-emotional well-being.
+                </p>
+                <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', marginTop: '20px' }}>
+                  <Link to="/research" className="thm-btn" style={{ padding: '10px 24px' }}>
+                    Read Doctoral Research
+                  </Link>
+                  <Link to="/mindgym" className="thm-btn" style={{ backgroundColor: '#1E293B', padding: '10px 24px' }}>
+                    Explore Positive MindGym
+                  </Link>
+                </div>
+              </div>
+
+              <div className="col-lg-5 mt-4 mt-lg-0">
+                <div style={{ backgroundColor: '#FFFFFF', padding: '28px', borderRadius: '16px', border: '1px solid #E2E8F0', boxShadow: '0 8px 24px rgba(0,0,0,0.04)' }}>
+                  <h4 style={{ fontSize: '18px', fontWeight: '800', color: '#0F172A', marginBottom: '16px' }}>
+                    Our 3 Signature Named Assets
+                  </h4>
+                  <div style={{ marginBottom: '14px', paddingBottom: '14px', borderBottom: '1px solid #F1F5F9' }}>
+                    <div style={{ fontWeight: '700', color: '#CA8A38', fontSize: '15px' }}>
+                      <Link to="/mindgym" style={{ color: '#CA8A38', textDecoration: 'none' }}>1. Positive MindGym →</Link>
+                    </div>
+                    <div style={{ fontSize: '13px', color: '#64748B', marginTop: '2px' }}>Structured experiential mental fitness training system.</div>
+                  </div>
+                  <div style={{ marginBottom: '14px', paddingBottom: '14px', borderBottom: '1px solid #F1F5F9' }}>
+                    <div style={{ fontWeight: '700', color: '#CA8A38', fontSize: '15px' }}>
+                      <Link to="/contact" style={{ color: '#CA8A38', textDecoration: 'none' }}>2. Positive MindGym Center →</Link>
+                    </div>
+                    <div style={{ fontSize: '13px', color: '#64748B', marginTop: '2px' }}>Physical experiential space in Nayandahalli, Bengaluru.</div>
+                  </div>
+                  <div>
+                    <div style={{ fontWeight: '700', color: '#CA8A38', fontSize: '15px' }}>
+                      <Link to="/shop" style={{ color: '#CA8A38', textDecoration: 'none' }}>3. Positive Mind Toolkit →</Link>
+                    </div>
+                    <div style={{ fontSize: '13px', color: '#64748B', marginTop: '2px' }}>17 published books, affirmation decks, and cognitive reflection guides.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        {/* End Original Doctoral Research & Trademarked Assets Spotlight */}
+
         {/* Start Counter One */}
         <section className="counter-one" style={{ marginTop: '0', position: 'relative', zIndex: 3 }}>
           <div className="container">

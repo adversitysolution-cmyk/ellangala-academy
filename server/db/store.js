@@ -51,6 +51,10 @@ async function uniqueSlug(conn, table, baseSlug, excludeId = null) {
 
 // --- SCHEMA + SEED (runs once on server start) ---
 export async function ensureSchema() {
+  if (!pool) {
+    console.log('ℹ️ Running in DB-free / static mode (MySQL pool not configured).');
+    return;
+  }
   const schemaSql = fs.readFileSync(path.join(__dirname, 'schema.sql'), 'utf-8');
   const statements = schemaSql.split(';').map(s => s.trim()).filter(Boolean);
   for (const stmt of statements) {
@@ -159,9 +163,23 @@ async function seedIfEmpty() {
 
 // Used by the sitemap generator.
 export async function getStore() {
-  const [events] = await pool.query('SELECT * FROM events');
-  const [blogs] = await pool.query('SELECT * FROM blogs');
-  return { events: events.map(rowToEvent), blogs: blogs.map(rowToBlog) };
+  if (!pool) {
+    return {
+      events: (initialEvents || []).map(rowToEvent),
+      blogs: (blogContent?.list?.posts || []).map(rowToBlog)
+    };
+  }
+  try {
+    const [events] = await pool.query('SELECT * FROM events');
+    const [blogs] = await pool.query('SELECT * FROM blogs');
+    return { events: events.map(rowToEvent), blogs: blogs.map(rowToBlog) };
+  } catch (err) {
+    console.warn('⚠️ getStore fallback to static dataset:', err.message);
+    return {
+      events: (initialEvents || []).map(rowToEvent),
+      blogs: (blogContent?.list?.posts || []).map(rowToBlog)
+    };
+  }
 }
 
 function rowToEvent(row) {

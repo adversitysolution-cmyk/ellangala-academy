@@ -14,7 +14,7 @@ export const contactContent = {
         link: "https://maps.app.goo.gl/b8PFp8EMmNyrvR6k7",
         lines: [
           "Dr. Naveen Ellangala, 410, C Block,",
-          "Radiant Karel, Nayandahalli, Bengaluru – 560039"
+          "Radiant Karel, Nayandahalli, Bengaluru, Karnataka – 560039"
         ]
       },
       {

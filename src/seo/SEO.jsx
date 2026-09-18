@@ -1,6 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { siteConfig, getCanonicalUrl } from './siteConfig';
+import { siteConfig, getCanonicalUrl } from './siteConfig.js';
 
 export default function SEO({
   title,

@@ -23,6 +23,7 @@ import MeditationMusicPage from '../pages/MeditationMusicPage';
 import FreeResourcesPage from '../pages/FreeResourcesPage';
 import TrackOrderPage from '../pages/TrackOrderPage';
 import VerifyCertificate from '../pages/VerifyCertificate';
+import ResearchPage from '../pages/ResearchPage';
 
 // Layout & Context
 import MobileNav from '../components/layout/MobileNav';
@@ -98,8 +99,20 @@ export default function AppRouter() {
 
               <Route path="/about" element={<About />} />
               <Route path="/founder" element={<FounderPage />} />
-              <Route path="/about/founder" element={<FounderPage />} />
-              <Route path="/dr-naveen-ellangala" element={<FounderPage />} />
+              <Route path="/about/founder" element={<Navigate to="/founder" replace />} />
+              <Route path="/dr-naveen-ellangala" element={<Navigate to="/founder" replace />} />
+              <Route path="/mr-naveen-ellangala" element={<Navigate to="/founder" replace />} />
+              <Route path="/naveen-ellangala" element={<Navigate to="/founder" replace />} />
+              <Route path="/about/dr-naveen-ellangala" element={<Navigate to="/founder" replace />} />
+              <Route path="/about/naveen-ellangala" element={<Navigate to="/founder" replace />} />
+              <Route path="/our-team/mr-naveen-ellangala" element={<Navigate to="/founder" replace />} />
+              <Route path="/our-team/dr-naveen-ellangala" element={<Navigate to="/founder" replace />} />
+              <Route path="/our-team/naveen-ellangala" element={<Navigate to="/founder" replace />} />
+              <Route path="/our-team/*" element={<Navigate to="/founder" replace />} />
+              <Route path="/our-team" element={<Navigate to="/founder" replace />} />
+              <Route path="/team/mr-naveen-ellangala" element={<Navigate to="/founder" replace />} />
+              <Route path="/team/dr-naveen-ellangala" element={<Navigate to="/founder" replace />} />
+              <Route path="/team/naveen-ellangala" element={<Navigate to="/founder" replace />} />
               <Route path="/positive-workshops" element={<PositiveWorkshops />} />
               <Route path="/workshops" element={<PositiveWorkshops />} />
               <Route path="/positive-mentoring" element={<PositiveMentoring />} />
@@ -123,6 +136,10 @@ export default function AppRouter() {
               <Route path="/blog-details" element={<BlogDetails />} />
               <Route path="/blog-details/:id" element={<BlogDetails />} />
               <Route path="/insights/:slug" element={<BlogDetails />} />
+
+              <Route path="/research" element={<ResearchPage />} />
+              <Route path="/doctoral-research" element={<ResearchPage />} />
+              <Route path="/perma-purandaradasa-research" element={<ResearchPage />} />
 
               <Route path="/shop" element={<Shop />} />
               <Route path="/resources" element={<Shop />} />
