@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useEnrollModal } from '../../context/EnrollModalContext';
 import { enrollmentService } from '../../admin/services/enrollmentService';
+import { paymentService } from '../../admin/services/paymentService';
 
 const PROGRAM_OPTIONS = [
   "Positive Psychology for a Meaningful Life",
@@ -45,11 +46,15 @@ export default function EnrollModal() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
+  const [pendingId, setPendingId] = useState(null); // unpaid event registration awaiting a payment retry
+  const [paid, setPaid] = useState(false);
 
   // Auto-fill program field whenever modal opens or selectedProgram changes
   useEffect(() => {
     if (isOpen) {
       setIsSubmitted(false);
+      setPendingId(null);
+      setPaid(false);
       const strTitle = typeof selectedProgram === 'string' ? selectedProgram.trim() : '';
       if (strTitle) {
         const lower = strTitle.toLowerCase();
@@ -72,7 +77,7 @@ export default function EnrollModal() {
     setIsSubmitting(true);
     setSubmitError('');
     try {
-      await enrollmentService.addEnrollment({
+      const enrollment = pendingId ? { id: pendingId, paymentStatus: 'Pending' } : await enrollmentService.addEnrollment({
         fullName,
         phone,
         email,
@@ -83,6 +88,17 @@ export default function EnrollModal() {
         eventId: eventMeta?.eventId || null,
         eventTitle: eventMeta?.eventTitle || null
       });
+      // Paid events: server marks it 'Pending Payment'; confirm only after Razorpay verifies.
+      if (enrollment.paymentStatus === 'Pending') {
+        try {
+          await paymentService.payForEnrollment(enrollment.id);
+          setPaid(true);
+        } catch (err) {
+          setPendingId(enrollment.id);
+          setSubmitError(`${err.message} Your seat is not confirmed until payment completes — press the button to try again.`);
+          return;
+        }
+      }
       setIsSubmitted(true);
     } catch (err) {
       setSubmitError(err.message || 'Could not submit your enrollment. Please try again.');
@@ -98,6 +114,8 @@ export default function EnrollModal() {
     setAreaCity('');
     setMessage('');
     setIsSubmitted(false);
+    setPendingId(null);
+    setPaid(false);
     closeEnrollModal();
   };
 
@@ -192,10 +210,10 @@ export default function EnrollModal() {
               <i className="fas fa-check"></i>
             </div>
             <h3 style={{ fontSize: '26px', fontWeight: '800', color: '#111827', marginBottom: '12px' }}>
-              Enrollment Request Received!
+              {paid ? 'Payment Successful — Registration Confirmed!' : 'Enrollment Request Received!'}
             </h3>
             <p style={{ fontSize: '15px', color: '#4B5563', maxWidth: '480px', margin: '0 auto 26px', lineHeight: '1.6' }}>
-              Thank you, <strong>{fullName}</strong>. We have received your inquiry for <strong>{program}</strong>. Our academy advisors will contact you shortly at <strong>{phone}</strong>.
+              Thank you, <strong>{fullName}</strong>. {paid ? <>Your seat for <strong>{program}</strong> is confirmed. We'll share the event details at <strong>{phone}</strong>{email ? <> and <strong>{email}</strong></> : null}.</> : <>We have received your inquiry for <strong>{program}</strong>. Our academy advisors will contact you shortly at <strong>{phone}</strong>.</>}
             </p>
             <button
               type="button"
@@ -550,7 +568,7 @@ export default function EnrollModal() {
                     }
                   }}
                 >
-                  <span>{isSubmitting ? 'Submitting...' : 'Submit Enrollment Request'}</span>
+                  <span>{isSubmitting ? 'Submitting...' : pendingId ? 'Retry Payment' : 'Submit Enrollment Request'}</span>
                   <i className="fas fa-paper-plane" style={{ fontSize: '12px' }}></i>
                 </button>
               </form>
