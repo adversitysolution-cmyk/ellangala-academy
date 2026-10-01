@@ -22,6 +22,10 @@ export const enrollmentService = {
     return res.json();
   },
 
+  async deleteEnrollment(id) {
+    return adminFetch(`/admin/enrollments/${id}`, { method: 'DELETE' });
+  },
+
   async updateEnrollmentStatus(id, status, internalNotes) {
     return adminFetch(`/admin/enrollments/${id}`, {
       method: 'PATCH',

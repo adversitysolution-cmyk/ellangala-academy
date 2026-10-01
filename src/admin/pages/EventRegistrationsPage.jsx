@@ -5,7 +5,7 @@ import StatCard from '../components/StatCard';
 import StatusBadge from '../components/StatusBadge';
 import { eventService } from '../../features/events/services/eventService';
 import { enrollmentService } from '../services/enrollmentService';
-import { ArrowLeft, Download, Users, Calendar, MapPin, Search, CheckCircle } from 'lucide-react';
+import { ArrowLeft, Download, Users, Calendar, MapPin, Search, CheckCircle, Trash2 } from 'lucide-react';
 
 function formatDate(dateStr) {
   if (!dateStr) return '-';
@@ -100,6 +100,13 @@ export default function EventRegistrationsPage() {
 
   const handleStatusChange = async (regId, newStatus) => {
     await enrollmentService.updateEnrollmentStatus(regId, newStatus);
+    loadData();
+  };
+
+  const handleDelete = async (item) => {
+    const paidNote = item.paymentStatus === 'Paid' ? '\n\nThis person has PAID — refund separately in Razorpay.' : '';
+    if (!window.confirm(`Delete ${item.fullName}? This cannot be undone.${paidNote}`)) return;
+    await enrollmentService.deleteEnrollment(item.id);
     loadData();
   };
 
@@ -205,12 +212,13 @@ export default function EventRegistrationsPage() {
                   <th style={{ padding: '14px 16px' }}>Seats</th>
                   <th style={{ padding: '14px 16px' }}>Submitted Date</th>
                   <th style={{ padding: '14px 16px' }}>Status</th>
+                  <th style={{ padding: '14px 16px' }}></th>
                 </tr>
               </thead>
               <tbody>
                 {filtered.length === 0 ? (
                   <tr>
-                    <td colSpan="6" style={{ padding: '40px 20px', textAlign: 'center', color: '#64748B' }}>
+                    <td colSpan="7" style={{ padding: '40px 20px', textAlign: 'center', color: '#64748B' }}>
                       No registered attendees found for this event.
                     </td>
                   </tr>
@@ -260,6 +268,16 @@ export default function EventRegistrationsPage() {
                           <option value="Attended">Attended</option>
                           <option value="Cancelled">Cancelled</option>
                         </select>
+                      </td>
+                      <td style={{ padding: '16px' }}>
+                        <button
+                          type="button"
+                          title="Delete registration"
+                          onClick={() => handleDelete(item)}
+                          style={{ border: 'none', background: 'none', color: '#DC2626', cursor: 'pointer', padding: '4px' }}
+                        >
+                          <Trash2 size={17} />
+                        </button>
                       </td>
                     </tr>
                   ))

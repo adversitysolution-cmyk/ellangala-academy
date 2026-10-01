@@ -577,6 +577,11 @@ export async function markDbEnrollmentPaid(id, paymentRef) {
   return getDbEnrollmentById(id);
 }
 
+export async function deleteDbEnrollment(id) {
+  const [result] = await pool.query('DELETE FROM enrollments WHERE id = ?', [id]);
+  return result.affectedRows > 0;
+}
+
 export async function updateDbEnrollmentStatus(id, { status, internalNotes } = {}) {
   const existing = await getDbEnrollmentById(id);
   if (!existing) return null;

@@ -3,6 +3,7 @@ import {
   getDbEnrollmentById,
   createDbEnrollment,
   updateDbEnrollmentStatus,
+  deleteDbEnrollment,
   getDbEventById
 } from '../db/store.js';
 import { asyncRouter } from '../lib/asyncRouter.js';
@@ -68,6 +69,12 @@ router.patch('/admin/enrollments/:id', async (req, res) => {
   const updated = await updateDbEnrollmentStatus(req.params.id, req.body);
   if (!updated) return res.status(404).json({ error: 'Enrollment not found' });
   res.json(updated);
+});
+
+// Admin: DELETE /api/admin/enrollments/:id
+router.delete('/admin/enrollments/:id', async (req, res) => {
+  if (!(await deleteDbEnrollment(req.params.id))) return res.status(404).json({ error: 'Enrollment not found' });
+  res.json({ deleted: true });
 });
 
 export default router;

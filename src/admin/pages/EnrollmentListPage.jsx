@@ -5,7 +5,7 @@ import StatCard from '../components/StatCard';
 import StatusBadge from '../components/StatusBadge';
 import ActionMenu from '../components/ActionMenu';
 import { enrollmentService } from '../services/enrollmentService';
-import { ClipboardList, MessageSquare, Clock, CheckCircle, Search, Download, Eye, CheckSquare } from 'lucide-react';
+import { ClipboardList, MessageSquare, Clock, CheckCircle, Search, Download, Eye, CheckSquare, Trash2 } from 'lucide-react';
 
 function formatDate(dateStr) {
   if (!dateStr) return '-';
@@ -33,6 +33,13 @@ export default function EnrollmentListPage() {
 
   const handleStatusChange = async (id, newStatus) => {
     await enrollmentService.updateEnrollmentStatus(id, newStatus);
+    loadData();
+  };
+
+  const handleDelete = async (item) => {
+    const paidNote = item.paymentStatus === 'Paid' ? '\n\nThis person has PAID — refund separately in Razorpay.' : '';
+    if (!window.confirm(`Delete ${item.fullName}? This cannot be undone.${paidNote}`)) return;
+    await enrollmentService.deleteEnrollment(item.id);
     loadData();
   };
 
@@ -236,7 +243,8 @@ export default function EnrollmentListPage() {
                               { label: 'Mark Contacted', icon: CheckSquare, onClick: () => handleStatusChange(item.id, 'Contacted') },
                               { label: 'Mark Follow-Up', icon: Clock, onClick: () => handleStatusChange(item.id, 'Follow-Up') },
                               { label: 'Mark Enrolled', icon: CheckCircle, onClick: () => handleStatusChange(item.id, 'Enrolled') },
-                              { label: 'Close Enquiry', icon: CheckSquare, danger: true, onClick: () => handleStatusChange(item.id, 'Closed') }
+                              { label: 'Close Enquiry', icon: CheckSquare, danger: true, onClick: () => handleStatusChange(item.id, 'Closed') },
+                              { label: 'Delete', icon: Trash2, danger: true, onClick: () => handleDelete(item) }
                             ]}
                           />
                         </td>
