@@ -64,6 +64,9 @@ export async function ensureSchema() {
   for (const [table, ddl] of [
     ['orders', 'ADD COLUMN paymentRef VARCHAR(120)'],
     ['orders', 'ADD COLUMN couponCode VARCHAR(60)'],
+    ['enrollments', 'ADD COLUMN amount INT DEFAULT 0'],
+    ['enrollments', "ADD COLUMN paymentStatus VARCHAR(20) DEFAULT 'Free'"],
+    ['enrollments', 'ADD COLUMN paymentRef VARCHAR(120)'],
     ['products', 'ADD COLUMN stock INT DEFAULT NULL'],
     ['events', 'ADD COLUMN endDate VARCHAR(20)'],
     ['certificate_templates', "ADD COLUMN renderMode VARCHAR(20) DEFAULT 'classic'"],
@@ -423,6 +426,18 @@ export async function getDbOrderById(id) {
   return rows[0] ? rowToOrder(rows[0]) : null;
 }
 
+// Finds a still-unpaid order/enrollment by the Razorpay order id we stored (used by the webhook).
+// Once paid, paymentRef becomes "order|payment", so a repeat webhook finds nothing = no-op.
+export async function getDbOrderByPaymentRef(ref) {
+  const [rows] = await pool.query('SELECT * FROM orders WHERE paymentRef = ? LIMIT 1', [ref]);
+  return rows[0] ? rowToOrder(rows[0]) : null;
+}
+
+export async function getDbEnrollmentByPaymentRef(ref) {
+  const [rows] = await pool.query('SELECT * FROM enrollments WHERE paymentRef = ? LIMIT 1', [ref]);
+  return rows[0] ? rowToEnrollment(rows[0]) : null;
+}
+
 export async function createDbOrder(orderData) {
   const now = new Date().toISOString();
   const id = await nextId(pool, 'orders', 'ORD');
@@ -531,16 +546,35 @@ export async function createDbEnrollment(formData) {
     message: formData.message || '',
     status: formData.status || 'New',
     internalNotes: '',
+    amount: formData.amount || 0,
+    paymentStatus: formData.paymentStatus || 'Free',
+    paymentRef: null,
     submittedAt: now,
     updatedAt: now
   };
 
   await pool.query(
-    `INSERT INTO enrollments (id, fullName, phone, email, city, interest, type, sourceType, eventId, eventTitle, message, status, internalNotes, submittedAt, updatedAt)
-     VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
-    [record.id, record.fullName, record.phone, record.email, record.city, record.interest, record.type, record.sourceType, record.eventId, record.eventTitle, record.message, record.status, record.internalNotes, toMysqlDatetime(record.submittedAt), toMysqlDatetime(record.updatedAt)]
+    `INSERT INTO enrollments (id, fullName, phone, email, city, interest, type, sourceType, eventId, eventTitle, message, status, internalNotes, amount, paymentStatus, submittedAt, updatedAt)
+     VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+    [record.id, record.fullName, record.phone, record.email, record.city, record.interest, record.type, record.sourceType, record.eventId, record.eventTitle, record.message, record.status, record.internalNotes, record.amount, record.paymentStatus, toMysqlDatetime(record.submittedAt), toMysqlDatetime(record.updatedAt)]
   );
   return record;
+}
+
+export async function setDbEnrollmentPaymentRef(id, paymentRef) {
+  await pool.query(
+    'UPDATE enrollments SET paymentRef = ?, updatedAt = ? WHERE id = ?',
+    [paymentRef, toMysqlDatetime(new Date().toISOString()), id]
+  );
+}
+
+// Marks a paid-event registration paid + confirmed after its Razorpay signature is verified.
+export async function markDbEnrollmentPaid(id, paymentRef) {
+  await pool.query(
+    "UPDATE enrollments SET paymentStatus = 'Paid', status = 'Confirmed', paymentRef = ?, updatedAt = ? WHERE id = ?",
+    [paymentRef, toMysqlDatetime(new Date().toISOString()), id]
+  );
+  return getDbEnrollmentById(id);
 }
 
 export async function updateDbEnrollmentStatus(id, { status, internalNotes } = {}) {

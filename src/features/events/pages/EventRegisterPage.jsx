@@ -11,6 +11,7 @@ import ScrollToTop from '../../../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../../../hooks/useUterpyPlugins';
 import { eventService } from '../services/eventService';
 import { enrollmentService } from '../../../admin/services/enrollmentService';
+import { paymentService } from '../../../admin/services/paymentService';
 import { Calendar, Clock, MapPin, User, CheckCircle2, ArrowLeft, Users, Send } from 'lucide-react';
 
 function formatDate(dateStr) {
@@ -40,6 +41,7 @@ export default function EventRegisterPage() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
+  const [pendingId, setPendingId] = useState(null); // unpaid registration awaiting a payment retry
 
   useEffect(() => {
     setLoading(true);
@@ -83,7 +85,7 @@ export default function EventRegisterPage() {
     setSubmitError('');
 
     try {
-      await enrollmentService.addEnrollment({
+      const enrollment = pendingId ? { id: pendingId, paymentStatus: 'Pending' } : await enrollmentService.addEnrollment({
         fullName,
         phone,
         email,
@@ -96,6 +98,16 @@ export default function EventRegisterPage() {
         message: `[Attendees: ${attendeesCount}] ${message}`,
         status: 'Confirmed'
       });
+      // Paid events: server marks it 'Pending Payment'; confirm only after Razorpay verifies.
+      if (enrollment.paymentStatus === 'Pending') {
+        try {
+          await paymentService.payForEnrollment(enrollment.id);
+        } catch (err) {
+          setSubmitError(`${err.message} Your seat is not confirmed until payment completes — press the button to try again.`);
+          setPendingId(enrollment.id);
+          return;
+        }
+      }
       setIsSubmitted(true);
     } catch (err) {
       setSubmitError(err.message || 'Could not submit your registration. Please try again.');
@@ -389,7 +401,7 @@ export default function EventRegisterPage() {
                         }}
                       >
                         <Send size={18} />
-                        <span>{isSubmitting ? 'SUBMITTING...' : 'CONFIRM EVENT REGISTRATION'}</span>
+                        <span>{isSubmitting ? 'SUBMITTING...' : pendingId ? 'RETRY PAYMENT' : event.priceType === 'Paid' ? 'PROCEED TO PAYMENT' : 'CONFIRM EVENT REGISTRATION'}</span>
                       </button>
                     </form>
                   </div>

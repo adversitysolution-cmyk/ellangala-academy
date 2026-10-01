@@ -1,6 +1,10 @@
-import { getDbOrderById, setDbOrderPaymentRef, markDbOrderPaid } from '../db/store.js';
+import {
+  getDbOrderById, setDbOrderPaymentRef, markDbOrderPaid,
+  getDbOrderByPaymentRef, getDbEnrollmentByPaymentRef, getDbEnrollmentById, setDbEnrollmentPaymentRef, markDbEnrollmentPaid
+} from '../db/store.js';
+import { sendEventRegistrationEmail } from './enrollmentsApi.js';
 import { asyncRouter } from '../lib/asyncRouter.js';
-import { verifyPaymentSignature } from '../lib/razorpay.js';
+import { verifyPaymentSignature, verifyWebhookSignature } from '../lib/razorpay.js';
 
 const KEY_ID = process.env.RAZORPAY_KEY_ID;
 const KEY_SECRET = process.env.RAZORPAY_KEY_SECRET;
@@ -8,6 +12,37 @@ const KEY_SECRET = process.env.RAZORPAY_KEY_SECRET;
 function rzpAuthHeader() {
   return 'Basic ' + Buffer.from(`${KEY_ID}:${KEY_SECRET}`).toString('base64');
 }
+
+// What can be paid for: book orders, or paid-event registrations (enrollments).
+const targets = {
+  order: {
+    idField: 'orderId',
+    label: 'Order',
+    get: getDbOrderById,
+    amount: (o) => Number(o.totalAmount),
+    isPaid: (o) => o.paymentStatus === 'Paid',
+    setRef: setDbOrderPaymentRef,
+    markPaid: markDbOrderPaid,
+    prefill: (o) => ({ customerName: o.customerName, email: o.email, phone: o.phone })
+  },
+  enrollment: {
+    idField: 'enrollmentId',
+    label: 'Registration',
+    get: getDbEnrollmentById,
+    amount: (e) => Number(e.amount),
+    isPaid: (e) => e.paymentStatus === 'Paid',
+    setRef: setDbEnrollmentPaymentRef,
+    markPaid: async (id, ref) => {
+      const paid = await markDbEnrollmentPaid(id, ref);
+      sendEventRegistrationEmail(paid).catch(err =>
+        console.error('Failed to send event registration email:', err.message)
+      );
+      return paid;
+    },
+    prefill: (e) => ({ customerName: e.fullName, email: e.email, phone: e.phone })
+  }
+};
+const pickTarget = (body) => (body?.enrollmentId ? 'enrollment' : 'order');
 
 const router = asyncRouter();
 
@@ -19,15 +54,16 @@ router.post('/payments/razorpay/order', async (req, res) => {
     return res.status(503).json({ error: 'Online payment is not configured.' });
   }
 
-  const order = await getDbOrderById((req.body?.orderId || '').trim());
-  if (!order) return res.status(404).json({ error: 'Order not found.' });
-  if (order.paymentStatus === 'Paid') {
-    return res.status(409).json({ error: 'This order is already paid.' });
+  const t = targets[pickTarget(req.body)];
+  const order = await t.get(String(req.body?.[t.idField] || '').trim());
+  if (!order) return res.status(404).json({ error: `${t.label} not found.` });
+  if (t.isPaid(order)) {
+    return res.status(409).json({ error: `This ${t.label.toLowerCase()} is already paid.` });
   }
 
-  const amountPaise = Math.round(Number(order.totalAmount) * 100);
+  const amountPaise = Math.round(t.amount(order) * 100);
   if (!amountPaise || amountPaise < 100) {
-    return res.status(400).json({ error: 'Order total is too low for online payment.' });
+    return res.status(400).json({ error: 'Amount is too low for online payment.' });
   }
 
   const rzpRes = await fetch('https://api.razorpay.com/v1/orders', {
@@ -41,7 +77,7 @@ router.post('/payments/razorpay/order', async (req, res) => {
     return res.status(502).json({ error: 'Could not start the payment. Please try again.' });
   }
 
-  await setDbOrderPaymentRef(order.id, rzpOrder.id);
+  await t.setRef(order.id, rzpOrder.id);
 
   res.json({
     keyId: KEY_ID,
@@ -49,22 +85,22 @@ router.post('/payments/razorpay/order', async (req, res) => {
     amount: amountPaise,
     currency: 'INR',
     orderId: order.id,
-    customerName: order.customerName,
-    email: order.email,
-    phone: order.phone
+    ...t.prefill(order)
   });
 });
 
 // Public: POST /api/payments/razorpay/verify
 // Body: { orderId, razorpay_order_id, razorpay_payment_id, razorpay_signature }
 router.post('/payments/razorpay/verify', async (req, res) => {
-  const { orderId, razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body || {};
+  const t = targets[pickTarget(req.body)];
+  const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body || {};
+  const orderId = req.body?.[t.idField];
   if (!orderId || !razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
     return res.status(400).json({ error: 'Missing payment confirmation fields.' });
   }
 
-  const order = await getDbOrderById(String(orderId).trim());
-  if (!order) return res.status(404).json({ error: 'Order not found.' });
+  const order = await t.get(String(orderId).trim());
+  if (!order) return res.status(404).json({ error: `${t.label} not found.` });
 
   // The Razorpay order must be the one we opened checkout with for THIS order.
   if (order.paymentRef !== razorpay_order_id) {
@@ -81,8 +117,32 @@ router.post('/payments/razorpay/verify', async (req, res) => {
     return res.status(400).json({ error: 'Payment signature verification failed.' });
   }
 
-  const updated = await markDbOrderPaid(order.id, `${razorpay_order_id}|${razorpay_payment_id}`);
+  const updated = await t.markPaid(order.id, `${razorpay_order_id}|${razorpay_payment_id}`);
   res.json({ verified: true, order: updated });
+});
+
+// Public: POST /api/payments/razorpay/webhook
+// Safety net for buyers who pay but never return to the site (tab closed, network drop).
+router.post('/payments/razorpay/webhook', async (req, res) => {
+  const secret = process.env.RAZORPAY_WEBHOOK_SECRET;
+  if (!secret) return res.status(503).json({ error: 'Webhook not configured.' });
+  const ok = verifyWebhookSignature({
+    rawBody: req.rawBody,
+    signature: req.get('X-Razorpay-Signature'),
+    secret
+  });
+  if (!ok) return res.status(400).json({ error: 'Invalid signature.' });
+
+  const { event, payload } = req.body || {};
+  const payment = payload?.payment?.entity;
+  if ((event === 'payment.captured' || event === 'order.paid') && payment?.order_id) {
+    const ref = `${payment.order_id}|${payment.id}`;
+    const order = await getDbOrderByPaymentRef(payment.order_id);
+    if (order && order.paymentStatus !== 'Paid') await markDbOrderPaid(order.id, ref);
+    const enr = await getDbEnrollmentByPaymentRef(payment.order_id);
+    if (enr && enr.paymentStatus !== 'Paid') await targets.enrollment.markPaid(enr.id, ref);
+  }
+  res.json({ ok: true }); // always 200 for events we ignore, so Razorpay doesn't retry
 });
 
 export default router;

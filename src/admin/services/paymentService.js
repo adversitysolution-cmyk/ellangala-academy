@@ -34,7 +34,16 @@ export const paymentService = {
   // payment is verified server-side. Rejects if the user closes the modal or
   // verification fails.
   async payForOrder(orderId) {
-    const rzp = await postJson('/api/payments/razorpay/order', { orderId });
+    return this.pay({ orderId });
+  },
+
+  // Same flow for a paid-event registration.
+  async payForEnrollment(enrollmentId) {
+    return this.pay({ enrollmentId });
+  },
+
+  async pay(ref) {
+    const rzp = await postJson('/api/payments/razorpay/order', ref);
     await loadRazorpayScript();
 
     return new Promise((resolve, reject) => {
@@ -44,14 +53,14 @@ export const paymentService = {
         amount: rzp.amount,
         currency: rzp.currency,
         name: 'Ellangala’s Academy',
-        description: `Order ${rzp.orderId}`,
+        description: `${ref.enrollmentId ? 'Registration' : 'Order'} ${rzp.orderId}`,
         prefill: { name: rzp.customerName, email: rzp.email, contact: rzp.phone },
         theme: { color: '#CA8A38' },
         modal: { ondismiss: () => reject(new Error('Payment was cancelled.')) },
         handler: async (response) => {
           try {
             const verified = await postJson('/api/payments/razorpay/verify', {
-              orderId: rzp.orderId,
+              ...ref,
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature

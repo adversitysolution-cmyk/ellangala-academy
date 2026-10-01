@@ -254,6 +254,7 @@ export default function EventRegistrationsPage() {
                             cursor: 'pointer'
                           }}
                         >
+                          <option value="Pending Payment">Pending Payment</option>
                           <option value="Confirmed">Confirmed</option>
                           <option value="Contacted">Contacted</option>
                           <option value="Attended">Attended</option>

@@ -28,7 +28,8 @@ const app = express();
 const PORT = process.env.PORT || 8080;
 
 app.use(cors());
-app.use(express.json());
+// Keep the raw body: the Razorpay webhook signature is computed over it.
+app.use(express.json({ verify: (req, _res, buf) => { req.rawBody = buf; } }));
 
 // 1. API Endpoints
 app.use('/api', adminAuthApi); // POST /api/admin/login (public)

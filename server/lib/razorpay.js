@@ -13,3 +13,13 @@ export function verifyPaymentSignature({ razorpayOrderId, razorpayPaymentId, sig
     crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(signature))
   );
 }
+
+// Webhook signature: HMAC-SHA256 of the raw request body with the webhook secret.
+export function verifyWebhookSignature({ rawBody, signature, secret }) {
+  if (!rawBody || !signature || !secret) return false;
+  const expected = crypto.createHmac('sha256', secret).update(rawBody).digest('hex');
+  return (
+    expected.length === signature.length &&
+    crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(signature))
+  );
+}
