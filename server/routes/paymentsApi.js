@@ -102,11 +102,6 @@ router.post('/payments/razorpay/verify', async (req, res) => {
   const order = await t.get(String(orderId).trim());
   if (!order) return res.status(404).json({ error: `${t.label} not found.` });
 
-  // The Razorpay order must be the one we opened checkout with for THIS order.
-  if (order.paymentRef !== razorpay_order_id) {
-    return res.status(400).json({ error: 'Payment does not match this order.' });
-  }
-
   const sigOk = verifyPaymentSignature({
     razorpayOrderId: razorpay_order_id,
     razorpayPaymentId: razorpay_payment_id,
@@ -115,6 +110,16 @@ router.post('/payments/razorpay/verify', async (req, res) => {
   });
   if (!sigOk) {
     return res.status(400).json({ error: 'Payment signature verification failed.' });
+  }
+
+  // The webhook may have marked it paid first (paymentRef is then "order|payment"): that's success.
+  if (t.isPaid(order) && String(order.paymentRef).startsWith(`${razorpay_order_id}|`)) {
+    return res.json({ verified: true, order });
+  }
+
+  // The Razorpay order must be the one we opened checkout with for THIS order.
+  if (order.paymentRef !== razorpay_order_id) {
+    return res.status(400).json({ error: 'Payment does not match this order.' });
   }
 
   const updated = await t.markPaid(order.id, `${razorpay_order_id}|${razorpay_payment_id}`);
