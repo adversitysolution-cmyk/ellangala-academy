@@ -265,7 +265,7 @@ export async function saveDbEvent(eventData) {
     existing = rows[0] || null;
   }
 
-  const baseSlug = slugify(eventData.slug || eventData.title || '') || 'event';
+  const baseSlug = slugify(eventData.slug || '') || slugify(eventData.title || '') || 'event';
   const slug = await uniqueSlug(conn, 'events', baseSlug, existing ? existing.id : null);
 
   if (existing) {

@@ -8,6 +8,7 @@ export default function EventForm({ initialData, onSubmit, isEditing = false }) 
   const navigate = useNavigate();
 
   const [title, setTitle] = useState(initialData?.title || '');
+  const [slug, setSlug] = useState(initialData?.slug || '');
   const [subtitle, setSubtitle] = useState(initialData?.subtitle || initialData?.series || '');
   const [language, setLanguage] = useState(initialData?.language || '');
   const [duration, setDuration] = useState(initialData?.duration || '');
@@ -117,6 +118,7 @@ export default function EventForm({ initialData, onSubmit, isEditing = false }) 
     const payload = {
       ...(initialData || {}),
       title,
+      slug: slug.trim() || undefined,
       subtitle: subtitle || null,
       series: subtitle || initialData?.series || null,
       language: language || null,
@@ -248,6 +250,12 @@ export default function EventForm({ initialData, onSubmit, isEditing = false }) 
                   onChange={(e) => setTitle(e.target.value)}
                   className="admin-input"
                 />
+              </div>
+            </div>
+            <div className="col-md-12">
+              <div className="admin-form-group">
+                <label className="admin-label">URL Slug (English letters, numbers, dashes; leave blank to auto-generate)</label>
+                <input type="text" placeholder="e.g. how-to-be-happy" value={slug} onChange={(e) => setSlug(e.target.value)} className="admin-input" />
               </div>
             </div>
             <div className="col-md-4">
@@ -678,7 +686,7 @@ export default function EventForm({ initialData, onSubmit, isEditing = false }) 
                 Google Search Preview
               </div>
               <div style={{ fontSize: '14px', color: '#202124' }}>
-                https://ellangala.com › events › {title ? title.toLowerCase().replace(/[^a-z0-9 -]/g, '').replace(/\s+/g, '-') : 'event-slug'}
+                https://ellangala.com › events › {(slug || title).toLowerCase().replace(/[^a-z0-9 -]/g, '').replace(/\s+/g, '-') || 'event'}
               </div>
               <div style={{ fontSize: '18px', color: '#1A0DAB', fontWeight: '500', margin: '4px 0', textDecoration: 'underline' }}>
                 {seoTitle.trim() || (title ? `${title} | Ellangala’s Academy` : 'Event Title | Ellangala’s Academy')}
