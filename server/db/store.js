@@ -19,13 +19,14 @@ function toMysqlDatetime(iso) {
   return new Date(iso || Date.now()).toISOString().slice(0, 19).replace('T', ' ');
 }
 
+// MAX (not COUNT) so ids stay unique after rows are deleted.
 async function nextId(conn, table, prefix) {
   const year = new Date().getFullYear();
   const [rows] = await conn.query(
-    `SELECT COUNT(*) AS n FROM ${table} WHERE id LIKE ?`,
+    `SELECT MAX(CAST(SUBSTRING_INDEX(id, '-', -1) AS UNSIGNED)) AS n FROM ${table} WHERE id LIKE ?`,
     [`${prefix}-${year}-%`]
   );
-  return `${prefix}-${year}-${String(rows[0].n + 1).padStart(4, '0')}`;
+  return `${prefix}-${year}-${String((rows[0].n || 0) + 1).padStart(4, '0')}`;
 }
 
 function slugify(text) {
