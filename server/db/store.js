@@ -34,7 +34,8 @@ function slugify(text) {
     .trim()
     .replace(/[^a-z0-9 -]/g, '')
     .replace(/\s+/g, '-')
-    .replace(/-+/g, '-');
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '');
 }
 
 async function uniqueSlug(conn, table, baseSlug, excludeId = null) {
@@ -69,6 +70,8 @@ export async function ensureSchema() {
     ['enrollments', 'ADD COLUMN paymentRef VARCHAR(120)'],
     ['products', 'ADD COLUMN stock INT DEFAULT NULL'],
     ['events', 'ADD COLUMN endDate VARCHAR(20)'],
+    ['events', 'ADD COLUMN duration VARCHAR(60)'],
+    ['events', 'ADD COLUMN extra JSON'],
     ['certificate_templates', "ADD COLUMN renderMode VARCHAR(20) DEFAULT 'classic'"],
     ['certificate_templates', 'ADD COLUMN overlayConfig JSON']
   ]) {
@@ -185,9 +188,15 @@ export async function getStore() {
   }
 }
 
+// Fields stored in their own column; anything else the admin form sends goes into the `extra` JSON column.
+const EVENT_COLS = new Set(['pk','id','slug','title','category','shortDescription','description','image','date','endDate','duration','startTime','endTime','timezone','mode','venue','address','city','googleMeetLink','meetingLink','organizer','speaker','registrationOpen','capacity','availableSeats','priceType','price','razorpayLink','paymentLink','status','featured','seo','extra','createdAt','updatedAt','publishedAt']);
+const eventExtra = (d) => Object.fromEntries(Object.entries(d).filter(([k]) => !EVENT_COLS.has(k)));
+
 function rowToEvent(row) {
+  const { extra, ...rest } = row;
   return {
-    ...row,
+    ...(extra || {}),
+    ...rest,
     registrationOpen: toBool(row.registrationOpen),
     featured: toBool(row.featured),
     createdAt: toIso(row.createdAt),
@@ -255,7 +264,7 @@ export async function saveDbEvent(eventData) {
     existing = rows[0] || null;
   }
 
-  const baseSlug = slugify(eventData.slug || eventData.title || 'event');
+  const baseSlug = slugify(eventData.slug || eventData.title || '') || 'event';
   const slug = await uniqueSlug(conn, 'events', baseSlug, existing ? existing.id : null);
 
   if (existing) {
@@ -267,8 +276,8 @@ export async function saveDbEvent(eventData) {
       publishedAt: eventData.status === 'published' && existing.status !== 'published' ? now : (toIso(existing.publishedAt) || now)
     };
     await conn.query(
-      `UPDATE events SET slug=?, title=?, category=?, shortDescription=?, description=?, image=?, date=?, endDate=?, startTime=?, endTime=?, timezone=?, mode=?, venue=?, address=?, city=?, googleMeetLink=?, meetingLink=?, organizer=?, speaker=?, registrationOpen=?, capacity=?, availableSeats=?, priceType=?, price=?, razorpayLink=?, paymentLink=?, status=?, featured=?, seo=?, updatedAt=?, publishedAt=? WHERE id=?`,
-      [merged.slug, merged.title, merged.category, merged.shortDescription, merged.description, merged.image, merged.date, merged.endDate || null, merged.startTime, merged.endTime, merged.timezone, merged.mode, merged.venue, merged.address, merged.city, merged.googleMeetLink, merged.meetingLink, merged.organizer, merged.speaker, Boolean(merged.registrationOpen), merged.capacity ?? null, merged.availableSeats ?? null, merged.priceType, merged.price, merged.razorpayLink, merged.paymentLink, merged.status, Boolean(merged.featured), JSON.stringify(merged.seo || {}), toMysqlDatetime(merged.updatedAt), merged.publishedAt ? toMysqlDatetime(merged.publishedAt) : null, existing.id]
+      `UPDATE events SET slug=?, title=?, category=?, shortDescription=?, description=?, image=?, date=?, endDate=?, duration=?, startTime=?, endTime=?, timezone=?, mode=?, venue=?, address=?, city=?, googleMeetLink=?, meetingLink=?, organizer=?, speaker=?, registrationOpen=?, capacity=?, availableSeats=?, priceType=?, price=?, razorpayLink=?, paymentLink=?, status=?, featured=?, seo=?, extra=?, updatedAt=?, publishedAt=? WHERE id=?`,
+      [merged.slug, merged.title, merged.category, merged.shortDescription, merged.description, merged.image, merged.date, merged.endDate || null, merged.duration || null, merged.startTime, merged.endTime, merged.timezone, merged.mode, merged.venue, merged.address, merged.city, merged.googleMeetLink, merged.meetingLink, merged.organizer, merged.speaker, Boolean(merged.registrationOpen), merged.capacity ?? null, merged.availableSeats ?? null, merged.priceType, merged.price, merged.razorpayLink, merged.paymentLink, merged.status, Boolean(merged.featured), JSON.stringify(merged.seo || {}), JSON.stringify(eventExtra(merged)), toMysqlDatetime(merged.updatedAt), merged.publishedAt ? toMysqlDatetime(merged.publishedAt) : null, existing.id]
     );
     invalidateSitemapCache();
     return merged;
@@ -276,6 +285,7 @@ export async function saveDbEvent(eventData) {
 
   const id = eventData.id || await nextId(conn, 'events', 'EVT');
   const record = {
+    ...eventExtra(eventData),
     id,
     slug,
     title: eventData.title || 'Untitled Event',
@@ -285,6 +295,7 @@ export async function saveDbEvent(eventData) {
     image: eventData.image || '/assets/images/blog/blog-positive-psychology.png',
     date: eventData.date || new Date().toISOString().split('T')[0],
     endDate: eventData.endDate || null,
+    duration: eventData.duration || null,
     startTime: eventData.startTime || '10:00',
     endTime: eventData.endTime || '12:00',
     timezone: eventData.timezone || 'Asia/Kolkata',
@@ -312,9 +323,9 @@ export async function saveDbEvent(eventData) {
   };
 
   await conn.query(
-    `INSERT INTO events (id, slug, title, category, shortDescription, description, image, date, endDate, startTime, endTime, timezone, mode, venue, address, city, googleMeetLink, meetingLink, organizer, speaker, registrationOpen, capacity, availableSeats, priceType, price, razorpayLink, paymentLink, status, featured, seo, createdAt, updatedAt, publishedAt)
-     VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
-    [record.id, record.slug, record.title, record.category, record.shortDescription, record.description, record.image, record.date, record.endDate, record.startTime, record.endTime, record.timezone, record.mode, record.venue, record.address, record.city, record.googleMeetLink, record.meetingLink, record.organizer, record.speaker, record.registrationOpen, record.capacity, record.availableSeats, record.priceType, record.price, record.razorpayLink, record.paymentLink, record.status, record.featured, JSON.stringify(record.seo), toMysqlDatetime(record.createdAt), toMysqlDatetime(record.updatedAt), record.publishedAt ? toMysqlDatetime(record.publishedAt) : null]
+    `INSERT INTO events (id, slug, title, category, shortDescription, description, image, date, endDate, duration, startTime, endTime, timezone, mode, venue, address, city, googleMeetLink, meetingLink, organizer, speaker, registrationOpen, capacity, availableSeats, priceType, price, razorpayLink, paymentLink, status, featured, seo, extra, createdAt, updatedAt, publishedAt)
+     VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+    [record.id, record.slug, record.title, record.category, record.shortDescription, record.description, record.image, record.date, record.endDate, record.duration, record.startTime, record.endTime, record.timezone, record.mode, record.venue, record.address, record.city, record.googleMeetLink, record.meetingLink, record.organizer, record.speaker, record.registrationOpen, record.capacity, record.availableSeats, record.priceType, record.price, record.razorpayLink, record.paymentLink, record.status, record.featured, JSON.stringify(record.seo), JSON.stringify(eventExtra(eventData)), toMysqlDatetime(record.createdAt), toMysqlDatetime(record.updatedAt), record.publishedAt ? toMysqlDatetime(record.publishedAt) : null]
   );
   invalidateSitemapCache();
   return record;
@@ -370,7 +381,7 @@ export async function saveDbBlog(blogData) {
     };
     await conn.query(
       `UPDATE blogs SET slug=?, title=?, excerpt=?, content=?, category=?, image=?, author=?, status=?, readTime=?, details=?, seo=?, updatedAt=?, publishedAt=? WHERE id=?`,
-      [merged.slug, merged.title, merged.excerpt, merged.content, merged.category, merged.image, merged.author, merged.status, merged.readTime, JSON.stringify(merged.details || null), JSON.stringify(merged.seo || {}), toMysqlDatetime(merged.updatedAt), merged.publishedAt ? toMysqlDatetime(merged.publishedAt) : null, existing.id]
+      [merged.slug, merged.title, merged.excerpt, merged.content, merged.category, merged.image, merged.author, merged.status, merged.readTime, JSON.stringify(merged.details || null), JSON.stringify(merged.seo || {}), JSON.stringify(eventExtra(merged)), toMysqlDatetime(merged.updatedAt), merged.publishedAt ? toMysqlDatetime(merged.publishedAt) : null, existing.id]
     );
     return merged;
   }
@@ -405,7 +416,7 @@ export async function saveDbBlog(blogData) {
   await conn.query(
     `INSERT INTO blogs (id, slug, title, excerpt, content, category, image, author, status, readTime, details, seo, createdAt, updatedAt, publishedAt)
      VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
-    [record.id, record.slug, record.title, record.excerpt, record.content, record.category, record.image, record.author, record.status, record.readTime, JSON.stringify(record.details), JSON.stringify(record.seo), toMysqlDatetime(record.createdAt), toMysqlDatetime(record.updatedAt), record.publishedAt ? toMysqlDatetime(record.publishedAt) : null]
+    [record.id, record.slug, record.title, record.excerpt, record.content, record.category, record.image, record.author, record.status, record.readTime, JSON.stringify(record.details), JSON.stringify(record.seo), JSON.stringify(eventExtra(eventData)), toMysqlDatetime(record.createdAt), toMysqlDatetime(record.updatedAt), record.publishedAt ? toMysqlDatetime(record.publishedAt) : null]
   );
   return record;
 }

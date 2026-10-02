@@ -60,6 +60,16 @@ export default function EventForm({ initialData, onSubmit, isEditing = false }) 
     initialData?.highlights || ['Practical strategies for positive growth', 'Interactive Q&A session']
   );
 
+  // One item per line; FAQs are "Question | Answer" per line.
+  const toLines = (a) => (Array.isArray(a) ? a.join('\n') : '');
+  const fromLines = (t) => t.split('\n').map((l) => l.trim()).filter(Boolean);
+  const [whatYouWillLearn, setWhatYouWillLearn] = useState(toLines(initialData?.whatYouWillLearn));
+  const [expectedOutcomes, setExpectedOutcomes] = useState(toLines(initialData?.expectedOutcomes));
+  const [faqs, setFaqs] = useState((initialData?.faqs || []).map((f) => `${f.question} | ${f.answer}`).join('\n'));
+  const [quote, setQuote] = useState(initialData?.quote || '');
+  const [timeDisplay, setTimeDisplay] = useState(initialData?.timeDisplay || '');
+  const [registrationNote, setRegistrationNote] = useState(initialData?.registrationNote || '');
+
   const [registrationOpen, setRegistrationOpen] = useState(
     initialData?.registrationOpen !== undefined ? initialData.registrationOpen : true
   );
@@ -132,6 +142,15 @@ export default function EventForm({ initialData, onSubmit, isEditing = false }) 
       speaker,
       whoIsItFor,
       highlights,
+      whatYouWillLearn: fromLines(whatYouWillLearn),
+      expectedOutcomes: fromLines(expectedOutcomes),
+      faqs: fromLines(faqs).map((l) => {
+        const [question, ...rest] = l.split('|');
+        return { question: question.trim(), answer: rest.join('|').trim() };
+      }).filter((f) => f.question && f.answer),
+      quote: quote || null,
+      timeDisplay: timeDisplay || null,
+      registrationNote: registrationNote || null,
       registrationOpen,
       capacity: capacity ? Number(capacity) : null,
       priceType,
@@ -284,6 +303,31 @@ export default function EventForm({ initialData, onSubmit, isEditing = false }) 
                 />
               </div>
             </div>
+          </div>
+
+          <div className="admin-form-group">
+            <label className="admin-label">Time Display (optional, overrides start–end time on the page)</label>
+            <input type="text" placeholder="e.g. 6:00 AM – 7:00 AM IST" value={timeDisplay} onChange={(e) => setTimeDisplay(e.target.value)} className="admin-input" />
+          </div>
+          <div className="admin-form-group">
+            <label className="admin-label">What You Will Learn (one per line)</label>
+            <textarea rows={5} value={whatYouWillLearn} onChange={(e) => setWhatYouWillLearn(e.target.value)} className="admin-input" />
+          </div>
+          <div className="admin-form-group">
+            <label className="admin-label">Expected Outcomes (one per line)</label>
+            <textarea rows={5} value={expectedOutcomes} onChange={(e) => setExpectedOutcomes(e.target.value)} className="admin-input" />
+          </div>
+          <div className="admin-form-group">
+            <label className="admin-label">Quote</label>
+            <textarea rows={3} value={quote} onChange={(e) => setQuote(e.target.value)} className="admin-input" />
+          </div>
+          <div className="admin-form-group">
+            <label className="admin-label">FAQs (one per line: Question | Answer)</label>
+            <textarea rows={5} value={faqs} onChange={(e) => setFaqs(e.target.value)} className="admin-input" />
+          </div>
+          <div className="admin-form-group">
+            <label className="admin-label">Registration Note (shown under the register button)</label>
+            <input type="text" value={registrationNote} onChange={(e) => setRegistrationNote(e.target.value)} className="admin-input" />
           </div>
 
           <div className="admin-form-group">
