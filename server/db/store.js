@@ -32,8 +32,8 @@ async function nextId(conn, table, prefix) {
 function slugify(text) {
   return (text || '')
     .toLowerCase()
-    .trim()
     .replace(/[^a-z0-9 -]/g, '')
+    .trim()
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-')
     .replace(/^-|-$/g, '');
