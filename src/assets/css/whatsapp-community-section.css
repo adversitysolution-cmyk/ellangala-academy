@@ -1,0 +1,391 @@
+/* ==========================================================================
+   WhatsApp Community Section (Positive MindGym)
+   ========================================================================== */
+
+.pmg-community-section {
+  position: relative;
+  background: linear-gradient(135deg, #f4faf6 0%, #ffffff 45%, #eff9f4 100%);
+  padding: 38px 0;
+  overflow: hidden;
+  border-top: 1px solid #e1efe6;
+  border-bottom: 1px solid #e1efe6;
+  font-family: inherit;
+  z-index: 1;
+}
+
+/* Organic background blur accents */
+.pmg-community-bg-shape-left {
+  position: absolute;
+  bottom: -40px;
+  left: -40px;
+  width: 320px;
+  height: 260px;
+  background: radial-gradient(circle at bottom left, rgba(16, 185, 129, 0.16) 0%, rgba(5, 150, 105, 0.06) 55%, transparent 75%);
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(12px);
+}
+
+.pmg-community-bg-shape-right {
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 360px;
+  height: 300px;
+  background: radial-gradient(circle at top right, rgba(52, 211, 153, 0.18) 0%, rgba(16, 185, 129, 0.06) 55%, transparent 75%);
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(14px);
+}
+
+/* Decorative subtle wave SVGs in background */
+.pmg-community-wave-svg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.35;
+  z-index: 0;
+}
+
+/* Main Container - 1cm padding towards outer borders */
+.pmg-community-container {
+  width: 100%;
+  max-width: 1680px;
+  margin: 0 auto;
+  padding-left: 1cm;
+  padding-right: 1cm;
+  position: relative;
+  z-index: 2;
+  box-sizing: border-box;
+}
+
+/* 3-Column Layout: Left (1fr) | Center (auto) | Right (1fr) guarantees exact mathematical center */
+.pmg-community-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 20px;
+}
+
+/* 1. Left Column: Logo moved towards border (1cm) + 30% larger */
+.pmg-community-col-left {
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 24px;
+  min-width: 0;
+}
+
+.pmg-community-logo-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+/* Logo: increased by 30% from 105px to 138px */
+.pmg-community-logo-img {
+  max-height: 138px;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  display: block;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pmg-community-logo-wrap:hover .pmg-community-logo-img {
+  transform: scale(1.025);
+}
+
+/* Vertical divider beside logo */
+.pmg-community-divider {
+  width: 1.5px;
+  height: 125px;
+  background: #d6e5dd;
+  flex-shrink: 0;
+}
+
+/* 2. Middle Column: Placed in EXACT middle with all texts and button centered */
+.pmg-community-col-middle {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 16px;
+  max-width: 660px;
+}
+
+.pmg-community-title {
+  font-size: 33px;
+  font-weight: 800;
+  line-height: 1.2;
+  color: #141f1c;
+  margin: 0 0 6px 0;
+  letter-spacing: -0.4px;
+  text-align: center;
+}
+
+.pmg-community-title-highlight {
+  color: #0d8a59;
+}
+
+.pmg-community-subtitle {
+  font-size: 15px;
+  font-weight: 500;
+  color: #556760;
+  margin: 0 0 18px 0;
+  line-height: 1.45;
+  text-align: center;
+}
+
+/* Feature Badges - centered */
+.pmg-community-features {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 24px;
+  width: 100%;
+}
+
+.pmg-community-feature-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 112px;
+  cursor: default;
+  transition: transform 0.25s ease;
+}
+
+.pmg-community-feature-item:hover {
+  transform: translateY(-3px);
+}
+
+.pmg-community-icon-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #e6f6ee;
+  border: 1.5px solid #c9ecda;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0d8a59;
+  box-shadow: 0 3px 8px rgba(13, 138, 89, 0.08);
+  margin-bottom: 8px;
+  transition: all 0.25s ease;
+}
+
+.pmg-community-feature-item:hover .pmg-community-icon-circle {
+  background: #0d8a59;
+  color: #ffffff;
+  border-color: #0d8a59;
+  box-shadow: 0 6px 16px rgba(13, 138, 89, 0.25);
+  transform: scale(1.05);
+}
+
+.pmg-community-feature-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #21322d;
+  line-height: 1.25;
+  margin: 0;
+  text-align: center;
+}
+
+/* Join Button - in exact middle */
+.pmg-community-btn-wrap {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.pmg-community-join-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #0d8a59 0%, #087047 100%);
+  color: #ffffff !important;
+  font-size: 15.5px;
+  font-weight: 700;
+  padding: 11px 28px;
+  border-radius: 50px;
+  text-decoration: none !important;
+  box-shadow: 0 6px 18px rgba(13, 138, 89, 0.28);
+  transition: all 0.28s ease;
+  letter-spacing: 0.2px;
+}
+
+.pmg-community-join-btn:hover {
+  background: linear-gradient(135deg, #0fa369 0%, #0a8253 100%);
+  color: #ffffff !important;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(13, 138, 89, 0.38);
+}
+
+.pmg-community-join-btn svg {
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+}
+
+.pmg-community-join-btn:hover .pmg-btn-arrow {
+  transform: translateX(4px);
+}
+
+/* 3. Right Column: Scanner image moved towards border (1cm) + 20% larger */
+.pmg-community-col-right {
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+.pmg-community-banner-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  text-decoration: none;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.pmg-community-banner-wrap:hover {
+  transform: translateY(-3px);
+}
+
+/* Scanner Image: increased by 20% from 185px to 225px */
+.pmg-community-banner-img {
+  max-height: 225px;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 10px 22px rgba(13, 138, 89, 0.12));
+  transition: filter 0.3s ease;
+}
+
+.pmg-community-banner-wrap:hover .pmg-community-banner-img {
+  filter: drop-shadow(0 14px 30px rgba(13, 138, 89, 0.22));
+}
+
+/* ==========================================================================
+   Responsive Breakpoints
+   ========================================================================== */
+
+@media (max-width: 1400px) {
+  .pmg-community-logo-img {
+    max-height: 120px;
+  }
+  .pmg-community-banner-img {
+    max-height: 195px;
+  }
+  .pmg-community-title {
+    font-size: 30px;
+  }
+  .pmg-community-features {
+    gap: 18px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .pmg-community-title {
+    font-size: 26px;
+  }
+  .pmg-community-banner-img {
+    max-height: 175px;
+  }
+  .pmg-community-logo-img {
+    max-height: 105px;
+  }
+  .pmg-community-features {
+    gap: 15px;
+  }
+  .pmg-community-icon-circle {
+    width: 44px;
+    height: 44px;
+  }
+  .pmg-community-feature-label {
+    font-size: 12px;
+  }
+  .pmg-community-join-btn {
+    font-size: 14.5px;
+    padding: 10px 24px;
+  }
+}
+
+@media (max-width: 1040px) {
+  .pmg-community-row {
+    flex-direction: column;
+    text-align: center;
+    gap: 26px;
+  }
+  .pmg-community-col-left,
+  .pmg-community-col-middle,
+  .pmg-community-col-right {
+    flex: 0 0 auto;
+    width: 100%;
+    justify-content: center;
+  }
+  .pmg-community-divider {
+    display: none;
+  }
+  .pmg-community-logo-wrap {
+    justify-content: center;
+  }
+  .pmg-community-logo-img {
+    max-height: 120px;
+  }
+  .pmg-community-banner-wrap {
+    justify-content: center;
+  }
+  .pmg-community-banner-img {
+    max-height: 200px;
+  }
+}
+
+@media (max-width: 576px) {
+  .pmg-community-container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .pmg-community-section {
+    padding: 30px 0;
+  }
+  .pmg-community-title {
+    font-size: 23px;
+  }
+  .pmg-community-subtitle {
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+  .pmg-community-features {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px 12px;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+  .pmg-community-feature-item {
+    max-width: 100%;
+  }
+  .pmg-community-banner-img {
+    max-height: 160px;
+  }
+  .pmg-community-logo-img {
+    max-height: 95px;
+  }
+  .pmg-community-join-btn {
+    width: 100%;
+    max-width: 290px;
+  }
+}

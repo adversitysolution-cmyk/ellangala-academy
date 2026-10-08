@@ -2,13 +2,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { commonContent } from '../../contents/common.content';
 import SubscribeOne from '../common/SubscribeOne';
+import WhatsAppCommunitySection from '../common/WhatsAppCommunitySection';
 import footerBgImg from '../../ChatGPT Image Aug 19, 2026, 06_31_05 PM.png';
 
-export default function FooterOne({ hideSubscribe = false }) {
+export default function FooterOne({ hideSubscribe = false, hideCommunity = false }) {
   const { footer } = commonContent;
 
   return (
     <>
+      {!hideCommunity && <WhatsAppCommunitySection />}
       {!hideSubscribe && <SubscribeOne />}
       <footer className="site-footer">
         <div
