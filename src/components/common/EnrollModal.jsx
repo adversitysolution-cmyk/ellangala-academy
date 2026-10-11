@@ -568,7 +568,7 @@ export default function EnrollModal() {
                     }
                   }}
                 >
-                  <span>{isSubmitting ? 'Submitting...' : pendingId ? 'Retry Payment' : 'Submit Enrollment Request'}</span>
+                  <span>{isSubmitting ? 'Submitting...' : pendingId ? 'Retry Payment' : eventMeta ? 'Submit Enrollment Request' : 'Pay ₹999 & Enroll'}</span>
                   <i className="fas fa-paper-plane" style={{ fontSize: '12px' }}></i>
                 </button>
               </form>

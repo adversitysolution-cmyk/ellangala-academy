@@ -32,6 +32,7 @@ router.post('/enrollments', async (req, res) => {
   delete body.amount;
   delete body.paymentStatus;
   let needsPayment = false;
+  const COURSE_FEE = 999; // ₹ flat fee for every course/program enrollment
   if (body.sourceType === 'Event' && body.eventId) {
     const event = await getDbEventById(body.eventId);
     if (!event) return res.status(404).json({ error: 'Event not found.' });
@@ -41,6 +42,11 @@ router.post('/enrollments', async (req, res) => {
       needsPayment = true;
       Object.assign(body, { amount, paymentStatus: 'Pending', status: 'Pending Payment' });
     }
+  }
+  if (body.sourceType !== 'Event') {
+    body.sourceType = 'Program';
+    needsPayment = true;
+    Object.assign(body, { amount: COURSE_FEE, paymentStatus: 'Pending', status: 'Pending Payment' });
   }
   const enrollment = await createDbEnrollment(body);
   res.status(201).json(enrollment);
