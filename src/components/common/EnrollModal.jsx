@@ -212,10 +212,10 @@ export default function EnrollModal() {
               <i className="fas fa-check"></i>
             </div>
             <h3 style={{ fontSize: '26px', fontWeight: '800', color: '#111827', marginBottom: '12px' }}>
-              {paid ? 'Payment Successful — Registration Confirmed!' : 'Enrollment Request Received!'}
+              {paid ? (eventMeta ? 'Payment Successful — Registration Confirmed!' : 'Payment Successful — You’re Enrolled!') : 'Enrollment Request Received!'}
             </h3>
             <p style={{ fontSize: '15px', color: '#4B5563', maxWidth: '480px', margin: '0 auto 26px', lineHeight: '1.6' }}>
-              Thank you, <strong>{fullName}</strong>. {paid ? <>Your seat for <strong>{program}</strong> is confirmed. We'll share the event details at <strong>{phone}</strong>{email ? <> and <strong>{email}</strong></> : null}.</> : <>We have received your inquiry for <strong>{program}</strong>. Our academy advisors will contact you shortly at <strong>{phone}</strong>.</>}
+              Thank you, <strong>{fullName}</strong>. {paid ? <>Your {eventMeta ? 'seat' : 'enrollment'} for <strong>{program}</strong> is confirmed. We'll share the {eventMeta ? 'event' : 'program'} details at <strong>{phone}</strong>{email ? <> and <strong>{email}</strong></> : null}.</> : <>We have received your inquiry for <strong>{program}</strong>. Our academy advisors will contact you shortly at <strong>{phone}</strong>.</>}
             </p>
             <button
               type="button"

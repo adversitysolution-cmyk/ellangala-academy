@@ -223,6 +223,11 @@ export default function EnrollmentListPage() {
                         </td>
                         <td style={{ fontWeight: '600', color: '#334155' }}>
                           {item.interest || item.program}
+                          {Number(item.amount) > 0 && (
+                            <div style={{ fontSize: '12px', fontWeight: '700', color: item.paymentStatus === 'Paid' ? '#047857' : '#B45309' }}>
+                              ₹{item.amount} · {item.paymentStatus}
+                            </div>
+                          )}
                         </td>
                         <td>
                           <span style={{ backgroundColor: '#FAF8F3', color: '#0A2347', padding: '4px 10px', borderRadius: '6px', fontSize: '12px', fontWeight: '700', border: '1px solid #E5E7EB' }}>
