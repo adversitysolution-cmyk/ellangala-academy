@@ -10,7 +10,6 @@ import SearchPopup from '../../../components/layout/SearchPopup';
 import ScrollToTop from '../../../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../../../hooks/useUterpyPlugins';
 import { eventService } from '../services/eventService';
-import { initialEvents } from '../data/eventSeedData';
 import { useEnrollModal } from '../../../context/EnrollModalContext';
 import { Calendar, Clock, MapPin, Sparkles, ArrowRight, Video, Globe, Brain } from 'lucide-react';
 import SEO from '../../../seo/SEO';
@@ -34,30 +33,20 @@ export default function EventsPage() {
   const [upcomingEvents, setUpcomingEvents] = useState([]);
   const [pastEvents, setPastEvents] = useState([]);
 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    const today = new Date().toISOString().split('T')[0];
-    const localUpcoming = initialEvents.filter(
-      (e) => (e.date >= today || !e.date) && e.status !== 'completed'
-    );
-    const localPast = initialEvents.filter(
-      (e) => (e.date < today && Boolean(e.date)) || e.status === 'completed'
-    );
-
+    // One request, split locally (local date, not UTC, so IST evenings aren't misfiled).
+    const d = new Date();
+    const today = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    const isPast = (e) => (Boolean(e.date) && e.date < today) || e.status === 'completed';
     eventService
-      .getUpcomingEvents()
-      .then((res) => {
-        if (Array.isArray(res) && res.length > 0) setUpcomingEvents(res);
-        else setUpcomingEvents(localUpcoming);
+      .getPublishedEvents()
+      .then((all) => {
+        setUpcomingEvents(all.filter((e) => !isPast(e)));
+        setPastEvents(all.filter(isPast));
       })
-      .catch(() => setUpcomingEvents(localUpcoming));
-
-    eventService
-      .getPastEvents()
-      .then((res) => {
-        if (Array.isArray(res) && res.length > 0) setPastEvents(res);
-        else setPastEvents(localPast);
-      })
-      .catch(() => setPastEvents(localPast));
+      .finally(() => setLoading(false));
   }, []);
 
   const featuredEvent = upcomingEvents.find((e) => e.featured) || upcomingEvents[0];
@@ -145,7 +134,7 @@ export default function EventsPage() {
                   boxShadow: activeTab === 'upcoming' ? '0 4px 14px rgba(202, 138, 56, 0.3)' : 'none'
                 }}
               >
-                Upcoming Events ({upcomingEvents.length})
+                Upcoming Events{loading ? '' : ` (${upcomingEvents.length})`}
               </button>
               <button
                 type="button"
@@ -164,7 +153,7 @@ export default function EventsPage() {
                   boxShadow: activeTab === 'past' ? '0 4px 14px rgba(202, 138, 56, 0.3)' : 'none'
                 }}
               >
-                Past Events ({pastEvents.length})
+                Past Events{loading ? '' : ` (${pastEvents.length})`}
               </button>
             </div>
 
@@ -491,7 +480,7 @@ export default function EventsPage() {
             )}
 
             {/* Past Events Grid */}
-            {activeTab === 'past' && pastEvents.length > 0 && (
+            {!loading && activeTab === 'past' && pastEvents.length > 0 && (
               <div className="row gy-4">
                 {pastEvents.map((event) => (
                   <div key={event.id} className="col-xl-4 col-lg-6 col-md-6">
@@ -617,7 +606,9 @@ export default function EventsPage() {
             )}
 
             {/* Empty State when no events exist in the active tab */}
-            {((activeTab === 'upcoming' && !featuredEvent && upcomingEvents.length === 0) ||
+            {loading && <p className="text-center" style={{ color: '#64748B', padding: '40px 0' }}>Loading events…</p>}
+
+            {!loading && ((activeTab === 'upcoming' && !featuredEvent && upcomingEvents.length === 0) ||
               (activeTab === 'past' && pastEvents.length === 0)) && (
               <div
                 style={{
