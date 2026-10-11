@@ -84,6 +84,8 @@ export async function ensureSchema() {
   }
   // Widen columns that outgrew their original size (idempotent — safe to re-run).
   await pool.query("ALTER TABLE events MODIFY mode VARCHAR(100)").catch(() => {});
+  // Repair events saved earlier with an empty/dash slug (broken /events/- URLs).
+  await pool.query("UPDATE events SET slug = LOWER(id) WHERE slug IS NULL OR slug IN ('', '-')").catch(() => {});
   await seedIfEmpty();
   await seedCertificateDefaults();
 }
@@ -265,7 +267,9 @@ export async function saveDbEvent(eventData) {
     existing = rows[0] || null;
   }
 
-  const baseSlug = slugify(eventData.slug || '') || slugify(eventData.title || '') || 'event';
+  // Non-Latin titles (e.g. Kannada) slugify to '' — fall back to the event id (e.g. evt-2026-0005).
+  const eventId = existing ? existing.id : (eventData.id || await nextId(conn, 'events', 'EVT'));
+  const baseSlug = slugify(eventData.slug || '') || slugify(eventData.title || '') || eventId.toLowerCase();
   const slug = await uniqueSlug(conn, 'events', baseSlug, existing ? existing.id : null);
 
   if (existing) {
@@ -284,7 +288,7 @@ export async function saveDbEvent(eventData) {
     return merged;
   }
 
-  const id = eventData.id || await nextId(conn, 'events', 'EVT');
+  const id = eventId;
   const record = {
     ...eventExtra(eventData),
     id,
