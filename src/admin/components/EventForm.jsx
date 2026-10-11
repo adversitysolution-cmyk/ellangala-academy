@@ -254,7 +254,7 @@ export default function EventForm({ initialData, onSubmit, isEditing = false }) 
             </div>
             <div className="col-md-12">
               <div className="admin-form-group">
-                <label className="admin-label">URL Slug (English letters, numbers, dashes; leave blank to auto-generate)</label>
+                <label className="admin-label">Old-style URL slug (optional — public links now use the Event ID; old slug links keep working)</label>
                 <input type="text" placeholder="e.g. how-to-be-happy" value={slug} onChange={(e) => setSlug(e.target.value)} className="admin-input" />
               </div>
             </div>
@@ -686,7 +686,7 @@ export default function EventForm({ initialData, onSubmit, isEditing = false }) 
                 Google Search Preview
               </div>
               <div style={{ fontSize: '14px', color: '#202124' }}>
-                https://ellangala.com › events › {(slug || title).toLowerCase().replace(/[^a-z0-9 -]/g, '').trim().replace(/\s+/g, '-') || 'event'}
+                https://ellangala.com › events › {initialData?.id || 'EVT-(assigned on save)'}
               </div>
               <div style={{ fontSize: '18px', color: '#1A0DAB', fontWeight: '500', margin: '4px 0', textDecoration: 'underline' }}>
                 {seoTitle.trim() || (title ? `${title} | Ellangala’s Academy` : 'Event Title | Ellangala’s Academy')}

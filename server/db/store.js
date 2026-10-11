@@ -19,14 +19,21 @@ function toMysqlDatetime(iso) {
   return new Date(iso || Date.now()).toISOString().slice(0, 19).replace('T', ' ');
 }
 
-// MAX (not COUNT) so ids stay unique after rows are deleted.
+// Ids come from a per-table/year counter that only moves forward, so an id is never
+// reused after a delete (old /events/<id> links must not land on a different event).
 async function nextId(conn, table, prefix) {
   const year = new Date().getFullYear();
   const [rows] = await conn.query(
     `SELECT MAX(CAST(SUBSTRING_INDEX(id, '-', -1) AS UNSIGNED)) AS n FROM ${table} WHERE id LIKE ?`,
     [`${prefix}-${year}-%`]
   );
-  return `${prefix}-${year}-${String((rows[0].n || 0) + 1).padStart(4, '0')}`;
+  const floor = (rows[0].n || 0) + 1;
+  const [res] = await conn.query(
+    'INSERT INTO id_counters (k, n) VALUES (?, ?) ON DUPLICATE KEY UPDATE n = LAST_INSERT_ID(GREATEST(n + 1, VALUES(n)))',
+    [`${table}-${year}`, floor]
+  );
+  const n = res.affectedRows === 1 ? floor : res.insertId; // 1 = fresh insert, 2 = counter bumped
+  return `${prefix}-${year}-${String(n).padStart(4, '0')}`;
 }
 
 function slugify(text) {
@@ -84,6 +91,7 @@ export async function ensureSchema() {
   }
   // Widen columns that outgrew their original size (idempotent — safe to re-run).
   await pool.query("ALTER TABLE events MODIFY mode VARCHAR(100)").catch(() => {});
+  await pool.query('CREATE TABLE IF NOT EXISTS id_counters (k VARCHAR(64) PRIMARY KEY, n INT NOT NULL)');
   // Repair events saved earlier with an empty/dash slug (broken /events/- URLs).
   await pool.query("UPDATE events SET slug = LOWER(id) WHERE slug IS NULL OR slug IN ('', '-')").catch(() => {});
   await seedIfEmpty();

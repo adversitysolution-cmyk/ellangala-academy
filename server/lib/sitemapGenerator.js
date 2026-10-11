@@ -112,7 +112,7 @@ export async function getDynamicSitemapXml() {
 
     const publishedEvents = events.filter(e => e.status === 'published' && e.seo?.noindex !== true);
     eventUrls = publishedEvents.map(e => ({
-      loc: `${baseDomain}/events/${e.slug}`,
+      loc: `${baseDomain}/events/${e.id}`,
       lastmod: e.updatedAt || e.publishedAt || e.createdAt || e.date,
       changefreq: 'weekly',
       priority: '0.85'

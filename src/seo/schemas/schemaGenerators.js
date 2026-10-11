@@ -246,7 +246,7 @@ export function generateEventSchema(event) {
   return {
     "@context": "https://schema.org",
     "@type": "EducationEvent",
-    "@id": `${siteConfig.url}/events/${event.slug}/#event`,
+    "@id": `${siteConfig.url}/events/${event.id}/#event`,
     "name": event.title,
     "description": event.shortDescription || event.description,
     "startDate": `${event.date}T${event.startTime || '10:00'}:00+05:30`,
@@ -260,7 +260,7 @@ export function generateEventSchema(event) {
     "location": isOnline
       ? {
         "@type": "VirtualLocation",
-        "url": event.googleMeetLink || `${siteConfig.url}/events/${event.slug}`
+        "url": event.googleMeetLink || `${siteConfig.url}/events/${event.id}`
       }
       : {
         "@type": "Place",
@@ -289,7 +289,7 @@ export function generateEventSchema(event) {
       "price": event.priceType === 'Free' ? "0" : (event.price || "0"),
       "priceCurrency": "INR",
       "availability": event.registrationOpen ? "https://schema.org/InStock" : "https://schema.org/SoldOut",
-      "url": `${siteConfig.url}/events/${event.slug}/register`
+      "url": `${siteConfig.url}/events/${event.id}/register`
     }
   };
 }

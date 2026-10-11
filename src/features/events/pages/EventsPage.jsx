@@ -235,7 +235,7 @@ export default function EventsPage() {
                       </div>
 
                       <h2 style={{ fontSize: '26px', fontWeight: '800', color: '#0F231B', marginBottom: '12px', lineHeight: '1.3' }}>
-                        <Link to={`/events/${featuredEvent.slug}`} style={{ color: '#0F231B', textDecoration: 'none' }}>
+                        <Link to={`/events/${featuredEvent.id}`} style={{ color: '#0F231B', textDecoration: 'none' }}>
                           {featuredEvent.title}
                         </Link>
                       </h2>
@@ -280,7 +280,7 @@ export default function EventsPage() {
 
                       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
                         <Link
-                          to={`/events/${featuredEvent.slug}`}
+                          to={`/events/${featuredEvent.id}`}
                           className="thm-btn"
                           style={{
                             display: 'inline-flex',
@@ -389,7 +389,7 @@ export default function EventsPage() {
                             )}
 
                             <h3 style={{ fontSize: '19px', fontWeight: '800', color: '#0F231B', lineHeight: '1.35', marginBottom: '10px' }}>
-                              <Link to={`/events/${event.slug}`} style={{ color: '#0F231B', textDecoration: 'none' }}>
+                              <Link to={`/events/${event.id}`} style={{ color: '#0F231B', textDecoration: 'none' }}>
                                 {event.title}
                               </Link>
                             </h3>
@@ -423,7 +423,7 @@ export default function EventsPage() {
                           }}
                         >
                           <Link
-                            to={`/events/${event.slug}`}
+                            to={`/events/${event.id}`}
                             style={{
                               flex: 1,
                               padding: '9px 12px',
@@ -557,7 +557,7 @@ export default function EventsPage() {
                         {/* Event Info */}
                         <div style={{ padding: '24px' }}>
                           <h3 style={{ fontSize: '19px', fontWeight: '800', color: '#0F231B', lineHeight: '1.35', marginBottom: '10px' }}>
-                            <Link to={`/events/${event.slug}`} style={{ color: '#0F231B', textDecoration: 'none' }}>
+                            <Link to={`/events/${event.id}`} style={{ color: '#0F231B', textDecoration: 'none' }}>
                               {event.title}
                             </Link>
                           </h3>
@@ -589,7 +589,7 @@ export default function EventsPage() {
                         }}
                       >
                         <Link
-                          to={`/events/${event.slug}`}
+                          to={`/events/${event.id}`}
                           style={{
                             flex: 1,
                             padding: '9px 12px',

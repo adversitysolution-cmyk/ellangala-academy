@@ -384,7 +384,7 @@ export default function EventListPage() {
                           <td style={{ textAlign: 'right' }}>
                             <ActionMenu
                               items={[
-                                { label: 'View Event', icon: Eye, to: `/events/${evt.slug}`, target: '_blank' },
+                                { label: 'View Event', icon: Eye, to: `/events/${evt.id}`, target: '_blank' },
                                 { label: 'Edit Event', icon: Edit, to: `/admin/events/${evt.id}/edit` },
                                 { label: 'View Registrations', icon: Users, to: `/admin/events/${evt.id}/registrations` },
                                 { label: 'Certificates', icon: Award, to: `/admin/events/${evt.id}/certificates` },
