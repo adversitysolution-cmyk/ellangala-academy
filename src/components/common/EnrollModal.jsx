@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useEnrollModal } from '../../context/EnrollModalContext';
 import { enrollmentService } from '../../admin/services/enrollmentService';
-import { paymentService } from '../../admin/services/paymentService';
+import { paymentService, preloadRazorpay } from '../../admin/services/paymentService';
 
 const PROGRAM_OPTIONS = [
   "Positive Psychology for a Meaningful Life",
@@ -69,6 +69,8 @@ export default function EnrollModal() {
       }
     }
   }, [isOpen, selectedProgram]);
+
+  useEffect(() => { if (isOpen) preloadRazorpay(); }, [isOpen]);
 
   if (!isOpen) return null;
 

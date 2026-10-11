@@ -18,6 +18,9 @@ function loadRazorpayScript() {
   });
 }
 
+// Warm the script up front (e.g. when the enroll modal opens) so checkout opens instantly.
+export const preloadRazorpay = () => loadRazorpayScript().catch(() => {});
+
 async function postJson(url, body) {
   const res = await fetch(url, {
     method: 'POST',
@@ -43,8 +46,7 @@ export const paymentService = {
   },
 
   async pay(ref) {
-    const rzp = await postJson('/api/payments/razorpay/order', ref);
-    await loadRazorpayScript();
+    const [rzp] = await Promise.all([postJson('/api/payments/razorpay/order', ref), loadRazorpayScript()]);
 
     return new Promise((resolve, reject) => {
       const checkout = new window.Razorpay({
