@@ -45,6 +45,9 @@ import OrderDetailPage from '../admin/pages/OrderDetailPage';
 import EventsPage from '../features/events/pages/EventsPage';
 import EventDetailsPage from '../features/events/pages/EventDetailsPage';
 import EventRegisterPage from '../features/events/pages/EventRegisterPage';
+
+// Community Module Imports
+import CommunityFeedPage from '../features/community/pages/CommunityFeedPage';
 import EventListPage from '../admin/pages/EventListPage';
 import EventCreatePage from '../admin/pages/EventCreatePage';
 import EventEditPage from '../admin/pages/EventEditPage';
@@ -58,6 +61,11 @@ import CertificateTemplatesPage from '../admin/pages/CertificateTemplatesPage';
 import BlogListPage from '../admin/pages/BlogListPage';
 import BlogCreatePage from '../admin/pages/BlogCreatePage';
 import BlogEditPage from '../admin/pages/BlogEditPage';
+
+// Admin Community Module Imports
+import CommunityAdminPage from '../admin/pages/CommunityAdminPage';
+import CommunityPostCreatePage from '../admin/pages/CommunityPostCreatePage';
+import CommunityPostEditPage from '../admin/pages/CommunityPostEditPage';
 
 // Admin Products Module Imports
 import ProductListPage from '../admin/pages/ProductListPage';
@@ -166,6 +174,10 @@ export default function AppRouter() {
               <Route path="/events" element={<EventsPage />} />
               <Route path="/events/:slug" element={<EventDetailsPage />} />
               <Route path="/events/:slug/register" element={<EventRegisterPage />} />
+
+              {/* Public Community Feed Routes */}
+              <Route path="/community" element={<CommunityFeedPage />} />
+              <Route path="/community/posts/:id" element={<CommunityFeedPage />} />
 
               {/* Public Certificate Verification */}
               <Route path="/verify-certificate" element={<VerifyCertificate />} />
@@ -319,6 +331,32 @@ export default function AppRouter() {
                 element={
                   <AdminProtectedRoute>
                     <BlogEditPage />
+                  </AdminProtectedRoute>
+                }
+              />
+
+              {/* Admin Community Routes */}
+              <Route
+                path="/admin/community"
+                element={
+                  <AdminProtectedRoute>
+                    <CommunityAdminPage />
+                  </AdminProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/community/new"
+                element={
+                  <AdminProtectedRoute>
+                    <CommunityPostCreatePage />
+                  </AdminProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/community/:id/edit"
+                element={
+                  <AdminProtectedRoute>
+                    <CommunityPostEditPage />
                   </AdminProtectedRoute>
                 }
               />

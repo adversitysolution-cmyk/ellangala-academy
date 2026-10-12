@@ -334,6 +334,13 @@ export default function MobileNav() {
                 <span>{header.nav.events || "Events"}</span>
               </Link>
             </li>
+
+            <li className="mobile-nav__item">
+              <Link to="/community" onClick={handleClose} className="mobile-nav__link">
+                <i className="fa fa-users mobile-nav__item-icon"></i>
+                <span>Community</span>
+              </Link>
+            </li>
           </ul>
         </div>
 

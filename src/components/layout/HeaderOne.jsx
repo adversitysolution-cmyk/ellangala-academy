@@ -380,6 +380,9 @@ export default function HeaderOne() {
                         <li>
                           <Link to="/events">{header.nav.events || "Events"}</Link>
                         </li>
+                        <li>
+                          <Link to="/community">Community</Link>
+                        </li>
                       </ul>
                     </div>
                   </div>
