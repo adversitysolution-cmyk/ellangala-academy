@@ -1,15 +1,16 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import {
   BookOpen,
   Star,
-  Clock,
-  Video,
-  ArrowRight,
-  Calendar
+  ArrowRight
 } from 'lucide-react';
+import { useCommunityAuth } from '../context/CommunityAuthContext';
+import { getRecommendedBooks } from '../data/communityBooks';
 
-export default function CommunityRightSidebar({ sidebarData }) {
+export default function CommunityRightSidebar({ sidebarData, selectedCategory = 'all' }) {
+  const { user } = useCommunityAuth();
+
   const featuredCourse = sidebarData?.featuredCourse || {
     title: 'Bhagavad Gita for Modern Life',
     description: 'Timeless wisdom for a calmer, clearer and more purposeful life.',
@@ -20,7 +21,15 @@ export default function CommunityRightSidebar({ sidebarData }) {
     slug: 'bhagavad-gita-life'
   };
 
-  const upcomingWorkshops = Array.isArray(sidebarData?.upcomingEvents) ? sidebarData.upcomingEvents : [];
+  const userTopics = Array.isArray(user?.topics) ? user.topics : [];
+
+  const recommendedBooks = useMemo(() => {
+    return getRecommendedBooks({
+      userTopics,
+      selectedCategory,
+      limit: 3
+    });
+  }, [userTopics, selectedCategory]);
 
   const recommendedCourses = sidebarData?.recommendedCourses?.length ? sidebarData.recommendedCourses : [
     {
@@ -86,57 +95,59 @@ export default function CommunityRightSidebar({ sidebarData }) {
         </Link>
       </div>
 
-      {/* 2. Upcoming Events Card */}
+      {/* 2. Recommended Books Card (Based on User's Interested Topics) */}
       <div className="community-mock-card">
         <div className="community-card-head-row">
-          <h4 className="community-card-title">Upcoming Events</h4>
-          {upcomingWorkshops.length > 0 && (
-            <Link to="/events" className="community-card-link">
-              <span>See all</span>
-              <span>→</span>
-            </Link>
-          )}
+          <div>
+            <h4 className="community-card-title">Recommended Books</h4>
+            <span className="community-card-topic-subtitle">
+              {userTopics.length > 0 ? 'Matched to your topics' : 'By Dr. Naveen Ellangala'}
+            </span>
+          </div>
+          <Link to="/shop" className="community-card-link">
+            <span>Explore all</span>
+            <span>→</span>
+          </Link>
         </div>
 
-        {upcomingWorkshops.length > 0 ? (
-          <div className="community-workshops-list">
-            {upcomingWorkshops.map((ws, i) => (
-              <Link
-                key={ws.id || i}
-                to={`/events/${ws.slug || ws.id}`}
-                className="community-ws-item-link"
-              >
-                <div className="community-ws-date-badge">
-                  <span className="community-ws-date-month">{ws.monthDisplay || ws.month || 'OCT'}</span>
-                  <span className="community-ws-date-day">{ws.dayDisplay || ws.day || '21'}</span>
+        <div className="community-books-list">
+          {recommendedBooks.map((book) => (
+            <Link
+              key={book.id}
+              to={`/shop/${book.id}`}
+              className="community-book-item-link"
+              title={`View ${book.title} in Bookstore`}
+            >
+              <div className="community-book-cover-frame">
+                <img
+                  src={book.image}
+                  alt={book.title}
+                  className="community-book-cover-thumb"
+                  onError={(e) => {
+                    e.currentTarget.src = '/assets/images/books/Bhagavadgeetha for Meaningful Life.png';
+                  }}
+                />
+              </div>
+              <div className="community-book-info">
+                <div className="community-book-badge-row">
+                  <span className="community-book-topic-pill">
+                    {book.matchedTag || book.badge}
+                  </span>
                 </div>
-                <div className="community-ws-info">
-                  <h5 className="community-ws-title">{ws.title}</h5>
-                  <div className="community-ws-meta-line">
-                    <Clock size={11} />
-                    <span>{ws.timeDisplay || ws.time || '6:30 PM - 7:30 PM (IST)'}</span>
-                  </div>
-                  <div className="community-ws-meta-line">
-                    <Video size={11} />
-                    <span>{ws.mode || 'Online (Zoom)'}</span>
-                  </div>
+                <h5 className="community-book-title">{book.title}</h5>
+                <div className="community-book-meta-line">
+                  <span className="community-book-author">Dr. Naveen Ellangala</span>
+                  {book.price && (
+                    <>
+                      <span className="community-dot-sep">·</span>
+                      <span className="community-book-price-tag">{book.price}</span>
+                    </>
+                  )}
                 </div>
-              </Link>
-            ))}
-          </div>
-        ) : (
-          <div className="community-events-empty-card">
-            <div className="community-events-empty-circle">
-              <Calendar size={24} color="#CA8A38" />
-            </div>
-            <h5 className="community-events-empty-heading">
-              New experiences are coming soon.
-            </h5>
-            <p className="community-events-empty-text">
-              There are no upcoming events published at the moment. Check back for future workshops, MindGym sessions and Academy experiences.
-            </p>
-          </div>
-        )}
+              </div>
+            </Link>
+          ))}
+        </div>
       </div>
 
       {/* 3. Recommended for You Card */}

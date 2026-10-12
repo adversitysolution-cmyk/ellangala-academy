@@ -450,7 +450,10 @@ function CommunityFeedPageContent() {
                 </section>
 
                 {/* 3. RIGHT SIDEBAR */}
-                <CommunityRightSidebar sidebarData={sidebarData} />
+                <CommunityRightSidebar
+                  sidebarData={sidebarData}
+                  selectedCategory={selectedCategory}
+                />
               </div>
             </div>
           </main>
