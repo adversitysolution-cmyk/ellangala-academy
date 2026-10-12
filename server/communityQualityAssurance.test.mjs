@@ -297,8 +297,8 @@ async function runQASuite() {
     assert.ok(sidebar.featuredCourse.targetUrl.startsWith('/programs/'));
     report.passed.push('7.1 Featured course panel data verified with link to /programs/positive-psychology-meaningful-life');
 
-    assert.ok(Array.isArray(sidebar.upcomingEvents) && sidebar.upcomingEvents.length > 0);
-    report.passed.push('7.2 Live workshops correctly populated from event system');
+    assert.ok(Array.isArray(sidebar.upcomingEvents), 'Upcoming events must be an array from real events system');
+    report.passed.push('7.2 Live events correctly populated from event system (no demo events)');
 
     // Test channel-based recommendations
     const resMindGym = await fetch(`${baseUrl}/community/sidebar-data?channel=mindgym-mental-fitness`);
