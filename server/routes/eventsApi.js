@@ -43,7 +43,7 @@ router.get('/events/:slug', async (req, res) => {
   const generatedSeo = generateContentSeo({
     type: 'event',
     title: event.title,
-    slug: event.slug,
+    slug: event.id,
     description: event.shortDescription || event.description,
     image: event.image,
     customSeo: event.seo

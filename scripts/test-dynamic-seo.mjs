@@ -45,7 +45,7 @@ try {
   });
   invalidateSitemapCache();
   const xmlAfterPublish = await getDynamicSitemapXml();
-  assert(xmlAfterPublish.includes('https://ellangala.com/events/automated-live-event-test'), 'Published Event is INCLUDED in sitemap with canonical URL');
+  assert(xmlAfterPublish.includes(`https://ellangala.com/events/${publishedEvent.id}`), 'Published Event is INCLUDED in sitemap with canonical URL');
 
   // Test 4: Draft Blog exclusion
   const draftBlog = await saveDbBlog({

@@ -131,7 +131,7 @@ export default function EventRegisterPage() {
             {/* Back to Event Details Link */}
             <div style={{ marginBottom: '24px' }}>
               <Link
-                to={`/events/${event.slug}`}
+                to={`/events/${event.id}`}
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -218,7 +218,7 @@ export default function EventRegisterPage() {
                 </div>
 
                 <div style={{ display: 'flex', gap: '14px', justifyContent: 'center', flexWrap: 'wrap' }}>
-                  <Link to={`/events/${event.slug}`} className="thm-btn" style={{ padding: '12px 28px', fontSize: '14px' }}>
+                  <Link to={`/events/${event.id}`} className="thm-btn" style={{ padding: '12px 28px', fontSize: '14px' }}>
                     VIEW EVENT PAGE
                   </Link>
                   <Link to="/events" style={{ padding: '12px 28px', borderRadius: '8px', border: '1px solid #CBD5E1', color: '#334155', textDecoration: 'none', fontWeight: '700', fontSize: '14px' }}>

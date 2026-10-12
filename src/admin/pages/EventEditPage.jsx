@@ -50,7 +50,7 @@ export default function EventEditPage() {
   }
 
   return (
-    <AdminLayout title={`Edit: ${event.title}`} subtitle={`ID: ${event.id} • Slug: /events/${event.slug}`}>
+    <AdminLayout title={`Edit: ${event.title}`} subtitle={`ID: ${event.id} • URL: /events/${event.id}`}>
       <EventForm initialData={event} onSubmit={handleSubmit} isEditing={true} />
     </AdminLayout>
   );

@@ -129,7 +129,7 @@ export default function EventDetailsPage() {
         <SEO
           title={seoTitle}
           description={seoDesc}
-          canonical={`/events/${event.slug}`}
+          canonical={`/events/${event.id}`}
           image={seoImg}
           type="event"
           noindex={isNoindex}
@@ -138,7 +138,7 @@ export default function EventDetailsPage() {
             generateBreadcrumbSchema([
               { name: 'Home', path: '/' },
               { name: 'Events', path: '/events' },
-              { name: event.title, path: `/events/${event.slug}` }
+              { name: event.title, path: `/events/${event.id}` }
             ])
           ]}
         />

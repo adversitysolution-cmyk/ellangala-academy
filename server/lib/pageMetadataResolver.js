@@ -249,7 +249,7 @@ export async function resolvePageMetadata(pathname = '/') {
         return {
           title: `${event.title} | Events | Ellangala’s Academy`,
           description: event.shortDescription || event.description?.slice(0, 160) || siteConfig.defaultDescription,
-          canonical: `${baseDomain}/events/${event.slug}`,
+          canonical: `${baseDomain}/events/${event.id}`,
           image: eventImg.startsWith('http') ? eventImg : `${baseDomain}${eventImg.startsWith('/') ? eventImg : '/' + eventImg}`,
           type: 'event',
           schemas: [
@@ -257,7 +257,7 @@ export async function resolvePageMetadata(pathname = '/') {
             generateBreadcrumbSchema([
               { name: 'Home', path: '/' },
               { name: 'Events', path: '/events' },
-              { name: event.title, path: `/events/${event.slug}` }
+              { name: event.title, path: `/events/${event.id}` }
             ])
           ]
         };

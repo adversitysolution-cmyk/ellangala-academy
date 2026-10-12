@@ -11,7 +11,13 @@ import { sendMail } from '../lib/mailer.js';
 import { buildRegistrationEmail } from '../lib/eventRegistrationEmail.js';
 
 async function sendEventRegistrationEmail(enrollment) {
-  if (!enrollment.email || enrollment.sourceType !== 'Event' || !enrollment.eventId) return;
+  if (!enrollment.email) return;
+  if (enrollment.sourceType !== 'Event') {
+    // Program enrollment receipt (sent once payment is verified).
+    const text = `Hi ${enrollment.fullName},\n\nThank you! We received your payment of ₹${enrollment.amount} and your enrollment for "${enrollment.interest}" is confirmed. Our team will contact you shortly with the details.\n\nPayment reference: ${enrollment.paymentRef || '-'}\n\n— Ellangala’s Academy`;
+    return sendMail({ to: enrollment.email, subject: `Enrollment confirmed: ${enrollment.interest}`, text, html: text.split('\n').map(l => l ? `<p>${l}</p>` : '<br/>').join('') });
+  }
+  if (!enrollment.eventId) return;
   const event = await getDbEventById(enrollment.eventId);
   if (!event) return;
   await sendMail(buildRegistrationEmail(enrollment, event));
@@ -27,11 +33,15 @@ router.post('/enrollments', async (req, res) => {
   if (!(fullName || name) || !phone) {
     return res.status(400).json({ error: 'Name and phone are required.' });
   }
+  if (req.body.sourceType !== 'Event' && !/^\S+@\S+\.\S+$/.test(String(req.body.email || ''))) {
+    return res.status(400).json({ error: 'A valid email is required for enrollment.' });
+  }
   const body = { ...req.body };
   // Never trust client-sent payment fields; derive them from the event.
   delete body.amount;
   delete body.paymentStatus;
   let needsPayment = false;
+  const COURSE_FEE = 999; // ₹ flat fee for every course/program enrollment
   if (body.sourceType === 'Event' && body.eventId) {
     const event = await getDbEventById(body.eventId);
     if (!event) return res.status(404).json({ error: 'Event not found.' });
@@ -41,6 +51,11 @@ router.post('/enrollments', async (req, res) => {
       needsPayment = true;
       Object.assign(body, { amount, paymentStatus: 'Pending', status: 'Pending Payment' });
     }
+  }
+  if (body.sourceType !== 'Event') {
+    body.sourceType = 'Program';
+    needsPayment = true;
+    Object.assign(body, { amount: COURSE_FEE, paymentStatus: 'Pending', status: 'Pending Payment' });
   }
   const enrollment = await createDbEnrollment(body);
   res.status(201).json(enrollment);
