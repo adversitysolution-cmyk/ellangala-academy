@@ -1,8 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import {
   Home,
-  BookOpen,
   Bookmark,
   Calendar,
   ArrowRight,
@@ -141,7 +139,7 @@ export default function CommunitySidebar({
                 onClick={() => openAuthModal('signup')}
               >
                 <UserPlus size={14} />
-                <span>Create Account</span>
+                <span>Signup</span>
               </button>
             </div>
           </div>
@@ -161,25 +159,6 @@ export default function CommunitySidebar({
           >
             <Home size={18} className="community-nav-icon" />
             <span>Feed</span>
-          </button>
-
-          {/* My Learning */}
-          <button
-            type="button"
-            className={`community-mock-nav-item ${currentView === 'learning' ? 'active' : ''}`}
-            onClick={() => {
-              if (!isCommunityMember) {
-                openAuthModal('login', 'Sign in to access your registered courses and learning progress.');
-              } else {
-                handleNavClick('learning');
-              }
-            }}
-          >
-            <BookOpen size={18} className="community-nav-icon" />
-            <span>My Learning</span>
-            {isCommunityMember && (
-              <span className="community-nav-badge">2</span>
-            )}
           </button>
 
           {/* Saved */}
