@@ -204,7 +204,7 @@ async function renderClassic({ template, vars, assets }) {
 
   const cx = W / 2;
 
-  if (assets.logoPath) safeImage(doc, assets.logoPath, cx - 45, 54, { fit: [90, 70], align: 'center' });
+  if (assets.logoPath) safeImage(doc, assets.logoPath, cx - 140, 44, { fit: [280, 80], align: 'center' });
 
   doc.fillColor(NAVY).font('Helvetica-Bold').fontSize(26)
     .text(template.organizationName || 'Ellangala’s Academy', 0, 132, { align: 'center' });
