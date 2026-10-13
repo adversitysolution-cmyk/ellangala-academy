@@ -143,7 +143,7 @@ export default function FooterOne({ hideSubscribe = false, hideCommunity = false
                       <Link to="/resources">Resources</Link>
                     </li>
                     <li>
-                      <Link to="/blog">Blog</Link>
+                      <Link to="/feed">Feed</Link>
                     </li>
                     <li>
                       <Link to="/contact">Contact</Link>

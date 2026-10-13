@@ -19,7 +19,7 @@ export default function CommunityShareModal({ post, onClose }) {
   if (!post) return null;
 
   // Canonical share URL for this specific post
-  const shareUrl = `${window.location.origin}/community/posts/${post.id}`;
+  const shareUrl = `${window.location.origin}/feed/posts/${post.id}`;
   const shareTitle = post.title;
   const shareExcerpt = post.content ? post.content.slice(0, 140) + '...' : '';
 

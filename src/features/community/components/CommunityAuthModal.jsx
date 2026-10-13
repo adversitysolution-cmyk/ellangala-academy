@@ -30,6 +30,40 @@ const AVAILABLE_TOPICS = [
   { id: 'life-purpose', label: 'Purpose & Meaning' }
 ];
 
+function compressImageToDataUrl(file, maxWidth = 300, maxHeight = 300, quality = 0.85) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        let width = img.width;
+        let height = img.height;
+        if (width > height) {
+          if (width > maxWidth) {
+            height = Math.round((height * maxWidth) / width);
+            width = maxWidth;
+          }
+        } else {
+          if (height > maxHeight) {
+            width = Math.round((width * maxHeight) / height);
+            height = maxHeight;
+          }
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = () => resolve(e.target.result);
+      img.src = e.target.result;
+    };
+    reader.onerror = () => resolve(null);
+    reader.readAsDataURL(file);
+  });
+}
+
 export default function CommunityAuthModal() {
   const {
     isAuthModalOpen,
@@ -58,7 +92,10 @@ export default function CommunityAuthModal() {
   // Avatar state
   const [avatarPreview, setAvatarPreview] = useState(null);
   const [avatarFile, setAvatarFile] = useState(null);
+  const [uploadedAvatarUrl, setUploadedAvatarUrl] = useState(null);
+  const [fallbackDataUrl, setFallbackDataUrl] = useState(null);
   const [avatarUploading, setAvatarUploading] = useState(false);
+  const [avatarUploadSuccess, setAvatarUploadSuccess] = useState(false);
   const fileInputRef = useRef(null);
 
   // Topics state
@@ -92,7 +129,7 @@ export default function CommunityAuthModal() {
     }
   };
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -101,15 +138,36 @@ export default function CommunityAuthModal() {
       return;
     }
 
-    if (file.size > 8 * 1024 * 1024) {
-      setError('Image file must be under 8MB.');
+    if (file.size > 10 * 1024 * 1024) {
+      setError('Image file must be under 10MB.');
       return;
     }
 
     setError('');
     setAvatarFile(file);
-    const objectUrl = URL.createObjectURL(file);
-    setAvatarPreview(objectUrl);
+    setAvatarUploading(true);
+    setAvatarUploadSuccess(false);
+
+    try {
+      // 1. Immediately compress & show local preview
+      const dataUrl = await compressImageToDataUrl(file);
+      if (dataUrl) {
+        setAvatarPreview(dataUrl);
+        setFallbackDataUrl(dataUrl);
+      }
+
+      // 2. Upload to server
+      const serverUrl = await communityService.uploadAvatar(file);
+      if (serverUrl) {
+        setUploadedAvatarUrl(serverUrl);
+        setAvatarUploadSuccess(true);
+      }
+    } catch (uploadErr) {
+      console.warn('Avatar upload endpoint issue, using high-quality local image:', uploadErr);
+      setAvatarUploadSuccess(true);
+    } finally {
+      setAvatarUploading(false);
+    }
   };
 
   const handleLoginSubmit = async (e) => {
@@ -165,14 +223,18 @@ export default function CommunityAuthModal() {
     try {
       let finalAvatarUrl = null;
 
-      if (!skipPhoto && avatarFile) {
-        setAvatarUploading(true);
-        try {
-          finalAvatarUrl = await communityService.uploadAvatar(avatarFile);
-        } catch (uploadErr) {
-          console.warn('Avatar upload failed, continuing with default silhouette:', uploadErr);
-        } finally {
-          setAvatarUploading(false);
+      if (!skipPhoto) {
+        finalAvatarUrl = uploadedAvatarUrl || fallbackDataUrl || null;
+
+        if (!finalAvatarUrl && avatarFile) {
+          setAvatarUploading(true);
+          try {
+            finalAvatarUrl = await communityService.uploadAvatar(avatarFile);
+          } catch (_) {
+            finalAvatarUrl = fallbackDataUrl || null;
+          } finally {
+            setAvatarUploading(false);
+          }
         }
       }
 
@@ -181,7 +243,7 @@ export default function CommunityAuthModal() {
         phone: phone.trim(),
         email: email.trim() || undefined,
         password,
-        avatarUrl: finalAvatarUrl,
+        avatarUrl: skipPhoto ? null : finalAvatarUrl,
         topics: selectedTopics
       });
     } catch (err) {
@@ -490,6 +552,7 @@ export default function CommunityAuthModal() {
                       type="button"
                       className="btn-select-photo"
                       onClick={() => fileInputRef.current?.click()}
+                      disabled={avatarUploading}
                     >
                       <UploadCloud size={16} />
                       <span>{avatarPreview ? 'Change Photo' : 'Upload from Device'}</span>
@@ -502,10 +565,25 @@ export default function CommunityAuthModal() {
                         setError('');
                         setSignupStep(3);
                       }}
+                      disabled={avatarUploading}
                     >
                       {avatarPreview ? 'Use this photo & Continue' : 'Skip for now'}
                     </button>
                   </div>
+
+                  {/* Status Indicator */}
+                  {avatarUploading && (
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginTop: '14px', fontSize: '13px', color: '#CA8A38' }}>
+                      <span className="btn-spinner" style={{ width: '14px', height: '14px', borderWidth: '2px' }} />
+                      <span>Optimizing & uploading photo...</span>
+                    </div>
+                  )}
+                  {!avatarUploading && avatarUploadSuccess && avatarPreview && (
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', marginTop: '14px', fontSize: '13px', color: '#16A34A', fontWeight: 600 }}>
+                      <Check size={16} />
+                      <span>Profile photo ready!</span>
+                    </div>
+                  )}
                 </div>
 
                 <div className="community-step-actions-nav">

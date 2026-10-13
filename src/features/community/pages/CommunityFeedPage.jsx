@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import HeaderOne from '../../../components/layout/HeaderOne';
 import FooterOne from '../../../components/layout/FooterOne';
 import Preloader from '../../../components/layout/Preloader';
@@ -22,6 +22,8 @@ import CommunityRightSidebar from '../components/CommunityRightSidebar';
 import CommunityAuthModal from '../components/CommunityAuthModal';
 import CommunityMyLearningView from '../components/CommunityMyLearningView';
 import CommunityWorkshopsView from '../components/CommunityWorkshopsView';
+import CommunityMobileBottomNav from '../components/CommunityMobileBottomNav';
+import CommunityMobileProfileView from '../components/CommunityMobileProfileView';
 
 // Styles
 import '../styles/community.css';
@@ -48,6 +50,44 @@ function CommunityFeedPageContent() {
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState('');
+  const location = useLocation();
+
+  // Route-based view synchronization & Desktop guard
+  useEffect(() => {
+    const pathname = location.pathname;
+
+    // Desktop guard: on desktop (>991px), no separate subpages; redirect to /feed
+    if (window.innerWidth > 991) {
+      if (['/feed/saved', '/feed/profile', '/community/saved', '/community/profile'].includes(pathname)) {
+        navigate('/feed', { replace: true });
+        return;
+      }
+    }
+
+    if (pathname === '/feed/saved' || pathname === '/community/saved') {
+      setCurrentView('saved');
+      setActiveFilter('saved');
+    } else if (pathname === '/feed/profile' || pathname === '/community/profile') {
+      setCurrentView('profile');
+    } else if (pathname === '/feed' || pathname === '/feed/' || pathname === '/community' || pathname === '/community/') {
+      if (currentView === 'profile' || currentView === 'saved') {
+        setCurrentView('feed');
+        if (activeFilter === 'saved') setActiveFilter('latest');
+      }
+    }
+  }, [location.pathname, navigate]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 991) {
+        if (['/feed/saved', '/feed/profile', '/community/saved', '/community/profile'].includes(location.pathname)) {
+          navigate('/feed', { replace: true });
+        }
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [location.pathname, navigate]);
 
   // Load initial categories
   useEffect(() => {
@@ -62,6 +102,184 @@ function CommunityFeedPageContent() {
       .then(setSidebarData)
       .catch(() => {});
   }, [selectedCategory]);
+
+  // Synchronize equal height and ratio between left sidebar cards and right sidebar cards
+  useEffect(() => {
+    let frameId;
+    const syncSidebarCardHeights = () => {
+      // Pair 1: Top Cards (Left Welcome/Topics vs Right Free Resources)
+      const leftCard1 = document.querySelector('.community-left-card');
+      const rightCard1 = document.querySelector('.community-fr-card');
+
+      // Pair 2: Second Cards (Left Mountain Quote vs Right Recommended Books)
+      const leftCard2 = document.querySelector('.community-mountain-quote-card');
+      const rightCard2 = document.querySelector('.community-books-card');
+
+      // Pair 3: Third Cards (Left MindGym App vs Right Recommended for You)
+      const leftCard3 = document.querySelector('.community-mindgym-card');
+      const rightCard3 = document.querySelector('.community-rec-card');
+
+      // Sidebars & Center Feed Stream
+      const leftSidebar = document.querySelector('.community-left-sidebar');
+      const rightSidebar = document.querySelector('.community-right-sidebar');
+      const feedStream = document.querySelector('.community-feed-stream');
+
+      // On mobile / single-column, clear minHeight and feed stream constraints
+      if (window.innerWidth <= 991) {
+        if (leftCard1) leftCard1.style.minHeight = '';
+        if (rightCard1) rightCard1.style.minHeight = '';
+        if (leftCard2) leftCard2.style.minHeight = '';
+        if (rightCard2) rightCard2.style.minHeight = '';
+        if (leftCard3) leftCard3.style.minHeight = '';
+        if (rightCard3) rightCard3.style.minHeight = '';
+        if (feedStream) {
+          feedStream.style.height = '';
+          feedStream.style.maxHeight = '';
+        }
+        return;
+      }
+
+      // Reset inline minHeight to measure natural content size
+      if (leftCard1) leftCard1.style.minHeight = '';
+      if (rightCard1) rightCard1.style.minHeight = '';
+      if (leftCard2) leftCard2.style.minHeight = '';
+      if (rightCard2) rightCard2.style.minHeight = '';
+      if (leftCard3) leftCard3.style.minHeight = '';
+      if (rightCard3) rightCard3.style.minHeight = '';
+
+      frameId = requestAnimationFrame(() => {
+        // Pair 1 sync
+        if (leftCard1 && rightCard1) {
+          const maxH1 = Math.max(leftCard1.offsetHeight, rightCard1.offsetHeight);
+          if (maxH1 > 0) {
+            leftCard1.style.minHeight = `${maxH1}px`;
+            rightCard1.style.minHeight = `${maxH1}px`;
+          }
+        }
+
+        // Pair 2 sync
+        if (leftCard2 && rightCard2) {
+          const maxH2 = Math.max(leftCard2.offsetHeight, rightCard2.offsetHeight);
+          if (maxH2 > 0) {
+            leftCard2.style.minHeight = `${maxH2}px`;
+            rightCard2.style.minHeight = `${maxH2}px`;
+          }
+        }
+
+        // Pair 3 sync (Corner cards)
+        if (leftCard3 && rightCard3) {
+          const maxH3 = Math.max(leftCard3.offsetHeight, rightCard3.offsetHeight);
+          if (maxH3 > 0) {
+            leftCard3.style.minHeight = `${maxH3}px`;
+            rightCard3.style.minHeight = `${maxH3}px`;
+          }
+        }
+
+        // Constrain feed stream to end exactly with the corner cards
+        if (feedStream) {
+          const leftH = leftSidebar ? leftSidebar.offsetHeight : 0;
+          const rightH = rightSidebar ? rightSidebar.offsetHeight : 0;
+          const totalSidebarH = Math.max(leftH, rightH);
+          if (totalSidebarH > 0) {
+            feedStream.style.height = `${totalSidebarH}px`;
+            feedStream.style.maxHeight = `${totalSidebarH}px`;
+          }
+        }
+      });
+    };
+
+    syncSidebarCardHeights();
+    const t1 = setTimeout(syncSidebarCardHeights, 150);
+    const t2 = setTimeout(syncSidebarCardHeights, 500);
+
+    window.addEventListener('resize', syncSidebarCardHeights);
+    return () => {
+      if (frameId) cancelAnimationFrame(frameId);
+      clearTimeout(t1);
+      clearTimeout(t2);
+      window.removeEventListener('resize', syncSidebarCardHeights);
+    };
+  }, [user, isAuthenticated, selectedCategory, categories, posts.length, loading]);
+
+  // Synchronize scrolling between center feed and sticky sidebars until they end
+  useEffect(() => {
+    const feedStream = document.querySelector('.community-feed-stream');
+    const leftSidebar = document.querySelector('.community-left-sidebar');
+    const rightSidebar = document.querySelector('.community-right-sidebar');
+
+    if (!feedStream || !leftSidebar || !rightSidebar) return;
+
+    let isSyncing = false;
+
+    const syncToSidebars = () => {
+      if (window.innerWidth <= 991) return;
+      const maxLeft = leftSidebar.scrollHeight - leftSidebar.clientHeight;
+      const maxRight = rightSidebar.scrollHeight - rightSidebar.clientHeight;
+
+      if (maxLeft > 0) {
+        leftSidebar.scrollTop = Math.min(feedStream.scrollTop, maxLeft);
+      }
+      if (maxRight > 0) {
+        rightSidebar.scrollTop = Math.min(feedStream.scrollTop, maxRight);
+      }
+    };
+
+    const handleFeedScroll = () => {
+      if (isSyncing || window.innerWidth <= 991) return;
+      isSyncing = true;
+      syncToSidebars();
+      requestAnimationFrame(() => {
+        isSyncing = false;
+      });
+    };
+
+    const handleLeftScroll = () => {
+      if (isSyncing || window.innerWidth <= 991) return;
+      isSyncing = true;
+      feedStream.scrollTop = leftSidebar.scrollTop;
+      const maxRight = rightSidebar.scrollHeight - rightSidebar.clientHeight;
+      if (maxRight > 0) {
+        rightSidebar.scrollTop = Math.min(leftSidebar.scrollTop, maxRight);
+      }
+      requestAnimationFrame(() => {
+        isSyncing = false;
+      });
+    };
+
+    const handleRightScroll = () => {
+      if (isSyncing || window.innerWidth <= 991) return;
+      isSyncing = true;
+      feedStream.scrollTop = rightSidebar.scrollTop;
+      const maxLeft = leftSidebar.scrollHeight - leftSidebar.clientHeight;
+      if (maxLeft > 0) {
+        leftSidebar.scrollTop = Math.min(rightSidebar.scrollTop, maxLeft);
+      }
+      requestAnimationFrame(() => {
+        isSyncing = false;
+      });
+    };
+
+    const handleSidebarWheel = (e) => {
+      if (window.innerWidth <= 991) return;
+      if (Math.abs(e.deltaY) > 0) {
+        feedStream.scrollTop += e.deltaY;
+      }
+    };
+
+    feedStream.addEventListener('scroll', handleFeedScroll, { passive: true });
+    leftSidebar.addEventListener('scroll', handleLeftScroll, { passive: true });
+    rightSidebar.addEventListener('scroll', handleRightScroll, { passive: true });
+    leftSidebar.addEventListener('wheel', handleSidebarWheel, { passive: true });
+    rightSidebar.addEventListener('wheel', handleSidebarWheel, { passive: true });
+
+    return () => {
+      feedStream.removeEventListener('scroll', handleFeedScroll);
+      leftSidebar.removeEventListener('scroll', handleLeftScroll);
+      rightSidebar.removeEventListener('scroll', handleRightScroll);
+      leftSidebar.removeEventListener('wheel', handleSidebarWheel);
+      rightSidebar.removeEventListener('wheel', handleSidebarWheel);
+    };
+  }, [posts.length, loading, currentView]);
 
   // Handle single post view vs general feed
   useEffect(() => {
@@ -133,19 +351,32 @@ function CommunityFeedPageContent() {
     }
   };
 
-  // Next upcoming masterclass
-  const nextWorkshop = sidebarData.upcomingEvents?.[0] || null;
+  // Featured event (only real featured events)
+  const featuredEvent = sidebarData?.featuredEvent || (
+    Array.isArray(sidebarData?.upcomingEvents)
+      ? sidebarData.upcomingEvents.find(e => e.featured)
+      : null
+  );
 
   // Dynamic SEO metadata
-  const seoTitle = singlePost
-    ? `${singlePost.title} | Ellangala Community`
-    : 'Ellangala Community Feed | Daily Mind Training & Wisdom';
-  const seoDescription = singlePost
-    ? singlePost.content?.slice(0, 160)
-    : "Join Dr. Naveen Ellangala's Positive Psychology and MindGym community feed. Explore daily reflections, workshop announcements, character strengths, and peer discussions.";
-  const seoCanonical = singlePost
-    ? `/community/posts/${singlePost.id}`
-    : '/community';
+  let seoTitle = 'Ellangala Feed | Daily Mind Training & Wisdom';
+  let seoDescription = "Join Dr. Naveen Ellangala's Positive Psychology and MindGym feed. Explore daily reflections, workshop announcements, character strengths, and peer discussions.";
+  let seoCanonical = '/feed';
+
+  if (singlePost) {
+    seoTitle = `${singlePost.title} | Ellangala Feed`;
+    seoDescription = singlePost.content?.slice(0, 160);
+    seoCanonical = `/feed/posts/${singlePost.id}`;
+  } else if (location.pathname === '/feed/saved' || location.pathname === '/community/saved') {
+    seoTitle = 'Saved Discussions | Ellangala Feed';
+    seoDescription = 'View your saved positive psychology discussions, reflections, and bookmarked insights.';
+    seoCanonical = '/feed/saved';
+  } else if (location.pathname === '/feed/profile' || location.pathname === '/community/profile') {
+    seoTitle = 'Feed Profile | Ellangala Feed';
+    seoDescription = 'Manage your Ellangala Feed profile, authentication, and personalized learning preferences.';
+    seoCanonical = '/feed/profile';
+  }
+
   const seoImage = singlePost?.mediaUrls?.[0]?.mediaUrl || null;
 
   return (
@@ -172,13 +403,13 @@ function CommunityFeedPageContent() {
                   categories={categories}
                   selectedCategory={selectedCategory}
                   onSelectCategory={(catId) => {
-                    if (singlePostId) navigate('/community');
+                    if (singlePostId) navigate('/feed');
                     setCurrentView('feed');
                     setSelectedCategory(catId);
                   }}
                   activeFilter={activeFilter}
                   onSelectFilter={(fil) => {
-                    if (singlePostId) navigate('/community');
+                    if (singlePostId) navigate('/feed');
                     setActiveFilter(fil);
                     if (fil === 'saved') {
                       setCurrentView('saved');
@@ -188,7 +419,7 @@ function CommunityFeedPageContent() {
                   }}
                   currentView={currentView}
                   onSelectView={(view) => {
-                    if (singlePostId) navigate('/community');
+                    if (singlePostId) navigate('/feed');
                     setCurrentView(view);
                     if (view === 'saved') {
                       setActiveFilter('saved');
@@ -212,7 +443,7 @@ function CommunityFeedPageContent() {
                       justifyContent: 'space-between'
                     }}>
                       <Link
-                        to="/community"
+                        to="/feed"
                         style={{
                           display: 'flex',
                           alignItems: 'center',
@@ -252,7 +483,22 @@ function CommunityFeedPageContent() {
                     />
                   )}
 
-                  {/* VIEW 3: SAVED POSTS OR GENERAL FEED STREAM */}
+
+                  {/* VIEW 4: PROFILE (MOBILE INSTAGRAM TAB) */}
+                  {!singlePostId && currentView === 'profile' && (
+                    <CommunityMobileProfileView
+                      onSelectView={(view) => {
+                        setCurrentView(view);
+                        if (view === 'saved') {
+                          setActiveFilter('saved');
+                        } else if (view === 'feed') {
+                          setActiveFilter('latest');
+                        }
+                      }}
+                    />
+                  )}
+
+                  {/* VIEW 5: SAVED POSTS OR GENERAL FEED STREAM */}
                   {!singlePostId && (currentView === 'feed' || currentView === 'saved') && (
                     <>
                       {/* Saved Header Banner (when in Saved view) */}
@@ -279,10 +525,8 @@ function CommunityFeedPageContent() {
                           {/* Welcome Hero Banner (feed only) */}
                           <CommunityWelcomeBanner />
 
-                          {/* Featured Next Masterclass (feed only) */}
-                          {nextWorkshop && (
-                            <CommunityFeaturedWorkshop event={nextWorkshop} />
-                          )}
+                          {/* Featured Event Alert Bar (feed only) */}
+                          <CommunityFeaturedWorkshop event={featuredEvent} />
 
                           {/* Feed Heading & Filter Tabs (feed only) */}
                           <CommunityFeedFilters
@@ -464,6 +708,9 @@ function CommunityFeedPageContent() {
         <MobileNav />
         <SearchPopup />
         <ScrollToTop />
+
+        {/* Instagram-style Mobile Bottom Navigation (Feed, Saved, Profile) */}
+        <CommunityMobileBottomNav singlePostId={singlePostId} />
 
         {/* Global Community Auth Modal */}
         <CommunityAuthModal />

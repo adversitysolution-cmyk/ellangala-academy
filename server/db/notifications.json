@@ -1,0 +1,153 @@
+[
+  {
+    "id": "notif-18366dcc458f",
+    "type": "comment",
+    "title": "New Comment on 'QA Masterclass Reflection on Cognitive Restructuring (Updated)'",
+    "message": "Sunita Sharma: \"This reflection on character strengths resonated deeply with my daily routine.\"",
+    "authorName": "Sunita Sharma",
+    "authorEmail": "sunita@example.com",
+    "authorAvatar": "",
+    "targetUrl": "/admin/feed",
+    "metadata": {
+      "postId": "POST-2026-C9587FAC",
+      "commentId": "CMT-2b7c7de7b515"
+    },
+    "isRead": false,
+    "createdAt": "2026-10-13T09:52:13.203Z"
+  },
+  {
+    "id": "notif-3bc55564c92b",
+    "type": "like",
+    "title": "New Post Like",
+    "message": "A member liked 'QA Masterclass Reflection on Cognitive Restructuring (Updated)' (Total: 1 likes)",
+    "authorName": "Website Visitor",
+    "authorEmail": "",
+    "authorAvatar": "",
+    "targetUrl": "/admin/feed",
+    "metadata": {
+      "postId": "POST-2026-C9587FAC"
+    },
+    "isRead": false,
+    "createdAt": "2026-10-13T09:52:13.194Z"
+  },
+  {
+    "id": "notif-fd919ff9dd82",
+    "type": "like",
+    "title": "New Post Like",
+    "message": "A member liked 'Welcome to the Ellangala Community! 🙏' (Total: 213 likes)",
+    "authorName": "Website Visitor",
+    "authorEmail": "",
+    "authorAvatar": "",
+    "targetUrl": "/admin/feed",
+    "metadata": {
+      "postId": "post-seed-001"
+    },
+    "isRead": false,
+    "createdAt": "2026-10-13T09:52:05.665Z"
+  },
+  {
+    "id": "notif-seed-001",
+    "type": "user_register",
+    "title": "New Member Registered",
+    "message": "Ananya Rao registered a new account on Ellangala Academy",
+    "authorName": "Ananya Rao",
+    "authorEmail": "ananya.rao@example.com",
+    "authorAvatar": "/assets/images/team/member-avatar.png",
+    "targetUrl": "/admin/feed",
+    "metadata": {
+      "userId": "usr-seed-01"
+    },
+    "isRead": false,
+    "createdAt": "2026-10-13T09:36:37.298Z"
+  },
+  {
+    "id": "notif-seed-002",
+    "type": "comment",
+    "title": "New Comment on 'A Thought for Today'",
+    "message": "Kavitha Menon: \"This perspective on mindfulness completely changed my morning routine. Thank you Dr. Naveen!\"",
+    "authorName": "Kavitha Menon",
+    "authorEmail": "kavitha.m@example.com",
+    "authorAvatar": "",
+    "targetUrl": "/admin/feed",
+    "metadata": {
+      "postId": "post-seed-002"
+    },
+    "isRead": false,
+    "createdAt": "2026-10-13T09:09:37.298Z"
+  },
+  {
+    "id": "notif-seed-003",
+    "type": "like",
+    "title": "New Post Like",
+    "message": "Rahul Verma liked post 'Guided Meditation - Inner Stillness (17 mins)'",
+    "authorName": "Rahul Verma",
+    "authorEmail": "rahul.v@example.com",
+    "authorAvatar": "",
+    "targetUrl": "/admin/feed",
+    "metadata": {
+      "postId": "post-seed-003"
+    },
+    "isRead": false,
+    "createdAt": "2026-10-13T08:36:37.298Z"
+  },
+  {
+    "id": "notif-seed-004",
+    "type": "enrollment",
+    "title": "New Workshop Enrollment",
+    "message": "Vikram Shenoy enrolled for Positive MindGym Experiential Circle (1 Seat, ₹999)",
+    "authorName": "Vikram Shenoy",
+    "authorEmail": "vikram.s@example.com",
+    "authorAvatar": "",
+    "targetUrl": "/admin/enrollments",
+    "metadata": {
+      "enrollmentId": "ENR-9042"
+    },
+    "isRead": false,
+    "createdAt": "2026-10-13T07:51:37.298Z"
+  },
+  {
+    "id": "notif-seed-005",
+    "type": "order",
+    "title": "New Book Order #ORD-7821",
+    "message": "Sneha Patel placed an order for 'Bhagavad Gita for Modern Life' handbook (Total: ₹499)",
+    "authorName": "Sneha Patel",
+    "authorEmail": "sneha.patel@example.com",
+    "authorAvatar": "",
+    "targetUrl": "/admin/orders",
+    "metadata": {
+      "orderId": "ORD-7821"
+    },
+    "isRead": true,
+    "createdAt": "2026-10-13T04:51:37.298Z"
+  },
+  {
+    "id": "notif-seed-006",
+    "type": "like",
+    "title": "New Community Interaction",
+    "message": "Deepa Nair liked post 'Welcome to the Ellangala Community!'",
+    "authorName": "Deepa Nair",
+    "authorEmail": "deepa.nair@example.com",
+    "authorAvatar": "",
+    "targetUrl": "/admin/feed",
+    "metadata": {
+      "postId": "post-seed-001"
+    },
+    "isRead": true,
+    "createdAt": "2026-10-13T01:51:37.298Z"
+  },
+  {
+    "id": "notif-seed-007",
+    "type": "contact",
+    "title": "New Contact Inquiry",
+    "message": "Dr. Ramesh Joshi: \"Interested in organizing a Positive Psychology corporate workshop for our university leadership team.\"",
+    "authorName": "Dr. Ramesh Joshi",
+    "authorEmail": "r.joshi@university.edu",
+    "authorAvatar": "",
+    "targetUrl": "/admin/dashboard",
+    "metadata": {
+      "messageId": "MSG-301"
+    },
+    "isRead": true,
+    "createdAt": "2026-10-12T09:51:37.298Z"
+  }
+]

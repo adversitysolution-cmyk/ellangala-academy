@@ -322,9 +322,9 @@ export default function MobileNav() {
             </li>
 
             <li className="mobile-nav__item">
-              <Link to="/blog" onClick={handleClose} className="mobile-nav__link">
-                <i className="fa fa-newspaper mobile-nav__item-icon"></i>
-                <span>{header.nav.blog || "Blog"}</span>
+              <Link to="/feed" onClick={handleClose} className="mobile-nav__link">
+                <i className="fa fa-users mobile-nav__item-icon"></i>
+                <span>{header.nav.community || "Feed"}</span>
               </Link>
             </li>
 
@@ -332,13 +332,6 @@ export default function MobileNav() {
               <Link to="/events" onClick={handleClose} className="mobile-nav__link">
                 <i className="fa fa-calendar-alt mobile-nav__item-icon"></i>
                 <span>{header.nav.events || "Events"}</span>
-              </Link>
-            </li>
-
-            <li className="mobile-nav__item">
-              <Link to="/community" onClick={handleClose} className="mobile-nav__link">
-                <i className="fa fa-users mobile-nav__item-icon"></i>
-                <span>Community</span>
               </Link>
             </li>
           </ul>

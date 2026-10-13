@@ -18,20 +18,31 @@ import {
   ArrowLeft
 } from 'lucide-react';
 import { communityAdminService } from '../services/communityAdminService';
+import { useAdminAuth } from '../context/AdminAuthContext';
+
+const aspectRatioOptions = [
+  { value: '16:9', label: '16:9 (Landscape)', desc: 'Standard widescreen video & horizontal photos' },
+  { value: '1:1', label: '1:1 (Square)', desc: 'Classic Instagram square for posters & quotes' },
+  { value: '4:5', label: '4:5 (Portrait)', desc: 'Instagram portrait feed standard (phone photos)' },
+  { value: '9:16', label: '9:16 (Reel / Vertical)', desc: 'Full vertical phone video (safely clamped)' },
+  { value: 'auto', label: 'Auto (Original)', desc: 'Natural size with 520px height cap' }
+];
 
 export default function CommunityPostForm({ initialData = null, onSubmit, isSubmitting = false }) {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
+  const { currentUser } = useAdminAuth();
 
   const [formData, setFormData] = useState({
     title: '',
     content: '',
     categoryId: '',
     categoryName: '',
-    authorName: 'Dr. Naveen Ellangala',
-    authorRole: 'Founder & Positive Psychologist',
-    authorAvatar: '/assets/images/resources/founder-avatar.png',
+    authorName: initialData?.authorName || currentUser?.name || 'Dr. Naveen Ellangala',
+    authorRole: initialData?.authorRole || currentUser?.role || 'Founder & Positive Psychologist',
+    authorAvatar: initialData?.authorAvatar !== undefined ? initialData.authorAvatar : (currentUser?.avatar || ''),
     postType: 'text',
+    aspectRatio: '16:9',
     mediaUrls: [],
     externalMediaUrl: '',
     relatedCourseSlug: '',
@@ -83,10 +94,11 @@ export default function CommunityPostForm({ initialData = null, onSubmit, isSubm
         content: initialData.content || '',
         categoryId: initialData.categoryId || '',
         categoryName: initialData.categoryName || '',
-        authorName: initialData.authorName || 'Dr. Naveen Ellangala',
-        authorRole: initialData.authorRole || 'Founder & Positive Psychologist',
-        authorAvatar: initialData.authorAvatar || '/assets/images/resources/founder-avatar.png',
+        authorName: initialData.authorName || currentUser?.name || 'Dr. Naveen Ellangala',
+        authorRole: initialData.authorRole || currentUser?.role || 'Founder & Positive Psychologist',
+        authorAvatar: initialData.authorAvatar !== undefined ? initialData.authorAvatar : (currentUser?.avatar || ''),
         postType: initialData.postType || 'text',
+        aspectRatio: initialData.aspectRatio || '16:9',
         mediaUrls: Array.isArray(initialData.mediaUrls) ? initialData.mediaUrls : [],
         externalMediaUrl: initialData.externalMediaUrl || '',
         relatedCourseSlug: initialData.relatedCourseSlug || '',
@@ -104,15 +116,21 @@ export default function CommunityPostForm({ initialData = null, onSubmit, isSubm
     const files = Array.from(e.target.files || []);
     if (files.length === 0) return;
 
+    // 2MB maximum file limit check (2 * 1024 * 1024 bytes)
+    const MAX_SIZE_BYTES = 2 * 1024 * 1024;
+    const oversizedFiles = files.filter(f => f.size > MAX_SIZE_BYTES);
+    if (oversizedFiles.length > 0) {
+      const oversizedInfo = oversizedFiles.map(f => `"${f.name}" (${(f.size / (1024 * 1024)).toFixed(2)}MB)`).join(', ');
+      setUploadError(`Maximum allowed file size is 2MB. The following file(s) exceed 2MB: ${oversizedInfo}. Please select files up to 2MB.`);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      return;
+    }
+
     setIsUploading(true);
     setUploadError('');
 
     try {
-      const uploadResults = [];
-      for (const file of files) {
-        const res = await communityAdminService.uploadMedia(file);
-        uploadResults.push(res);
-      }
+      const uploadResults = await communityAdminService.uploadMediaFiles(files);
 
       setFormData(prev => {
         const nextMedia = [...prev.mediaUrls, ...uploadResults];
@@ -122,11 +140,12 @@ export default function CommunityPostForm({ initialData = null, onSubmit, isSubm
         return {
           ...prev,
           mediaUrls: nextMedia,
-          postType: nextType
+          postType: nextType,
+          aspectRatio: prev.aspectRatio || '16:9'
         };
       });
     } catch (err) {
-      setUploadError(err.message || 'File upload failed. Supported formats: JPG, PNG, WebP, MP4, MP3.');
+      setUploadError(err.message || 'File upload failed. Maximum size is 2MB per file.');
     } finally {
       setIsUploading(false);
       if (fileInputRef.current) fileInputRef.current.value = '';
@@ -202,9 +221,19 @@ export default function CommunityPostForm({ initialData = null, onSubmit, isSubm
       });
     }
 
+    const hasMedia = finalMedia.length > 0 ||
+                     Boolean(formData.externalMediaUrl.trim()) ||
+                     formData.postType !== 'text';
+
+    if (hasMedia && !formData.aspectRatio) {
+      setValidationError('Please select a required aspect ratio (e.g. 16:9, 1:1, 4:5, or 9:16) for your uploaded media.');
+      return;
+    }
+
     const payload = {
       ...formData,
       mediaUrls: finalMedia,
+      aspectRatio: formData.aspectRatio || '16:9',
       scheduledFor: formData.status === 'scheduled' && formData.scheduledFor
         ? new Date(formData.scheduledFor).toISOString()
         : null
@@ -236,16 +265,16 @@ export default function CommunityPostForm({ initialData = null, onSubmit, isSubm
       >
         <button
           type="button"
-          onClick={() => navigate('/admin/community')}
+          onClick={() => navigate('/admin/feed')}
           className="btn-secondary-outline"
         >
-          <ArrowLeft size={16} /> Back to Community Posts
+          <ArrowLeft size={16} /> Back to Feed Posts
         </button>
 
         <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
           <button
             type="button"
-            onClick={() => navigate('/admin/community')}
+            onClick={() => navigate('/admin/feed')}
             className="btn-secondary-outline"
           >
             Cancel
@@ -368,7 +397,11 @@ export default function CommunityPostForm({ initialData = null, onSubmit, isSubm
                       <button
                         key={item.type}
                         type="button"
-                        onClick={() => setFormData(prev => ({ ...prev, postType: item.type }))}
+                        onClick={() => setFormData(prev => ({
+                          ...prev,
+                          postType: item.type,
+                          aspectRatio: prev.aspectRatio || '16:9'
+                        }))}
                         style={{
                           display: 'inline-flex',
                           alignItems: 'center',
@@ -410,9 +443,90 @@ export default function CommunityPostForm({ initialData = null, onSubmit, isSubm
                 </div>
               )}
 
+              {/* Media Display Aspect Ratio Selector (REQUIRED FOR MEDIA) */}
+              <div style={{ background: '#FFFDF9', border: '1px solid #F3E8D6', borderRadius: '10px', padding: '14px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px', flexWrap: 'wrap', gap: '6px' }}>
+                  <label className="admin-label" style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ fontWeight: '700', color: '#1E293B' }}>Media Aspect Ratio</span>
+                    <span style={{
+                      fontSize: '11px',
+                      fontWeight: '700',
+                      color: '#B91C1C',
+                      background: '#FEE2E2',
+                      border: '1px solid #FECACA',
+                      padding: '2px 8px',
+                      borderRadius: '999px',
+                      letterSpacing: '0.02em'
+                    }}>
+                      * Required for Upload
+                    </span>
+                  </label>
+                  <span style={{ fontSize: '12px', color: '#B87B28', fontWeight: '700' }}>
+                    Active: {formData.aspectRatio || '16:9'}
+                  </span>
+                </div>
+                <p style={{ margin: '0 0 10px', fontSize: '11.5px', color: '#64748B' }}>
+                  Select the required frame ratio (like Instagram 1:1, 16:9 widescreen, or 4:5 portrait) to ensure your media fits gracefully in the feed without overflowing.
+                </p>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '8px' }}>
+                  {aspectRatioOptions.map(opt => {
+                    const active = (formData.aspectRatio || '16:9') === opt.value;
+                    return (
+                      <button
+                        key={opt.value}
+                        type="button"
+                        onClick={() => {
+                          setFormData(prev => ({
+                            ...prev,
+                            aspectRatio: opt.value,
+                            postType: prev.postType === 'text' ? 'single_image' : prev.postType
+                          }));
+                          setValidationError('');
+                        }}
+                        style={{
+                          padding: '10px 12px',
+                          textAlign: 'left',
+                          borderRadius: '8px',
+                          border: `2px solid ${active ? '#CA8A38' : '#E2E8F0'}`,
+                          backgroundColor: active ? '#FFFBF2' : '#FFFFFF',
+                          boxShadow: active ? '0 2px 6px rgba(202, 138, 56, 0.2)' : 'none',
+                          cursor: 'pointer',
+                          transition: 'all 0.15s ease'
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                          <span style={{ fontSize: '12px', fontWeight: active ? '700' : '600', color: active ? '#9A5B0B' : '#1E293B' }}>
+                            {opt.label}
+                          </span>
+                          {active && (
+                            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#CA8A38' }} />
+                          )}
+                        </div>
+                        <div style={{ fontSize: '10.5px', color: '#64748B', marginTop: '3px', lineHeight: '1.3' }}>
+                          {opt.desc}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
               {/* Drag & Drop Upload Zone */}
               <div>
-                <label className="admin-label">Upload Files</label>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
+                  <label className="admin-label" style={{ margin: 0 }}>Upload Files</label>
+                  <span style={{
+                    fontSize: '11px',
+                    fontWeight: '700',
+                    color: '#B91C1C',
+                    background: '#FEE2E2',
+                    border: '1px solid #FECACA',
+                    padding: '2px 8px',
+                    borderRadius: '999px'
+                  }}>
+                    Max 2MB per file
+                  </span>
+                </div>
                 <div
                   style={{
                     border: '2px dashed #CBD5E1',
@@ -421,7 +535,7 @@ export default function CommunityPostForm({ initialData = null, onSubmit, isSubm
                     textAlign: 'center',
                     backgroundColor: '#FAF8F5',
                     cursor: 'pointer',
-                    marginTop: '6px'
+                    marginTop: '4px'
                   }}
                   onClick={() => fileInputRef.current?.click()}
                 >
@@ -450,12 +564,15 @@ export default function CommunityPostForm({ initialData = null, onSubmit, isSubm
                     {isUploading ? 'Uploading files...' : 'Click or Drag files to attach media'}
                   </h4>
                   <p style={{ margin: 0, fontSize: '12px', color: '#64748B' }}>
-                    Supports JPEG, PNG, WEBP, MP4, and MP3 (Max 25MB per file)
+                    Supports JPEG, PNG, WEBP, MP4, and MP3 (Max 2MB per file)
                   </p>
+                  <div style={{ marginTop: '8px', display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', color: '#9A5B0B', background: '#FFF7E8', border: '1px solid #FDE68A', padding: '3px 10px', borderRadius: '12px', fontWeight: '600' }}>
+                    Enforced Frame Ratio: <strong>{formData.aspectRatio || '16:9'}</strong>
+                  </div>
                 </div>
 
                 {uploadError && (
-                  <p style={{ color: '#EF4444', fontSize: '13px', marginTop: '8px', marginBottom: 0 }}>
+                  <p style={{ color: '#EF4444', fontSize: '13px', marginTop: '8px', marginBottom: 0, fontWeight: '600' }}>
                     {uploadError}
                   </p>
                 )}
@@ -464,9 +581,14 @@ export default function CommunityPostForm({ initialData = null, onSubmit, isSubm
               {/* Attached Media Grid */}
               {formData.mediaUrls.length > 0 && (
                 <div>
-                  <h5 style={{ fontSize: '13px', fontWeight: '700', color: '#475569', marginBottom: '10px' }}>
-                    Attached Media ({formData.mediaUrls.length})
-                  </h5>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                    <h5 style={{ fontSize: '13px', fontWeight: '700', color: '#475569', margin: 0 }}>
+                      Attached Media ({formData.mediaUrls.length})
+                    </h5>
+                    <span style={{ fontSize: '11.5px', color: '#CA8A38', fontWeight: '700' }}>
+                      Ratio: {formData.aspectRatio || '16:9'}
+                    </span>
+                  </div>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(110px, 1fr))', gap: '12px' }}>
                     {formData.mediaUrls.map((item, idx) => (
                       <div
@@ -495,6 +617,19 @@ export default function CommunityPostForm({ initialData = null, onSubmit, isSubm
                             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                           />
                         )}
+                        <span style={{
+                          position: 'absolute',
+                          bottom: '4px',
+                          left: '4px',
+                          background: 'rgba(15, 23, 42, 0.75)',
+                          color: '#FFFFFF',
+                          fontSize: '10px',
+                          padding: '1px 5px',
+                          borderRadius: '4px',
+                          fontWeight: '600'
+                        }}>
+                          {formData.aspectRatio || '16:9'}
+                        </span>
                         <button
                           type="button"
                           onClick={(e) => {
@@ -719,11 +854,32 @@ export default function CommunityPostForm({ initialData = null, onSubmit, isSubm
 
             <article style={{ background: '#FFFFFF', border: '1px solid #ECE7DE', borderRadius: '16px', padding: '20px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <img
-                  src={formData.authorAvatar || '/assets/images/resources/founder-avatar.png'}
-                  alt={formData.authorName}
-                  style={{ width: '44px', height: '44px', borderRadius: '50%', objectFit: 'cover' }}
-                />
+                {formData.authorAvatar ? (
+                  <img
+                    src={formData.authorAvatar}
+                    alt={formData.authorName}
+                    style={{ width: '44px', height: '44px', borderRadius: '50%', objectFit: 'cover' }}
+                  />
+                ) : (
+                  <div
+                    style={{
+                      width: '44px',
+                      height: '44px',
+                      borderRadius: '50%',
+                      background: '#082349',
+                      color: '#CA8A38',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontWeight: 700,
+                      fontSize: '14px',
+                      border: '1.5px solid #CA8A38',
+                      flexShrink: 0
+                    }}
+                  >
+                    {((formData.authorName || 'Admin').split(' ').filter(Boolean).map(p => p[0]).slice(0, 2).join('') || 'AA').toUpperCase()}
+                  </div>
+                )}
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <span style={{ fontSize: '14px', fontWeight: '700', color: '#1E1A16' }}>{formData.authorName || 'Dr. Naveen Ellangala'}</span>
@@ -745,12 +901,30 @@ export default function CommunityPostForm({ initialData = null, onSubmit, isSubm
               </p>
 
               {formData.mediaUrls.length > 0 && (
-                <div style={{ borderRadius: '10px', overflow: 'hidden', border: '1px solid #EAE5DC' }}>
-                  <img
-                    src={formData.mediaUrls[0]?.mediaUrl}
-                    alt="Preview"
-                    style={{ width: '100%', maxHeight: '280px', objectFit: 'cover', display: 'block' }}
-                  />
+                <div
+                  style={{
+                    borderRadius: '10px',
+                    overflow: 'hidden',
+                    border: '1px solid #EAE5DC',
+                    aspectRatio: formData.aspectRatio === '1:1' ? '1 / 1' : (formData.aspectRatio === '4:5' ? '4 / 5' : (formData.aspectRatio === '9:16' ? '9 / 16' : '16 / 9')),
+                    maxWidth: formData.aspectRatio === '9:16' ? '240px' : (formData.aspectRatio === '4:5' ? '320px' : (formData.aspectRatio === '1:1' ? '360px' : '100%')),
+                    margin: '0 auto',
+                    background: '#0B0F19'
+                  }}
+                >
+                  {formData.postType === 'video' || formData.mediaUrls[0]?.mediaType === 'video' ? (
+                    <video
+                      controls
+                      src={formData.mediaUrls[0]?.mediaUrl}
+                      style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
+                    />
+                  ) : (
+                    <img
+                      src={formData.mediaUrls[0]?.mediaUrl}
+                      alt="Preview"
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                    />
+                  )}
                 </div>
               )}
             </article>

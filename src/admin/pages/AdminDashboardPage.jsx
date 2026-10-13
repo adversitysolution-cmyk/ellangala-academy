@@ -3,10 +3,19 @@ import { Link } from 'react-router-dom';
 import AdminLayout from '../components/AdminLayout';
 import StatCard from '../components/StatCard';
 import StatusBadge from '../components/StatusBadge';
+import AdminProfileModal from '../components/AdminProfileModal';
+import { useAdminAuth } from '../context/AdminAuthContext';
 import { enrollmentService } from '../services/enrollmentService';
 import { orderService } from '../services/orderService';
 import { eventService } from '../../features/events/services/eventService';
-import { ClipboardList, MessageSquare, ShoppingBag, CalendarDays, ArrowRight, MapPin } from 'lucide-react';
+import {
+  ClipboardList,
+  MessageSquare,
+  ShoppingBag,
+  CalendarDays,
+  ArrowRight,
+  MapPin
+} from 'lucide-react';
 
 function formatDate(dateStr) {
   if (!dateStr) return '-';
@@ -32,9 +41,12 @@ function formatMonthDay(dateStr) {
 }
 
 export default function AdminDashboardPage() {
+  const { currentUser } = useAdminAuth();
+
   const [enrollments, setEnrollments] = useState([]);
   const [orders, setOrders] = useState([]);
   const [events, setEvents] = useState([]);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
   useEffect(() => {
     enrollmentService.getEnrollments().then(setEnrollments).catch(() => {});
@@ -47,7 +59,7 @@ export default function AdminDashboardPage() {
 
   return (
     <AdminLayout
-      title="Good Evening, Administrator"
+      title={`Good Day, ${currentUser?.name ? currentUser.name.split(' ')[0] : 'Administrator'}`}
       subtitle="Here’s what’s happening at Ellangala’s Academy today."
     >
       <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
@@ -246,6 +258,11 @@ export default function AdminDashboardPage() {
           </div>
         </div>
       </div>
+
+      <AdminProfileModal
+        isOpen={isProfileModalOpen}
+        onClose={() => setIsProfileModalOpen(false)}
+      />
     </AdminLayout>
   );
 }

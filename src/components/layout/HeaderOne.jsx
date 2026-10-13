@@ -375,13 +375,10 @@ export default function HeaderOne() {
                           </ul>
                         </li>
                         <li>
-                          <Link to="/blog">{header.nav.blog || "Blog"}</Link>
+                          <Link to="/feed">{header.nav.community || "Feed"}</Link>
                         </li>
                         <li>
                           <Link to="/events">{header.nav.events || "Events"}</Link>
-                        </li>
-                        <li>
-                          <Link to="/community">Community</Link>
                         </li>
                       </ul>
                     </div>

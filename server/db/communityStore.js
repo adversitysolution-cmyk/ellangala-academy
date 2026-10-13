@@ -82,6 +82,7 @@ const SEED_POSTS = [
     authorRole: 'Founder & Positive Psychologist',
     authorAvatar: '/assets/images/team/naveen-ellangala.jpg',
     postType: 'single_image',
+    aspectRatio: '16:9',
     mediaUrls: [
       {
         id: 'media-002',
@@ -148,6 +149,13 @@ export async function ensureCommunitySchema() {
     if (memoryStore.posts.length === 0) {
       memoryStore.posts = [...SEED_POSTS];
     }
+    try {
+      const adminProfileFile = path.join(__dirname, '..', 'uploads', 'admin-profile.json');
+      if (fs.existsSync(adminProfileFile)) {
+        const adminProfile = JSON.parse(fs.readFileSync(adminProfileFile, 'utf-8'));
+        await syncAdminProfileToPosts(adminProfile);
+      }
+    } catch (_) {}
     return;
   }
 
@@ -190,6 +198,20 @@ export async function ensureCommunitySchema() {
         ]
       );
     }
+  }
+
+  try {
+    const adminProfileFile = path.join(__dirname, '..', 'uploads', 'admin-profile.json');
+    if (fs.existsSync(adminProfileFile)) {
+      const adminProfile = JSON.parse(fs.readFileSync(adminProfileFile, 'utf-8'));
+      await syncAdminProfileToPosts(adminProfile);
+    }
+  } catch (_) {}
+
+  if (pool) {
+    try {
+      await pool.query("ALTER TABLE community_posts ADD COLUMN IF NOT EXISTS aspectRatio VARCHAR(32) DEFAULT '16:9'");
+    } catch (_) {}
   }
 
   console.log('✅ Community Feed schema verified and initialized.');
@@ -276,6 +298,7 @@ export async function getCommunityPosts({
     const total = posts.length;
     const paginated = posts.slice(offset, offset + limitNum).map(p => ({
       ...p,
+      aspectRatio: p.aspectRatio || (p.postType === 'video' ? '16:9' : (p.postType === 'single_image' ? '16:9' : 'auto')),
       hasLiked: visitorId ? memoryStore.likes.has(`${p.id}:${visitorId}`) : false,
       hasSaved: visitorId ? memoryStore.saved.has(`${p.id}:${visitorId}`) : false
     }));
@@ -366,6 +389,7 @@ export async function getCommunityPosts({
     authorRole: r.authorRole,
     authorAvatar: r.authorAvatar,
     postType: r.postType,
+    aspectRatio: r.aspectRatio || (r.postType === 'video' ? '16:9' : (r.postType === 'single_image' ? '16:9' : 'auto')),
     mediaUrls: parseJson(r.mediaUrls, []),
     relatedCourseSlug: r.relatedCourseSlug,
     relatedCourseTitle: r.relatedCourseTitle,
@@ -438,6 +462,7 @@ export async function getCommunityPostById(id, { includeDrafts = false, visitorI
     authorRole: r.authorRole,
     authorAvatar: r.authorAvatar,
     postType: r.postType,
+    aspectRatio: r.aspectRatio || 'auto',
     mediaUrls: parseJson(r.mediaUrls, []),
     relatedCourseSlug: r.relatedCourseSlug,
     relatedCourseTitle: r.relatedCourseTitle,
@@ -481,16 +506,30 @@ export async function saveCommunityPost(postData) {
     } catch (_) {}
   }
 
+  let defaultAuthorAvatar = '/assets/images/resources/founder-avatar.png';
+  let defaultAuthorName = 'Dr. Naveen Ellangala';
+  let defaultAuthorRole = 'Founder & Positive Psychologist';
+  try {
+    const adminProfileFile = path.join(__dirname, '..', 'uploads', 'admin-profile.json');
+    if (fs.existsSync(adminProfileFile)) {
+      const ap = JSON.parse(fs.readFileSync(adminProfileFile, 'utf-8'));
+      if (ap.avatar !== undefined) defaultAuthorAvatar = ap.avatar || '';
+      if (ap.name) defaultAuthorName = ap.name;
+      if (ap.role) defaultAuthorRole = ap.role;
+    }
+  } catch (_) {}
+
   const postRecord = {
     id,
     title: postData.title.trim(),
     content: postData.content.trim(),
     categoryId: postData.categoryId || 'cat-mindgym',
     categoryName: postData.categoryName || 'Positive MindGym',
-    authorName: postData.authorName || 'Dr. Naveen Ellangala',
-    authorRole: postData.authorRole || 'Founder & Positive Psychologist',
-    authorAvatar: postData.authorAvatar || '/assets/images/resources/founder-avatar.png',
+    authorName: postData.authorName || defaultAuthorName,
+    authorRole: postData.authorRole || defaultAuthorRole,
+    authorAvatar: postData.authorAvatar !== undefined ? postData.authorAvatar : defaultAuthorAvatar,
     postType: postData.postType || 'text',
+    aspectRatio: postData.aspectRatio || 'auto',
     mediaUrls: Array.isArray(postData.mediaUrls) ? postData.mediaUrls : [],
     relatedCourseSlug: postData.relatedCourseSlug || null,
     relatedCourseTitle,
@@ -523,14 +562,14 @@ export async function saveCommunityPost(postData) {
     await pool.query(
       `UPDATE community_posts SET
         title = ?, content = ?, categoryId = ?, categoryName = ?,
-        authorName = ?, authorRole = ?, authorAvatar = ?, postType = ?,
+        authorName = ?, authorRole = ?, authorAvatar = ?, postType = ?, aspectRatio = ?,
         mediaUrls = ?, relatedCourseSlug = ?, relatedCourseTitle = ?,
         relatedEventId = ?, relatedEventTitle = ?, status = ?, isPinned = ?,
         pinnedAt = ?, scheduledFor = ?, publishedAt = ?, updatedAt = ?
       WHERE id = ?`,
       [
         postRecord.title, postRecord.content, postRecord.categoryId, postRecord.categoryName,
-        postRecord.authorName, postRecord.authorRole, postRecord.authorAvatar, postRecord.postType,
+        postRecord.authorName, postRecord.authorRole, postRecord.authorAvatar, postRecord.postType, postRecord.aspectRatio,
         JSON.stringify(postRecord.mediaUrls), postRecord.relatedCourseSlug, postRecord.relatedCourseTitle,
         postRecord.relatedEventId, postRecord.relatedEventTitle, postRecord.status, postRecord.isPinned,
         toDbDatetime(postRecord.pinnedAt), toDbDatetime(postRecord.scheduledFor), toDbDatetime(postRecord.publishedAt),
@@ -541,13 +580,13 @@ export async function saveCommunityPost(postData) {
     await pool.query(
       `INSERT INTO community_posts (
         id, title, content, categoryId, categoryName, authorName, authorRole, authorAvatar,
-        postType, mediaUrls, relatedCourseSlug, relatedCourseTitle, relatedEventId, relatedEventTitle,
+        postType, aspectRatio, mediaUrls, relatedCourseSlug, relatedCourseTitle, relatedEventId, relatedEventTitle,
         status, isPinned, pinnedAt, scheduledFor, publishedAt, likesCount, commentsCount, sharesCount,
         createdAt, updatedAt
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         postRecord.id, postRecord.title, postRecord.content, postRecord.categoryId, postRecord.categoryName,
-        postRecord.authorName, postRecord.authorRole, postRecord.authorAvatar, postRecord.postType,
+        postRecord.authorName, postRecord.authorRole, postRecord.authorAvatar, postRecord.postType, postRecord.aspectRatio,
         JSON.stringify(postRecord.mediaUrls), postRecord.relatedCourseSlug, postRecord.relatedCourseTitle,
         postRecord.relatedEventId, postRecord.relatedEventTitle, postRecord.status, postRecord.isPinned,
         toDbDatetime(postRecord.pinnedAt), toDbDatetime(postRecord.scheduledFor), toDbDatetime(postRecord.publishedAt),
@@ -558,6 +597,50 @@ export async function saveCommunityPost(postData) {
   }
 
   return postRecord;
+}
+
+export async function syncAdminProfileToPosts({ name, role, avatar } = {}) {
+  if (memoryStore.posts && Array.isArray(memoryStore.posts)) {
+    for (const post of memoryStore.posts) {
+      if (avatar !== undefined) {
+        post.authorAvatar = avatar || '';
+      }
+      if (name) {
+        post.authorName = name;
+      }
+      if (role) {
+        post.authorRole = role;
+      }
+    }
+  }
+
+  if (pool) {
+    try {
+      const updates = [];
+      const params = [];
+
+      if (avatar !== undefined) {
+        updates.push('authorAvatar = ?');
+        params.push(avatar || '');
+      }
+      if (name) {
+        updates.push('authorName = ?');
+        params.push(name);
+      }
+      if (role) {
+        updates.push('authorRole = ?');
+        params.push(role);
+      }
+
+      if (updates.length > 0) {
+        await pool.query(`UPDATE community_posts SET ${updates.join(', ')}`, params);
+      }
+    } catch (err) {
+      console.error('Error syncing admin profile to community posts in SQL:', err.message);
+    }
+  }
+
+  return true;
 }
 
 export async function deleteCommunityPost(id) {
@@ -748,13 +831,14 @@ export async function createCommunityComment({ postId, authorName, authorEmail =
   return record;
 }
 
-export async function getAdminCommunityComments({ status = 'all', page = 1, limit = 30 } = {}) {
+export async function getAdminCommunityComments({ postId = null, status = 'all', page = 1, limit = 50 } = {}) {
   const pageNum = Math.max(1, parseInt(page, 10) || 1);
-  const limitNum = Math.min(100, Math.max(1, parseInt(limit, 10) || 30));
+  const limitNum = Math.min(100, Math.max(1, parseInt(limit, 10) || 50));
   const offset = (pageNum - 1) * limitNum;
 
   if (!pool) {
     let comments = [...memoryStore.comments];
+    if (postId) comments = comments.filter(c => c.postId === postId);
     if (status !== 'all') comments = comments.filter(c => c.status === status);
     comments.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     return {
@@ -763,10 +847,20 @@ export async function getAdminCommunityComments({ status = 'all', page = 1, limi
     };
   }
 
-  const whereClause = status !== 'all' ? 'WHERE status = ?' : '';
-  const params = status !== 'all' ? [status] : [];
+  const conditions = [];
+  const params = [];
+  if (postId) {
+    conditions.push('c.postId = ?');
+    params.push(postId);
+  }
+  if (status !== 'all') {
+    conditions.push('c.status = ?');
+    params.push(status);
+  }
 
-  const [[{ total }]] = await pool.query(`SELECT COUNT(*) AS total FROM community_comments ${whereClause}`, params);
+  const whereClause = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+
+  const [[{ total }]] = await pool.query(`SELECT COUNT(*) AS total FROM community_comments c ${whereClause}`, params);
   const [rows] = await pool.query(
     `SELECT c.*, p.title AS postTitle
      FROM community_comments c
@@ -851,8 +945,12 @@ export async function getCommunitySidebarData(channelId = 'all') {
       mode: e.mode || 'Online (Zoom)',
       venue: e.venue || 'Online (Zoom)',
       image: e.image || '/assets/images/services/Positive Workshop.png',
-      registrationOpen: e.registrationOpen !== false
+      registrationOpen: e.registrationOpen !== false,
+      featured: Boolean(e.featured),
+      description: e.shortDescription || e.description || ''
     }));
+
+  const featuredEvent = upcomingEvents.find(e => e.featured) || null;
 
   const featuredCourse = {
     slug: 'positive-psychology-meaningful-life',
@@ -909,6 +1007,7 @@ export async function getCommunitySidebarData(channelId = 'all') {
   };
 
   return {
+    featuredEvent,
     featuredCourse,
     upcomingEvents,
     recommendedCourses,

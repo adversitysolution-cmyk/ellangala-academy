@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS community_posts (
   authorRole VARCHAR(120) DEFAULT 'Founder & Positive Psychologist',
   authorAvatar VARCHAR(500) DEFAULT '/assets/images/resources/founder-avatar.png',
   postType VARCHAR(32) DEFAULT 'text',
+  aspectRatio VARCHAR(32) DEFAULT '16:9',
   mediaUrls JSON,
   relatedCourseSlug VARCHAR(120),
   relatedCourseTitle VARCHAR(255),

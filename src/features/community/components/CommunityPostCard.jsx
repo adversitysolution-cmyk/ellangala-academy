@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Heart,
@@ -20,6 +20,19 @@ export default function CommunityPostCard({ post, onPostUpdated }) {
   const [showComments, setShowComments] = useState(false);
   const [commentsCount, setCommentsCount] = useState(post.commentsCount || 0);
   const [showShareModal, setShowShareModal] = useState(false);
+  const [avatarError, setAvatarError] = useState(false);
+
+  useEffect(() => {
+    setAvatarError(false);
+  }, [post.authorAvatar]);
+
+  const authorInitials = (post.authorName || 'Academy Administrator')
+    .split(' ')
+    .filter(Boolean)
+    .map(p => p[0])
+    .slice(0, 2)
+    .join('')
+    .toUpperCase() || 'AA';
 
   const handleToggleLike = async () => {
     const nextLiked = !liked;
@@ -67,11 +80,21 @@ export default function CommunityPostCard({ post, onPostUpdated }) {
       {/* Top Author Row */}
       <div className="community-post-header-row">
         <div className="community-post-author-block">
-          <img
-            src={post.authorAvatar || '/assets/images/resources/founder-avatar.png'}
-            alt={post.authorName || 'Dr. Naveen Ellangala'}
-            className="community-post-avatar-img"
-          />
+          {post.authorAvatar && !avatarError ? (
+            <img
+              src={post.authorAvatar}
+              alt={post.authorName || 'Dr. Naveen Ellangala'}
+              className="community-post-avatar-img"
+              onError={() => setAvatarError(true)}
+            />
+          ) : (
+            <div
+              className="community-post-avatar-initials"
+              title={post.authorName || 'Dr. Naveen Ellangala'}
+            >
+              {authorInitials}
+            </div>
+          )}
           <div className="community-post-author-info">
             <div className="community-post-author-name-line">
               <span className="community-author-display-name">
@@ -124,7 +147,7 @@ export default function CommunityPostCard({ post, onPostUpdated }) {
       )}
 
       {/* Post Media (Image, Audio Waveform, Gallery, Video) */}
-      <CommunityPostMedia postType={post.postType} mediaUrls={post.mediaUrls} />
+      <CommunityPostMedia postType={post.postType} mediaUrls={post.mediaUrls} aspectRatio={post.aspectRatio} />
 
       {/* Clean Bottom Action Row: Like, Comment, Share */}
       <div className="community-post-footer-actions">

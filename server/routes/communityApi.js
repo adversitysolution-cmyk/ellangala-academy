@@ -25,6 +25,7 @@ import {
   getCommunityUserLearning,
   getCommunityUserWorkshops
 } from '../db/communityStore.js';
+import { createNotification } from '../db/notificationStore.js';
 
 const router = asyncRouter();
 
@@ -49,7 +50,7 @@ const communityUpload = multer({
       cb(null, `community-${Date.now()}-${crypto.randomBytes(6).toString('hex')}${ext}`);
     }
   }),
-  limits: { fileSize: 25 * 1024 * 1024 }, // 25 MB max
+  limits: { fileSize: 2 * 1024 * 1024 }, // 2 MB max
   fileFilter: (req, file, cb) => {
     if (!ALLOWED_COMMUNITY_MIME[file.mimetype]) {
       return cb(new Error('Allowed formats: JPEG, PNG, WEBP, GIF, MP3, WAV, MP4, WEBM'));
@@ -75,6 +76,17 @@ router.post('/community/auth/signup', async (req, res) => {
   const { name, phone, email, password, avatarUrl, topics } = req.body;
   try {
     const user = await createCommunityUser({ name, phone, email, password, avatarUrl, topics });
+    createNotification({
+      type: 'user_register',
+      title: 'New Member Registered',
+      message: `${user.name} registered a new account on Ellangala Academy`,
+      authorName: user.name,
+      authorEmail: user.email,
+      authorAvatar: user.avatarUrl,
+      targetUrl: '/admin/feed',
+      metadata: { userId: user.id }
+    }).catch?.(() => {});
+
     res.status(201).json({
       success: true,
       user,
@@ -226,6 +238,16 @@ router.post('/community/posts/:id/comments', async (req, res) => {
     visitorId
   });
 
+  createNotification({
+    type: 'comment',
+    title: `New Comment on '${post.title}'`,
+    message: `${authorName}: "${content.length > 80 ? content.slice(0, 80) + '...' : content}"`,
+    authorName,
+    authorEmail,
+    targetUrl: '/admin/feed',
+    metadata: { postId: req.params.id, commentId: comment.id }
+  }).catch?.(() => {});
+
   res.status(201).json(comment);
 });
 
@@ -238,6 +260,17 @@ router.post('/community/posts/:id/like', async (req, res) => {
 
   try {
     const result = await toggleCommunityLike(req.params.id, visitorId.trim());
+    if (result.liked) {
+      getCommunityPostById(req.params.id, { includeDrafts: true }).then(targetPost => {
+        createNotification({
+          type: 'like',
+          title: 'New Post Like',
+          message: `A member liked '${targetPost?.title || 'Feed Post'}' (Total: ${result.likesCount} likes)`,
+          targetUrl: '/admin/feed',
+          metadata: { postId: req.params.id }
+        }).catch?.(() => {});
+      }).catch?.(() => {});
+    }
     res.json(result);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -335,8 +368,8 @@ router.patch('/admin/community/posts/:id/pin', async (req, res) => {
 
 // GET /api/admin/community/comments
 router.get('/admin/community/comments', async (req, res) => {
-  const { status, page, limit } = req.query;
-  const result = await getAdminCommunityComments({ status: status || 'all', page, limit });
+  const { postId, status, page, limit } = req.query;
+  const result = await getAdminCommunityComments({ postId: postId || null, status: status || 'all', page, limit });
   res.json(result);
 });
 
@@ -364,7 +397,12 @@ router.delete('/admin/community/comments/:id', async (req, res) => {
 // POST /api/admin/community/upload-media (supports single or multiple file uploads)
 router.post('/admin/community/upload-media', (req, res) => {
   communityUpload.array('media', 10)(req, res, (err) => {
-    if (err) return res.status(400).json({ error: err.message });
+    if (err) {
+      if (err.code === 'LIMIT_FILE_SIZE') {
+        return res.status(400).json({ error: 'File size exceeds 2MB maximum limit. Please upload files under 2MB.' });
+      }
+      return res.status(400).json({ error: err.message });
+    }
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ error: 'No media files uploaded.' });
     }

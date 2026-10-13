@@ -12,7 +12,7 @@ export default function CommunityPostCreatePage() {
     setIsSubmitting(true);
     try {
       await communityAdminService.createPost(formData);
-      navigate('/admin/community');
+      navigate('/admin/feed');
     } catch (err) {
       alert(err.message || 'Failed to create post.');
     } finally {

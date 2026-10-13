@@ -16,7 +16,7 @@ export default function CommunityPostEditPage() {
       .then(setPost)
       .catch(err => {
         alert(err.message || 'Post could not be loaded.');
-        navigate('/admin/community');
+        navigate('/admin/feed');
       })
       .finally(() => setLoading(false));
   }, [id, navigate]);
@@ -25,7 +25,7 @@ export default function CommunityPostEditPage() {
     setIsSubmitting(true);
     try {
       await communityAdminService.updatePost(id, formData);
-      navigate('/admin/community');
+      navigate('/admin/feed');
     } catch (err) {
       alert(err.message || 'Failed to update post.');
     } finally {

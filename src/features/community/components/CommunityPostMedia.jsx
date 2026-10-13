@@ -1,11 +1,70 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Play, Pause, Volume2, VolumeX, MoreVertical, X } from 'lucide-react';
 
-export default function CommunityPostMedia({ postType, mediaUrls = [] }) {
+function getEmbedInfo(url) {
+  if (!url) return null;
+  const str = String(url).trim();
+  const ytMatch = str.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|shorts\/))([\w-]{11})/i);
+  if (ytMatch) {
+    return {
+      type: 'youtube',
+      embedUrl: `https://www.youtube-nocookie.com/embed/${ytMatch[1]}?rel=0&modestbranding=1`
+    };
+  }
+  const vimeoMatch = str.match(/(?:vimeo\.com\/)(\d+)/i);
+  if (vimeoMatch) {
+    return {
+      type: 'vimeo',
+      embedUrl: `https://player.vimeo.com/video/${vimeoMatch[1]}`
+    };
+  }
+  return null;
+}
+
+function getRatioContainerStyle(ratio) {
+  switch (ratio) {
+    case '1:1':
+      return {
+        aspectRatio: '1 / 1',
+        width: '100%',
+        maxWidth: '500px',
+        margin: '0 auto'
+      };
+    case '4:5':
+      return {
+        aspectRatio: '4 / 5',
+        width: '100%',
+        maxWidth: '416px',
+        margin: '0 auto'
+      };
+    case '16:9':
+      return {
+        aspectRatio: '16 / 9',
+        width: '100%',
+        margin: '0 auto'
+      };
+    case '9:16':
+      return {
+        aspectRatio: '9 / 16',
+        width: '100%',
+        maxWidth: '292px',
+        margin: '0 auto'
+      };
+    case 'auto':
+    default:
+      return {
+        width: '100%',
+        maxHeight: '520px',
+        margin: '0 auto'
+      };
+  }
+}
+
+export default function CommunityPostMedia({ postType, mediaUrls = [], aspectRatio = 'auto' }) {
   const [lightboxIndex, setLightboxIndex] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(1055); // 17:35 default if not loaded
+  const [duration, setDuration] = useState(1055); // default
   const [isMuted, setIsMuted] = useState(false);
   const audioRef = useRef(null);
 
@@ -16,7 +75,6 @@ export default function CommunityPostMedia({ postType, mediaUrls = [] }) {
       setIsPlaying(false);
     } else {
       audioRef.current.play().catch(() => {
-        // Fallback simulated playing if audio src is placeholder
         setIsPlaying(true);
       });
       setIsPlaying(true);
@@ -43,7 +101,6 @@ export default function CommunityPostMedia({ postType, mediaUrls = [] }) {
   // 1. Audio Post with custom waveform bar UI
   if (postType === 'audio') {
     const audioItem = mediaUrls[0];
-    // Waveform bar heights mimicking realistic sound wave
     const waveBars = [
       14, 22, 16, 28, 36, 20, 26, 42, 30, 18, 34, 46, 32, 24, 38,
       28, 44, 36, 22, 30, 48, 38, 24, 32, 40, 26, 18, 30, 22, 16,
@@ -59,7 +116,6 @@ export default function CommunityPostMedia({ postType, mediaUrls = [] }) {
           onEnded={() => setIsPlaying(false)}
         />
 
-        {/* Circular Gold Play Button */}
         <button
           type="button"
           onClick={togglePlayAudio}
@@ -73,7 +129,6 @@ export default function CommunityPostMedia({ postType, mediaUrls = [] }) {
           )}
         </button>
 
-        {/* Waveform Visualization Bars */}
         <div className="community-audio-waveform-wrap">
           {waveBars.map((height, idx) => {
             const progressRatio = duration > 0 ? currentTime / duration : 0;
@@ -90,12 +145,10 @@ export default function CommunityPostMedia({ postType, mediaUrls = [] }) {
           })}
         </div>
 
-        {/* Timestamp */}
         <div className="community-audio-timestamp">
           {formatTime(currentTime)} / {formatTime(duration)}
         </div>
 
-        {/* Volume & Options */}
         <div className="community-audio-controls-right">
           <button
             type="button"
@@ -122,30 +175,105 @@ export default function CommunityPostMedia({ postType, mediaUrls = [] }) {
     );
   }
 
-  // 2. Video Post
-  if (postType === 'video') {
+  // 2. Video Post (External YouTube/Vimeo Embed OR Uploaded MP4/WebM Video)
+  const isVideo = postType === 'video' || (mediaUrls.length === 1 && (mediaUrls[0]?.mediaType === 'video' || String(mediaUrls[0]?.mediaUrl).match(/\.(mp4|webm|mov)(\?|$)/i)));
+  if (isVideo) {
     const videoItem = mediaUrls[0];
+    const embedInfo = getEmbedInfo(videoItem.mediaUrl);
+    // Use the admin's exact chosen aspect ratio; default to 16:9 if unspecified
+    const effectiveRatio = aspectRatio && aspectRatio !== 'auto' ? aspectRatio : '16:9';
+    const ratioStyle = getRatioContainerStyle(effectiveRatio);
+
     return (
-      <div className="community-post-media-wrap">
-        <div className="community-media-video-wrap">
-          <video controls src={videoItem.mediaUrl} style={{ width: '100%', height: '100%', borderRadius: '12px' }} />
-        </div>
+      <div className="community-post-media-wrap" style={{ ...ratioStyle, background: '#000000' }}>
+        {embedInfo ? (
+          <iframe
+            src={embedInfo.embedUrl}
+            title={videoItem.caption || 'Community Video'}
+            className="community-media-video-frame"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        ) : (
+          <video
+            controls
+            playsInline
+            preload="metadata"
+            src={videoItem.mediaUrl}
+            className="community-media-video-element"
+            style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+          />
+        )}
       </div>
     );
   }
 
-  // 3. Single Panoramic / Featured Image Post
+  // 3. Multi-Image Gallery
+  if (postType === 'gallery' && mediaUrls.length > 1) {
+    return (
+      <>
+        <div className="community-post-gallery-grid">
+          {mediaUrls.slice(0, 4).map((item, idx) => (
+            <div
+              key={item.id || idx}
+              className="community-post-gallery-item"
+              onClick={() => setLightboxIndex(idx)}
+              style={{ cursor: 'pointer' }}
+            >
+              <img src={item.mediaUrl} alt={item.caption || `Gallery ${idx + 1}`} loading="lazy" />
+              {idx === 3 && mediaUrls.length > 4 && (
+                <div className="community-post-gallery-more">
+                  +{mediaUrls.length - 4}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {lightboxIndex !== null && (
+          <div
+            className="community-lightbox-backdrop"
+            onClick={() => setLightboxIndex(null)}
+          >
+            <button
+              type="button"
+              onClick={() => setLightboxIndex(null)}
+              className="community-lightbox-close-btn"
+            >
+              <X size={28} />
+            </button>
+            <img
+              src={mediaUrls[lightboxIndex]?.mediaUrl}
+              alt="Full view"
+              className="community-lightbox-img"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
+        )}
+      </>
+    );
+  }
+
+  // 4. Single Panoramic / Featured Image Post
   const singleItem = mediaUrls[0];
+  const effectiveRatio = aspectRatio && aspectRatio !== 'auto' ? aspectRatio : '16:9';
+  const imgRatioStyle = getRatioContainerStyle(effectiveRatio);
+
   return (
     <>
-      <div className="community-post-media-wrap">
+      <div className="community-post-media-wrap" style={{ ...imgRatioStyle }}>
         <img
           src={singleItem.mediaUrl}
           alt={singleItem.caption || 'Community Post'}
           className="community-post-single-image"
           loading="lazy"
           onClick={() => setLightboxIndex(0)}
-          style={{ cursor: 'pointer' }}
+          style={{
+            cursor: 'pointer',
+            width: '100%',
+            height: '100%',
+            objectFit: effectiveRatio === 'auto' ? 'contain' : 'cover'
+          }}
         />
       </div>
 

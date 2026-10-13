@@ -23,7 +23,7 @@ export const commonContent = {
       case: "Case",
       page: "Page",
       shop: "Resources",
-      blog: "Blog",
+      community: "Feed",
       contact: "Contact"
     },
     servicesList: [
@@ -43,7 +43,7 @@ export const commonContent = {
     booksList: [
       { name: "Books", path: "/resources?tab=books" },
       { name: "Affirmation Cards", path: "/resources?tab=affirmation-cards" },
-      { name: "Blogs & Insights", path: "/blog" },
+      { name: "Feed", path: "/feed" },
       { name: "Videos on Talks", path: "/videos" },
       { name: "Meditation & Music", path: "/meditation" },
       { name: "Free Resources", path: "/free-resources" }

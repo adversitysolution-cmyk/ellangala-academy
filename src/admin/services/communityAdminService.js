@@ -55,8 +55,9 @@ export const communityAdminService = {
   },
 
   async uploadMediaFiles(files) {
+    const list = Array.isArray(files) ? files : [files];
     const formData = new FormData();
-    for (const f of files) {
+    for (const f of list) {
       formData.append('media', f);
     }
 
@@ -74,16 +75,43 @@ export const communityAdminService = {
       throw new Error(err.error || 'Failed to upload media files.');
     }
 
-    return res.json();
+    const data = await res.json();
+    return data.media || [];
   },
 
-  async getComments({ status = 'all', page = 1, limit = 50 } = {}) {
+  async uploadMedia(file) {
+    const mediaList = await this.uploadMediaFiles([file]);
+    if (!mediaList || mediaList.length === 0) {
+      throw new Error('Upload failed.');
+    }
+    return mediaList[0];
+  },
+
+  async getComments({ postId, status = 'all', page = 1, limit = 50 } = {}) {
     const params = new URLSearchParams();
+    if (postId) params.append('postId', postId);
     if (status && status !== 'all') params.append('status', status);
     params.append('page', String(page));
     params.append('limit', String(limit));
 
     return adminFetch(`/admin/community/comments?${params.toString()}`);
+  },
+
+  async postComment(postId, { authorName = 'Dr. Naveen Ellangala', authorEmail = 'admin@ellangala.com', content }) {
+    const res = await fetch(`${API_BASE}/community/posts/${encodeURIComponent(postId)}/comments`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        authorName,
+        authorEmail,
+        content
+      })
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'Failed to submit admin reply.');
+    }
+    return res.json();
   },
 
   async updateCommentStatus(id, status) {

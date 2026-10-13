@@ -15,7 +15,7 @@ export default function CommunityWelcomeBanner() {
     >
       <div className="community-wb-left-content">
         <h2 className="community-wb-heading">
-          Welcome to the<br />Ellangala Community
+          Welcome to the<br />Ellangala Feed
         </h2>
         <p className="community-wb-subheading">
           Learn, reflect, and grow with Dr. Naveen Ellangala.
@@ -23,17 +23,17 @@ export default function CommunityWelcomeBanner() {
 
         <div className="community-wb-features-row">
           <div className="community-wb-feature-item">
-            <Users size={16} className="community-wb-feature-icon" />
+            <Users size={11} className="community-wb-feature-icon" />
             <span>Meaningful Discussions</span>
           </div>
 
           <div className="community-wb-feature-item">
-            <BookOpen size={16} className="community-wb-feature-icon" />
+            <BookOpen size={11} className="community-wb-feature-icon" />
             <span>Practical Wisdom</span>
           </div>
 
           <div className="community-wb-feature-item">
-            <Sparkles size={16} className="community-wb-feature-icon" />
+            <Sparkles size={11} className="community-wb-feature-icon" />
             <span>Supportive Community</span>
           </div>
         </div>

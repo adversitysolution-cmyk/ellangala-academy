@@ -9,6 +9,7 @@ import {
 import { asyncRouter } from '../lib/asyncRouter.js';
 import { sendMail } from '../lib/mailer.js';
 import { siteConfig } from '../../src/seo/siteConfig.js';
+import { createNotification } from '../db/notificationStore.js';
 
 const STATUS_MESSAGES = {
   New: 'has been received and is being reviewed',
@@ -56,6 +57,17 @@ router.post('/orders', async (req, res) => {
   }
 
   const order = await createDbOrder(payload);
+
+  createNotification({
+    type: 'order',
+    title: `New Book Order #${order.id}`,
+    message: `${payload.firstName || 'Customer'} placed an order for ₹${payload.total || 0}`,
+    authorName: payload.firstName || 'Customer',
+    authorEmail: payload.email || '',
+    targetUrl: `/admin/orders/${order.id}`,
+    metadata: { orderId: order.id }
+  }).catch?.(() => {});
+
   res.status(201).json(order);
 
   // ponytail: counts usage at order-placement, so an abandoned online payment

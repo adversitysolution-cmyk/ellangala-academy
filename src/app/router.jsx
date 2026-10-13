@@ -36,6 +36,7 @@ import { AdminAuthProvider } from '../admin/context/AdminAuthContext';
 import AdminProtectedRoute from '../admin/components/AdminProtectedRoute';
 import AdminLoginPage from '../admin/pages/AdminLoginPage';
 import AdminDashboardPage from '../admin/pages/AdminDashboardPage';
+import AdminNotificationsPage from '../admin/pages/AdminNotificationsPage';
 import EnrollmentListPage from '../admin/pages/EnrollmentListPage';
 import EnrollmentDetailPage from '../admin/pages/EnrollmentDetailPage';
 import OrderListPage from '../admin/pages/OrderListPage';
@@ -175,8 +176,16 @@ export default function AppRouter() {
               <Route path="/events/:slug" element={<EventDetailsPage />} />
               <Route path="/events/:slug/register" element={<EventRegisterPage />} />
 
-              {/* Public Community Feed Routes */}
-              <Route path="/community" element={<CommunityFeedPage />} />
+              {/* Public Feed Routes */}
+              <Route path="/feed" element={<CommunityFeedPage />} />
+              <Route path="/feed/saved" element={<CommunityFeedPage />} />
+              <Route path="/feed/profile" element={<CommunityFeedPage />} />
+              <Route path="/feed/posts/:id" element={<CommunityFeedPage />} />
+
+              {/* Legacy /community URLs compatibility */}
+              <Route path="/community" element={<Navigate to="/feed" replace />} />
+              <Route path="/community/saved" element={<Navigate to="/feed/saved" replace />} />
+              <Route path="/community/profile" element={<Navigate to="/feed/profile" replace />} />
               <Route path="/community/posts/:id" element={<CommunityFeedPage />} />
 
               {/* Public Certificate Verification */}
@@ -191,6 +200,14 @@ export default function AppRouter() {
                 element={
                   <AdminProtectedRoute>
                     <AdminDashboardPage />
+                  </AdminProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/notifications"
+                element={
+                  <AdminProtectedRoute>
+                    <AdminNotificationsPage />
                   </AdminProtectedRoute>
                 }
               />
@@ -335,9 +352,9 @@ export default function AppRouter() {
                 }
               />
 
-              {/* Admin Community Routes */}
+              {/* Admin Feed Routes */}
               <Route
-                path="/admin/community"
+                path="/admin/feed"
                 element={
                   <AdminProtectedRoute>
                     <CommunityAdminPage />
@@ -345,10 +362,34 @@ export default function AppRouter() {
                 }
               />
               <Route
-                path="/admin/community/new"
+                path="/admin/feed/new"
                 element={
                   <AdminProtectedRoute>
                     <CommunityPostCreatePage />
+                  </AdminProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/feed/:id/edit"
+                element={
+                  <AdminProtectedRoute>
+                    <CommunityPostEditPage />
+                  </AdminProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/community"
+                element={
+                  <AdminProtectedRoute>
+                    <Navigate to="/admin/feed" replace />
+                  </AdminProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/community/new"
+                element={
+                  <AdminProtectedRoute>
+                    <Navigate to="/admin/feed/new" replace />
                   </AdminProtectedRoute>
                 }
               />

@@ -199,6 +199,23 @@ export const communityService = {
     return data.avatarUrl;
   },
 
+  async updateProfile(token, profileData) {
+    if (!token) throw new Error('Authentication required.');
+    const res = await fetch(`${API_BASE}/community/auth/profile`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify(profileData)
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error || 'Failed to update profile.');
+    }
+    return data.user;
+  },
+
   async getUserLearning(token) {
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
     const res = await fetch(`${API_BASE}/community/user/learning`, { headers });

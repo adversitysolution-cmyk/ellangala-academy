@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import {
   Home,
   Bookmark,
@@ -8,7 +9,9 @@ import {
   LogIn,
   UserPlus,
   LogOut,
-  Sparkles
+  Sparkles,
+  Smartphone,
+  Download
 } from 'lucide-react';
 import { useAdminAuth } from '../../../admin/context/AdminAuthContext';
 import { useCommunityAuth } from '../context/CommunityAuthContext';
@@ -61,6 +64,8 @@ export default function CommunitySidebar({
     return name.trim().charAt(0).toUpperCase();
   };
 
+  const [sidebarImgError, setSidebarImgError] = React.useState(false);
+
   return (
     <aside className="community-left-sidebar community-sidebar-sticky">
       {/* 1. Profile / Navigation Card */}
@@ -70,11 +75,12 @@ export default function CommunitySidebar({
           /* ================= MEMBER STATE ================= */
           <div className="community-member-profile-header">
             <div className="community-profile-row">
-              {communityUser.avatarUrl ? (
+              {communityUser.avatarUrl && !sidebarImgError ? (
                 <img
                   src={communityUser.avatarUrl}
                   alt={communityUser.name}
                   className="community-mock-avatar"
+                  onError={() => setSidebarImgError(true)}
                 />
               ) : (
                 <div className="community-initials-avatar">
@@ -177,25 +183,6 @@ export default function CommunitySidebar({
             <Bookmark size={18} className="community-nav-icon" />
             <span>Saved</span>
           </button>
-
-          {/* Workshops */}
-          <button
-            type="button"
-            className={`community-mock-nav-item ${currentView === 'workshops' ? 'active' : ''}`}
-            onClick={() => {
-              if (!isCommunityMember) {
-                openAuthModal('login', 'Sign in to access your enrolled workshops and live session links.');
-              } else {
-                handleNavClick('workshops');
-              }
-            }}
-          >
-            <Calendar size={18} className="community-nav-icon" />
-            <span>Workshops</span>
-            {isCommunityMember && (
-              <span className="community-nav-badge">1</span>
-            )}
-          </button>
         </nav>
 
         {/* Divider */}
@@ -205,19 +192,6 @@ export default function CommunitySidebar({
         <div className="community-topics-section">
           <div className="community-topics-header">
             <h4>Topics &amp; Interests</h4>
-            <button
-              type="button"
-              className="community-topics-edit-btn"
-              onClick={() => {
-                if (!isCommunityMember) {
-                  openAuthModal('signup', 'Create your account to choose your personal topics.');
-                } else {
-                  onSelectCategory('all');
-                }
-              }}
-            >
-              {isCommunityMember ? 'Explore All' : 'Choose'}
-            </button>
           </div>
 
           <div className="community-topic-pills-wrap">
@@ -253,6 +227,82 @@ export default function CommunitySidebar({
           <cite className="community-mountain-quote-author">
             — DR. NAVEEN ELLANGALA
           </cite>
+        </div>
+      </div>
+
+      {/* 3. Positive MindGym App Card (Opposite to Recommended for You Card) */}
+      <div className="community-mock-card community-mindgym-card">
+        <div className="community-card-head-row">
+          <div>
+            <h4 className="community-card-title">Positive Mind GYM App</h4>
+            <span className="community-card-topic-subtitle">
+              Daily Mind Conditioning
+            </span>
+          </div>
+          <Link
+            to="/mindgym/app"
+            className="community-card-link"
+            title="Explore Positive Mind GYM App"
+          >
+            <span>Explore</span>
+            <span>→</span>
+          </Link>
+        </div>
+
+        {/* First Item: Positive Mind GYM App - Download Now */}
+        <Link
+          to="/mindgym/app"
+          className="community-rec-item-link"
+          title="Positive Mind GYM App - Download Now"
+        >
+          <div className="community-app-icon-thumb-wrap">
+            <img
+              src="/assets/images/services/Positive MindGym App.png"
+              alt="Positive Mind GYM App"
+              className="community-rec-thumb community-app-thumb"
+              onError={(e) => {
+                e.currentTarget.src = '/assets/images/case/positive-mindgym-app.jpg';
+              }}
+            />
+          </div>
+          <div className="community-rec-info">
+            <h5 className="community-rec-title">Positive Mind GYM App</h5>
+            <span className="community-download-now-badge">
+              <Download size={12} />
+              <span>Download Now</span>
+            </span>
+          </div>
+        </Link>
+
+        {/* Direct 2 Download Buttons for Android & Apple */}
+        <div className="community-app-dl-buttons-row">
+          <a
+            href="https://play.google.com/store/apps/details?id=in.adversitysolutions.mindgym"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="community-app-dl-btn community-dl-android"
+            title="Direct Download for Android on Google Play"
+          >
+            <i className="fab fa-google-play dl-icon"></i>
+            <div className="dl-labels">
+              <span className="dl-sub">GET IT ON</span>
+              <span className="dl-name">Google Play</span>
+            </div>
+          </a>
+
+          <a
+            href="https://apps.apple.com/in/app/positive-mindgym/id6769993640"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="community-app-dl-btn community-dl-apple"
+            title="Direct Download for Apple on App Store"
+          >
+            <i className="fab fa-apple dl-icon"></i>
+            <div className="dl-labels">
+              <span className="dl-sub">Download on</span>
+              <span className="dl-name">App Store</span>
+            </div>
+          </a>
         </div>
       </div>
     </aside>

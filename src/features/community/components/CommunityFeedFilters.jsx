@@ -4,7 +4,7 @@ export default function CommunityFeedFilters({ activeFilter, onSelectFilter, tot
   return (
     <div className="community-feed-header-bar-mock">
       <h3 className="community-feed-heading-mock">
-        Community Feed
+        Feed
       </h3>
 
       <div className="community-filter-tabs-mock">
@@ -22,14 +22,6 @@ export default function CommunityFeedFilters({ activeFilter, onSelectFilter, tot
           onClick={() => onSelectFilter('popular')}
         >
           Popular
-        </button>
-
-        <button
-          type="button"
-          className={`community-tab-mock ${activeFilter === 'following' || activeFilter === 'saved' ? 'active' : ''}`}
-          onClick={() => onSelectFilter('following')}
-        >
-          Following
         </button>
       </div>
     </div>
