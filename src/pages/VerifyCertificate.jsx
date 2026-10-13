@@ -16,7 +16,7 @@ import { ShieldCheck, ShieldAlert, ShieldX, Search } from 'lucide-react';
 const box = { backgroundColor: '#FFFFFF', borderRadius: '20px', padding: '36px', border: '1px solid #ECE7DE', boxShadow: '0 4px 20px rgba(0,0,0,0.04)' };
 const row = { display: 'flex', justifyContent: 'space-between', gap: '16px', fontSize: '14px', color: '#334155', padding: '8px 0', borderBottom: '1px solid #F1F5F9' };
 
-function Result({ result }) {
+function Result({ result, token }) {
   if (!result) return null;
   if (result.status === 'NOT_FOUND') {
     return (
@@ -39,6 +39,12 @@ function Result({ result }) {
       <div style={row}><span>Event Date</span><strong>{result.eventDateText}</strong></div>
       <div style={row}><span>Certificate ID</span><strong style={{ fontFamily: 'monospace' }}>{result.certificateId}</strong></div>
       <div style={{ ...row, borderBottom: 'none' }}><span>Issued By</span><strong>{result.issuedBy}</strong></div>
+      {token && !revoked && (
+        <a href={`/api/certificates/file/${token}`} target="_blank" rel="noopener noreferrer" className="thm-btn"
+          style={{ display: 'block', textAlign: 'center', marginTop: '20px', padding: '12px 20px', borderRadius: '8px', fontWeight: 700 }}>
+          <span>View / Download Certificate (PDF)</span>
+        </a>
+      )}
       {revoked && result.revocationReason && (
         <p style={{ marginTop: '14px', fontSize: '13px', color: '#DC2626' }}>Reason: {result.revocationReason}</p>
       )}
@@ -109,7 +115,7 @@ export default function VerifyCertificate() {
 
             {token && loading && <div style={{ ...box, textAlign: 'center', color: '#64748B' }}>Verifying certificate…</div>}
             {token && error && <div style={{ ...box, textAlign: 'center', color: '#DC2626' }}>{error}</div>}
-            <Result result={result} />
+            <Result result={result} token={token} />
           </div>
         </section>
 
