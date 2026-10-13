@@ -9,7 +9,7 @@ import MobileNav from '../../../components/layout/MobileNav';
 import SearchPopup from '../../../components/layout/SearchPopup';
 import ScrollToTop from '../../../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../../../hooks/useUterpyPlugins';
-import { eventService } from '../services/eventService';
+import { eventService, isEventClosed } from '../services/eventService';
 import { useEnrollModal } from '../../../context/EnrollModalContext';
 import { Calendar, Clock, MapPin, Sparkles, ArrowRight, Video, Globe, Brain } from 'lucide-react';
 import SEO from '../../../seo/SEO';
@@ -36,10 +36,8 @@ export default function EventsPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // One request, split locally (local date, not UTC, so IST evenings aren't misfiled).
-    const d = new Date();
-    const today = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-    const isPast = (e) => (Boolean(e.date) && e.date < today) || e.status === 'completed';
+    // One request, split locally.
+    const isPast = isEventClosed;
     eventService
       .getPublishedEvents()
       .then((all) => {

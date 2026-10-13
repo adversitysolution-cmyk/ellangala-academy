@@ -9,7 +9,7 @@ import MobileNav from '../../../components/layout/MobileNav';
 import SearchPopup from '../../../components/layout/SearchPopup';
 import ScrollToTop from '../../../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../../../hooks/useUterpyPlugins';
-import { eventService } from '../services/eventService';
+import { eventService, isEventClosed } from '../services/eventService';
 import { enrollmentService } from '../../../admin/services/enrollmentService';
 import { paymentService } from '../../../admin/services/paymentService';
 import { Calendar, Clock, MapPin, User, CheckCircle2, ArrowLeft, Users, Send } from 'lucide-react';
@@ -147,7 +147,12 @@ export default function EventRegisterPage() {
               </Link>
             </div>
 
-            {isSubmitted ? (
+            {isEventClosed(event) ? (
+              <div style={{ textAlign: 'center', padding: '40px 0' }}>
+                <h3>Registration is closed</h3>
+                <p style={{ color: '#64748B' }}>This event has ended or is no longer accepting registrations.</p>
+              </div>
+            ) : isSubmitted ? (
               /* Registration Success Confirmation Card */
               <div
                 style={{

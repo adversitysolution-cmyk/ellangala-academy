@@ -9,7 +9,7 @@ import MobileNav from '../../../components/layout/MobileNav';
 import SearchPopup from '../../../components/layout/SearchPopup';
 import ScrollToTop from '../../../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../../../hooks/useUterpyPlugins';
-import { eventService } from '../services/eventService';
+import { eventService, isEventClosed } from '../services/eventService';
 import { initialEvents } from '../data/eventSeedData';
 import { useEnrollModal } from '../../../context/EnrollModalContext';
 import {
@@ -113,7 +113,8 @@ export default function EventDetailsPage() {
   };
 
   const isCancelled = event.status === 'cancelled';
-  const isCompleted = event.status === 'completed';
+  const isCompleted = event.status === 'completed' || (!isCancelled && isEventClosed(event));
+  const registrationClosed = isCancelled || isCompleted;
 
   const seoTitle = event.seo?.title || `${event.title} | Ellangala’s Academy`;
   const seoDesc = event.seo?.description || event.shortDescription || event.description || `Join ${event.title} conducted by ${event.speaker || 'Dr. Naveen Ellangala'}.`;
@@ -232,6 +233,7 @@ export default function EventDetailsPage() {
                   </p>
 
                   <div style={{ marginBottom: '28px' }}>
+                    {!registrationClosed && (
                     <button
                       type="button"
                       onClick={handleRegisterClick}
@@ -249,6 +251,7 @@ export default function EventDetailsPage() {
                       <span>Register Now</span>
                       <Sparkles size={16} />
                     </button>
+                    )}
                   </div>
 
                   {/* Cover Image */}
@@ -520,6 +523,7 @@ export default function EventDetailsPage() {
                   <div style={{ fontSize: '16px', fontWeight: '700', color: '#CA8A38', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '24px' }}>
                     Learn. Reflect. Apply. Transform.
                   </div>
+                  {!registrationClosed && (
                   <button
                     type="button"
                     onClick={handleRegisterClick}
@@ -533,6 +537,7 @@ export default function EventDetailsPage() {
                   >
                     <span>Register Now</span>
                   </button>
+                  )}
                 </div>
               </div>
 
@@ -632,6 +637,7 @@ export default function EventDetailsPage() {
 
                     {/* Registration CTA Button */}
                     <div style={{ backgroundColor: '#FAF8F5', borderRadius: '12px', padding: '20px', textAlign: 'center', border: '1px solid #ECE7DE' }}>
+                      {!registrationClosed && (
                       <button
                         type="button"
                         onClick={handleRegisterClick}
@@ -650,6 +656,7 @@ export default function EventDetailsPage() {
                         <span>Register Now</span>
                         <Sparkles size={16} />
                       </button>
+                      )}
 
                       {event.registrationNote && (
                         <p style={{ fontSize: '12.5px', color: '#64748B', marginTop: '12px', margin: '12px 0 0' }}>
