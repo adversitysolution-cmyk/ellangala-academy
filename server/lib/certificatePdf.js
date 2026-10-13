@@ -15,6 +15,9 @@ const INK = '#1E293B';
 
 // Bundled calligraphy face for overlay body text (Parisienne, OFL).
 const SCRIPT_FONT_PATH = path.join(__dirname, 'fonts', 'Parisienne.ttf');
+// Helvetica is Latin-only; Kannada text (event names) needs a Unicode font.
+const UNICODE_FONT_PATH = path.join(__dirname, 'fonts', 'NotoSansKannada.ttf');
+const NON_LATIN = /[^\u0000-\u024F\u2000-\u206F]/;
 
 function hexRgb(hex, fallback = [0, 0, 0]) {
   const m = /^#?([0-9a-f]{6})$/i.exec(String(hex || '').trim());
@@ -221,7 +224,8 @@ async function renderClassic({ template, vars, assets }) {
     vars
   );
   doc.moveDown(0.5);
-  doc.font('Helvetica').fontSize(15).fillColor(INK)
+  const bodyFont = NON_LATIN.test(body) && fs.existsSync(UNICODE_FONT_PATH) ? UNICODE_FONT_PATH : 'Helvetica';
+  doc.font(bodyFont).fontSize(15).fillColor(INK)
     .text(body, 90, 260, { width: W - 180, align: 'center', lineGap: 6 });
 
   // signature + seal row
