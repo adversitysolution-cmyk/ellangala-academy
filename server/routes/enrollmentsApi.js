@@ -45,6 +45,12 @@ router.post('/enrollments', async (req, res) => {
   if (body.sourceType === 'Event' && body.eventId) {
     const event = await getDbEventById(body.eventId);
     if (!event) return res.status(404).json({ error: 'Event not found.' });
+    // Mirrors isEventClosed() in the frontend; "today" in IST.
+    const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+    const last = event.endDate || event.date;
+    if (['completed', 'cancelled'].includes(event.status) || (last && last < today)) {
+      return res.status(400).json({ error: 'Registration for this event is closed.' });
+    }
     const seats = Math.min(Math.max(parseInt(body.attendeesCount, 10) || 1, 1), 5);
     const amount = event.priceType === 'Paid' ? Math.round(Number(event.price) || 0) * seats : 0;
     if (amount > 0) {
