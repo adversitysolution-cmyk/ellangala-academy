@@ -11,7 +11,7 @@ import ScrollToTop from '../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../hooks/useUterpyPlugins';
 import SEO from '../seo/SEO';
 import { certificateVerifyService } from '../admin/services/certificateService';
-import { ShieldCheck, ShieldAlert, ShieldX, Search } from 'lucide-react';
+import { ShieldCheck, ShieldAlert, ShieldX, Search, Download } from 'lucide-react';
 
 const box = { backgroundColor: '#FFFFFF', borderRadius: '20px', padding: '36px', border: '1px solid #ECE7DE', boxShadow: '0 4px 20px rgba(0,0,0,0.04)' };
 const row = { display: 'flex', justifyContent: 'space-between', gap: '16px', fontSize: '14px', color: '#334155', padding: '8px 0', borderBottom: '1px solid #F1F5F9' };
@@ -40,9 +40,18 @@ function Result({ result, token }) {
       <div style={row}><span>Certificate ID</span><strong style={{ fontFamily: 'monospace' }}>{result.certificateId}</strong></div>
       <div style={{ ...row, borderBottom: 'none' }}><span>Issued By</span><strong>{result.issuedBy}</strong></div>
       {token && !revoked && (
-        <a href={`/api/certificates/file/${token}`} target="_blank" rel="noopener noreferrer" className="thm-btn"
-          style={{ display: 'block', textAlign: 'center', marginTop: '20px', padding: '12px 20px', borderRadius: '8px', fontWeight: 700 }}>
-          <span>View / Download Certificate (PDF)</span>
+        <a href={`/api/certificates/file/${token}`} target="_blank" rel="noopener noreferrer"
+          style={{
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',
+            marginTop: '24px', height: '52px', padding: '0 24px', borderRadius: '10px',
+            backgroundColor: '#0B1D3A', color: '#FFFFFF', fontSize: '15px', fontWeight: 700,
+            lineHeight: 1, textDecoration: 'none', boxShadow: '0 4px 14px rgba(11,29,58,0.18)',
+            transition: 'background-color 0.2s ease'
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#CA8A38'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#0B1D3A'; }}>
+          <Download size={18} />
+          <span>Download Certificate (PDF)</span>
         </a>
       )}
       {revoked && result.revocationReason && (
