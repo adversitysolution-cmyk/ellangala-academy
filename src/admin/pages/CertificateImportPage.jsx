@@ -110,7 +110,7 @@ export default function CertificateImportPage() {
             </div>
             <div style={{ fontSize: '12.5px', color: '#64748B' }}>Max 5 MB. Normally has Full Name, Email, Phone columns.</div>
             <input type="file" accept=".csv,.xlsx,.xls" style={{ display: 'none' }} disabled={busy}
-              onChange={(e) => handleFile(e.target.files?.[0])} />
+              onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ''; handleFile(f); }} />
           </label>
         )}
 

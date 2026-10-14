@@ -218,15 +218,29 @@ async function renderClassic({ template, vars, assets }) {
       align: 'center', characterSpacing: 2
     });
 
+  // Participant name is rendered bold navy; event name etc. always come from the current event.
+  const NAME_MARK = '\u0000';
   const body = renderTemplate(
     template.bodyText ||
       'This is to certify that {{participant_name}} has successfully completed "{{event_name}}" at {{organization_name}}, {{event_date_text}}.',
-    vars
+    { ...vars, participant_name: NAME_MARK }
   );
   doc.moveDown(0.5);
-  const bodyFont = NON_LATIN.test(body) && fs.existsSync(UNICODE_FONT_PATH) ? UNICODE_FONT_PATH : 'Helvetica';
-  doc.font(bodyFont).fontSize(15).fillColor(INK)
-    .text(body, 90, 260, { width: W - 180, align: 'center', lineGap: 6 });
+  const bodyFont = NON_LATIN.test(body + vars.participant_name) && fs.existsSync(UNICODE_FONT_PATH) ? UNICODE_FONT_PATH : 'Helvetica';
+  const nameFont = bodyFont === 'Helvetica' ? 'Helvetica-Bold' : bodyFont;
+  const parts = body.split(NAME_MARK);
+  parts.forEach((part, i) => {
+    const last = i === parts.length - 1;
+    const opts = i === 0
+      ? { width: W - 180, align: 'center', lineGap: 6, continued: !last }
+      : { continued: !last };
+    doc.font(bodyFont).fontSize(15).fillColor(INK);
+    if (i === 0) doc.text(part, 90, 260, opts); else doc.text(part, opts);
+    if (!last) {
+      doc.font(nameFont).fontSize(17).fillColor(NAVY).text(vars.participant_name, { continued: true });
+    }
+  });
+  doc.text('', { continued: false });
 
   // signature + seal row
   const rowY = H - 150;
