@@ -101,9 +101,6 @@ export default function HeaderOne() {
                               <Link to="/founder">Founder</Link>
                             </li>
                             <li>
-                              <Link to="/research">Doctoral Research</Link>
-                            </li>
-                            <li>
                               <Link to="/about#our-team">Team</Link>
                             </li>
                             <li>
@@ -375,7 +372,7 @@ export default function HeaderOne() {
                           </ul>
                         </li>
                         <li>
-                          <Link to="/blog">{header.nav.blog || "Blog"}</Link>
+                          <Link to="/feed">{header.nav.community || "Feed"}</Link>
                         </li>
                         <li>
                           <Link to="/events">{header.nav.events || "Events"}</Link>

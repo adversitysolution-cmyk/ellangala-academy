@@ -14,9 +14,13 @@ import contactApi from './routes/contactApi.js';
 import adminAuthApi from './routes/adminAuthApi.js';
 import uploadApi, { uploadsDir } from './routes/uploadApi.js';
 import certificatesApi from './routes/certificatesApi.js';
+import communityApi from './routes/communityApi.js';
+import notificationsApi from './routes/notificationsApi.js';
+import adminUsersApi from './routes/adminUsersApi.js';
 import sitemapRoute from './routes/sitemapRoute.js';
 import { requireAdminAuth } from './middleware/adminAuth.js';
 import { ensureSchema } from './db/store.js';
+import { ensureCommunitySchema } from './db/communityStore.js';
 import { startCertificateWorker } from './lib/certificateWorker.js';
 import { resolvePageMetadata, buildHeadTagsHtml } from './lib/pageMetadataResolver.js';
 
@@ -44,6 +48,9 @@ app.use('/api', couponsApi);
 app.use('/api', contactApi);
 app.use('/api', uploadApi);
 app.use('/api', certificatesApi);
+app.use('/api', communityApi);
+app.use('/api', notificationsApi);
+app.use('/api', adminUsersApi);
 
 // 2. Dynamic Sitemap Endpoint (Handled BEFORE SPA catch-all)
 app.use('/', sitemapRoute);
@@ -131,7 +138,8 @@ app.listen(PORT, () => {
   console.log(`🌐 Dynamic Sitemap available at http://localhost:${PORT}/sitemap.xml`);
 
   ensureSchema()
-    .then(() => {
+    .then(async () => {
+      await ensureCommunitySchema().catch((err) => console.error('Community schema notice:', err.message));
       startCertificateWorker().catch((err) => console.error('Certificate worker failed to start:', err.message));
       console.log('✅ Database schema verified and initialized.');
     })

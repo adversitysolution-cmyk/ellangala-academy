@@ -249,6 +249,10 @@ function rowToProduct(row) {
 
 // --- EVENT DB OPERATIONS ---
 export async function getDbEvents({ status } = {}) {
+  if (!pool) {
+    if (status) return initialEvents.filter(e => e.status === status);
+    return initialEvents;
+  }
   const [rows] = status
     ? await pool.query('SELECT * FROM events WHERE status = ? ORDER BY pk DESC', [status])
     : await pool.query('SELECT * FROM events ORDER BY pk DESC');
@@ -256,11 +260,17 @@ export async function getDbEvents({ status } = {}) {
 }
 
 export async function getDbEventBySlug(slug) {
+  if (!pool) {
+    return initialEvents.find(e => e.slug === slug || e.id === slug) || null;
+  }
   const [rows] = await pool.query('SELECT * FROM events WHERE slug = ? OR id = ? LIMIT 1', [slug, slug]);
   return rows[0] ? rowToEvent(rows[0]) : null;
 }
 
 export async function getDbEventById(id) {
+  if (!pool) {
+    return initialEvents.find(e => e.id === id || e.slug === id) || null;
+  }
   const [rows] = await pool.query('SELECT * FROM events WHERE id = ? LIMIT 1', [id]);
   return rows[0] ? rowToEvent(rows[0]) : null;
 }

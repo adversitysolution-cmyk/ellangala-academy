@@ -23,19 +23,22 @@ import MeditationMusicPage from '../pages/MeditationMusicPage';
 import FreeResourcesPage from '../pages/FreeResourcesPage';
 import TrackOrderPage from '../pages/TrackOrderPage';
 import VerifyCertificate from '../pages/VerifyCertificate';
-import ResearchPage from '../pages/ResearchPage';
 
 // Layout & Context
 import MobileNav from '../components/layout/MobileNav';
 import { MobileNavProvider } from '../context/MobileNavContext';
 import { EnrollModalProvider } from '../context/EnrollModalContext';
 import EnrollModal from '../components/common/EnrollModal';
+import { CommunityAuthProvider } from '../features/community/context/CommunityAuthContext';
+import CommunityAuthModal from '../features/community/components/CommunityAuthModal';
 
 // Admin System Imports
 import { AdminAuthProvider } from '../admin/context/AdminAuthContext';
 import AdminProtectedRoute from '../admin/components/AdminProtectedRoute';
 import AdminLoginPage from '../admin/pages/AdminLoginPage';
 import AdminDashboardPage from '../admin/pages/AdminDashboardPage';
+import AdminNotificationsPage from '../admin/pages/AdminNotificationsPage';
+import AdminUsersPage from '../admin/pages/AdminUsersPage';
 import EnrollmentListPage from '../admin/pages/EnrollmentListPage';
 import EnrollmentDetailPage from '../admin/pages/EnrollmentDetailPage';
 import OrderListPage from '../admin/pages/OrderListPage';
@@ -45,6 +48,9 @@ import OrderDetailPage from '../admin/pages/OrderDetailPage';
 import EventsPage from '../features/events/pages/EventsPage';
 import EventDetailsPage from '../features/events/pages/EventDetailsPage';
 import EventRegisterPage from '../features/events/pages/EventRegisterPage';
+
+// Community Module Imports
+import CommunityFeedPage from '../features/community/pages/CommunityFeedPage';
 import EventListPage from '../admin/pages/EventListPage';
 import EventCreatePage from '../admin/pages/EventCreatePage';
 import EventEditPage from '../admin/pages/EventEditPage';
@@ -58,6 +64,11 @@ import CertificateTemplatesPage from '../admin/pages/CertificateTemplatesPage';
 import BlogListPage from '../admin/pages/BlogListPage';
 import BlogCreatePage from '../admin/pages/BlogCreatePage';
 import BlogEditPage from '../admin/pages/BlogEditPage';
+
+// Admin Community Module Imports
+import CommunityAdminPage from '../admin/pages/CommunityAdminPage';
+import CommunityPostCreatePage from '../admin/pages/CommunityPostCreatePage';
+import CommunityPostEditPage from '../admin/pages/CommunityPostEditPage';
 
 // Admin Products Module Imports
 import ProductListPage from '../admin/pages/ProductListPage';
@@ -88,12 +99,14 @@ export default function AppRouter() {
   return (
     <Router>
       <AdminAuthProvider>
-        <EnrollModalProvider>
-          <MobileNavProvider>
-            <ScrollToTopOnRoute />
-            <MobileNav />
-            <EnrollModal />
-            <Routes>
+        <CommunityAuthProvider>
+          <EnrollModalProvider>
+            <MobileNavProvider>
+              <ScrollToTopOnRoute />
+              <MobileNav />
+              <EnrollModal />
+              <CommunityAuthModal />
+              <Routes>
               {/* Core Public Pages */}
               <Route path="/" element={<HomeOne />} />
 
@@ -137,10 +150,6 @@ export default function AppRouter() {
               <Route path="/blog-details/:id" element={<BlogDetails />} />
               <Route path="/insights/:slug" element={<BlogDetails />} />
 
-              <Route path="/research" element={<ResearchPage />} />
-              <Route path="/doctoral-research" element={<ResearchPage />} />
-              <Route path="/perma-purandaradasa-research" element={<ResearchPage />} />
-
               <Route path="/shop" element={<Shop />} />
               <Route path="/resources" element={<Shop />} />
               <Route path="/resources/videos" element={<VideosOnTalksPage />} />
@@ -167,6 +176,18 @@ export default function AppRouter() {
               <Route path="/events/:slug" element={<EventDetailsPage />} />
               <Route path="/events/:slug/register" element={<EventRegisterPage />} />
 
+              {/* Public Feed Routes */}
+              <Route path="/feed" element={<CommunityFeedPage />} />
+              <Route path="/feed/saved" element={<CommunityFeedPage />} />
+              <Route path="/feed/profile" element={<CommunityFeedPage />} />
+              <Route path="/feed/posts/:id" element={<CommunityFeedPage />} />
+
+              {/* Legacy /community URLs compatibility */}
+              <Route path="/community" element={<Navigate to="/feed" replace />} />
+              <Route path="/community/saved" element={<Navigate to="/feed/saved" replace />} />
+              <Route path="/community/profile" element={<Navigate to="/feed/profile" replace />} />
+              <Route path="/community/posts/:id" element={<CommunityFeedPage />} />
+
               {/* Public Certificate Verification */}
               <Route path="/verify-certificate" element={<VerifyCertificate />} />
               <Route path="/verify/c/:token" element={<VerifyCertificate />} />
@@ -179,6 +200,22 @@ export default function AppRouter() {
                 element={
                   <AdminProtectedRoute>
                     <AdminDashboardPage />
+                  </AdminProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/notifications"
+                element={
+                  <AdminProtectedRoute>
+                    <AdminNotificationsPage />
+                  </AdminProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/users"
+                element={
+                  <AdminProtectedRoute>
+                    <AdminUsersPage />
                   </AdminProtectedRoute>
                 }
               />
@@ -323,6 +360,56 @@ export default function AppRouter() {
                 }
               />
 
+              {/* Admin Feed Routes */}
+              <Route
+                path="/admin/feed"
+                element={
+                  <AdminProtectedRoute>
+                    <CommunityAdminPage />
+                  </AdminProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/feed/new"
+                element={
+                  <AdminProtectedRoute>
+                    <CommunityPostCreatePage />
+                  </AdminProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/feed/:id/edit"
+                element={
+                  <AdminProtectedRoute>
+                    <CommunityPostEditPage />
+                  </AdminProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/community"
+                element={
+                  <AdminProtectedRoute>
+                    <Navigate to="/admin/feed" replace />
+                  </AdminProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/community/new"
+                element={
+                  <AdminProtectedRoute>
+                    <Navigate to="/admin/feed/new" replace />
+                  </AdminProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/community/:id/edit"
+                element={
+                  <AdminProtectedRoute>
+                    <CommunityPostEditPage />
+                  </AdminProtectedRoute>
+                }
+              />
+
               {/* Admin Products Routes */}
               <Route
                 path="/admin/products"
@@ -396,6 +483,7 @@ export default function AppRouter() {
             </Routes>
           </MobileNavProvider>
         </EnrollModalProvider>
+        </CommunityAuthProvider>
       </AdminAuthProvider>
     </Router>
   );

@@ -59,5 +59,113 @@ export const adminAuthService = {
 
   getCurrentUser() {
     return this.getSession()?.user || null;
+  },
+
+  updateCurrentUser(partialUser) {
+    const session = this.getSession();
+    if (!session) return null;
+    session.user = { ...(session.user || {}), ...partialUser };
+    const storage = localStorage.getItem(SESSION_KEY) ? localStorage : sessionStorage;
+    storage.setItem(SESSION_KEY, JSON.stringify(session));
+    return session.user;
+  },
+
+  async getProfile() {
+    const token = this.getToken();
+    const res = await fetch('/api/admin/profile', {
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
+      }
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'Failed to fetch admin profile.');
+    }
+    const data = await res.json();
+    if (data.profile) {
+      this.updateCurrentUser(data.profile);
+    }
+    return data.profile;
+  },
+
+  async updateProfile(profileData) {
+    const token = this.getToken();
+    const res = await fetch('/api/admin/profile', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
+      },
+      body: JSON.stringify(profileData)
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'Failed to update admin profile.');
+    }
+    const data = await res.json();
+    if (data.profile) {
+      this.updateCurrentUser(data.profile);
+    }
+    return data.profile;
+  },
+
+  async uploadAvatar(file) {
+    // Client-side 2MB maximum limit verification
+    const MAX_BYTES = 2 * 1024 * 1024;
+    if (file.size > MAX_BYTES) {
+      throw new Error(`Profile photo exceeds 2MB limit (${(file.size / (1024 * 1024)).toFixed(1)}MB). Please choose a file up to 2MB.`);
+    }
+
+    const token = this.getToken();
+    const formData = new FormData();
+    formData.append('avatar', file);
+
+    const res = await fetch('/api/admin/profile/avatar', {
+      method: 'POST',
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
+      },
+      body: formData
+    });
+
+    if (res.status === 401) {
+      throw new Error('Admin session expired or token missing. Please sign in again.');
+    }
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || `Upload failed with status ${res.status}.`);
+    }
+
+    const data = await res.json();
+    if (data.profile) {
+      this.updateCurrentUser(data.profile);
+    }
+    return data;
+  },
+
+  async deleteAvatar() {
+    const token = this.getToken();
+    const res = await fetch('/api/admin/profile/avatar', {
+      method: 'DELETE',
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
+      }
+    });
+
+    if (res.status === 401) {
+      throw new Error('Admin session expired or token missing. Please sign in again.');
+    }
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || `Failed to remove photo (${res.status}).`);
+    }
+
+    const data = await res.json();
+    if (data.profile) {
+      this.updateCurrentUser(data.profile);
+    }
+    return data;
   }
 };

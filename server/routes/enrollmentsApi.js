@@ -9,6 +9,7 @@ import {
 import { asyncRouter } from '../lib/asyncRouter.js';
 import { sendMail } from '../lib/mailer.js';
 import { buildRegistrationEmail } from '../lib/eventRegistrationEmail.js';
+import { createNotification } from '../db/notificationStore.js';
 
 async function sendEventRegistrationEmail(enrollment) {
   if (!enrollment.email) return;
@@ -64,6 +65,17 @@ router.post('/enrollments', async (req, res) => {
     Object.assign(body, { amount: COURSE_FEE, paymentStatus: 'Pending', status: 'Pending Payment' });
   }
   const enrollment = await createDbEnrollment(body);
+
+  createNotification({
+    type: 'enrollment',
+    title: `New ${body.sourceType || 'Workshop'} Enrollment`,
+    message: `${body.fullName || body.name} enrolled for ${body.interest || 'Workshop'} (Seats: ${body.attendeesCount || 1})`,
+    authorName: body.fullName || body.name,
+    authorEmail: body.email,
+    targetUrl: '/admin/enrollments',
+    metadata: { enrollmentId: enrollment.id }
+  }).catch?.(() => {});
+
   res.status(201).json(enrollment);
   // Paid events get their confirmation email once payment is verified.
   if (!needsPayment) {

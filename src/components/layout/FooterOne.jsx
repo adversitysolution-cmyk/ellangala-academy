@@ -137,13 +137,10 @@ export default function FooterOne({ hideSubscribe = false, hideCommunity = false
                       <Link to="/founder">Founder Profile</Link>
                     </li>
                     <li>
-                      <Link to="/research">Doctoral Research</Link>
-                    </li>
-                    <li>
                       <Link to="/resources">Resources</Link>
                     </li>
                     <li>
-                      <Link to="/blog">Blog</Link>
+                      <Link to="/feed">Feed</Link>
                     </li>
                     <li>
                       <Link to="/contact">Contact</Link>

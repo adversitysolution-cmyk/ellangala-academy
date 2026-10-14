@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { adminAuthService } from '../services/adminAuthService';
 
 const AdminAuthContext = createContext();
@@ -6,6 +6,14 @@ const AdminAuthContext = createContext();
 export function AdminAuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(() => adminAuthService.isLoggedIn());
   const [currentUser, setCurrentUser] = useState(() => adminAuthService.getCurrentUser());
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      adminAuthService.getProfile().then(p => {
+        if (p) setCurrentUser(p);
+      }).catch(() => {});
+    }
+  }, [isAuthenticated]);
 
   const login = async (email, password, remember = true) => {
     const res = await adminAuthService.login(email, password, remember);
@@ -22,8 +30,39 @@ export function AdminAuthProvider({ children }) {
     setCurrentUser(null);
   };
 
+  const updateProfile = async (partial) => {
+    const updated = await adminAuthService.updateProfile(partial);
+    setCurrentUser(updated);
+    return updated;
+  };
+
+  const uploadAvatar = async (file) => {
+    const res = await adminAuthService.uploadAvatar(file);
+    if (res.profile) {
+      setCurrentUser(res.profile);
+    }
+    return res;
+  };
+
+  const deleteAvatar = async () => {
+    const res = await adminAuthService.deleteAvatar();
+    if (res.profile) {
+      setCurrentUser(res.profile);
+    }
+    return res;
+  };
+
   return (
-    <AdminAuthContext.Provider value={{ isAuthenticated, currentUser, login, logout }}>
+    <AdminAuthContext.Provider value={{
+      isAuthenticated,
+      currentUser,
+      setCurrentUser,
+      login,
+      logout,
+      updateProfile,
+      uploadAvatar,
+      deleteAvatar
+    }}>
       {children}
     </AdminAuthContext.Provider>
   );

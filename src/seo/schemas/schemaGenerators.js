@@ -329,7 +329,7 @@ export function generateScholarlyArticleSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "ScholarlyArticle",
-    "@id": `${siteConfig.url}/research/#scholarly-article`,
+    "@id": `${siteConfig.url}/founder/#scholarly-article`,
     "name": "A Study and Formulation of a PERMA Model of Positive Psychology Based on the Literary Works of Saint Purandaradasa",
     "headline": "A Study and Formulation of a PERMA Model of Positive Psychology Based on the Literary Works of Saint Purandaradasa",
     "author": {
@@ -345,7 +345,7 @@ export function generateScholarlyArticleSchema() {
       "name": siteConfig.name,
       "url": siteConfig.url
     },
-    "url": `${siteConfig.url}/research`,
+    "url": `${siteConfig.url}/founder`,
     "inLanguage": ["en", "kn"],
     "description": "Original doctoral research by Dr. Naveen Ellangala formulating an indigenous cross-cultural PERMA model of Positive Psychology grounded in the 16th-century devotional compositions and philosophical teachings of Saint Purandaradasa.",
     "abstract": "This doctoral study explores the synthesis of Western Positive Psychology—specifically Martin Seligman's PERMA framework (Positive Emotions, Engagement, Relationships, Meaning, Accomplishment)—with the spiritual and ethical philosophy embedded in the literary works of Saint Purandaradasa. The research establishes an indigenous, culturally rooted model of psychological flourishing, emotional hygiene, and purposeful living, bridging classical Indian wisdom with modern behavioural science.",

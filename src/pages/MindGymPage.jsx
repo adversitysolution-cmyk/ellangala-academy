@@ -209,8 +209,8 @@ export default function MindGymPage() {
                   </p>
                 </div>
                 <div className="col-lg-4 text-lg-end mt-4 mt-lg-0">
-                  <Link to="/research" className="thm-btn" style={{ padding: '12px 28px' }}>
-                    Explore Doctoral Research →
+                  <Link to="/founder" className="thm-btn" style={{ padding: '12px 28px' }}>
+                    Meet Our Founder →
                   </Link>
                 </div>
               </div>

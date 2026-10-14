@@ -3,6 +3,7 @@ import { shopContent } from '../../src/contents/shop.content.js';
 import { programsData } from '../../src/contents/programsData.content.js';
 import { blogContent } from '../../src/contents/blog.content.js';
 import { getStore } from '../db/store.js';
+import { getCommunityPostById } from '../db/communityStore.js';
 import {
   generateOrganizationSchema,
   generatePersonSchema,
@@ -360,6 +361,49 @@ export async function resolvePageMetadata(pathname = '/') {
         generateBreadcrumbSchema([
           { name: 'Home', path: '/' },
           { name: 'Verify Certificate', path: '/verify-certificate' }
+        ])
+      ]
+    };
+  }
+
+  // 12b. Community Post Details & Feed OpenGraph Metadata
+  const communityMatch = cleanPath.match(/^\/community\/(?:posts\/)?([a-zA-Z0-9_-]+)$/);
+  if (communityMatch) {
+    const postId = communityMatch[1];
+    let post = null;
+    try {
+      post = await getCommunityPostById(postId, { includeDrafts: false });
+    } catch {}
+    if (post && post.status === 'published') {
+      const postImg = post.mediaUrls?.[0]?.mediaUrl || siteConfig.defaultOgImage;
+      return {
+        title: `${post.title} | Ellangala Community`,
+        description: post.content?.slice(0, 160) || siteConfig.defaultDescription,
+        canonical: `${baseDomain}/community/posts/${post.id}`,
+        image: postImg.startsWith('http') ? postImg : `${baseDomain}${postImg.startsWith('/') ? postImg : '/' + postImg}`,
+        type: 'article',
+        schemas: [
+          generateBreadcrumbSchema([
+            { name: 'Home', path: '/' },
+            { name: 'Community', path: '/community' },
+            { name: post.title, path: `/community/posts/${post.id}` }
+          ])
+        ]
+      };
+    }
+  }
+
+  if (cleanPath === '/community') {
+    return {
+      title: 'Community Feed & Mind Training Discussions | Ellangala’s Academy',
+      description: 'Explore positive psychology insights, mental conditioning reflections, and live masterclass discussions with Dr. Naveen Ellangala.',
+      canonical: `${baseDomain}/community`,
+      image: siteConfig.defaultOgImage,
+      type: 'website',
+      schemas: [
+        generateBreadcrumbSchema([
+          { name: 'Home', path: '/' },
+          { name: 'Community', path: '/community' }
         ])
       ]
     };

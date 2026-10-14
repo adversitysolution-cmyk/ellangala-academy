@@ -1244,7 +1244,8 @@
     }
 
     .main-slider-one__content .title h2 {
-        font-size: 50px;
+        font-size: clamp(33px, 8vw, 44px);
+        line-height: 1.15em;
     }
 
     .main-slider-one__content .title h2 br {
@@ -1253,7 +1254,7 @@
 
     .main-slider-one__content-btn {
         display: block;
-        margin-top: 57px;
+        margin-top: clamp(28px, 6vw, 38px);
     }
 
     .main-slider-one__content-btn .btn-two {
@@ -1266,8 +1267,17 @@
         padding: 0px 53.5px 0px;
     }
 
+    /* Main Slider One - Mobile Height Decreased by 30% (Desktop completely untouched) */
     .main-slider-one__content {
-        padding: 166px 0px 190px;
+        padding: clamp(96px, 18vw, 116px) 0px clamp(114px, 20vw, 133px);
+    }
+
+    .main-slider-one__content .title {
+        margin-bottom: 16px;
+    }
+
+    .main-slider-one__content .text {
+        margin-top: 8px;
     }
 
     /*Intro One*/

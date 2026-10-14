@@ -1,0 +1,20 @@
+{
+  "heading": "Welcome to the\nEllangala Feed",
+  "subheading": "Learn, reflect, and grow with Dr. Naveen Ellangala.",
+  "imageUrl": "/uploads/1791951912987-0c5d027107cb3bbb.png",
+  "gradientColor": "#FFFFFF",
+  "textColorMode": "auto",
+  "badge1": {
+    "text": "Meaningful Discussions",
+    "icon": "users"
+  },
+  "badge2": {
+    "text": "Practical Wisdom",
+    "icon": "book"
+  },
+  "badge3": {
+    "text": "Supportive Community",
+    "icon": "sparkles"
+  },
+  "updatedAt": "2026-10-14T04:42:21.471Z"
+}

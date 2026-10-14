@@ -241,8 +241,8 @@ export default function About() {
                   Dr. Naveen Ellangala’s doctoral dissertation establishes a unique synthesis between <strong>Martin Seligman’s PERMA Model</strong> of Positive Psychology and the 16th-century Haridasa philosophical compositions of <strong>Saint Purandaradasa</strong>. This indigenous framework translates classical spiritual wisdom into modern cognitive-emotional well-being.
                 </p>
                 <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', marginTop: '20px' }}>
-                  <Link to="/research" className="thm-btn" style={{ padding: '10px 24px' }}>
-                    Read Doctoral Research
+                  <Link to="/founder" className="thm-btn" style={{ padding: '10px 24px' }}>
+                    About Our Founder
                   </Link>
                   <Link to="/mindgym" className="thm-btn" style={{ backgroundColor: '#1E293B', padding: '10px 24px' }}>
                     Explore Positive MindGym

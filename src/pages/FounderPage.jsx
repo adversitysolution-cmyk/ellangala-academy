@@ -619,12 +619,9 @@ export default function FounderPage() {
                         <i className="fa fa-graduation-cap"></i>
                       </div>
                       <div style={{ flex: 1 }}>
-                        <p style={{ fontSize: '15px', lineHeight: '1.75', color: '#3A4B63', margin: '0 0 12px 0', fontWeight: '400' }}>
+                        <p style={{ fontSize: '15px', lineHeight: '1.75', color: '#3A4B63', margin: '0', fontWeight: '400' }}>
                           His doctoral research, titled <strong>“A Study and Formulation of a PERMA Model of Positive Psychology Based on the Literary Works of Saint Purandaradasa,”</strong> explores the relationship between <strong>Positive Psychology and Indian wisdom</strong> in the context of human flourishing and purposeful living. Through his work, Dr. Naveen brings together <strong>Positive Psychology, Spiritual Psychology, Indian wisdom and practical mind training</strong> to help individuals better understand themselves, develop healthier mental habits and approach life with greater <strong>awareness, balance and purpose</strong>.
                         </p>
-                        <Link to="/research" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#CA8A38', fontWeight: '700', fontSize: '14px', textDecoration: 'none' }}>
-                          Explore Full Doctoral Research & PERMA-Purandaradasa Model →
-                        </Link>
                       </div>
                     </div>
                   </div>
