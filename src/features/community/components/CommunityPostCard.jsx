@@ -4,6 +4,7 @@ import {
   Heart,
   MessageSquare,
   Share2,
+  Bookmark,
   MoreHorizontal,
   CheckCircle2,
   Pin
@@ -12,8 +13,13 @@ import CommunityPostMedia from './CommunityPostMedia';
 import CommunityCommentSection from './CommunityCommentSection';
 import CommunityShareModal from './CommunityShareModal';
 import { communityService } from '../services/communityService';
+import { useCommunityAuth } from '../context/CommunityAuthContext';
+import { useAdminAuth } from '../../../admin/context/AdminAuthContext';
 
 export default function CommunityPostCard({ post, onPostUpdated }) {
+  const { user, openAuthModal } = useCommunityAuth();
+  const { isAuthenticated: isAdmin } = useAdminAuth();
+  const hasAccess = Boolean(user || isAdmin);
   const [liked, setLiked] = useState(Boolean(post.hasLiked));
   const [likesCount, setLikesCount] = useState(post.likesCount || 0);
   const [saved, setSaved] = useState(Boolean(post.hasSaved));
@@ -34,7 +40,7 @@ export default function CommunityPostCard({ post, onPostUpdated }) {
     .join('')
     .toUpperCase() || 'AA';
 
-  const handleToggleLike = async () => {
+  const executeToggleLike = async () => {
     const nextLiked = !liked;
     setLiked(nextLiked);
     setLikesCount(prev => nextLiked ? prev + 1 : Math.max(0, prev - 1));
@@ -49,7 +55,17 @@ export default function CommunityPostCard({ post, onPostUpdated }) {
     }
   };
 
-  const handleToggleSave = async () => {
+  const handleToggleLike = () => {
+    if (!hasAccess) {
+      openAuthModal('signup', 'Please sign up or log in to like community posts and connect with seekers.', () => {
+        executeToggleLike();
+      });
+      return;
+    }
+    executeToggleLike();
+  };
+
+  const executeToggleSave = async () => {
     const nextSaved = !saved;
     setSaved(nextSaved);
     try {
@@ -58,6 +74,26 @@ export default function CommunityPostCard({ post, onPostUpdated }) {
     } catch (_) {
       setSaved(!nextSaved);
     }
+  };
+
+  const handleToggleSave = () => {
+    if (!hasAccess) {
+      openAuthModal('signup', 'Please sign up or log in to save insights and reflections to your profile.', () => {
+        executeToggleSave();
+      });
+      return;
+    }
+    executeToggleSave();
+  };
+
+  const handleShareClick = () => {
+    if (!hasAccess) {
+      openAuthModal('signup', 'Please sign up or log in to share reflections with the community.', () => {
+        setShowShareModal(true);
+      });
+      return;
+    }
+    setShowShareModal(true);
   };
 
   // Human friendly time badge e.g. "3 days ago"
@@ -175,11 +211,26 @@ export default function CommunityPostCard({ post, onPostUpdated }) {
           <span>{commentsCount}</span>
         </button>
 
+        {/* Bookmark / Save */}
+        <button
+          type="button"
+          onClick={handleToggleSave}
+          className={`community-footer-act-btn ${saved ? 'active-saved' : ''}`}
+          title={saved ? 'Remove from saved' : 'Save post'}
+        >
+          <Bookmark
+            size={17}
+            style={{ fill: saved ? '#CA8A38' : 'none', color: saved ? '#CA8A38' : '#64748B' }}
+          />
+          <span>{saved ? 'Saved' : 'Save'}</span>
+        </button>
+
         {/* Share */}
         <button
           type="button"
-          onClick={() => setShowShareModal(true)}
+          onClick={handleShareClick}
           className="community-footer-act-btn"
+          title="Share post"
         >
           <Share2 size={17} style={{ color: '#64748B' }} />
           <span>Share</span>

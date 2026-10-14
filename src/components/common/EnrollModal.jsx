@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useEnrollModal } from '../../context/EnrollModalContext';
+import { useCommunityAuth } from '../../features/community/context/CommunityAuthContext';
 import { enrollmentService } from '../../admin/services/enrollmentService';
 import { paymentService, preloadRazorpay } from '../../admin/services/paymentService';
 
@@ -36,6 +37,7 @@ const PROGRAM_OPTIONS = [
 
 export default function EnrollModal() {
   const { isOpen, selectedProgram, eventMeta, closeEnrollModal } = useEnrollModal();
+  const { user, openAuthModal } = useCommunityAuth();
 
   const [fullName, setFullName] = useState('');
   const [phone, setPhone] = useState('');
@@ -48,6 +50,15 @@ export default function EnrollModal() {
   const [submitError, setSubmitError] = useState('');
   const [pendingId, setPendingId] = useState(null); // unpaid event registration awaiting a payment retry
   const [paid, setPaid] = useState(false);
+
+  // Auto-fill user contact info from authenticated session whenever available
+  useEffect(() => {
+    if (isOpen && user) {
+      if (user.name && !fullName) setFullName(user.name);
+      if (user.phone && !phone) setPhone(user.phone);
+      if (user.email && !email) setEmail(user.email);
+    }
+  }, [isOpen, user]);
 
   // Auto-fill program field whenever modal opens or selectedProgram changes
   useEffect(() => {
@@ -76,6 +87,10 @@ export default function EnrollModal() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!user) {
+      openAuthModal('signup', 'Please sign up or log in to confirm your registration.');
+      return;
+    }
     setIsSubmitting(true);
     setSubmitError('');
     try {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Home,
@@ -11,10 +11,15 @@ import {
   LogOut,
   Sparkles,
   Smartphone,
-  Download
+  Download,
+  Edit,
+  ShieldCheck,
+  Shield,
+  LayoutDashboard
 } from 'lucide-react';
 import { useAdminAuth } from '../../../admin/context/AdminAuthContext';
 import { useCommunityAuth } from '../context/CommunityAuthContext';
+import { communityService } from '../services/communityService';
 
 export default function CommunitySidebar({
   categories = [],
@@ -25,13 +30,26 @@ export default function CommunitySidebar({
   currentView = 'feed', // 'feed' | 'learning' | 'saved' | 'workshops'
   onSelectView
 }) {
-  const { isAuthenticated: isAdmin, currentUser: adminUser } = useAdminAuth();
+  const { isAuthenticated: isAdmin, currentUser: adminUser, logout: adminLogout } = useAdminAuth();
   const {
     user: communityUser,
     isAuthenticated: isCommunityMember,
     openAuthModal,
     logout
   } = useCommunityAuth();
+
+  const [sidebarImgError, setSidebarImgError] = useState(false);
+  const [adminImgError, setAdminImgError] = useState(false);
+
+  // Admin Profile Details
+  const adminDisplayName = adminUser?.name || 'Dr. Naveen Ellangala';
+  const adminRole = adminUser?.role || 'Founder & Administrator';
+  const adminAvatar = adminUser?.avatar || '/assets/images/team/naveen-ellangala.jpg';
+  const adminInitial = (adminDisplayName || 'A').trim().charAt(0).toUpperCase();
+
+  useEffect(() => {
+    setAdminImgError(false);
+  }, [adminAvatar]);
 
   const topicPills = [
     { label: 'Positive Psychology', id: 'psychology' },
@@ -64,14 +82,89 @@ export default function CommunitySidebar({
     return name.trim().charAt(0).toUpperCase();
   };
 
-  const [sidebarImgError, setSidebarImgError] = React.useState(false);
+  const [quoteCard, setQuoteCard] = useState({
+    quote: "A calmer mind creates a brighter life.",
+    author: "DR. NAVEEN ELLANGALA",
+    imageUrl: "/assets/images/community/mountain-quote-bg.jpg"
+  });
+
+  useEffect(() => {
+    communityService.getQuoteCard()
+      .then((data) => {
+        if (data && data.quote) {
+          setQuoteCard(data);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <aside className="community-left-sidebar community-sidebar-sticky">
       {/* 1. Profile / Navigation Card */}
       <div className="community-card community-left-card">
         {/* Profile Header */}
-        {isCommunityMember && communityUser ? (
+        {isAdmin ? (
+          /* ================= ADMIN STATE (Admin Device/Browser Only) ================= */
+          <div className="community-admin-profile-header">
+            <div className="community-profile-row">
+              <div className="community-admin-avatar-wrap">
+                {adminAvatar && !adminImgError ? (
+                  <img
+                    src={adminAvatar}
+                    alt={adminDisplayName}
+                    className="community-mock-avatar community-admin-avatar"
+                    onError={() => setAdminImgError(true)}
+                  />
+                ) : (
+                  <div className="community-admin-initials-avatar">
+                    <span>{adminInitial}</span>
+                  </div>
+                )}
+                <span className="community-admin-shield-indicator" title="Verified Academy Administrator">
+                  <ShieldCheck size={11} />
+                </span>
+              </div>
+
+              <div className="community-mock-user-meta">
+                <div className="community-admin-badge-pill">
+                  <Shield size={10} />
+                  <span>ADMINISTRATOR</span>
+                </div>
+                <h4 className="community-mock-user-name" title={adminDisplayName}>
+                  {adminDisplayName}
+                </h4>
+                <p className="community-mock-user-role" title={adminRole}>
+                  {adminRole}
+                </p>
+              </div>
+            </div>
+
+            {/* Admin CTA Buttons */}
+            <div className="community-admin-cta-row">
+              <Link
+                to="/admin/dashboard"
+                className="community-btn-admin-portal"
+                title="Open Academy Admin Portal"
+              >
+                <LayoutDashboard size={14} />
+                <span>Admin Portal</span>
+              </Link>
+              <button
+                type="button"
+                className="community-btn-admin-signout"
+                onClick={() => {
+                  if (window.confirm('Do you want to log out from the Admin session on this device?')) {
+                    adminLogout();
+                  }
+                }}
+                title="Log out of Admin session on this browser"
+              >
+                <LogOut size={13} />
+                <span>Log Out</span>
+              </button>
+            </div>
+          </div>
+        ) : isCommunityMember && communityUser ? (
           /* ================= MEMBER STATE ================= */
           <div className="community-member-profile-header">
             <div className="community-profile-row">
@@ -92,7 +185,7 @@ export default function CommunitySidebar({
                   {communityUser.name}
                 </h4>
                 <p className="community-mock-user-role">
-                  {isAdmin ? 'Admin & Faculty' : 'Community Member'}
+                  Community Member
                 </p>
                 <div className="community-member-quick-actions">
                   <button
@@ -172,7 +265,7 @@ export default function CommunitySidebar({
             type="button"
             className={`community-mock-nav-item ${currentView === 'saved' || activeFilter === 'saved' ? 'active' : ''}`}
             onClick={() => {
-              if (!isCommunityMember) {
+              if (!isCommunityMember && !isAdmin) {
                 openAuthModal('login', 'Sign in to view and manage your saved community posts.');
               } else {
                 handleNavClick('saved');
@@ -183,6 +276,19 @@ export default function CommunitySidebar({
             <Bookmark size={18} className="community-nav-icon" />
             <span>Saved</span>
           </button>
+
+          {/* Admin Portal Nav Item (Admin Device/Browser Only) */}
+          {isAdmin && (
+            <Link
+              to="/admin/dashboard"
+              className="community-mock-nav-item community-admin-nav-item"
+              title="Open Admin Management Dashboard"
+            >
+              <ShieldCheck size={18} className="community-nav-icon community-admin-nav-icon" />
+              <span>Admin Dashboard</span>
+              <span className="community-admin-nav-chip">Admin</span>
+            </Link>
+          )}
         </nav>
 
         {/* Divider */}
@@ -218,14 +324,34 @@ export default function CommunitySidebar({
         </div>
       </div>
 
-      {/* 2. Mountain Quote Vertical Poster Card */}
-      <div className="community-mountain-quote-card">
+      {/* 2. Mountain Quote Vertical Poster Card (Permanent Constant Ratio & Dimensions) */}
+      <div className="community-mountain-quote-card" style={{ position: 'relative' }}>
+        {isAdmin && (
+          <Link
+            to="/admin/feed?tab=quote-card"
+            className="community-quote-admin-edit-badge"
+            title="Admin: Edit this poster image & text"
+          >
+            <Edit size={11} />
+            <span>Edit Poster</span>
+          </Link>
+        )}
+        <img
+          src={quoteCard.imageUrl || '/assets/images/community/mountain-quote-bg.jpg'}
+          alt="Inspiration Quote Poster"
+          className="community-mountain-quote-bg-img"
+          onError={(e) => {
+            e.currentTarget.src = '/assets/images/community/mountain-quote-bg.jpg';
+          }}
+        />
         <div className="community-mountain-quote-overlay">
           <blockquote className="community-mountain-quote-text">
-            “A calmer mind creates a brighter life.”
+            “{quoteCard.quote || 'A calmer mind creates a brighter life.'}”
           </blockquote>
           <cite className="community-mountain-quote-author">
-            — DR. NAVEEN ELLANGALA
+            {quoteCard.author
+              ? (quoteCard.author.startsWith('—') ? quoteCard.author : `— ${quoteCard.author}`)
+              : '— DR. NAVEEN ELLANGALA'}
           </cite>
         </div>
       </div>

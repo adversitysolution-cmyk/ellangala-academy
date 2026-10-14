@@ -84,11 +84,19 @@ export default function BlogListPage() {
       }
     >
       {/* Stat Summary Cards */}
-      <div className="admin-grid admin-grid--4" style={{ marginBottom: '24px' }}>
-        <StatCard title="Total Articles" value={totalCount} icon={FileText} color="blue" />
-        <StatCard title="Published (Indexed)" value={publishedCount} icon={CheckCircle2} color="green" />
-        <StatCard title="Drafts (Unindexed)" value={draftCount} icon={Clock} color="amber" />
-        <StatCard title="Archived" value={archivedCount} icon={Archive} color="slate" />
+      <div
+        className="admin-grid admin-grid--4"
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+          gap: '16px',
+          marginBottom: '24px'
+        }}
+      >
+        <StatCard title="Total Articles" value={totalCount} icon={FileText} color="#2563EB" bgColor="#EFF6FF" />
+        <StatCard title="Published (Indexed)" value={publishedCount} icon={CheckCircle2} color="#059669" bgColor="#ECFDF5" />
+        <StatCard title="Drafts (Unindexed)" value={draftCount} icon={Clock} color="#D97706" bgColor="#FFFBEB" />
+        <StatCard title="Archived" value={archivedCount} icon={Archive} color="#64748B" bgColor="#F1F5F9" />
       </div>
 
       {/* Table Container */}

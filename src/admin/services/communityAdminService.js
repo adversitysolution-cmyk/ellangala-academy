@@ -151,5 +151,92 @@ export const communityAdminService = {
     } catch (_) {}
 
     return { courses, events };
+  },
+
+  async getQuoteCard() {
+    try {
+      const res = await fetch(`${API_BASE}/community/quote-card`);
+      if (res.ok) {
+        const data = await res.json();
+        return data.quoteCard;
+      }
+    } catch (_) {}
+    return {
+      quote: "A calmer mind creates a brighter life.",
+      author: "DR. NAVEEN ELLANGALA",
+      imageUrl: "/assets/images/community/mountain-quote-bg.jpg"
+    };
+  },
+
+  async updateQuoteCard({ quote, author, imageUrl }) {
+    return adminFetch('/admin/community/quote-card', {
+      method: 'PATCH',
+      body: JSON.stringify({ quote, author, imageUrl })
+    });
+  },
+
+  async uploadQuoteCardImage(file) {
+    const token = adminAuthService.getToken();
+    const formData = new FormData();
+    formData.append('image', file);
+    const res = await fetch(`${API_BASE}/admin/upload`, {
+      method: 'POST',
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
+      },
+      body: formData
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'Failed to upload image.');
+    }
+    const data = await res.json();
+    return data.url;
+  },
+
+  async getHeroBanner() {
+    try {
+      const res = await fetch(`${API_BASE}/community/hero-banner`);
+      if (res.ok) {
+        const data = await res.json();
+        return data.heroBanner;
+      }
+    } catch (_) {}
+    return {
+      heading: "Welcome to the\nEllangala Feed",
+      subheading: "Learn, reflect, and grow with Dr. Naveen Ellangala.",
+      imageUrl: "/assets/images/community/founder-feed-hero.png",
+      gradientColor: "#FFFDF8",
+      textColorMode: "auto",
+      badge1: { text: "Meaningful Discussions", icon: "users" },
+      badge2: { text: "Practical Wisdom", icon: "book" },
+      badge3: { text: "Supportive Community", icon: "sparkles" }
+    };
+  },
+
+  async updateHeroBanner(payload) {
+    return adminFetch('/admin/community/hero-banner', {
+      method: 'PATCH',
+      body: JSON.stringify(payload)
+    });
+  },
+
+  async uploadHeroBannerImage(file) {
+    const token = adminAuthService.getToken();
+    const formData = new FormData();
+    formData.append('image', file);
+    const res = await fetch(`${API_BASE}/admin/upload`, {
+      method: 'POST',
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
+      },
+      body: formData
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'Failed to upload hero image.');
+    }
+    const data = await res.json();
+    return data.url;
   }
 };

@@ -101,9 +101,6 @@ export default function HeaderOne() {
                               <Link to="/founder">Founder</Link>
                             </li>
                             <li>
-                              <Link to="/research">Doctoral Research</Link>
-                            </li>
-                            <li>
                               <Link to="/about#our-team">Team</Link>
                             </li>
                             <li>

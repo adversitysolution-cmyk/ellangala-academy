@@ -23,13 +23,14 @@ import MeditationMusicPage from '../pages/MeditationMusicPage';
 import FreeResourcesPage from '../pages/FreeResourcesPage';
 import TrackOrderPage from '../pages/TrackOrderPage';
 import VerifyCertificate from '../pages/VerifyCertificate';
-import ResearchPage from '../pages/ResearchPage';
 
 // Layout & Context
 import MobileNav from '../components/layout/MobileNav';
 import { MobileNavProvider } from '../context/MobileNavContext';
 import { EnrollModalProvider } from '../context/EnrollModalContext';
 import EnrollModal from '../components/common/EnrollModal';
+import { CommunityAuthProvider } from '../features/community/context/CommunityAuthContext';
+import CommunityAuthModal from '../features/community/components/CommunityAuthModal';
 
 // Admin System Imports
 import { AdminAuthProvider } from '../admin/context/AdminAuthContext';
@@ -37,6 +38,7 @@ import AdminProtectedRoute from '../admin/components/AdminProtectedRoute';
 import AdminLoginPage from '../admin/pages/AdminLoginPage';
 import AdminDashboardPage from '../admin/pages/AdminDashboardPage';
 import AdminNotificationsPage from '../admin/pages/AdminNotificationsPage';
+import AdminUsersPage from '../admin/pages/AdminUsersPage';
 import EnrollmentListPage from '../admin/pages/EnrollmentListPage';
 import EnrollmentDetailPage from '../admin/pages/EnrollmentDetailPage';
 import OrderListPage from '../admin/pages/OrderListPage';
@@ -97,12 +99,14 @@ export default function AppRouter() {
   return (
     <Router>
       <AdminAuthProvider>
-        <EnrollModalProvider>
-          <MobileNavProvider>
-            <ScrollToTopOnRoute />
-            <MobileNav />
-            <EnrollModal />
-            <Routes>
+        <CommunityAuthProvider>
+          <EnrollModalProvider>
+            <MobileNavProvider>
+              <ScrollToTopOnRoute />
+              <MobileNav />
+              <EnrollModal />
+              <CommunityAuthModal />
+              <Routes>
               {/* Core Public Pages */}
               <Route path="/" element={<HomeOne />} />
 
@@ -145,10 +149,6 @@ export default function AppRouter() {
               <Route path="/blog-details" element={<BlogDetails />} />
               <Route path="/blog-details/:id" element={<BlogDetails />} />
               <Route path="/insights/:slug" element={<BlogDetails />} />
-
-              <Route path="/research" element={<ResearchPage />} />
-              <Route path="/doctoral-research" element={<ResearchPage />} />
-              <Route path="/perma-purandaradasa-research" element={<ResearchPage />} />
 
               <Route path="/shop" element={<Shop />} />
               <Route path="/resources" element={<Shop />} />
@@ -208,6 +208,14 @@ export default function AppRouter() {
                 element={
                   <AdminProtectedRoute>
                     <AdminNotificationsPage />
+                  </AdminProtectedRoute>
+                }
+              />
+              <Route
+                path="/admin/users"
+                element={
+                  <AdminProtectedRoute>
+                    <AdminUsersPage />
                   </AdminProtectedRoute>
                 }
               />
@@ -475,6 +483,7 @@ export default function AppRouter() {
             </Routes>
           </MobileNavProvider>
         </EnrollModalProvider>
+        </CommunityAuthProvider>
       </AdminAuthProvider>
     </Router>
   );

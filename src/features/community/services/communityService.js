@@ -138,6 +138,41 @@ export const communityService = {
     return res.json();
   },
 
+  async getQuoteCard() {
+    try {
+      const res = await fetch(`${API_BASE}/community/quote-card`);
+      if (res.ok) {
+        const data = await res.json();
+        return data.quoteCard;
+      }
+    } catch (_) {}
+    return {
+      quote: "A calmer mind creates a brighter life.",
+      author: "DR. NAVEEN ELLANGALA",
+      imageUrl: "/assets/images/community/mountain-quote-bg.jpg"
+    };
+  },
+
+  async getHeroBanner() {
+    try {
+      const res = await fetch(`${API_BASE}/community/hero-banner`);
+      if (res.ok) {
+        const data = await res.json();
+        return data.heroBanner;
+      }
+    } catch (_) {}
+    return {
+      heading: "Welcome to the\nEllangala Feed",
+      subheading: "Learn, reflect, and grow with Dr. Naveen Ellangala.",
+      imageUrl: "/assets/images/community/founder-feed-hero.png",
+      gradientColor: "#FFFDF8",
+      textColorMode: "auto",
+      badge1: { text: "Meaningful Discussions", icon: "users" },
+      badge2: { text: "Practical Wisdom", icon: "book" },
+      badge3: { text: "Supportive Community", icon: "sparkles" }
+    };
+  },
+
   // Community User Auth APIs (30-day session support)
   async signUp({ name, phone, email, password, avatarUrl, topics }) {
     const res = await fetch(`${API_BASE}/community/auth/signup`, {
@@ -230,4 +265,62 @@ export const communityService = {
     return res.json();
   }
 };
+
+/**
+ * Builds an SEO & human-friendly public share slug with author name and post title letters + id
+ * Example: dr-naveen-ellangala-welcome-to-the-ellangala-community-post-seed-001
+ */
+export function buildPostShareSlug(post) {
+  if (!post) return '';
+
+  const cleanAuthor = (post.authorName || '')
+    .replace(/^dr\.?\s*/i, 'dr-')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 20)
+    .replace(/-+$/, '');
+
+  const cleanTitle = (post.title || '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 40)
+    .replace(/-+$/, '');
+
+  const id = post.id || '';
+
+  const parts = [];
+  if (cleanAuthor) parts.push(cleanAuthor);
+  if (cleanTitle) parts.push(cleanTitle);
+  if (id) parts.push(id);
+
+  return parts.join('-') || id;
+}
+
+/**
+ * Extracts raw unique post ID (e.g. post-seed-001 or POST-2026-XXXX) from a human-readable slug
+ */
+export function extractPostIdFromSlug(slugOrId) {
+  if (!slugOrId) return '';
+  const str = String(slugOrId).trim();
+
+  // 1. Direct seed pattern
+  const seedMatch = str.match(/post-seed-\d+/i);
+  if (seedMatch) return seedMatch[0].toLowerCase();
+
+  // 2. Direct POST GUID pattern
+  const guidMatch = str.match(/POST-\d{4}-[A-Z0-9]+/i);
+  if (guidMatch) return guidMatch[0];
+
+  // 3. Fallback: check last hyphen segment
+  const parts = str.split('-');
+  if (parts.length > 1) {
+    const last = parts[parts.length - 1];
+    if (last.length >= 6) return last;
+  }
+
+  return str;
+}
+
 

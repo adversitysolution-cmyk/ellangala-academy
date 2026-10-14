@@ -64,15 +64,28 @@ export function CommunityAuthProvider({ children }) {
     localStorage.removeItem(STORAGE_KEY);
   };
 
-  const openAuthModal = (tab = 'login', notice = '') => {
+  const [onSuccessCallback, setOnSuccessCallback] = useState(null);
+
+  const openAuthModal = (tab = 'login', notice = '', callback = null) => {
     setAuthModalInitialTab(tab);
     setAuthModalNotice(notice);
+    setOnSuccessCallback(() => (typeof callback === 'function' ? callback : null));
     setIsAuthModalOpen(true);
   };
 
   const closeAuthModal = () => {
     setIsAuthModalOpen(false);
     setAuthModalNotice('');
+    setOnSuccessCallback(null);
+  };
+
+  const requireAuth = (callback, { tab = 'signup', notice = 'Please sign up or log in to continue.' } = {}) => {
+    if (user && token) {
+      if (typeof callback === 'function') callback(user);
+      return true;
+    }
+    openAuthModal(tab, notice, callback);
+    return false;
   };
 
   const signup = async ({ name, phone, email, password, avatarUrl, topics }) => {
@@ -92,6 +105,15 @@ export function CommunityAuthProvider({ children }) {
         avatar: res.user.avatarUrl || ''
       });
       closeAuthModal();
+
+      if (onSuccessCallback) {
+        try {
+          onSuccessCallback(res.user);
+        } catch (cbErr) {
+          console.error('Error executing post-auth callback:', cbErr);
+        }
+        setOnSuccessCallback(null);
+      }
       return res.user;
     }
     throw new Error('Could not create account.');
@@ -114,6 +136,15 @@ export function CommunityAuthProvider({ children }) {
         avatar: res.user.avatarUrl || ''
       });
       closeAuthModal();
+
+      if (onSuccessCallback) {
+        try {
+          onSuccessCallback(res.user);
+        } catch (cbErr) {
+          console.error('Error executing post-auth callback:', cbErr);
+        }
+        setOnSuccessCallback(null);
+      }
       return res.user;
     }
     throw new Error('Authentication failed.');
@@ -152,6 +183,7 @@ export function CommunityAuthProvider({ children }) {
         authModalNotice,
         openAuthModal,
         closeAuthModal,
+        requireAuth,
         signup,
         login,
         logout,

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Play, Pause, Volume2, VolumeX, MoreVertical, X } from 'lucide-react';
+import { Play, Pause, Volume2, VolumeX, MoreVertical, X, ChevronLeft, ChevronRight } from 'lucide-react';
 
 function getEmbedInfo(url) {
   if (!url) return null;
@@ -27,28 +27,32 @@ function getRatioContainerStyle(ratio) {
       return {
         aspectRatio: '1 / 1',
         width: '100%',
-        maxWidth: '500px',
-        margin: '0 auto'
+        maxWidth: '520px',
+        margin: '0 auto',
+        alignSelf: 'center'
       };
     case '4:5':
       return {
         aspectRatio: '4 / 5',
         width: '100%',
-        maxWidth: '416px',
-        margin: '0 auto'
+        maxWidth: '430px',
+        margin: '0 auto',
+        alignSelf: 'center'
       };
     case '16:9':
       return {
         aspectRatio: '16 / 9',
         width: '100%',
-        margin: '0 auto'
+        margin: '0 auto',
+        alignSelf: 'center'
       };
     case '9:16':
       return {
         aspectRatio: '9 / 16',
         width: '100%',
-        maxWidth: '292px',
-        margin: '0 auto'
+        maxWidth: '300px',
+        margin: '0 auto',
+        alignSelf: 'center'
       };
     case 'auto':
     default:
@@ -58,6 +62,127 @@ function getRatioContainerStyle(ratio) {
         margin: '0 auto'
       };
   }
+}
+
+function GalleryCarousel({ mediaUrls, aspectRatio, onOpenLightbox }) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchEnd, setTouchEnd] = useState(null);
+
+  const total = mediaUrls.length;
+
+  const handlePrev = (e) => {
+    e?.stopPropagation();
+    setCurrentIndex(prev => (prev > 0 ? prev - 1 : prev));
+  };
+
+  const handleNext = (e) => {
+    e?.stopPropagation();
+    setCurrentIndex(prev => (prev < total - 1 ? prev + 1 : prev));
+  };
+
+  // Touch swipe support (Mobile)
+  const minSwipeDistance = 35;
+  const onTouchStart = (e) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+  const onTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    if (distance > minSwipeDistance && currentIndex < total - 1) {
+      setCurrentIndex(prev => prev + 1);
+    } else if (distance < -minSwipeDistance && currentIndex > 0) {
+      setCurrentIndex(prev => prev - 1);
+    }
+  };
+
+  const effectiveRatio = aspectRatio && aspectRatio !== 'auto' ? aspectRatio : '1:1';
+  const ratioStyle = getRatioContainerStyle(effectiveRatio);
+
+  return (
+    <div
+      className="community-gallery-slider-wrap"
+      style={{ ...ratioStyle }}
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEnd}
+    >
+      {/* Slide Counter Pill (e.g. 1/5) */}
+      <div className="community-gallery-counter-badge">
+        <span>{currentIndex + 1}</span>
+        <span style={{ opacity: 0.65 }}>/</span>
+        <span>{total}</span>
+      </div>
+
+      {/* Horizontal Sliding Track */}
+      <div
+        className="community-gallery-slider-track"
+        style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+      >
+        {mediaUrls.map((item, idx) => (
+          <div
+            key={item.id || idx}
+            className="community-gallery-slide-item"
+            onClick={() => onOpenLightbox(idx)}
+            title="Click to view full screen"
+          >
+            <img
+              src={item.mediaUrl}
+              alt={item.caption || `Poster ${idx + 1}`}
+              className="community-gallery-slide-img"
+              loading={idx === 0 ? 'eager' : 'lazy'}
+              style={{
+                objectFit: effectiveRatio === 'auto' ? 'contain' : 'cover'
+              }}
+            />
+          </div>
+        ))}
+      </div>
+
+      {/* Prev Navigation Arrow */}
+      {currentIndex > 0 && (
+        <button
+          type="button"
+          onClick={handlePrev}
+          className="community-gallery-nav-arrow community-gallery-nav-prev"
+          aria-label="Previous slide"
+        >
+          <ChevronLeft size={20} />
+        </button>
+      )}
+
+      {/* Next Navigation Arrow */}
+      {currentIndex < total - 1 && (
+        <button
+          type="button"
+          onClick={handleNext}
+          className="community-gallery-nav-arrow community-gallery-nav-next"
+          aria-label="Next slide"
+        >
+          <ChevronRight size={20} />
+        </button>
+      )}
+
+      {/* Dot Indicators Bar */}
+      {total > 1 && (
+        <div className="community-gallery-dots-bar" onClick={(e) => e.stopPropagation()}>
+          {mediaUrls.map((_, idx) => (
+            <button
+              key={idx}
+              type="button"
+              className={`community-gallery-dot ${idx === currentIndex ? 'active' : ''}`}
+              onClick={() => setCurrentIndex(idx)}
+              aria-label={`Go to slide ${idx + 1}`}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default function CommunityPostMedia({ postType, mediaUrls = [], aspectRatio = 'auto' }) {
@@ -208,27 +333,15 @@ export default function CommunityPostMedia({ postType, mediaUrls = [], aspectRat
     );
   }
 
-  // 3. Multi-Image Gallery
+  // 3. Multi-Image Gallery (Instagram-style Horizontal Slides)
   if (postType === 'gallery' && mediaUrls.length > 1) {
     return (
       <>
-        <div className="community-post-gallery-grid">
-          {mediaUrls.slice(0, 4).map((item, idx) => (
-            <div
-              key={item.id || idx}
-              className="community-post-gallery-item"
-              onClick={() => setLightboxIndex(idx)}
-              style={{ cursor: 'pointer' }}
-            >
-              <img src={item.mediaUrl} alt={item.caption || `Gallery ${idx + 1}`} loading="lazy" />
-              {idx === 3 && mediaUrls.length > 4 && (
-                <div className="community-post-gallery-more">
-                  +{mediaUrls.length - 4}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
+        <GalleryCarousel
+          mediaUrls={mediaUrls}
+          aspectRatio={aspectRatio}
+          onOpenLightbox={(idx) => setLightboxIndex(idx)}
+        />
 
         {lightboxIndex !== null && (
           <div
@@ -239,15 +352,49 @@ export default function CommunityPostMedia({ postType, mediaUrls = [], aspectRat
               type="button"
               onClick={() => setLightboxIndex(null)}
               className="community-lightbox-close-btn"
+              aria-label="Close"
             >
-              <X size={28} />
+              <X size={26} />
             </button>
+
+            <div className="community-lightbox-counter">
+              {lightboxIndex + 1} / {mediaUrls.length}
+            </div>
+
+            {lightboxIndex > 0 && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setLightboxIndex(prev => prev - 1);
+                }}
+                className="community-lightbox-nav community-lightbox-prev"
+                aria-label="Previous Image"
+              >
+                <ChevronLeft size={28} />
+              </button>
+            )}
+
             <img
               src={mediaUrls[lightboxIndex]?.mediaUrl}
-              alt="Full view"
+              alt={mediaUrls[lightboxIndex]?.caption || `Full view ${lightboxIndex + 1}`}
               className="community-lightbox-img"
               onClick={(e) => e.stopPropagation()}
             />
+
+            {lightboxIndex < mediaUrls.length - 1 && (
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setLightboxIndex(prev => prev + 1);
+                }}
+                className="community-lightbox-nav community-lightbox-next"
+                aria-label="Next Image"
+              >
+                <ChevronRight size={28} />
+              </button>
+            )}
           </div>
         )}
       </>
@@ -256,7 +403,7 @@ export default function CommunityPostMedia({ postType, mediaUrls = [], aspectRat
 
   // 4. Single Panoramic / Featured Image Post
   const singleItem = mediaUrls[0];
-  const effectiveRatio = aspectRatio && aspectRatio !== 'auto' ? aspectRatio : '16:9';
+  const effectiveRatio = aspectRatio || '16:9';
   const imgRatioStyle = getRatioContainerStyle(effectiveRatio);
 
   return (

@@ -110,6 +110,7 @@ CREATE TABLE IF NOT EXISTS community_users (
   passwordHash VARCHAR(255) NOT NULL,
   avatarUrl VARCHAR(500),
   topics JSON,
+  status VARCHAR(20) DEFAULT 'active',
   token VARCHAR(255),
   tokenExpiresAt DATETIME,
   enrolledEvents JSON,

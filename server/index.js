@@ -16,6 +16,7 @@ import uploadApi, { uploadsDir } from './routes/uploadApi.js';
 import certificatesApi from './routes/certificatesApi.js';
 import communityApi from './routes/communityApi.js';
 import notificationsApi from './routes/notificationsApi.js';
+import adminUsersApi from './routes/adminUsersApi.js';
 import sitemapRoute from './routes/sitemapRoute.js';
 import { requireAdminAuth } from './middleware/adminAuth.js';
 import { ensureSchema } from './db/store.js';
@@ -49,6 +50,7 @@ app.use('/api', uploadApi);
 app.use('/api', certificatesApi);
 app.use('/api', communityApi);
 app.use('/api', notificationsApi);
+app.use('/api', adminUsersApi);
 
 // 2. Dynamic Sitemap Endpoint (Handled BEFORE SPA catch-all)
 app.use('/', sitemapRoute);

@@ -38,6 +38,10 @@
   gap: 20px;
 }
 
+.community-sidebar-sticky>* {
+  flex-shrink: 0;
+}
+
 @media (min-width: 992px) {
   .community-sidebar-sticky {
     position: sticky;
@@ -267,12 +271,18 @@
   font-weight: 600;
 }
 
-/* Left Vertical Mountain Quote Poster */
+/* Left Vertical Mountain Quote Poster - Permanent Constant Aspect Ratio & Dimensions */
 .community-mountain-quote-card {
+  width: 100%;
+  aspect-ratio: 896 / 1200;
+  /* Permanent constant ratio matching current dimensions */
+  height: 435px;
+  min-height: 435px;
+  max-height: 435px;
   border-radius: 16px;
   overflow: hidden;
   position: relative;
-  background: url('/assets/images/community/mountain-quote-bg.jpg') center/cover no-repeat;
+  background-color: #F5EFE6;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
   border: 1px solid #ECE7DE;
   display: flex;
@@ -282,9 +292,26 @@
   transition: all 0.2s ease;
 }
 
+.community-mountain-quote-bg-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 1;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
 .community-mountain-quote-overlay {
+  position: relative;
+  z-index: 2;
   padding: 44px 24px 24px 24px;
   text-align: center;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .community-mountain-quote-text {
@@ -295,6 +322,7 @@
   color: #2C261E;
   margin: 0 0 16px 0;
   font-weight: 600;
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.7);
 }
 
 .community-mountain-quote-author {
@@ -304,6 +332,69 @@
   color: #685E50;
   text-transform: uppercase;
   display: block;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.6);
+}
+
+/* Admin Quick Edit Shortcut on Quote Poster Card */
+.community-quote-admin-edit-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 10;
+  background: rgba(8, 35, 73, 0.88);
+  backdrop-filter: blur(4px);
+  color: #FFFFFF !important;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 5px 11px;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  text-decoration: none !important;
+  opacity: 0.9;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+}
+
+.community-quote-admin-edit-badge:hover {
+  opacity: 1;
+  background: #082349;
+  color: #CA8A38 !important;
+  transform: translateY(-1px);
+}
+
+/* Admin Quick Edit Shortcut on Welcome Banner */
+.community-hero-edit-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 10;
+  background: rgba(8, 35, 73, 0.88);
+  backdrop-filter: blur(4px);
+  color: #FFFFFF !important;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none !important;
+  opacity: 0.92;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.community-hero-edit-btn:hover {
+  opacity: 1;
+  background: #082349;
+  color: #CA8A38 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(8, 35, 73, 0.35);
 }
 
 /* --------------------------------------------------------------------------
@@ -660,7 +751,7 @@
   border-radius: 50%;
   object-fit: cover;
   border: 1px solid #ECE7DE;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 .community-post-avatar-initials {
@@ -675,7 +766,7 @@
   font-weight: 700;
   font-size: 14px;
   border: 1.5px solid #CA8A38;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   flex-shrink: 0;
   user-select: none;
 }
@@ -810,46 +901,210 @@
   transform: scale(1.01);
 }
 
-/* Multi-Image Gallery Grid */
-.community-post-gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
-  margin-top: 14px;
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.community-post-gallery-item {
+/* Multi-Image Gallery Swipeable Carousel (Instagram / LinkedIn Slide Format) */
+.community-gallery-slider-wrap {
   position: relative;
-  aspect-ratio: 1 / 1;
+  width: 100%;
   overflow: hidden;
-  border-radius: 8px;
-  background: #F1EFEA;
+  border-radius: 14px;
+  background: #11100E;
+  margin-top: 14px;
+  user-select: none;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+  border: 1px solid #ECE7DE;
+  box-sizing: border-box;
 }
 
-.community-post-gallery-item img {
+.community-gallery-slider-track {
+  display: flex;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.25s ease;
-}
-
-.community-post-gallery-item:hover img {
-  transform: scale(1.03);
-}
-
-.community-post-gallery-more {
   position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.55);
-  color: #FFFFFF;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: transform;
+}
+
+.community-gallery-slide-item {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
+  background: #181512;
+}
+
+.community-gallery-slide-img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  pointer-events: none;
+  transition: transform 0.25s ease;
+}
+
+.community-gallery-slide-item:hover .community-gallery-slide-img {
+  transform: scale(1.01);
+}
+
+/* Slide Counter Pill (Top-Right: e.g. 1/5) */
+.community-gallery-counter-badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 5;
+  background: rgba(18, 16, 14, 0.78);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #FFFFFF;
+  font-size: 11.5px;
   font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  letter-spacing: 0.03em;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+}
+
+/* Nav Arrows (Left / Right) */
+.community-gallery-nav-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 6;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  color: #1E1A16;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.22);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  padding: 0;
+  outline: none;
+}
+
+.community-gallery-nav-arrow:hover {
+  background: #FFFFFF;
+  color: #B87B28;
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 4px 14px rgba(184, 123, 40, 0.35);
+}
+
+.community-gallery-nav-arrow:active {
+  transform: translateY(-50%) scale(0.96);
+}
+
+.community-gallery-nav-prev {
+  left: 12px;
+}
+
+.community-gallery-nav-next {
+  right: 12px;
+}
+
+/* Dot Indicators Bar (Bottom Center) */
+.community-gallery-dots-bar {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  background: rgba(18, 16, 14, 0.6);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.community-gallery-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.45);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.community-gallery-dot:hover {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.community-gallery-dot.active {
+  width: 18px;
+  border-radius: 10px;
+  background: #CA8A38;
+  box-shadow: 0 0 8px rgba(202, 138, 56, 0.6);
+}
+
+/* Lightbox Nav and Counter */
+.community-lightbox-counter {
+  position: absolute;
+  top: 24px;
+  left: 32px;
+  color: #FFFFFF;
+  font-size: 14px;
+  font-weight: 700;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 5px 16px;
+  border-radius: 20px;
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  letter-spacing: 0.04em;
+  z-index: 10001;
+}
+
+.community-lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(8px);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 10001;
+}
+
+.community-lightbox-nav:hover {
+  background: rgba(255, 255, 255, 0.4);
+  transform: translateY(-50%) scale(1.08);
+}
+
+.community-lightbox-prev {
+  left: 24px;
+}
+
+.community-lightbox-next {
+  right: 24px;
 }
 
 /* Post Media: Waveform Audio Player */
@@ -968,6 +1223,8 @@
   border-radius: 16px;
   padding: 18px 20px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  flex-shrink: 0;
+  box-sizing: border-box;
 }
 
 .community-card-head-row {
@@ -1381,14 +1638,20 @@
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  padding: 20px;
+  padding: 16px 16px 18px 16px;
+  flex-shrink: 0;
+  height: auto;
+  min-height: auto;
+  overflow: visible;
 }
 
 /* Recommended Books 2x2 Square Grid */
 .community-books-grid-2x2 {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .community-book-grid-card {
@@ -1399,7 +1662,9 @@
   border: 1px solid #EFEAE1;
   border-radius: 12px;
   overflow: hidden;
-  padding: 8px;
+  padding: 7px;
+  box-sizing: border-box;
+  min-width: 0;
   transition: all 0.22s ease;
 }
 
@@ -1436,25 +1701,27 @@
   transform: scale(1.05);
 }
 
-
 .community-book-sq-meta {
-  margin-top: 8px;
+  margin-top: 6px;
   display: flex;
   flex-direction: column;
   flex: 1;
   justify-content: space-between;
+  min-width: 0;
 }
 
 .community-book-sq-title {
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 700;
   color: #1E1A16;
-  margin: 0 0 4px 0;
-  line-height: 1.35;
+  margin: 0 0 3px 0;
+  line-height: 1.3;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
   transition: color 0.15s ease;
 }
 
@@ -1463,9 +1730,10 @@
 }
 
 .community-book-sq-price {
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 800;
   color: #B87B28;
+  line-height: 1.2;
 }
 
 .community-books-list {
@@ -2502,6 +2770,156 @@
   margin-right: 4px;
 }
 
+/* Admin Profile Header in Left Sidebar (Admin Device/Browser Only) */
+.community-admin-profile-header {
+  display: flex;
+  flex-direction: column;
+}
+
+.community-admin-avatar-wrap {
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.community-admin-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2.5px solid #CA8A38;
+  box-shadow: 0 3px 10px rgba(8, 35, 73, 0.16);
+  display: block;
+}
+
+.community-admin-initials-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #082349 0%, #17386D 100%);
+  color: #CA8A38;
+  font-weight: 800;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 2px solid #CA8A38;
+  box-shadow: 0 3px 10px rgba(8, 35, 73, 0.18);
+}
+
+.community-admin-shield-indicator {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  background: #082349;
+  color: #CA8A38;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #FFFFFF;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+}
+
+.community-admin-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #FEF3C7;
+  color: #92400E;
+  border: 1px solid #FDE68A;
+  padding: 1.5px 7px;
+  border-radius: 4px;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  width: fit-content;
+  margin-bottom: 3px;
+}
+
+.community-admin-cta-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.community-btn-admin-portal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: #082349;
+  color: #FFFFFF;
+  border: 1.5px solid #082349;
+  border-radius: 8px;
+  padding: 7px 10px;
+  font-size: 11.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(8, 35, 73, 0.18);
+  transition: all 0.2s ease;
+}
+
+.community-btn-admin-portal:hover {
+  background: #0D3369;
+  color: #CA8A38;
+  border-color: #CA8A38;
+  transform: translateY(-1px);
+}
+
+.community-btn-admin-signout {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  background: #FFFFFF;
+  color: #DC2626;
+  border: 1.5px solid #FCA5A5;
+  border-radius: 8px;
+  padding: 7px 10px;
+  font-size: 11.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.community-btn-admin-signout:hover {
+  background: #FEF2F2;
+  border-color: #DC2626;
+}
+
+.community-admin-nav-item {
+  color: #082349;
+  font-weight: 600;
+}
+
+.community-admin-nav-item:hover {
+  background: #F1F5F9;
+  color: #082349;
+}
+
+.community-admin-nav-icon {
+  color: #CA8A38;
+}
+
+.community-admin-nav-chip {
+  margin-left: auto;
+  background: #FEF3C7;
+  color: #92400E;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid #FDE68A;
+}
+
 /* --------------------------------------------------------------------------
    9. Community Authentication Modal (Sign In & Multi-Step Sign Up)
    -------------------------------------------------------------------------- */
@@ -2519,8 +2937,13 @@
 }
 
 @keyframes fadeInModal {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .community-auth-modal {
@@ -3497,6 +3920,7 @@
   .community-learning-course-card {
     grid-template-columns: 1fr;
   }
+
   .community-enrolled-workshop-card {
     flex-direction: column;
   }
@@ -3918,4 +4342,3 @@
   background: #F8FAFC;
   border-color: #CBD5E1;
 }
-

@@ -28,6 +28,38 @@ const aspectRatioOptions = [
   { value: 'auto', label: 'Auto (Original)', desc: 'Natural size with 520px height cap' }
 ];
 
+// Convert UTC/ISO date to local Indian Standard Time (IST, UTC+5:30) YYYY-MM-DDTHH:mm string for datetime-local input
+function toIstInputDateTime(isoOrDate) {
+  if (!isoOrDate) return '';
+  const d = new Date(isoOrDate);
+  if (isNaN(d.getTime())) return '';
+  const istOffsetMs = 5.5 * 60 * 60 * 1000;
+  const istDate = new Date(d.getTime() + istOffsetMs);
+  const year = istDate.getUTCFullYear();
+  const month = String(istDate.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(istDate.getUTCDate()).padStart(2, '0');
+  const hours = String(istDate.getUTCHours()).padStart(2, '0');
+  const minutes = String(istDate.getUTCMinutes()).padStart(2, '0');
+  return `${year}-${month}-${day}T${hours}:${minutes}`;
+}
+
+// Convert IST input string (YYYY-MM-DDTHH:mm) to UTC ISO 8601 string for server storage
+function istInputToIso(val) {
+  if (!val) return null;
+  const s = String(val).trim();
+  if (s.includes('Z') || s.includes('+')) {
+    const d = new Date(s);
+    return !isNaN(d.getTime()) ? d.toISOString() : null;
+  }
+  const withOffset = s.length === 16 ? `${s}:00+05:30` : `${s}+05:30`;
+  const d = new Date(withOffset);
+  if (!isNaN(d.getTime())) {
+    return d.toISOString();
+  }
+  const fallback = new Date(s);
+  return !isNaN(fallback.getTime()) ? fallback.toISOString() : null;
+}
+
 export default function CommunityPostForm({ initialData = null, onSubmit, isSubmitting = false }) {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
@@ -84,8 +116,7 @@ export default function CommunityPostForm({ initialData = null, onSubmit, isSubm
       let sched = '';
       if (initialData.scheduledFor) {
         try {
-          const d = new Date(initialData.scheduledFor);
-          sched = d.toISOString().slice(0, 16);
+          sched = toIstInputDateTime(initialData.scheduledFor);
         } catch (_) {}
       }
 
@@ -116,12 +147,12 @@ export default function CommunityPostForm({ initialData = null, onSubmit, isSubm
     const files = Array.from(e.target.files || []);
     if (files.length === 0) return;
 
-    // 2MB maximum file limit check (2 * 1024 * 1024 bytes)
-    const MAX_SIZE_BYTES = 2 * 1024 * 1024;
+    // 5MB maximum file limit check (5 * 1024 * 1024 bytes)
+    const MAX_SIZE_BYTES = 5 * 1024 * 1024;
     const oversizedFiles = files.filter(f => f.size > MAX_SIZE_BYTES);
     if (oversizedFiles.length > 0) {
       const oversizedInfo = oversizedFiles.map(f => `"${f.name}" (${(f.size / (1024 * 1024)).toFixed(2)}MB)`).join(', ');
-      setUploadError(`Maximum allowed file size is 2MB. The following file(s) exceed 2MB: ${oversizedInfo}. Please select files up to 2MB.`);
+      setUploadError(`Maximum allowed file size is 5MB. The following file(s) exceed 5MB: ${oversizedInfo}. Please select files up to 5MB.`);
       if (fileInputRef.current) fileInputRef.current.value = '';
       return;
     }
@@ -145,7 +176,7 @@ export default function CommunityPostForm({ initialData = null, onSubmit, isSubm
         };
       });
     } catch (err) {
-      setUploadError(err.message || 'File upload failed. Maximum size is 2MB per file.');
+      setUploadError(err.message || 'File upload failed. Maximum size is 5MB per file.');
     } finally {
       setIsUploading(false);
       if (fileInputRef.current) fileInputRef.current.value = '';
@@ -235,7 +266,7 @@ export default function CommunityPostForm({ initialData = null, onSubmit, isSubm
       mediaUrls: finalMedia,
       aspectRatio: formData.aspectRatio || '16:9',
       scheduledFor: formData.status === 'scheduled' && formData.scheduledFor
-        ? new Date(formData.scheduledFor).toISOString()
+        ? istInputToIso(formData.scheduledFor)
         : null
     };
 
@@ -524,7 +555,7 @@ export default function CommunityPostForm({ initialData = null, onSubmit, isSubm
                     padding: '2px 8px',
                     borderRadius: '999px'
                   }}>
-                    Max 2MB per file
+                    Max 5MB per file
                   </span>
                 </div>
                 <div
@@ -564,7 +595,7 @@ export default function CommunityPostForm({ initialData = null, onSubmit, isSubm
                     {isUploading ? 'Uploading files...' : 'Click or Drag files to attach media'}
                   </h4>
                   <p style={{ margin: 0, fontSize: '12px', color: '#64748B' }}>
-                    Supports JPEG, PNG, WEBP, MP4, and MP3 (Max 2MB per file)
+                    Supports JPEG, PNG, WEBP, MP4, and MP3 (Max 5MB per file)
                   </p>
                   <div style={{ marginTop: '8px', display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '11.5px', color: '#9A5B0B', background: '#FFF7E8', border: '1px solid #FDE68A', padding: '3px 10px', borderRadius: '12px', fontWeight: '600' }}>
                     Enforced Frame Ratio: <strong>{formData.aspectRatio || '16:9'}</strong>
@@ -681,7 +712,16 @@ export default function CommunityPostForm({ initialData = null, onSubmit, isSubm
                 <select
                   className="admin-input"
                   value={formData.status}
-                  onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value }))}
+                  onChange={(e) => {
+                    const nextStatus = e.target.value;
+                    setFormData(prev => ({
+                      ...prev,
+                      status: nextStatus,
+                      scheduledFor: (nextStatus === 'scheduled' && !prev.scheduledFor)
+                        ? toIstInputDateTime(new Date(Date.now() + 30 * 60 * 1000))
+                        : prev.scheduledFor
+                    }));
+                  }}
                 >
                   <option value="published">Publish Immediately</option>
                   <option value="draft">Save as Draft</option>

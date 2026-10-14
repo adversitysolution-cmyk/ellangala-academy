@@ -4,7 +4,7 @@ import { Home, Bookmark, User } from 'lucide-react';
 import { useCommunityAuth } from '../context/CommunityAuthContext';
 
 export default function CommunityMobileBottomNav({ singlePostId = null }) {
-  const { user, isAuthenticated } = useCommunityAuth();
+  const { user, isAuthenticated, openAuthModal } = useCommunityAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -15,6 +15,26 @@ export default function CommunityMobileBottomNav({ singlePostId = null }) {
 
   const handleTabClick = (targetPath) => {
     navigate(targetPath);
+  };
+
+  const handleSavedClick = () => {
+    if (!isAuthenticated) {
+      openAuthModal('signup', 'Sign up or log in to view your saved community reflections.', () => {
+        navigate('/feed/saved');
+      });
+      return;
+    }
+    navigate('/feed/saved');
+  };
+
+  const handleProfileClick = () => {
+    if (!isAuthenticated) {
+      openAuthModal('login', 'Sign in to access your personal seeker profile and learning.', () => {
+        navigate('/feed/profile');
+      });
+      return;
+    }
+    navigate('/feed/profile');
   };
 
   const getInitial = (name) => {
@@ -41,7 +61,7 @@ export default function CommunityMobileBottomNav({ singlePostId = null }) {
       <button
         type="button"
         className={`community-mobile-nav-item ${isSaved ? 'active' : ''}`}
-        onClick={() => handleTabClick('/feed/saved')}
+        onClick={handleSavedClick}
         aria-label="Saved"
       >
         <Bookmark size={22} />
@@ -52,7 +72,7 @@ export default function CommunityMobileBottomNav({ singlePostId = null }) {
       <button
         type="button"
         className={`community-mobile-nav-item ${isProfile ? 'active' : ''}`}
-        onClick={() => handleTabClick('/feed/profile')}
+        onClick={handleProfileClick}
         aria-label="Profile"
       >
         {isAuthenticated && user ? (

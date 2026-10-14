@@ -21,7 +21,7 @@ const DEFAULT_PROFILE = {
   name: 'Academy Administrator',
   email: 'admin@ellangala.com',
   role: 'Administrator',
-  avatar: '/assets/images/resources/founder-avatar.png'
+  avatar: '/assets/images/team/naveen-ellangala.jpg'
 };
 
 function getAdminProfile() {

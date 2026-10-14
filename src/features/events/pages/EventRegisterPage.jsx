@@ -12,7 +12,8 @@ import { useUterpyPlugins } from '../../../hooks/useUterpyPlugins';
 import { eventService } from '../services/eventService';
 import { enrollmentService } from '../../../admin/services/enrollmentService';
 import { paymentService } from '../../../admin/services/paymentService';
-import { Calendar, Clock, MapPin, User, CheckCircle2, ArrowLeft, Users, Send } from 'lucide-react';
+import { useCommunityAuth } from '../../community/context/CommunityAuthContext';
+import { Calendar, Clock, MapPin, User, CheckCircle2, ArrowLeft, Users, Send, LogIn, Sparkles } from 'lucide-react';
 
 function formatDate(dateStr) {
   if (!dateStr) return '';
@@ -27,6 +28,7 @@ function formatDate(dateStr) {
 export default function EventRegisterPage() {
   useUterpyPlugins();
   const { slug } = useParams();
+  const { user, isAuthenticated, openAuthModal } = useCommunityAuth();
 
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -42,6 +44,15 @@ export default function EventRegisterPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const [pendingId, setPendingId] = useState(null); // unpaid registration awaiting a payment retry
+
+  // Auto-fill from authenticated seeker profile
+  useEffect(() => {
+    if (user) {
+      if (user.name && !fullName) setFullName(user.name);
+      if (user.phone && !phone) setPhone(user.phone);
+      if (user.email && !email) setEmail(user.email);
+    }
+  }, [user]);
 
   useEffect(() => {
     setLoading(true);
@@ -81,6 +92,19 @@ export default function EventRegisterPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Restriction: User must be signed up/logged in to register
+    if (!isAuthenticated || !user) {
+      openAuthModal('signup', 'Please sign up or log in to confirm your registration for this event.', (loggedInUser) => {
+        if (loggedInUser) {
+          if (loggedInUser.name) setFullName(loggedInUser.name);
+          if (loggedInUser.phone) setPhone(loggedInUser.phone);
+          if (loggedInUser.email) setEmail(loggedInUser.email);
+        }
+      });
+      return;
+    }
+
     setIsSubmitting(true);
     setSubmitError('');
 
@@ -282,9 +306,79 @@ export default function EventRegisterPage() {
                     <h2 style={{ fontSize: '24px', fontWeight: '800', color: '#0F231B', marginBottom: '8px' }}>
                       Attendee Registration Form
                     </h2>
-                    <p style={{ fontSize: '14px', color: '#64748B', marginBottom: '28px' }}>
+                    <p style={{ fontSize: '14px', color: '#64748B', marginBottom: '24px' }}>
                       Please fill in your contact details below to reserve your seat.
                     </p>
+
+                    {!isAuthenticated && (
+                      <div
+                        style={{
+                          backgroundColor: '#FFF7E8',
+                          border: '1.5px solid #F3E3C3',
+                          borderRadius: '12px',
+                          padding: '16px 20px',
+                          marginBottom: '24px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          gap: '16px',
+                          flexWrap: 'wrap'
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                          <div
+                            style={{
+                              width: '38px',
+                              height: '38px',
+                              borderRadius: '50%',
+                              backgroundColor: '#CA8A38',
+                              color: '#FFFFFF',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              flexShrink: 0
+                            }}
+                          >
+                            <Sparkles size={18} />
+                          </div>
+                          <div>
+                            <div style={{ fontWeight: '700', color: '#082349', fontSize: '14px' }}>
+                              Sign Up or Log In Required
+                            </div>
+                            <div style={{ fontSize: '12.5px', color: '#667085' }}>
+                              You must be a registered seeker to reserve seats for events and ongoing activities.
+                            </div>
+                          </div>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() =>
+                            openAuthModal('signup', 'Sign up or log in to register for this event.', (u) => {
+                              if (u) {
+                                if (u.name) setFullName(u.name);
+                                if (u.phone) setPhone(u.phone);
+                                if (u.email) setEmail(u.email);
+                              }
+                            })
+                          }
+                          className="thm-btn"
+                          style={{
+                            padding: '8px 20px',
+                            fontSize: '13px',
+                            fontWeight: '700',
+                            borderRadius: '8px',
+                            border: 'none',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '6px'
+                          }}
+                        >
+                          <LogIn size={14} />
+                          <span>Sign Up / Log In</span>
+                        </button>
+                      </div>
+                    )}
 
                     <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                       {/* Full Name */}

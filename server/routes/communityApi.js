@@ -17,6 +17,10 @@ import {
   updateCommunityCommentStatus,
   deleteCommunityComment,
   getCommunitySidebarData,
+  getCommunityQuoteCard,
+  updateCommunityQuoteCard,
+  getCommunityHeroBanner,
+  updateCommunityHeroBanner,
   createCommunityUser,
   authenticateCommunityUser,
   getCommunityUserByToken,
@@ -50,7 +54,7 @@ const communityUpload = multer({
       cb(null, `community-${Date.now()}-${crypto.randomBytes(6).toString('hex')}${ext}`);
     }
   }),
-  limits: { fileSize: 2 * 1024 * 1024 }, // 2 MB max
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB max
   fileFilter: (req, file, cb) => {
     if (!ALLOWED_COMMUNITY_MIME[file.mimetype]) {
       return cb(new Error('Allowed formats: JPEG, PNG, WEBP, GIF, MP3, WAV, MP4, WEBM'));
@@ -299,9 +303,54 @@ router.get('/community/sidebar-data', async (req, res) => {
   res.json(data);
 });
 
+// GET /api/community/quote-card (Public quote poster card configuration)
+router.get('/community/quote-card', (req, res) => {
+  const quoteCard = getCommunityQuoteCard();
+  res.json({ success: true, quoteCard });
+});
+
+// GET /api/community/hero-banner (Public feed hero banner configuration)
+router.get('/community/hero-banner', (req, res) => {
+  const heroBanner = getCommunityHeroBanner();
+  res.json({ success: true, heroBanner });
+});
+
 // ============================================================================
 // ADMIN ENDPOINTS (Protected automatically by server/index.js /api/admin guard)
 // ============================================================================
+
+// GET /api/admin/community/quote-card
+router.get('/admin/community/quote-card', (req, res) => {
+  const quoteCard = getCommunityQuoteCard();
+  res.json({ success: true, quoteCard });
+});
+
+// PATCH /api/admin/community/quote-card
+router.patch('/admin/community/quote-card', (req, res) => {
+  const { quote, author, imageUrl } = req.body || {};
+  const updated = updateCommunityQuoteCard({ quote, author, imageUrl });
+  res.json({
+    success: true,
+    quoteCard: updated,
+    message: 'Poster card updated successfully.'
+  });
+});
+
+// GET /api/admin/community/hero-banner
+router.get('/admin/community/hero-banner', (req, res) => {
+  const heroBanner = getCommunityHeroBanner();
+  res.json({ success: true, heroBanner });
+});
+
+// PATCH /api/admin/community/hero-banner
+router.patch('/admin/community/hero-banner', (req, res) => {
+  const updated = updateCommunityHeroBanner(req.body || {});
+  res.json({
+    success: true,
+    heroBanner: updated,
+    message: 'Feed hero banner updated successfully.'
+  });
+});
 
 // GET /api/admin/community/posts
 router.get('/admin/community/posts', async (req, res) => {
@@ -399,7 +448,7 @@ router.post('/admin/community/upload-media', (req, res) => {
   communityUpload.array('media', 10)(req, res, (err) => {
     if (err) {
       if (err.code === 'LIMIT_FILE_SIZE') {
-        return res.status(400).json({ error: 'File size exceeds 2MB maximum limit. Please upload files under 2MB.' });
+        return res.status(400).json({ error: 'File size exceeds 5MB maximum limit. Please upload files under 5MB.' });
       }
       return res.status(400).json({ error: err.message });
     }

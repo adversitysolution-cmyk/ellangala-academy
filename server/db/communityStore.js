@@ -26,14 +26,66 @@ function parseJson(val, fallback = null) {
   }
 }
 
+const USERS_DATA_FILE = path.join(__dirname, 'community-users.json');
+
+function loadPersistentUsers() {
+  const map = new Map();
+  try {
+    if (fs.existsSync(USERS_DATA_FILE)) {
+      const list = JSON.parse(fs.readFileSync(USERS_DATA_FILE, 'utf-8'));
+      if (Array.isArray(list)) {
+        for (const u of list) {
+          if (u.id) map.set(u.id, u);
+        }
+      }
+    }
+  } catch (err) {
+    console.error('Error loading persistent community users:', err);
+  }
+  return map;
+}
+
+function savePersistentUsers(userMap) {
+  try {
+    const list = Array.from(userMap.values());
+    fs.writeFileSync(USERS_DATA_FILE, JSON.stringify(list, null, 2), 'utf-8');
+  } catch (err) {
+    console.error('Error saving persistent community users:', err);
+  }
+}
+
+const POSTS_DATA_FILE = path.join(__dirname, 'community-posts.json');
+
+function loadPersistentPosts() {
+  try {
+    if (fs.existsSync(POSTS_DATA_FILE)) {
+      const list = JSON.parse(fs.readFileSync(POSTS_DATA_FILE, 'utf-8'));
+      if (Array.isArray(list) && list.length > 0) {
+        return list;
+      }
+    }
+  } catch (err) {
+    console.error('Error loading persistent community posts:', err);
+  }
+  return null;
+}
+
+function savePersistentPosts(posts) {
+  try {
+    fs.writeFileSync(POSTS_DATA_FILE, JSON.stringify(posts, null, 2), 'utf-8');
+  } catch (err) {
+    console.error('Error saving persistent community posts:', err);
+  }
+}
+
 // In-memory fallback for local DB-free / demo mode
 const memoryStore = {
   categories: [],
-  posts: [],
+  posts: loadPersistentPosts() || [],
   likes: new Map(), // key: postId:visitorId
   saved: new Map(), // key: postId:visitorId
   comments: [],
-  users: new Map(), // key: user.id
+  users: loadPersistentUsers(), // persistent from community-users.json
   events: []
 };
 
@@ -146,8 +198,12 @@ export async function ensureCommunitySchema() {
     if (memoryStore.categories.length === 0) {
       memoryStore.categories = [...DEFAULT_CATEGORIES];
     }
-    if (memoryStore.posts.length === 0) {
+    const persisted = loadPersistentPosts();
+    if (persisted && persisted.length > 0) {
+      memoryStore.posts = persisted;
+    } else if (memoryStore.posts.length === 0) {
       memoryStore.posts = [...SEED_POSTS];
+      savePersistentPosts(memoryStore.posts);
     }
     try {
       const adminProfileFile = path.join(__dirname, '..', 'uploads', 'admin-profile.json');
@@ -215,6 +271,32 @@ export async function ensureCommunitySchema() {
   }
 
   console.log('✅ Community Feed schema verified and initialized.');
+
+  // Auto-publish any scheduled posts periodically (every 15 seconds)
+  setInterval(() => {
+    try {
+      autoPublishDueScheduledPosts();
+    } catch (_) {}
+  }, 15000);
+}
+
+function autoPublishDueScheduledPosts() {
+  const nowMs = Date.now();
+  let updated = false;
+  for (const p of memoryStore.posts) {
+    if (p.status === 'scheduled' && p.scheduledFor) {
+      const schedMs = new Date(p.scheduledFor).getTime();
+      if (!isNaN(schedMs) && schedMs <= nowMs) {
+        p.status = 'published';
+        p.publishedAt = p.publishedAt || p.scheduledFor;
+        p.updatedAt = new Date().toISOString();
+        updated = true;
+      }
+    }
+  }
+  if (updated) {
+    savePersistentPosts();
+  }
 }
 
 // ============================================================================
@@ -254,13 +336,18 @@ export async function getCommunityPosts({
   const nowIso = new Date().toISOString();
 
   if (!pool) {
+    autoPublishDueScheduledPosts();
+    const nowMs = Date.now();
     let posts = [...memoryStore.posts];
 
     // Filter by visibility / status
     if (!includeDrafts) {
       posts = posts.filter(p => {
         if (p.status === 'published') return true;
-        if (p.status === 'scheduled' && p.scheduledFor && p.scheduledFor <= nowIso) return true;
+        if (p.status === 'scheduled' && p.scheduledFor) {
+          const schedMs = new Date(p.scheduledFor).getTime();
+          return !isNaN(schedMs) && schedMs <= nowMs;
+        }
         return false;
       });
     } else if (status && status !== 'all') {
@@ -423,9 +510,25 @@ export async function getCommunityPosts({
 export async function getCommunityPostById(id, { includeDrafts = false, visitorId = null } = {}) {
   if (!id) return null;
 
+  const seedMatch = String(id).match(/post-seed-\d+/i);
+  const guidMatch = String(id).match(/POST-\d{4}-[A-Z0-9]+/i);
+  const targetId = seedMatch ? seedMatch[0].toLowerCase() : (guidMatch ? guidMatch[0] : id);
+
   if (!pool) {
-    const post = memoryStore.posts.find(p => p.id === id);
+    let post = memoryStore.posts.find(p => p.id === targetId || p.id === id);
+    if (!post) {
+      post = memoryStore.posts.find(p => id.endsWith(p.id) || id.includes(p.id));
+    }
     if (!post) return null;
+    if (post.status === 'scheduled' && post.scheduledFor) {
+      const schedMs = new Date(post.scheduledFor).getTime();
+      if (!isNaN(schedMs) && schedMs <= Date.now()) {
+        post.status = 'published';
+        post.publishedAt = post.publishedAt || post.scheduledFor;
+        post.updatedAt = new Date().toISOString();
+        savePersistentPosts();
+      }
+    }
     if (!includeDrafts && post.status !== 'published') return null;
     return {
       ...post,
@@ -554,6 +657,7 @@ export async function saveCommunityPost(postData) {
     } else {
       memoryStore.posts.unshift(postRecord);
     }
+    savePersistentPosts(memoryStore.posts);
     return postRecord;
   }
 
@@ -612,6 +716,7 @@ export async function syncAdminProfileToPosts({ name, role, avatar } = {}) {
         post.authorRole = role;
       }
     }
+    savePersistentPosts(memoryStore.posts);
   }
 
   if (pool) {
@@ -648,7 +753,9 @@ export async function deleteCommunityPost(id) {
   if (!pool) {
     const initialLen = memoryStore.posts.length;
     memoryStore.posts = memoryStore.posts.filter(p => p.id !== id);
-    return memoryStore.posts.length < initialLen;
+    const removed = memoryStore.posts.length < initialLen;
+    if (removed) savePersistentPosts(memoryStore.posts);
+    return removed;
   }
   const [result] = await pool.query('DELETE FROM community_posts WHERE id = ?', [id]);
   return result.affectedRows > 0;
@@ -920,6 +1027,126 @@ export async function deleteCommunityComment(commentId) {
 // ============================================================================
 // SIDEBAR WIDGETS DATA: Active workshops & Course Recommendations
 // ============================================================================
+const QUOTE_CARD_FILE = path.join(__dirname, 'community-quote-card.json');
+
+const DEFAULT_QUOTE_CARD = {
+  quote: "A calmer mind creates a brighter life.",
+  author: "DR. NAVEEN ELLANGALA",
+  imageUrl: "/assets/images/community/mountain-quote-bg.jpg"
+};
+
+export function getCommunityQuoteCard() {
+  try {
+    if (fs.existsSync(QUOTE_CARD_FILE)) {
+      const data = JSON.parse(fs.readFileSync(QUOTE_CARD_FILE, 'utf-8'));
+      if (data && typeof data === 'object') {
+        return {
+          quote: data.quote || DEFAULT_QUOTE_CARD.quote,
+          author: data.author || DEFAULT_QUOTE_CARD.author,
+          imageUrl: data.imageUrl || DEFAULT_QUOTE_CARD.imageUrl,
+          updatedAt: data.updatedAt || new Date().toISOString()
+        };
+      }
+    }
+  } catch (err) {
+    console.error('Error reading community quote card:', err);
+  }
+  return { ...DEFAULT_QUOTE_CARD, updatedAt: new Date().toISOString() };
+}
+
+export function updateCommunityQuoteCard({ quote, author, imageUrl }) {
+  const current = getCommunityQuoteCard();
+  const updated = {
+    quote: quote !== undefined && String(quote).trim() ? String(quote).trim() : current.quote,
+    author: author !== undefined && String(author).trim() ? String(author).trim() : current.author,
+    imageUrl: imageUrl !== undefined && String(imageUrl).trim() ? String(imageUrl).trim() : current.imageUrl,
+    updatedAt: new Date().toISOString()
+  };
+  try {
+    fs.writeFileSync(QUOTE_CARD_FILE, JSON.stringify(updated, null, 2), 'utf-8');
+  } catch (err) {
+    console.error('Error saving community quote card:', err);
+  }
+  return updated;
+}
+
+const HERO_BANNER_FILE = path.join(__dirname, 'community-hero-banner.json');
+
+const DEFAULT_HERO_BANNER = {
+  heading: "Welcome to the\nEllangala Feed",
+  subheading: "Learn, reflect, and grow with Dr. Naveen Ellangala.",
+  imageUrl: "/assets/images/community/founder-feed-hero.png",
+  gradientColor: "#FFFDF8",
+  textColorMode: "auto",
+  badge1: { text: "Meaningful Discussions", icon: "users" },
+  badge2: { text: "Practical Wisdom", icon: "book" },
+  badge3: { text: "Supportive Community", icon: "sparkles" }
+};
+
+export function getCommunityHeroBanner() {
+  try {
+    if (fs.existsSync(HERO_BANNER_FILE)) {
+      const data = JSON.parse(fs.readFileSync(HERO_BANNER_FILE, 'utf-8'));
+      if (data && typeof data === 'object') {
+        return {
+          heading: data.heading || DEFAULT_HERO_BANNER.heading,
+          subheading: data.subheading || DEFAULT_HERO_BANNER.subheading,
+          imageUrl: data.imageUrl || DEFAULT_HERO_BANNER.imageUrl,
+          gradientColor: data.gradientColor || DEFAULT_HERO_BANNER.gradientColor,
+          textColorMode: data.textColorMode || DEFAULT_HERO_BANNER.textColorMode,
+          badge1: {
+            text: data.badge1?.text || DEFAULT_HERO_BANNER.badge1.text,
+            icon: data.badge1?.icon || DEFAULT_HERO_BANNER.badge1.icon
+          },
+          badge2: {
+            text: data.badge2?.text || DEFAULT_HERO_BANNER.badge2.text,
+            icon: data.badge2?.icon || DEFAULT_HERO_BANNER.badge2.icon
+          },
+          badge3: {
+            text: data.badge3?.text || DEFAULT_HERO_BANNER.badge3.text,
+            icon: data.badge3?.icon || DEFAULT_HERO_BANNER.badge3.icon
+          },
+          updatedAt: data.updatedAt || new Date().toISOString()
+        };
+      }
+    }
+  } catch (err) {
+    console.error('Error reading community hero banner:', err);
+  }
+  return { ...DEFAULT_HERO_BANNER, updatedAt: new Date().toISOString() };
+}
+
+export function updateCommunityHeroBanner(payload = {}) {
+  const current = getCommunityHeroBanner();
+  const updated = {
+    heading: payload.heading !== undefined && String(payload.heading).trim() ? String(payload.heading).trim() : current.heading,
+    subheading: payload.subheading !== undefined && String(payload.subheading).trim() ? String(payload.subheading).trim() : current.subheading,
+    imageUrl: payload.imageUrl !== undefined && String(payload.imageUrl).trim() ? String(payload.imageUrl).trim() : current.imageUrl,
+    gradientColor: payload.gradientColor !== undefined && String(payload.gradientColor).trim() ? String(payload.gradientColor).trim() : current.gradientColor,
+    textColorMode: payload.textColorMode !== undefined && String(payload.textColorMode).trim() ? String(payload.textColorMode).trim() : current.textColorMode,
+    badge1: {
+      text: payload.badge1?.text !== undefined && String(payload.badge1.text).trim() ? String(payload.badge1.text).trim() : current.badge1.text,
+      icon: payload.badge1?.icon !== undefined && String(payload.badge1.icon).trim() ? String(payload.badge1.icon).trim() : current.badge1.icon
+    },
+    badge2: {
+      text: payload.badge2?.text !== undefined && String(payload.badge2.text).trim() ? String(payload.badge2.text).trim() : current.badge2.text,
+      icon: payload.badge2?.icon !== undefined && String(payload.badge2.icon).trim() ? String(payload.badge2.icon).trim() : current.badge2.icon
+    },
+    badge3: {
+      text: payload.badge3?.text !== undefined && String(payload.badge3.text).trim() ? String(payload.badge3.text).trim() : current.badge3.text,
+      icon: payload.badge3?.icon !== undefined && String(payload.badge3.icon).trim() ? String(payload.badge3.icon).trim() : current.badge3.icon
+    },
+    updatedAt: new Date().toISOString()
+  };
+
+  try {
+    fs.writeFileSync(HERO_BANNER_FILE, JSON.stringify(updated, null, 2), 'utf-8');
+  } catch (err) {
+    console.error('Error saving community hero banner:', err);
+  }
+  return updated;
+}
+
 export async function getCommunitySidebarData(channelId = 'all') {
   let events = [];
   try {
@@ -1001,9 +1228,10 @@ export async function getCommunitySidebarData(channelId = 'all') {
     ];
   }
 
+  const quoteCard = getCommunityQuoteCard();
   const dailyQuote = {
-    quote: 'Real learning transforms not just what you know, but how you live.',
-    author: 'DR. NAVEEN ELLANGALA'
+    quote: quoteCard.quote,
+    author: quoteCard.author
   };
 
   return {
@@ -1011,7 +1239,8 @@ export async function getCommunitySidebarData(channelId = 'all') {
     featuredCourse,
     upcomingEvents,
     recommendedCourses,
-    dailyQuote
+    dailyQuote,
+    quoteCard
   };
 }
 
@@ -1111,12 +1340,15 @@ function phonesMatch(phone1, phone2) {
 
 function sanitizeCommunityUser(u) {
   if (!u) return null;
+  const isNew = u.createdAt ? (Date.now() - new Date(u.createdAt).getTime() <= 30 * 24 * 60 * 60 * 1000) : false;
   return {
     id: u.id,
     name: u.name,
     phone: u.phone,
     email: u.email || '',
     avatarUrl: u.avatarUrl || null,
+    status: (u.status || 'active').toLowerCase(),
+    isNew,
     topics: Array.isArray(u.topics) ? u.topics : parseJson(u.topics, []),
     token: u.token,
     tokenExpiresAt: u.tokenExpiresAt,
@@ -1155,6 +1387,7 @@ export async function createCommunityUser({ name, phone, email, password, avatar
       email: email?.trim() || '',
       passwordHash,
       avatarUrl: avatarUrl?.trim() || null,
+      status: 'active',
       topics: userTopics,
       token,
       tokenExpiresAt,
@@ -1165,6 +1398,7 @@ export async function createCommunityUser({ name, phone, email, password, avatar
     };
 
     memoryStore.users.set(userId, newUser);
+    savePersistentUsers(memoryStore.users);
     return sanitizeCommunityUser(newUser);
   }
 
@@ -1417,3 +1651,112 @@ export async function getCommunityUserWorkshops(userOrToken) {
     enrolledEvents: user.enrolledEvents || DEFAULT_USER_WORKSHOPS
   };
 }
+
+export async function getCommunityUsers({ status, search, sort = 'newest', fromDate, toDate } = {}) {
+  let list = [];
+  if (!pool) {
+    memoryStore.users = loadPersistentUsers();
+    list = Array.from(memoryStore.users.values()).map(sanitizeCommunityUser).filter(Boolean);
+  } else {
+    const [rows] = await pool.query('SELECT * FROM community_users ORDER BY createdAt DESC');
+    list = rows.map(sanitizeCommunityUser).filter(Boolean);
+  }
+
+  // Pre-calculate full metrics across the entire user base before filters
+  const now = Date.now();
+  const THIRTY_DAYS = 30 * 24 * 60 * 60 * 1000;
+  const stats = {
+    total: list.length,
+    active: list.filter(u => (u.status || 'active').toLowerCase() === 'active').length,
+    inactive: list.filter(u => (u.status || 'active').toLowerCase() === 'inactive').length,
+    newCount: list.filter(u => u.createdAt && (now - new Date(u.createdAt).getTime()) <= THIRTY_DAYS).length
+  };
+
+  // 1. Status Filter: active | inactive | new | all
+  if (status && status !== 'all') {
+    const s = status.toLowerCase();
+    if (s === 'active') {
+      list = list.filter(u => (u.status || 'active').toLowerCase() === 'active');
+    } else if (s === 'inactive') {
+      list = list.filter(u => (u.status || 'active').toLowerCase() === 'inactive');
+    } else if (s === 'new') {
+      list = list.filter(u => u.createdAt && (now - new Date(u.createdAt).getTime()) <= THIRTY_DAYS);
+    }
+  }
+
+  // 2. Search Filter (by name, email, phone, topics)
+  if (search && search.trim()) {
+    const q = search.trim().toLowerCase();
+    list = list.filter(u => {
+      const name = (u.name || '').toLowerCase();
+      const email = (u.email || '').toLowerCase();
+      const phone = (u.phone || '').toLowerCase();
+      const topicsStr = Array.isArray(u.topics) ? u.topics.join(' ').toLowerCase() : '';
+      return name.includes(q) || email.includes(q) || phone.includes(q) || topicsStr.includes(q);
+    });
+  }
+
+  // 3. Date Range Filter
+  if (fromDate) {
+    const fromTime = new Date(fromDate).getTime();
+    if (!isNaN(fromTime)) {
+      list = list.filter(u => new Date(u.createdAt).getTime() >= fromTime);
+    }
+  }
+  if (toDate) {
+    const toTime = new Date(toDate).getTime();
+    if (!isNaN(toTime)) {
+      // End of that day
+      list = list.filter(u => new Date(u.createdAt).getTime() <= (toTime + 24 * 60 * 60 * 1000 - 1));
+    }
+  }
+
+  // 4. Sort Filter: newest | oldest | name-asc | name-desc
+  if (sort === 'oldest') {
+    list.sort((a, b) => new Date(a.createdAt || 0) - new Date(b.createdAt || 0));
+  } else if (sort === 'name-asc') {
+    list.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+  } else if (sort === 'name-desc') {
+    list.sort((a, b) => (b.name || '').localeCompare(a.name || ''));
+  } else {
+    // Default newest (new to old)
+    list.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+  }
+
+  return { users: list, stats };
+}
+
+export async function updateCommunityUserStatus(userId, status) {
+  const cleanStatus = (status || 'active').toLowerCase() === 'inactive' ? 'inactive' : 'active';
+  const nowIso = new Date().toISOString();
+
+  if (!pool) {
+    const raw = memoryStore.users.get(userId);
+    if (!raw) throw new Error('User not found.');
+    raw.status = cleanStatus;
+    raw.updatedAt = nowIso;
+    savePersistentUsers(memoryStore.users);
+    return sanitizeCommunityUser(raw);
+  }
+
+  await pool.query('UPDATE community_users SET status = ?, updatedAt = ? WHERE id = ?', [
+    cleanStatus,
+    toDbDatetime(nowIso),
+    userId
+  ]);
+
+  const [rows] = await pool.query('SELECT * FROM community_users WHERE id = ? LIMIT 1', [userId]);
+  if (rows.length === 0) throw new Error('User not found.');
+  return sanitizeCommunityUser(rows[0]);
+}
+
+export async function deleteCommunityUser(userId) {
+  if (!pool) {
+    const deleted = memoryStore.users.delete(userId);
+    if (deleted) savePersistentUsers(memoryStore.users);
+    return true;
+  }
+  await pool.query('DELETE FROM community_users WHERE id = ?', [userId]);
+  return true;
+}
+

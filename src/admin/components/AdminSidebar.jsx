@@ -12,7 +12,8 @@ import {
   LogOut,
   X,
   Camera,
-  Bell
+  Bell,
+  Users
 } from 'lucide-react';
 import { useAdminAuth } from '../context/AdminAuthContext';
 import AdminProfileModal from './AdminProfileModal';
@@ -33,6 +34,7 @@ export default function AdminSidebar({ isOpen, onClose }) {
   const navItems = [
     { label: 'Dashboard', icon: LayoutDashboard, path: '/admin/dashboard' },
     { label: 'Notifications', icon: Bell, path: '/admin/notifications' },
+    { label: 'Users', icon: Users, path: '/admin/users' },
     { label: 'Enrollments', icon: ClipboardList, path: '/admin/enrollments' },
     { label: 'Events', icon: CalendarDays, path: '/admin/events' },
     { label: 'Certificate Templates', icon: Award, path: '/admin/certificate-templates' },

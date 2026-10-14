@@ -9,7 +9,7 @@ import SearchPopup from '../../../components/layout/SearchPopup';
 import ScrollToTop from '../../../components/layout/ScrollToTop';
 import SEO from '../../../seo/SEO';
 import { useUterpyPlugins } from '../../../hooks/useUterpyPlugins';
-import { communityService } from '../services/communityService';
+import { communityService, extractPostIdFromSlug, buildPostShareSlug } from '../services/communityService';
 import { CommunityAuthProvider, useCommunityAuth } from '../context/CommunityAuthContext';
 
 // Community Components
@@ -129,7 +129,10 @@ function CommunityFeedPageContent() {
         if (leftCard1) leftCard1.style.minHeight = '';
         if (rightCard1) rightCard1.style.minHeight = '';
         if (leftCard2) leftCard2.style.minHeight = '';
-        if (rightCard2) rightCard2.style.minHeight = '';
+        if (rightCard2) {
+          rightCard2.style.minHeight = '';
+          rightCard2.style.height = '';
+        }
         if (leftCard3) leftCard3.style.minHeight = '';
         if (rightCard3) rightCard3.style.minHeight = '';
         if (feedStream) {
@@ -143,7 +146,10 @@ function CommunityFeedPageContent() {
       if (leftCard1) leftCard1.style.minHeight = '';
       if (rightCard1) rightCard1.style.minHeight = '';
       if (leftCard2) leftCard2.style.minHeight = '';
-      if (rightCard2) rightCard2.style.minHeight = '';
+      if (rightCard2) {
+        rightCard2.style.minHeight = '';
+        rightCard2.style.height = '';
+      }
       if (leftCard3) leftCard3.style.minHeight = '';
       if (rightCard3) rightCard3.style.minHeight = '';
 
@@ -157,13 +163,15 @@ function CommunityFeedPageContent() {
           }
         }
 
-        // Pair 2 sync
-        if (leftCard2 && rightCard2) {
-          const maxH2 = Math.max(leftCard2.offsetHeight, rightCard2.offsetHeight);
-          if (maxH2 > 0) {
-            leftCard2.style.minHeight = `${maxH2}px`;
-            rightCard2.style.minHeight = `${maxH2}px`;
-          }
+        // Pair 2 sync: Lock Mountain Quote Card to its permanent constant height (435px)
+        if (leftCard2) {
+          leftCard2.style.height = '435px';
+          leftCard2.style.minHeight = '435px';
+          leftCard2.style.maxHeight = '435px';
+        }
+        if (rightCard2) {
+          rightCard2.style.minHeight = '435px';
+          rightCard2.style.height = 'auto';
         }
 
         // Pair 3 sync (Corner cards)
@@ -287,7 +295,8 @@ function CommunityFeedPageContent() {
       setCurrentView('feed');
       setLoading(true);
       setError('');
-      communityService.getPostById(singlePostId)
+      const targetId = extractPostIdFromSlug(singlePostId);
+      communityService.getPostById(targetId)
         .then(post => {
           if (!post) {
             setError('This community post could not be found or has not been published yet.');
@@ -366,7 +375,7 @@ function CommunityFeedPageContent() {
   if (singlePost) {
     seoTitle = `${singlePost.title} | Ellangala Feed`;
     seoDescription = singlePost.content?.slice(0, 160);
-    seoCanonical = `/feed/posts/${singlePost.id}`;
+    seoCanonical = `/feed/posts/${buildPostShareSlug(singlePost)}`;
   } else if (location.pathname === '/feed/saved' || location.pathname === '/community/saved') {
     seoTitle = 'Saved Discussions | Ellangala Feed';
     seoDescription = 'View your saved positive psychology discussions, reflections, and bookmarked insights.';
@@ -711,18 +720,12 @@ function CommunityFeedPageContent() {
 
         {/* Instagram-style Mobile Bottom Navigation (Feed, Saved, Profile) */}
         <CommunityMobileBottomNav singlePostId={singlePostId} />
-
-        {/* Global Community Auth Modal */}
-        <CommunityAuthModal />
       </div>
     </>
   );
 }
 
 export default function CommunityFeedPage() {
-  return (
-    <CommunityAuthProvider>
-      <CommunityFeedPageContent />
-    </CommunityAuthProvider>
-  );
+  return <CommunityFeedPageContent />;
 }
+
