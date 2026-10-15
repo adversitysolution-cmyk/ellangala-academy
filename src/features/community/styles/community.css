@@ -10,9 +10,10 @@
 .community-page-wrapper {
   background-color: #F8F6F1;
   min-height: 100vh;
-  padding: 32px 0 36px 0;
+  padding: 24px 0 0 0;
   color: #1E293B;
   font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  box-sizing: border-box;
 }
 
 .community-container {
@@ -43,11 +44,15 @@
 }
 
 @media (min-width: 992px) {
+  .community-page-wrapper {
+    padding: 20px 0 0 0 !important;
+  }
+
   .community-sidebar-sticky {
     position: sticky;
     top: 90px;
-    height: calc(100vh - 105px);
-    max-height: calc(100vh - 105px);
+    height: calc(100vh - 110px);
+    max-height: calc(100vh - 110px);
     overflow-y: auto;
     overflow-x: hidden;
     overscroll-behavior: auto;
@@ -56,7 +61,8 @@
     scrollbar-width: none;
     -ms-overflow-style: none;
     padding-right: 0;
-    padding-bottom: 12px;
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important;
     box-sizing: border-box;
   }
 
@@ -412,8 +418,8 @@
 
 @media (min-width: 992px) {
   .community-feed-stream {
-    height: calc(100vh - 105px);
-    max-height: calc(100vh - 105px);
+    height: calc(100vh - 110px);
+    max-height: calc(100vh - 110px);
     overflow-y: auto;
     overflow-x: hidden;
     overscroll-behavior: auto;
@@ -422,13 +428,19 @@
     scrollbar-width: none;
     -ms-overflow-style: none;
     padding-right: 0;
-    padding-bottom: 12px;
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important;
   }
 
   .community-feed-stream::-webkit-scrollbar {
     display: none;
     width: 0;
     height: 0;
+  }
+
+  .community-sidebar-sticky > *:last-child,
+  .community-feed-stream > *:last-child {
+    margin-bottom: 0 !important;
   }
 }
 
