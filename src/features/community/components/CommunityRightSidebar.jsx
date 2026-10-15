@@ -135,9 +135,6 @@ export default function CommunityRightSidebar({ sidebarData, selectedCategory = 
             <i className="fab fa-youtube" style={{ color: '#FF0000', fontSize: '13px' }}></i>
             <span>YouTube Lesson</span>
           </div>
-          <div className="community-meta-stat">
-            <span className="community-free-pill">100% Free</span>
-          </div>
         </div>
 
         <a

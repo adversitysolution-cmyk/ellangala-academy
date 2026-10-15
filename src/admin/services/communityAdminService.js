@@ -207,10 +207,7 @@ export const communityAdminService = {
       subheading: "Learn, reflect, and grow with Dr. Naveen Ellangala.",
       imageUrl: "/assets/images/community/founder-feed-hero.png",
       gradientColor: "#FFFDF8",
-      textColorMode: "auto",
-      badge1: { text: "Meaningful Discussions", icon: "users" },
-      badge2: { text: "Practical Wisdom", icon: "book" },
-      badge3: { text: "Supportive Community", icon: "sparkles" }
+      textColorMode: "auto"
     };
   },
 

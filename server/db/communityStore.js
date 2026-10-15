@@ -1171,10 +1171,7 @@ const DEFAULT_HERO_BANNER = {
   subheading: "Learn, reflect, and grow with Dr. Naveen Ellangala.",
   imageUrl: "/assets/images/community/founder-feed-hero.png",
   gradientColor: "#FFFDF8",
-  textColorMode: "auto",
-  badge1: { text: "Meaningful Discussions", icon: "users" },
-  badge2: { text: "Practical Wisdom", icon: "book" },
-  badge3: { text: "Supportive Community", icon: "sparkles" }
+  textColorMode: "auto"
 };
 
 export function getCommunityHeroBanner() {
@@ -1182,24 +1179,22 @@ export function getCommunityHeroBanner() {
     if (fs.existsSync(HERO_BANNER_FILE)) {
       const data = JSON.parse(fs.readFileSync(HERO_BANNER_FILE, 'utf-8'));
       if (data && typeof data === 'object') {
+        let resolvedImageUrl = data.imageUrl || DEFAULT_HERO_BANNER.imageUrl;
+        // Verify uploaded image exists on disk; if missing (e.g. deployed server), fall back to safe bundled asset
+        if (resolvedImageUrl.startsWith('/uploads/')) {
+          const diskFilename = resolvedImageUrl.replace('/uploads/', '');
+          const diskPath = path.join(uploadsDir, diskFilename);
+          if (!fs.existsSync(diskPath)) {
+            resolvedImageUrl = DEFAULT_HERO_BANNER.imageUrl;
+          }
+        }
+
         return {
           heading: data.heading || DEFAULT_HERO_BANNER.heading,
           subheading: data.subheading || DEFAULT_HERO_BANNER.subheading,
-          imageUrl: data.imageUrl || DEFAULT_HERO_BANNER.imageUrl,
+          imageUrl: resolvedImageUrl,
           gradientColor: data.gradientColor || DEFAULT_HERO_BANNER.gradientColor,
           textColorMode: data.textColorMode || DEFAULT_HERO_BANNER.textColorMode,
-          badge1: {
-            text: data.badge1?.text || DEFAULT_HERO_BANNER.badge1.text,
-            icon: data.badge1?.icon || DEFAULT_HERO_BANNER.badge1.icon
-          },
-          badge2: {
-            text: data.badge2?.text || DEFAULT_HERO_BANNER.badge2.text,
-            icon: data.badge2?.icon || DEFAULT_HERO_BANNER.badge2.icon
-          },
-          badge3: {
-            text: data.badge3?.text || DEFAULT_HERO_BANNER.badge3.text,
-            icon: data.badge3?.icon || DEFAULT_HERO_BANNER.badge3.icon
-          },
           updatedAt: data.updatedAt || new Date().toISOString()
         };
       }
@@ -1218,18 +1213,6 @@ export function updateCommunityHeroBanner(payload = {}) {
     imageUrl: payload.imageUrl !== undefined && String(payload.imageUrl).trim() ? String(payload.imageUrl).trim() : current.imageUrl,
     gradientColor: payload.gradientColor !== undefined && String(payload.gradientColor).trim() ? String(payload.gradientColor).trim() : current.gradientColor,
     textColorMode: payload.textColorMode !== undefined && String(payload.textColorMode).trim() ? String(payload.textColorMode).trim() : current.textColorMode,
-    badge1: {
-      text: payload.badge1?.text !== undefined && String(payload.badge1.text).trim() ? String(payload.badge1.text).trim() : current.badge1.text,
-      icon: payload.badge1?.icon !== undefined && String(payload.badge1.icon).trim() ? String(payload.badge1.icon).trim() : current.badge1.icon
-    },
-    badge2: {
-      text: payload.badge2?.text !== undefined && String(payload.badge2.text).trim() ? String(payload.badge2.text).trim() : current.badge2.text,
-      icon: payload.badge2?.icon !== undefined && String(payload.badge2.icon).trim() ? String(payload.badge2.icon).trim() : current.badge2.icon
-    },
-    badge3: {
-      text: payload.badge3?.text !== undefined && String(payload.badge3.text).trim() ? String(payload.badge3.text).trim() : current.badge3.text,
-      icon: payload.badge3?.icon !== undefined && String(payload.badge3.icon).trim() ? String(payload.badge3.icon).trim() : current.badge3.icon
-    },
     updatedAt: new Date().toISOString()
   };
 

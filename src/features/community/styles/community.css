@@ -51,6 +51,8 @@
     overflow-y: auto;
     overflow-x: hidden;
     overscroll-behavior: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     -ms-overflow-style: none;
     padding-right: 0;
@@ -415,6 +417,8 @@
     overflow-y: auto;
     overflow-x: hidden;
     overscroll-behavior: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     -ms-overflow-style: none;
     padding-right: 0;

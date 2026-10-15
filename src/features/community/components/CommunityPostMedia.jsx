@@ -134,7 +134,8 @@ function GalleryCarousel({ mediaUrls, aspectRatio, onOpenLightbox }) {
               src={item.mediaUrl}
               alt={item.caption || `Poster ${idx + 1}`}
               className="community-gallery-slide-img"
-              loading={idx === 0 ? 'eager' : 'lazy'}
+              loading="lazy"
+              decoding="async"
               style={{
                 objectFit: effectiveRatio === 'auto' ? 'contain' : 'cover'
               }}
@@ -237,6 +238,7 @@ export default function CommunityPostMedia({ postType, mediaUrls = [], aspectRat
         <audio
           ref={audioRef}
           src={audioItem.mediaUrl}
+          preload="none"
           onTimeUpdate={handleTimeUpdate}
           onEnded={() => setIsPlaying(false)}
         />
@@ -323,7 +325,7 @@ export default function CommunityPostMedia({ postType, mediaUrls = [], aspectRat
           <video
             controls
             playsInline
-            preload="metadata"
+            preload="none"
             src={videoItem.mediaUrl}
             className="community-media-video-element"
             style={{ width: '100%', height: '100%', objectFit: 'contain' }}
@@ -414,6 +416,7 @@ export default function CommunityPostMedia({ postType, mediaUrls = [], aspectRat
           alt={singleItem.caption || 'Community Post'}
           className="community-post-single-image"
           loading="lazy"
+          decoding="async"
           onClick={() => setLightboxIndex(0)}
           style={{
             cursor: 'pointer',

@@ -154,16 +154,12 @@ export default function CommunityAdminPage() {
     }
   };
 
-  // Feed Hero Banner CMS state & handlers
   const [heroBannerData, setHeroBannerData] = useState({
     heading: "Welcome to the\nEllangala Feed",
     subheading: "Learn, reflect, and grow with Dr. Naveen Ellangala.",
     imageUrl: "/assets/images/community/founder-feed-hero.png",
     gradientColor: "#FFFDF8",
-    textColorMode: "auto",
-    badge1: { text: "Meaningful Discussions", icon: "users" },
-    badge2: { text: "Practical Wisdom", icon: "book" },
-    badge3: { text: "Supportive Community", icon: "sparkles" }
+    textColorMode: "auto"
   });
   const [heroBannerLoading, setHeroBannerLoading] = useState(false);
   const [heroBannerSaving, setHeroBannerSaving] = useState(false);
@@ -182,19 +178,7 @@ export default function CommunityAdminPage() {
           subheading: data.subheading || "Learn, reflect, and grow with Dr. Naveen Ellangala.",
           imageUrl: data.imageUrl || "/assets/images/community/founder-feed-hero.png",
           gradientColor: data.gradientColor || "#FFFDF8",
-          textColorMode: data.textColorMode || "auto",
-          badge1: {
-            text: data.badge1?.text || "Meaningful Discussions",
-            icon: data.badge1?.icon || "users"
-          },
-          badge2: {
-            text: data.badge2?.text || "Practical Wisdom",
-            icon: data.badge2?.icon || "book"
-          },
-          badge3: {
-            text: data.badge3?.text || "Supportive Community",
-            icon: data.badge3?.icon || "sparkles"
-          }
+          textColorMode: data.textColorMode || "auto"
         });
       }
     } catch (err) {
@@ -252,10 +236,7 @@ export default function CommunityAdminPage() {
         subheading: "Learn, reflect, and grow with Dr. Naveen Ellangala.",
         imageUrl: "/assets/images/community/founder-feed-hero.png",
         gradientColor: "#FFFDF8",
-        textColorMode: "auto",
-        badge1: { text: "Meaningful Discussions", icon: "users" },
-        badge2: { text: "Practical Wisdom", icon: "book" },
-        badge3: { text: "Supportive Community", icon: "sparkles" }
+        textColorMode: "auto"
       });
       setHeroBannerSuccess('Reset to defaults. Click "Save Banner Changes" to persist.');
     }
@@ -1607,128 +1588,7 @@ export default function CommunityAdminPage() {
                 </div>
               </div>
 
-              {/* CARD 3: 3 Small Bar / Badge Contents */}
-              <div
-                style={{
-                  backgroundColor: '#F8FAFC',
-                  border: '1px solid #E2E8F0',
-                  borderRadius: '12px',
-                  padding: '20px'
-                }}
-              >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-                  <label style={{ fontSize: '14px', fontWeight: '800', color: '#0F172A', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <Sparkles size={16} color="#CA8A38" />
-                    <span>3 Feature Pill Bars</span>
-                  </label>
-                  <span style={{ fontSize: '11px', color: '#64748B', fontWeight: '600' }}>
-                    Text &amp; Icon for Each Pill
-                  </span>
-                </div>
 
-                {/* Badge 1 */}
-                <div style={{ marginBottom: '12px', padding: '10px', backgroundColor: '#FFFFFF', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
-                  <div style={{ fontSize: '11px', fontWeight: '800', color: '#92400E', marginBottom: '6px', textTransform: 'uppercase' }}>
-                    Bar / Pill 1
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 140px', gap: '10px' }}>
-                    <input
-                      type="text"
-                      value={heroBannerData.badge1?.text || ''}
-                      onChange={(e) => setHeroBannerData({
-                        ...heroBannerData,
-                        badge1: { ...heroBannerData.badge1, text: e.target.value }
-                      })}
-                      placeholder="Meaningful Discussions"
-                      className="admin-input"
-                      style={{ fontSize: '12.5px', padding: '6px 10px' }}
-                    />
-                    <select
-                      value={heroBannerData.badge1?.icon || 'users'}
-                      onChange={(e) => setHeroBannerData({
-                        ...heroBannerData,
-                        badge1: { ...heroBannerData.badge1, icon: e.target.value }
-                      })}
-                      className="admin-input"
-                      style={{ fontSize: '12px', padding: '6px 8px' }}
-                    >
-                      <option value="users">Icon: Users</option>
-                      <option value="messagesquare">Icon: Discussion</option>
-                      <option value="heart">Icon: Heart</option>
-                      <option value="compass">Icon: Compass</option>
-                      <option value="award">Icon: Award</option>
-                    </select>
-                  </div>
-                </div>
-
-                {/* Badge 2 */}
-                <div style={{ marginBottom: '12px', padding: '10px', backgroundColor: '#FFFFFF', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
-                  <div style={{ fontSize: '11px', fontWeight: '800', color: '#92400E', marginBottom: '6px', textTransform: 'uppercase' }}>
-                    Bar / Pill 2
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 140px', gap: '10px' }}>
-                    <input
-                      type="text"
-                      value={heroBannerData.badge2?.text || ''}
-                      onChange={(e) => setHeroBannerData({
-                        ...heroBannerData,
-                        badge2: { ...heroBannerData.badge2, text: e.target.value }
-                      })}
-                      placeholder="Practical Wisdom"
-                      className="admin-input"
-                      style={{ fontSize: '12.5px', padding: '6px 10px' }}
-                    />
-                    <select
-                      value={heroBannerData.badge2?.icon || 'book'}
-                      onChange={(e) => setHeroBannerData({
-                        ...heroBannerData,
-                        badge2: { ...heroBannerData.badge2, icon: e.target.value }
-                      })}
-                      className="admin-input"
-                      style={{ fontSize: '12px', padding: '6px 8px' }}
-                    >
-                      <option value="book">Icon: BookOpen</option>
-                      <option value="graduationcap">Icon: Learning</option>
-                      <option value="award">Icon: Award</option>
-                      <option value="star">Icon: Star</option>
-                    </select>
-                  </div>
-                </div>
-
-                {/* Badge 3 */}
-                <div style={{ padding: '10px', backgroundColor: '#FFFFFF', borderRadius: '8px', border: '1px solid #E2E8F0' }}>
-                  <div style={{ fontSize: '11px', fontWeight: '800', color: '#92400E', marginBottom: '6px', textTransform: 'uppercase' }}>
-                    Bar / Pill 3
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 140px', gap: '10px' }}>
-                    <input
-                      type="text"
-                      value={heroBannerData.badge3?.text || ''}
-                      onChange={(e) => setHeroBannerData({
-                        ...heroBannerData,
-                        badge3: { ...heroBannerData.badge3, text: e.target.value }
-                      })}
-                      placeholder="Supportive Community"
-                      className="admin-input"
-                      style={{ fontSize: '12.5px', padding: '6px 10px' }}
-                    />
-                    <select
-                      value={heroBannerData.badge3?.icon || 'sparkles'}
-                      onChange={(e) => setHeroBannerData({
-                        ...heroBannerData,
-                        badge3: { ...heroBannerData.badge3, icon: e.target.value }
-                      })}
-                      className="admin-input"
-                      style={{ fontSize: '12px', padding: '6px 8px' }}
-                    >
-                      <option value="sparkles">Icon: Sparkles</option>
-                      <option value="shield">Icon: Shield</option>
-                      <option value="heart">Icon: Heart</option>
-                      <option value="star">Icon: Star</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
 
               {/* CARD 4: Gradient Color & Contrast Options */}
               <div
@@ -1933,25 +1793,6 @@ export default function CommunityAdminPage() {
 
                 const previewGradient = `linear-gradient(90deg, rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.96) 0%, rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.90) 45%, rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.35) 68%, rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0) 100%)`;
 
-                const getPreviewIcon = (iconName, fallback) => {
-                  switch ((iconName || '').toLowerCase()) {
-                    case 'users': return Users;
-                    case 'book': return BookOpen;
-                    case 'sparkles': return Sparkles;
-                    case 'heart': return Heart;
-                    case 'compass': return Compass;
-                    case 'award': return Award;
-                    case 'star': return Star;
-                    case 'shield': return Shield;
-                    case 'graduationcap': return GraduationCap;
-                    default: return fallback;
-                  }
-                };
-
-                const PreviewIcon1 = getPreviewIcon(heroBannerData.badge1?.icon, Users);
-                const PreviewIcon2 = getPreviewIcon(heroBannerData.badge2?.icon, BookOpen);
-                const PreviewIcon3 = getPreviewIcon(heroBannerData.badge3?.icon, Sparkles);
-
                 return (
                   <div
                     className="community-welcome-banner-mock"
@@ -1995,61 +1836,11 @@ export default function CommunityAdminPage() {
                             ? '0 1px 2px rgba(255, 255, 255, 0.8)'
                             : '0 1px 3px rgba(0, 0, 0, 0.4)',
                           fontSize: '13.5px',
-                          margin: '0 0 20px 0'
+                          margin: 0
                         }}
                       >
                         {heroBannerData.subheading || "Learn, reflect, and grow with Dr. Naveen Ellangala."}
                       </p>
-
-                      <div className="community-wb-features-row" style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                        {heroBannerData.badge1?.text && (
-                          <div
-                            className="community-wb-feature-item"
-                            style={{
-                              backgroundColor: isDark ? 'rgba(255, 255, 255, 0.92)' : 'rgba(255, 255, 255, 0.18)',
-                              color: isDark ? '#0F172A' : '#FFFFFF',
-                              borderColor: isDark ? 'rgba(220, 205, 185, 0.7)' : 'rgba(255, 255, 255, 0.35)',
-                              fontSize: '9.5px',
-                              padding: '3px 8px'
-                            }}
-                          >
-                            <PreviewIcon1 size={10} className="community-wb-feature-icon" />
-                            <span>{heroBannerData.badge1.text}</span>
-                          </div>
-                        )}
-
-                        {heroBannerData.badge2?.text && (
-                          <div
-                            className="community-wb-feature-item"
-                            style={{
-                              backgroundColor: isDark ? 'rgba(255, 255, 255, 0.92)' : 'rgba(255, 255, 255, 0.18)',
-                              color: isDark ? '#0F172A' : '#FFFFFF',
-                              borderColor: isDark ? 'rgba(220, 205, 185, 0.7)' : 'rgba(255, 255, 255, 0.35)',
-                              fontSize: '9.5px',
-                              padding: '3px 8px'
-                            }}
-                          >
-                            <PreviewIcon2 size={10} className="community-wb-feature-icon" />
-                            <span>{heroBannerData.badge2.text}</span>
-                          </div>
-                        )}
-
-                        {heroBannerData.badge3?.text && (
-                          <div
-                            className="community-wb-feature-item"
-                            style={{
-                              backgroundColor: isDark ? 'rgba(255, 255, 255, 0.92)' : 'rgba(255, 255, 255, 0.18)',
-                              color: isDark ? '#0F172A' : '#FFFFFF',
-                              borderColor: isDark ? 'rgba(220, 205, 185, 0.7)' : 'rgba(255, 255, 255, 0.35)',
-                              fontSize: '9.5px',
-                              padding: '3px 8px'
-                            }}
-                          >
-                            <PreviewIcon3 size={10} className="community-wb-feature-icon" />
-                            <span>{heroBannerData.badge3.text}</span>
-                          </div>
-                        )}
-                      </div>
                     </div>
                   </div>
                 );

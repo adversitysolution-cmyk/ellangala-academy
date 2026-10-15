@@ -216,17 +216,6 @@ function CommunityFeedPageContent() {
             rightCard3.style.minHeight = `${maxH3}px`;
           }
         }
-
-        // Constrain feed stream to end exactly with the corner cards
-        if (feedStream) {
-          const leftH = leftSidebar ? leftSidebar.offsetHeight : 0;
-          const rightH = rightSidebar ? rightSidebar.offsetHeight : 0;
-          const totalSidebarH = Math.max(leftH, rightH);
-          if (totalSidebarH > 0) {
-            feedStream.style.height = `${totalSidebarH}px`;
-            feedStream.style.maxHeight = `${totalSidebarH}px`;
-          }
-        }
       });
     };
 
@@ -242,86 +231,6 @@ function CommunityFeedPageContent() {
       window.removeEventListener('resize', syncSidebarCardHeights);
     };
   }, [user, isAuthenticated, selectedCategory, categories, posts.length, loading]);
-
-  // Synchronize scrolling between center feed and sticky sidebars until they end
-  useEffect(() => {
-    const feedStream = document.querySelector('.community-feed-stream');
-    const leftSidebar = document.querySelector('.community-left-sidebar');
-    const rightSidebar = document.querySelector('.community-right-sidebar');
-
-    if (!feedStream || !leftSidebar || !rightSidebar) return;
-
-    let isSyncing = false;
-
-    const syncToSidebars = () => {
-      if (window.innerWidth <= 991) return;
-      const maxLeft = leftSidebar.scrollHeight - leftSidebar.clientHeight;
-      const maxRight = rightSidebar.scrollHeight - rightSidebar.clientHeight;
-
-      if (maxLeft > 0) {
-        leftSidebar.scrollTop = Math.min(feedStream.scrollTop, maxLeft);
-      }
-      if (maxRight > 0) {
-        rightSidebar.scrollTop = Math.min(feedStream.scrollTop, maxRight);
-      }
-    };
-
-    const handleFeedScroll = () => {
-      if (isSyncing || window.innerWidth <= 991) return;
-      isSyncing = true;
-      syncToSidebars();
-      requestAnimationFrame(() => {
-        isSyncing = false;
-      });
-    };
-
-    const handleLeftScroll = () => {
-      if (isSyncing || window.innerWidth <= 991) return;
-      isSyncing = true;
-      feedStream.scrollTop = leftSidebar.scrollTop;
-      const maxRight = rightSidebar.scrollHeight - rightSidebar.clientHeight;
-      if (maxRight > 0) {
-        rightSidebar.scrollTop = Math.min(leftSidebar.scrollTop, maxRight);
-      }
-      requestAnimationFrame(() => {
-        isSyncing = false;
-      });
-    };
-
-    const handleRightScroll = () => {
-      if (isSyncing || window.innerWidth <= 991) return;
-      isSyncing = true;
-      feedStream.scrollTop = rightSidebar.scrollTop;
-      const maxLeft = leftSidebar.scrollHeight - leftSidebar.clientHeight;
-      if (maxLeft > 0) {
-        leftSidebar.scrollTop = Math.min(rightSidebar.scrollTop, maxLeft);
-      }
-      requestAnimationFrame(() => {
-        isSyncing = false;
-      });
-    };
-
-    const handleSidebarWheel = (e) => {
-      if (window.innerWidth <= 991) return;
-      if (Math.abs(e.deltaY) > 0) {
-        feedStream.scrollTop += e.deltaY;
-      }
-    };
-
-    feedStream.addEventListener('scroll', handleFeedScroll, { passive: true });
-    leftSidebar.addEventListener('scroll', handleLeftScroll, { passive: true });
-    rightSidebar.addEventListener('scroll', handleRightScroll, { passive: true });
-    leftSidebar.addEventListener('wheel', handleSidebarWheel, { passive: true });
-    rightSidebar.addEventListener('wheel', handleSidebarWheel, { passive: true });
-
-    return () => {
-      feedStream.removeEventListener('scroll', handleFeedScroll);
-      leftSidebar.removeEventListener('scroll', handleLeftScroll);
-      rightSidebar.removeEventListener('scroll', handleRightScroll);
-      leftSidebar.removeEventListener('wheel', handleSidebarWheel);
-      rightSidebar.removeEventListener('wheel', handleSidebarWheel);
-    };
-  }, [posts.length, loading, currentView]);
 
   // Handle single post view vs general feed
   useEffect(() => {
