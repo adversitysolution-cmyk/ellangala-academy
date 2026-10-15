@@ -38,12 +38,36 @@
   <meta name="twitter:image" content="https://ellangala.com/assets/images/og-share-card.jpg" />
   <!-- /SEO_HEAD_INJECTION -->
 
-  <!-- Google Fonts -->
+  <!-- Google Fonts (Non-Render-Blocking) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
+  <link rel="preload" as="style"
+    href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Dancing+Script:wght@400..700&family=Great+Vibes&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Kumbh+Sans:wght@200;300;400;500;600;700;800;900&family=Manrope:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" />
+  <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Dancing+Script:wght@400..700&family=Great+Vibes&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Kumbh+Sans:wght@200;300;400;500;600;700;800;900&family=Manrope:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-    rel="stylesheet" />
+    media="print" onload="this.media='all'" />
+  <noscript>
+    <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Dancing+Script:wght@400..700&family=Great+Vibes&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Kumbh+Sans:wght@200;300;400;500;600;700;800;900&family=Manrope:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" />
+  </noscript>
+
+  <!-- Google Analytics / GA4 Tracking Setup -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-D88P4F0878"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-D88P4F0878', { send_page_view: true });
+  </script>
+
+  <!-- Core Layout & CLS Prevention Styles -->
+  <style>
+    /* Cumulative Layout Shift (CLS) Stabilization */
+    .main-slider-one, .main-slider { min-height: 520px; background-color: #f7f5f0; contain-intrinsic-size: 520px; }
+    @media (max-width: 768px) { .main-slider-one, .main-slider { min-height: 380px; } }
+    /* Screen reader accessible hidden crawler block */
+    .visually-hidden { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0, 0, 0, 0) !important; white-space: nowrap !important; border: 0 !important; }
+  </style>
 
   <!-- Vendor CSS -->
   <link rel="stylesheet" href="/assets/vendors/bootstrap/css/bootstrap.min.css" />
@@ -58,8 +82,8 @@
   <link rel="stylesheet" href="/assets/vendors/swiper/swiper.min.css" />
   <link rel="stylesheet" href="/assets/vendors/flaticon/style.css" />
   <link rel="stylesheet" href="/assets/vendors/tiny-slider/tiny-slider.min.css" />
-  <link rel="stylesheet" href="/assets/vendors/reey-font/stylesheet.css" />
-  <link rel="stylesheet" href="/assets/vendors/the-sayinistic-font/stylesheet.css" />
+  <link rel="stylesheet" href="/assets/vendors/reey-font/stylesheet.css" media="print" onload="this.media='all'" />
+  <link rel="stylesheet" href="/assets/vendors/the-sayinistic-font/stylesheet.css" media="print" onload="this.media='all'" />
   <link rel="stylesheet" href="/assets/vendors/owl-carousel/owl.carousel.min.css" />
   <link rel="stylesheet" href="/assets/vendors/owl-carousel/owl.theme.default.min.css" />
   <link rel="stylesheet" href="/assets/vendors/bxslider/jquery.bxslider.css" />
@@ -75,34 +99,57 @@
 </head>
 
 <body class="custom-cursor">
-  <div id="root"></div>
+  <div id="root">
+    <!-- Crawlable Pre-Rendered Fallback for Search Bots & SEO Checkers (Replaced dynamically on React hydration) -->
+    <header class="visually-hidden">
+      <h1>Ellangala’s Academy — Positive Psychology, Mind Training &amp; Positive MindGym</h1>
+      <h2>Evidence-Informed Frameworks by Dr. Naveen Ellangala</h2>
+      <p>Transformative workshops, 1-on-1 personal mentoring, MindGym mental fitness routines, and 17 published books on Positive Psychology and purposeful living.</p>
+      <nav aria-label="Main Navigation">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/about">About Us</a></li>
+          <li><a href="/founder">Dr. Naveen Ellangala</a></li>
+          <li><a href="/positive-workshops">Positive Workshops</a></li>
+          <li><a href="/positive-mentoring">Positive Mentoring</a></li>
+          <li><a href="/mindgym">Positive MindGym</a></li>
+          <li><a href="/mindgym/app">MindGym App</a></li>
+          <li><a href="/shop">Bookstore &amp; Publications</a></li>
+          <li><a href="/events">Upcoming Events</a></li>
+          <li><a href="/feed">Community Feed</a></li>
+          <li><a href="/contact">Contact</a></li>
+          <li><a href="/faq">FAQ</a></li>
+        </ul>
+      </nav>
+    </header>
+  </div>
 
-  <!-- Vendor Scripts -->
-  <script src="/assets/vendors/jquery/jquery-3.6.0.min.js"></script>
-  <script src="/assets/vendors/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="/assets/vendors/jarallax/jarallax.min.js"></script>
-  <script src="/assets/vendors/jquery-ajaxchimp/jquery.ajaxchimp.min.js"></script>
-  <script src="/assets/vendors/jquery-appear/jquery.appear.min.js"></script>
-  <script src="/assets/vendors/jquery-circle-progress/jquery.circle-progress.min.js"></script>
-  <script src="/assets/vendors/jquery-magnific-popup/jquery.magnific-popup.min.js"></script>
-  <script src="/assets/vendors/jquery-validate/jquery.validate.min.js"></script>
-  <script src="/assets/vendors/nouislider/nouislider.min.js"></script>
-  <script src="/assets/vendors/odometer/odometer.min.js"></script>
-  <script src="/assets/vendors/swiper/swiper.min.js"></script>
-  <script src="/assets/vendors/tiny-slider/tiny-slider.min.js"></script>
-  <script src="/assets/vendors/wnumb/wNumb.min.js"></script>
-  <script src="/assets/vendors/wow/wow.js"></script>
-  <script src="/assets/vendors/isotope/isotope.js"></script>
-  <script src="/assets/vendors/countdown/countdown.min.js"></script>
-  <script src="/assets/vendors/owl-carousel/owl.carousel.min.js"></script>
-  <script src="/assets/vendors/bxslider/jquery.bxslider.min.js"></script>
-  <script src="/assets/vendors/bootstrap-select/js/bootstrap-select.min.js"></script>
-  <script src="/assets/vendors/vegas/vegas.min.js"></script>
-  <script src="/assets/vendors/jquery-ui/jquery-ui.js"></script>
-  <script src="/assets/vendors/timepicker/timePicker.js"></script>
-  <script src="/assets/vendors/circleType/jquery.circleType.js"></script>
-  <script src="/assets/vendors/circleType/jquery.lettering.min.js"></script>
-  <script src="/assets/vendors/polyglot-language-switcher/jquery.polyglot.language.switcher.js"></script>
+  <!-- Vendor Scripts (Deferred for Performance) -->
+  <script defer src="/assets/vendors/jquery/jquery-3.6.0.min.js"></script>
+  <script defer src="/assets/vendors/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script defer src="/assets/vendors/jarallax/jarallax.min.js"></script>
+  <script defer src="/assets/vendors/jquery-ajaxchimp/jquery.ajaxchimp.min.js"></script>
+  <script defer src="/assets/vendors/jquery-appear/jquery.appear.min.js"></script>
+  <script defer src="/assets/vendors/jquery-circle-progress/jquery.circle-progress.min.js"></script>
+  <script defer src="/assets/vendors/jquery-magnific-popup/jquery.magnific-popup.min.js"></script>
+  <script defer src="/assets/vendors/jquery-validate/jquery.validate.min.js"></script>
+  <script defer src="/assets/vendors/nouislider/nouislider.min.js"></script>
+  <script defer src="/assets/vendors/odometer/odometer.min.js"></script>
+  <script defer src="/assets/vendors/swiper/swiper.min.js"></script>
+  <script defer src="/assets/vendors/tiny-slider/tiny-slider.min.js"></script>
+  <script defer src="/assets/vendors/wnumb/wNumb.min.js"></script>
+  <script defer src="/assets/vendors/wow/wow.js"></script>
+  <script defer src="/assets/vendors/isotope/isotope.js"></script>
+  <script defer src="/assets/vendors/countdown/countdown.min.js"></script>
+  <script defer src="/assets/vendors/owl-carousel/owl.carousel.min.js"></script>
+  <script defer src="/assets/vendors/bxslider/jquery.bxslider.min.js"></script>
+  <script defer src="/assets/vendors/bootstrap-select/js/bootstrap-select.min.js"></script>
+  <script defer src="/assets/vendors/vegas/vegas.min.js"></script>
+  <script defer src="/assets/vendors/jquery-ui/jquery-ui.js"></script>
+  <script defer src="/assets/vendors/timepicker/timePicker.js"></script>
+  <script defer src="/assets/vendors/circleType/jquery.circleType.js"></script>
+  <script defer src="/assets/vendors/circleType/jquery.lettering.min.js"></script>
+  <script defer src="/assets/vendors/polyglot-language-switcher/jquery.polyglot.language.switcher.js"></script>
 
   <!-- React Main Entry Point -->
   <script type="module" src="/src/main.jsx"></script>

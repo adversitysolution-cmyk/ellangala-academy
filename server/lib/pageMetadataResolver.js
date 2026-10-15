@@ -418,13 +418,58 @@ export async function resolvePageMetadata(pathname = '/') {
     };
   }
 
-  // 13. Default Fallback
+  // 12c. Free Resources & Video Hubs
+  if (cleanPath === '/free-resources') {
+    return {
+      title: 'Free Video Masterclasses & Mind Resources | Ellangala’s Academy',
+      description: 'Access curated talks, masterclasses, and practical mind training wisdom by Dr. Naveen Ellangala on YouTube and streaming audio.',
+      canonical: `${baseDomain}/free-resources`,
+      image: siteConfig.defaultOgImage,
+      type: 'website'
+    };
+  }
+
+  if (cleanPath === '/meditation-music') {
+    return {
+      title: 'Meditation & Mind Training Music | Ellangala’s Academy',
+      description: 'Explore uplifting and calming meditation audio, contemplative frequencies, and soothing compositions.',
+      canonical: `${baseDomain}/meditation-music`,
+      image: siteConfig.defaultOgImage,
+      type: 'website'
+    };
+  }
+
+  if (cleanPath === '/videos-on-talks') {
+    return {
+      title: 'Videos & Keynote Talks | Dr. Naveen Ellangala',
+      description: 'Watch video talks on mental wellness, positive psychology, emotional strength, and conscious parenting.',
+      canonical: `${baseDomain}/videos-on-talks`,
+      image: siteConfig.defaultOgImage,
+      type: 'website'
+    };
+  }
+
+  // 12d. Cart, Checkout, Order Tracking & Protected Pages
+  if (['/cart', '/checkout', '/track-order', '/admin', '/login'].includes(cleanPath)) {
+    return {
+      title: `${cleanPath.slice(1).replace('-', ' ').toUpperCase()} | Ellangala’s Academy`,
+      description: siteConfig.defaultDescription,
+      canonical: `${baseDomain}${cleanPath}`,
+      image: siteConfig.defaultOgImage,
+      type: 'website',
+      noindex: true
+    };
+  }
+
+  // 13. Default 404 Fallback for Unknown URLs
   return {
-    title: siteConfig.defaultTitle,
-    description: siteConfig.defaultDescription,
+    is404: true,
+    title: `Page Not Found (404) | ${siteConfig.name}`,
+    description: 'The requested page could not be found. Explore our positive psychology workshops, books, and resources.',
     canonical: `${baseDomain}${cleanPath === '/' ? '/' : cleanPath}`,
     image: siteConfig.defaultOgImage,
     type: 'website',
+    noindex: true,
     schemas: [generateOrganizationSchema()]
   };
 }

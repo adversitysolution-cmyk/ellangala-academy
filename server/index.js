@@ -80,6 +80,32 @@ app.use((req, res, next) => {
   next();
 });
 
+// 3b. Canonicalization (www -> non-www, HTTP -> HTTPS) & Security Headers (HSTS)
+app.use((req, res, next) => {
+  const host = req.headers.host || '';
+  const proto = req.headers['x-forwarded-proto'] || req.protocol;
+
+  // Enforce HSTS (Strict-Transport-Security) & Security Headers
+  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+
+  // Redirect www.ellangala.com to ellangala.com (301 Permanent Redirect)
+  if (host.startsWith('www.')) {
+    const cleanHost = host.replace(/^www\./i, '');
+    return res.redirect(301, `https://${cleanHost}${req.originalUrl}`);
+  }
+
+  // Redirect HTTP to HTTPS in production
+  if (process.env.NODE_ENV === 'production' && proto === 'http') {
+    return res.redirect(301, `https://${host}${req.originalUrl}`);
+  }
+
+  next();
+});
+
 // 4. Serve Static Assets from Dist (Production) + public assets + persistent uploaded images
 const distDir = path.join(rootDir, 'dist');
 const publicDir = path.join(rootDir, 'public');
@@ -120,7 +146,11 @@ app.get('*', async (req, res) => {
     }
 
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
-    res.status(200).send(finalHtml);
+    if (pageMeta.is404) {
+      res.status(404).send(finalHtml);
+    } else {
+      res.status(200).send(finalHtml);
+    }
   } catch (err) {
     console.error('Error serving dynamic HTML:', err);
     res.status(500).send('Internal Server Error');
