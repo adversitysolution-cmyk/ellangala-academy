@@ -597,7 +597,8 @@ export default function HomeOne() {
         {/* Start Team One (hidden) */}
         {/* End Team One */}
 
-        {/* Start Blog One */}
+        {/* Start Blog One (hidden) */}
+        {/*
         <section className="blog-one">
           <div
             className="blog-one__pattern1"
@@ -692,6 +693,7 @@ export default function HomeOne() {
             </div>
           </div>
         </section>
+        */}
         {/* End Blog One */}
 
         <FooterOne />

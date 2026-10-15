@@ -6,7 +6,7 @@ export const siteConfig = {
   defaultTitle: "Ellangala’s Academy | Positive Psychology, Mind Training & MindGym",
   titleTemplate: "%s | Ellangala’s Academy",
   defaultDescription: "Explore Positive Psychology, mind training, Positive MindGym, mentoring, workshops, books, and practical resources by Dr. Naveen Ellangala for meaningful everyday living.",
-  defaultOgImage: "https://ellangala.com/assets/images/resources/hero-founder.png",
+  defaultOgImage: "https://ellangala.com/assets/images/og-share-card.jpg",
   twitterHandle: "@ellangalaacademy",
   founder: {
     name: "Dr. Naveen Ellangala",

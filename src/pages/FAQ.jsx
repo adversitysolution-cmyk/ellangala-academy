@@ -131,7 +131,7 @@ export default function FAQ() {
         </section>
         {/* End Faq Page */}
 
-        <FooterOne />
+        <FooterOne hideFaq={true} />
       </div>
 
       <MobileNav />

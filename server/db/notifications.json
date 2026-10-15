@@ -1,5 +1,20 @@
 [
   {
+    "id": "notif-1def9c36b6c7",
+    "type": "user_register",
+    "title": "New Member Registered",
+    "message": "Yogesh K S registered a new account on Ellangala Academy",
+    "authorName": "Yogesh K S",
+    "authorEmail": "yogeshks3998@gmail.com",
+    "authorAvatar": "/uploads/community-1792059202141-a5b6ce176a3b.png",
+    "targetUrl": "/admin/feed",
+    "metadata": {
+      "userId": "USR-219176e9c8796b74"
+    },
+    "isRead": false,
+    "createdAt": "2026-10-15T10:13:28.727Z"
+  },
+  {
     "id": "notif-18366dcc458f",
     "type": "comment",
     "title": "New Comment on 'QA Masterclass Reflection on Cognitive Restructuring (Updated)'",

@@ -1563,12 +1563,21 @@ export default function CommunityAdminPage() {
                     Main Heading (Supports line breaks)
                   </label>
                   <textarea
-                    rows={2}
+                    rows={3}
                     value={heroBannerData.heading}
                     onChange={(e) => setHeroBannerData({ ...heroBannerData, heading: e.target.value })}
                     placeholder="Welcome to the&#10;Ellangala Feed"
-                    className="admin-input"
-                    style={{ fontSize: '14px', fontWeight: '600', resize: 'vertical' }}
+                    className="admin-textarea"
+                    style={{
+                      minHeight: '85px',
+                      height: 'auto',
+                      padding: '10px 14px',
+                      fontSize: '14px',
+                      fontWeight: '600',
+                      lineHeight: '1.5',
+                      fontFamily: 'inherit',
+                      resize: 'vertical'
+                    }}
                   />
                   <span style={{ fontSize: '11px', color: '#94A3B8' }}>
                     Tip: Press Enter to create a new line in the heading.
@@ -1579,13 +1588,21 @@ export default function CommunityAdminPage() {
                   <label style={{ fontSize: '12px', fontWeight: '700', color: '#475569', marginBottom: '4px', display: 'block' }}>
                     Subheading / Supporting Description
                   </label>
-                  <input
-                    type="text"
+                  <textarea
+                    rows={3}
                     value={heroBannerData.subheading}
                     onChange={(e) => setHeroBannerData({ ...heroBannerData, subheading: e.target.value })}
                     placeholder="Learn, reflect, and grow with Dr. Naveen Ellangala."
-                    className="admin-input"
-                    style={{ fontSize: '13px' }}
+                    className="admin-textarea"
+                    style={{
+                      minHeight: '85px',
+                      height: 'auto',
+                      padding: '10px 14px',
+                      fontSize: '13px',
+                      lineHeight: '1.5',
+                      fontFamily: 'inherit',
+                      resize: 'vertical'
+                    }}
                   />
                 </div>
               </div>

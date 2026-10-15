@@ -3,7 +3,7 @@ import path from 'path';
 import crypto from 'crypto';
 import { fileURLToPath } from 'url';
 import { pool } from './pool.js';
-import { getDbEvents } from './store.js';
+import { getDbEvents, getDbEnrollments } from './store.js';
 import { programsData } from '../../src/contents/programsData.content.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -55,26 +55,112 @@ function savePersistentUsers(userMap) {
 }
 
 const POSTS_DATA_FILE = path.join(__dirname, 'community-posts.json');
+const BACKUPS_DIR = path.join(__dirname, 'backups');
+const LATEST_BACKUP_FILE = path.join(BACKUPS_DIR, 'community-posts-latest-backup.json');
+const DELETED_POSTS_FILE = path.join(BACKUPS_DIR, 'community-deleted-posts.json');
+
+if (!fs.existsSync(BACKUPS_DIR)) {
+  try { fs.mkdirSync(BACKUPS_DIR, { recursive: true }); } catch (_) { }
+}
+
+function archiveDeletedPost(post) {
+  try {
+    let list = [];
+    if (fs.existsSync(DELETED_POSTS_FILE)) {
+      try { list = JSON.parse(fs.readFileSync(DELETED_POSTS_FILE, 'utf-8')); } catch (_) { }
+    }
+    list.unshift({ ...post, _deletedAt: new Date().toISOString() });
+    fs.writeFileSync(DELETED_POSTS_FILE, JSON.stringify(list.slice(0, 100), null, 2), 'utf-8');
+  } catch (err) {
+    console.warn('Warning: Could not archive deleted post:', err.message);
+  }
+}
 
 function loadPersistentPosts() {
   try {
     if (fs.existsSync(POSTS_DATA_FILE)) {
-      const list = JSON.parse(fs.readFileSync(POSTS_DATA_FILE, 'utf-8'));
-      if (Array.isArray(list) && list.length > 0) {
-        return list;
+      const raw = fs.readFileSync(POSTS_DATA_FILE, 'utf-8').trim();
+      if (raw) {
+        const list = JSON.parse(raw);
+        if (Array.isArray(list) && list.length > 0) {
+          return list;
+        }
       }
     }
   } catch (err) {
-    console.error('Error loading persistent community posts:', err);
+    console.error('Error loading persistent community posts from primary file:', err.message);
   }
+
+  // Fail-Safe Auto-Recovery from Master Backup
+  try {
+    if (fs.existsSync(LATEST_BACKUP_FILE)) {
+      const raw = fs.readFileSync(LATEST_BACKUP_FILE, 'utf-8').trim();
+      if (raw) {
+        const list = JSON.parse(raw);
+        if (Array.isArray(list) && list.length > 0) {
+          console.warn('🛡️ Auto-Recovery: Successfully restored community posts from master backup!');
+          try {
+            fs.writeFileSync(POSTS_DATA_FILE, JSON.stringify(list, null, 2), 'utf-8');
+          } catch (_) { }
+          return list;
+        }
+      }
+    }
+  } catch (backupErr) {
+    console.error('Error restoring from backup file:', backupErr.message);
+  }
+
   return null;
 }
 
-function savePersistentPosts(posts) {
+function savePersistentPosts(posts = memoryStore?.posts, force = false) {
   try {
-    fs.writeFileSync(POSTS_DATA_FILE, JSON.stringify(posts, null, 2), 'utf-8');
+    const dataToSave = posts || (memoryStore && memoryStore.posts) || [];
+    if (!Array.isArray(dataToSave)) return;
+
+    // Safety Shield: Never overwrite an existing populated file with an empty list unless force=true
+    if (!force && dataToSave.length === 0 && fs.existsSync(POSTS_DATA_FILE)) {
+      try {
+        const existing = JSON.parse(fs.readFileSync(POSTS_DATA_FILE, 'utf-8'));
+        if (Array.isArray(existing) && existing.length > 0) {
+          console.warn('🛡️ Safety Shield Active: Prevented overwriting existing posts with an empty array.');
+          return;
+        }
+      } catch (_) { }
+    }
+
+    if (!fs.existsSync(BACKUPS_DIR)) {
+      fs.mkdirSync(BACKUPS_DIR, { recursive: true });
+    }
+
+    const jsonString = JSON.stringify(dataToSave, null, 2);
+
+    // 1. Maintain Master Latest Backup
+    try {
+      fs.writeFileSync(LATEST_BACKUP_FILE, jsonString, 'utf-8');
+    } catch (_) { }
+
+    // 2. Rotate timestamped historical snapshots (keep latest 10)
+    try {
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+      const snapshotFile = path.join(BACKUPS_DIR, `community-posts-${timestamp}.json`);
+      fs.writeFileSync(snapshotFile, jsonString, 'utf-8');
+
+      const files = fs.readdirSync(BACKUPS_DIR)
+        .filter(f => f.startsWith('community-posts-20') && f.endsWith('.json'))
+        .sort();
+      while (files.length > 10) {
+        const oldest = files.shift();
+        fs.unlinkSync(path.join(BACKUPS_DIR, oldest));
+      }
+    } catch (_) { }
+
+    // 3. Safe Atomic Write to primary file
+    const tmpFile = path.join(__dirname, `community-posts.${Date.now()}.${Math.random().toString(36).slice(2, 6)}.tmp`);
+    fs.writeFileSync(tmpFile, jsonString, 'utf-8');
+    fs.renameSync(tmpFile, POSTS_DATA_FILE);
   } catch (err) {
-    console.error('Error saving persistent community posts:', err);
+    console.error('Error saving persistent community posts safely:', err);
   }
 }
 
@@ -211,7 +297,7 @@ export async function ensureCommunitySchema() {
         const adminProfile = JSON.parse(fs.readFileSync(adminProfileFile, 'utf-8'));
         await syncAdminProfileToPosts(adminProfile);
       }
-    } catch (_) {}
+    } catch (_) { }
     return;
   }
 
@@ -262,12 +348,12 @@ export async function ensureCommunitySchema() {
       const adminProfile = JSON.parse(fs.readFileSync(adminProfileFile, 'utf-8'));
       await syncAdminProfileToPosts(adminProfile);
     }
-  } catch (_) {}
+  } catch (_) { }
 
   if (pool) {
     try {
       await pool.query("ALTER TABLE community_posts ADD COLUMN IF NOT EXISTS aspectRatio VARCHAR(32) DEFAULT '16:9'");
-    } catch (_) {}
+    } catch (_) { }
   }
 
   console.log('✅ Community Feed schema verified and initialized.');
@@ -276,7 +362,7 @@ export async function ensureCommunitySchema() {
   setInterval(() => {
     try {
       autoPublishDueScheduledPosts();
-    } catch (_) {}
+    } catch (_) { }
   }, 15000);
 }
 
@@ -537,10 +623,14 @@ export async function getCommunityPostById(id, { includeDrafts = false, visitorI
     };
   }
 
-  const [rows] = await pool.query('SELECT * FROM community_posts WHERE id = ? LIMIT 1', [id]);
+  const [rows] = await pool.query(
+    'SELECT * FROM community_posts WHERE id = ? OR id = ? OR id LIKE ? LIMIT 1',
+    [targetId, id, `%${targetId}%`]
+  );
   if (rows.length === 0) return null;
 
   const r = rows[0];
+  const postId = r.id;
   if (!includeDrafts) {
     const isScheduledVisible = r.status === 'scheduled' && r.scheduledFor && new Date(r.scheduledFor) <= new Date();
     if (r.status !== 'published' && !isScheduledVisible) return null;
@@ -549,9 +639,9 @@ export async function getCommunityPostById(id, { includeDrafts = false, visitorI
   let hasLiked = false;
   let hasSaved = false;
   if (visitorId) {
-    const [[likeRow]] = await pool.query('SELECT 1 FROM community_likes WHERE postId = ? AND visitorId = ? LIMIT 1', [id, visitorId]);
+    const [[likeRow]] = await pool.query('SELECT 1 FROM community_likes WHERE postId = ? AND visitorId = ? LIMIT 1', [postId, visitorId]);
     hasLiked = Boolean(likeRow);
-    const [[savedRow]] = await pool.query('SELECT 1 FROM community_saved_posts WHERE postId = ? AND visitorId = ? LIMIT 1', [id, visitorId]);
+    const [[savedRow]] = await pool.query('SELECT 1 FROM community_saved_posts WHERE postId = ? AND visitorId = ? LIMIT 1', [postId, visitorId]);
     hasSaved = Boolean(savedRow);
   }
 
@@ -606,7 +696,7 @@ export async function saveCommunityPost(postData) {
     try {
       const [[eventRow]] = await pool.query('SELECT title FROM events WHERE id = ? OR slug = ? LIMIT 1', [postData.relatedEventId, postData.relatedEventId]);
       if (eventRow) relatedEventTitle = eventRow.title;
-    } catch (_) {}
+    } catch (_) { }
   }
 
   let defaultAuthorAvatar = '/assets/images/resources/founder-avatar.png';
@@ -620,7 +710,7 @@ export async function saveCommunityPost(postData) {
       if (ap.name) defaultAuthorName = ap.name;
       if (ap.role) defaultAuthorRole = ap.role;
     }
-  } catch (_) {}
+  } catch (_) { }
 
   const postRecord = {
     id,
@@ -751,12 +841,16 @@ export async function syncAdminProfileToPosts({ name, role, avatar } = {}) {
 export async function deleteCommunityPost(id) {
   if (!id) return false;
   if (!pool) {
+    const targetPost = memoryStore.posts.find(p => p.id === id);
+    if (targetPost) archiveDeletedPost(targetPost);
     const initialLen = memoryStore.posts.length;
     memoryStore.posts = memoryStore.posts.filter(p => p.id !== id);
     const removed = memoryStore.posts.length < initialLen;
-    if (removed) savePersistentPosts(memoryStore.posts);
+    if (removed) savePersistentPosts(memoryStore.posts, true);
     return removed;
   }
+  const [[pRow]] = await pool.query('SELECT * FROM community_posts WHERE id = ? LIMIT 1', [id]);
+  if (pRow) archiveDeletedPost(pRow);
   const [result] = await pool.query('DELETE FROM community_posts WHERE id = ?', [id]);
   return result.affectedRows > 0;
 }
@@ -1151,33 +1245,56 @@ export async function getCommunitySidebarData(channelId = 'all') {
   let events = [];
   try {
     events = await getDbEvents();
-  } catch (_) {}
+  } catch (_) { }
 
-  // Filter ONLY real upcoming published events (date >= today) — never display demo data
+  // Filter upcoming published events (endDate >= today, or date >= today) — never display completed/cancelled
   const today = new Date().toISOString().split('T')[0];
-  const upcomingEvents = (events || [])
-    .filter(e => (e.status === 'published' || !e.status) && e.status !== 'completed' && Boolean(e.date) && e.date >= today)
-    .sort((a, b) => new Date(a.date) - new Date(b.date))
-    .slice(0, 3)
-    .map(e => ({
-      id: e.id,
-      slug: e.slug || e.id,
-      title: e.title,
-      date: e.date,
-      dayDisplay: e.dayDisplay || (e.date ? e.date.split('-')[2] : ''),
-      monthDisplay: e.monthDisplay || (e.date ? new Date(e.date).toLocaleString('en-US', { month: 'short' }).toUpperCase() : ''),
-      dayOfWeek: e.dayOfWeek || (e.date ? new Date(e.date).toLocaleString('en-US', { weekday: 'short' }).toUpperCase() : ''),
-      startTime: e.startTime || '18:30',
-      timeDisplay: e.timeDisplay || '6:30 PM – 7:30 PM (IST)',
-      mode: e.mode || 'Online (Zoom)',
-      venue: e.venue || 'Online (Zoom)',
-      image: e.image || '/assets/images/services/Positive Workshop.png',
-      registrationOpen: e.registrationOpen !== false,
-      featured: Boolean(e.featured),
-      description: e.shortDescription || e.description || ''
-    }));
+  const isUpcoming = (e) => {
+    if (!e || e.status === 'completed' || e.status === 'cancelled') return false;
+    if (e.status && e.status !== 'published') return false;
+    const last = e.endDate || e.date;
+    return Boolean(last) && last >= today;
+  };
 
-  const featuredEvent = upcomingEvents.find(e => e.featured) || null;
+  const upcomingEvents = (events || [])
+    .filter(isUpcoming)
+    .sort((a, b) => {
+      if (a.featured && !b.featured) return -1;
+      if (!a.featured && b.featured) return 1;
+      return new Date(a.date || a.createdAt) - new Date(b.date || b.createdAt);
+    })
+    .slice(0, 3)
+    .map(e => {
+      let dObj = null;
+      try { dObj = e.date ? new Date(e.date) : null; } catch (_) { }
+      const monthDisplay = e.monthDisplay || (dObj && !isNaN(dObj) ? dObj.toLocaleString('en-US', { month: 'short' }).toUpperCase() : '');
+      const dayDisplay = e.dayDisplay || (dObj && !isNaN(dObj) ? String(dObj.getDate()).padStart(2, '0') : '');
+      const dayOfWeek = e.dayOfWeek || (dObj && !isNaN(dObj) ? dObj.toLocaleString('en-US', { weekday: 'short' }).toUpperCase() : '');
+
+      return {
+        id: e.id,
+        slug: e.slug || e.id,
+        title: e.title,
+        date: e.date,
+        endDate: e.endDate,
+        dayDisplay,
+        monthDisplay,
+        dayOfWeek,
+        startTime: e.startTime || '18:30',
+        endTime: e.endTime || '',
+        timeDisplay: e.timeDisplay || (e.startTime ? `${e.startTime}${e.endTime ? ` – ${e.endTime}` : ''}` : '6:30 PM – 7:30 PM (IST)'),
+        mode: e.mode || 'Online (Zoom)',
+        venue: e.venue || 'Online (Zoom)',
+        image: e.image || '/assets/images/services/Positive Workshop.png',
+        registrationOpen: e.registrationOpen !== false,
+        featured: Boolean(e.featured),
+        description: e.shortDescription || e.description || '',
+        subtitle: e.subtitle || e.series || e.category || 'Featured Event',
+        category: e.category || 'Event'
+      };
+    });
+
+  const featuredEvent = upcomingEvents.find(e => e.featured) || upcomingEvents[0] || null;
 
   const featuredCourse = {
     slug: 'positive-psychology-meaningful-life',
@@ -1195,21 +1312,23 @@ export async function getCommunitySidebarData(channelId = 'all') {
   let recommendedCourses = [
     {
       slug: 'the-art-of-mind-training',
-      title: 'The Science of Mindfulness',
-      subtitle: 'A practical course for modern life.',
-      category: 'MINDFULNESS',
-      lessons: '8 Lessons',
-      rating: '4.8',
-      image: '/assets/images/community/science-of-mindfulness-thumb.jpg'
+      title: 'The Art of Mind Training',
+      subtitle: 'Mastering mental discipline, focus & emotional resilience.',
+      category: 'MIND TRAINING',
+      lessons: '8 Modules',
+      rating: '4.9',
+      image: '/assets/images/programs/the-art-of-mind-training.png',
+      link: '/programs/the-art-of-mind-training'
     },
     {
       slug: 'positive-psychology-meaningful-life',
-      title: 'Personal Growth Blueprint',
-      subtitle: 'Tools for a more intentional life.',
-      category: 'GROWTH',
-      lessons: '10 Lessons',
-      rating: '4.7',
-      image: '/assets/images/community/personal-growth-thumb.jpg'
+      title: 'Positive Psychology for a Meaningful Life',
+      subtitle: 'Flourishing, strengths & purpose for everyday living.',
+      category: 'POSITIVE WORKSHOP',
+      lessons: '10 Modules',
+      rating: '4.9',
+      image: '/assets/images/programs/positive-psychology-meaningful-life.png',
+      link: '/programs/positive-psychology-meaningful-life'
     }
   ];
 
@@ -1217,12 +1336,13 @@ export async function getCommunitySidebarData(channelId = 'all') {
     recommendedCourses = [
       {
         slug: 'spiritual-psychology-purposeful-life',
-        title: 'Spiritual Psychology for Modern Life',
+        title: 'Spiritual Psychology for Daily Life',
         subtitle: 'Ancient insight meets modern psychology.',
         category: 'WISDOM',
-        lessons: '12 Lessons',
+        lessons: '12 Modules',
         rating: '4.9',
-        image: '/assets/images/community/science-of-mindfulness-thumb.jpg'
+        image: '/assets/images/programs/spiritual-psychology-purposeful-life.png',
+        link: '/programs/spiritual-psychology-purposeful-life'
       },
       ...recommendedCourses
     ];
@@ -1277,13 +1397,13 @@ const DEFAULT_USER_COURSES = [
   {
     id: 'course-mind-02',
     slug: 'the-art-of-mind-training',
-    title: 'The Science of Mindfulness',
+    title: 'The Art of Mind Training',
     subtitle: 'Evidence-based tools for mental resilience and emotional balance.',
     progress: 25,
     totalLessons: 8,
     completedLessons: 2,
     currentLesson: 'Lesson 3: Somatic Anchoring & Breath Regulation',
-    thumbnail: '/assets/images/community/science-of-mindfulness-thumb.jpg',
+    thumbnail: '/assets/images/programs/the-art-of-mind-training.png',
     targetUrl: '/programs/the-art-of-mind-training',
     lastAccessed: new Date().toISOString()
   }

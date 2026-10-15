@@ -8,6 +8,7 @@ import MobileNav from '../components/layout/MobileNav';
 import SearchPopup from '../components/layout/SearchPopup';
 import ScrollToTop from '../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../hooks/useUterpyPlugins';
+import SEO from '../seo/SEO';
 
 const videoUrls = [
   "https://www.youtube.com/embed/smb1UusRZ98",
@@ -27,6 +28,11 @@ export default function VideosOnTalksPage() {
       <Preloader />
 
       <div className="page-wrapper">
+        <SEO
+          title="Keynote Talks, Seminars & Lectures by Dr. Naveen Ellangala | Ellangala’s Academy"
+          description="Watch keynote speeches, university seminars, and mind-training video presentations by Dr. Naveen Ellangala on human flourishing, positive mindset, and resilience."
+          canonical="/resources/videos"
+        />
         <HeaderOne />
         <PageHeader title="Videos on Talks" breadcrumb="Videos on Talks" />
 

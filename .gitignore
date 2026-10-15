@@ -15,6 +15,7 @@ dist-ssr
 
 # Admin-uploaded images (persistent on the server, not part of the repo)
 server/uploads/
+server/db/backups/
 
 # Editor directories and files
 .vscode/*

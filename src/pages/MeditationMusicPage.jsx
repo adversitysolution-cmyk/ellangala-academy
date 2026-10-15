@@ -8,6 +8,7 @@ import MobileNav from '../components/layout/MobileNav';
 import SearchPopup from '../components/layout/SearchPopup';
 import ScrollToTop from '../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../hooks/useUterpyPlugins';
+import SEO from '../seo/SEO';
 
 const meditationTracks = [
   {
@@ -42,6 +43,11 @@ export default function MeditationMusicPage() {
       <Preloader />
 
       <div className="page-wrapper">
+        <SEO
+          title="Meditation Music & Relaxing Mind Soundscapes | Ellangala’s Academy"
+          description="Immerse in soothing guided meditation melodies and mindful soundscapes curated by Dr. Naveen Ellangala to ease anxiety, foster deep focus, and restore inner peace."
+          canonical="/resources/meditation"
+        />
         <HeaderOne />
         <PageHeader title="Meditation & Music" breadcrumb="Meditation & Music" />
 

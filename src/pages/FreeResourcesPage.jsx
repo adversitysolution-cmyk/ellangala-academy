@@ -8,6 +8,7 @@ import MobileNav from '../components/layout/MobileNav';
 import SearchPopup from '../components/layout/SearchPopup';
 import ScrollToTop from '../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../hooks/useUterpyPlugins';
+import SEO from '../seo/SEO';
 
 const videoUrls = [
   "https://www.youtube.com/embed/badU8RC8i8E",
@@ -25,6 +26,11 @@ export default function FreeResourcesPage() {
       <Preloader />
 
       <div className="page-wrapper">
+        <SEO
+          title="Free Positive Psychology Resources & Videos | Ellangala’s Academy"
+          description="Access free mind training lectures, practical exercises, and inspirational video masterclasses by Dr. Naveen Ellangala for emotional hygiene and self-growth."
+          canonical="/resources/free-downloads"
+        />
         <HeaderOne />
         <PageHeader title="Free Resources" breadcrumb="Free Resources" />
 

@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { useCommunityAuth } from '../context/CommunityAuthContext';
 import { getRecommendedBooks } from '../data/communityBooks';
+import { getRecommendedWorkshops } from '../data/communityWorkshops';
 
 const FREE_RESOURCES = [
   {
@@ -55,26 +56,24 @@ export default function CommunityRightSidebar({ sidebarData, selectedCategory = 
     });
   }, [userTopics, selectedCategory]);
 
-  const recommendedCourses = sidebarData?.recommendedCourses?.length ? sidebarData.recommendedCourses : [
-    {
-      id: 'rec-1',
-      title: 'The Science of Mindfulness',
-      subtitle: 'A practical course for modern life.',
-      image: '/assets/images/community/science-of-mindfulness-thumb.jpg',
-      lessons: '8 Lessons',
-      rating: '4.8',
-      slug: 'mindfulness'
-    },
-    {
-      id: 'rec-2',
-      title: 'Personal Growth Blueprint',
-      subtitle: 'Tools for a more intentional life.',
-      image: '/assets/images/community/personal-growth-thumb.jpg',
-      lessons: '10 Lessons',
-      rating: '4.7',
-      slug: 'positive-psychology'
+  const recommendedWorkshops = useMemo(() => {
+    if (sidebarData?.recommendedWorkshops?.length) {
+      return sidebarData.recommendedWorkshops;
     }
-  ];
+    if (sidebarData?.recommendedCourses?.length) {
+      const isDemo = sidebarData.recommendedCourses.some(c =>
+        c.title === 'The Science of Mindfulness' || c.title === 'Personal Growth Blueprint'
+      );
+      if (!isDemo) {
+        return sidebarData.recommendedCourses;
+      }
+    }
+    return getRecommendedWorkshops({
+      userTopics,
+      selectedCategory,
+      limit: 2
+    });
+  }, [sidebarData?.recommendedWorkshops, sidebarData?.recommendedCourses, userTopics, selectedCategory]);
 
   return (
     <aside className="community-right-sidebar community-sidebar-sticky">
@@ -242,20 +241,24 @@ export default function CommunityRightSidebar({ sidebarData, selectedCategory = 
         </div>
 
         <div className="community-rec-list">
-          {recommendedCourses.map((rc, i) => (
+          {recommendedWorkshops.map((ws, i) => (
             <Link
-              key={rc.id || i}
-              to={`/programs/${rc.slug || 'positive-psychology'}`}
+              key={ws.id || ws.slug || i}
+              to={ws.link || `/programs/${ws.slug}`}
               className="community-rec-item-link"
+              title={`Explore ${ws.title}`}
             >
               <img
-                src={rc.image}
-                alt={rc.title}
+                src={ws.image}
+                alt={ws.title}
                 className="community-rec-thumb"
+                onError={(e) => {
+                  e.currentTarget.src = '/assets/images/programs/the-art-of-mind-training.png';
+                }}
               />
               <div className="community-rec-info">
-                <h5 className="community-rec-title">{rc.title}</h5>
-                <p className="community-rec-subtitle">{rc.subtitle || rc.description}</p>
+                <h5 className="community-rec-title">{ws.title}</h5>
+                <p className="community-rec-subtitle">{ws.subtitle || ws.description}</p>
               </div>
             </Link>
           ))}

@@ -381,3 +381,69 @@ export function generateScholarlyArticleSchema() {
     ]
   };
 }
+
+export function generateFAQSchema(faqs = []) {
+  if (!faqs || faqs.length === 0) return null;
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map(faq => ({
+      "@type": "Question",
+      "name": faq.q,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.a
+      }
+    }))
+  };
+}
+
+export function generateCommunityPostSchema(post) {
+  if (!post) return null;
+  const postSlug = post.slug || post.id;
+  const rawImg = post.mediaUrls?.[0]?.mediaUrl || '';
+  const fullImage = rawImg
+    ? (rawImg.startsWith('http') ? rawImg : `${siteConfig.url}${rawImg.startsWith('/') ? rawImg : '/' + rawImg}`)
+    : siteConfig.defaultOgImage;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": ["Article", "SocialMediaPosting"],
+    "@id": `${siteConfig.url}/feed/posts/${postSlug}/#article`,
+    "headline": post.title || "Daily Positive Wisdom & Mind Training Reflection",
+    "description": post.content ? post.content.slice(0, 160) : (post.title || siteConfig.defaultDescription),
+    "articleBody": post.content || "",
+    "image": fullImage,
+    "datePublished": post.publishedAt || post.createdAt || new Date().toISOString(),
+    "dateModified": post.updatedAt || post.publishedAt || post.createdAt || new Date().toISOString(),
+    "author": {
+      "@type": "Person",
+      "@id": `${siteConfig.url}/founder/#person`,
+      "name": post.authorName || siteConfig.founder.name,
+      "jobTitle": "Positive Psychologist, Author & Founder",
+      "url": `${siteConfig.url}/founder`
+    },
+    "publisher": {
+      "@type": "EducationalOrganization",
+      "@id": `${siteConfig.url}/#organization`,
+      "name": siteConfig.name,
+      "url": siteConfig.url,
+      "logo": {
+        "@type": "ImageObject",
+        "url": `${siteConfig.url}/assets/images/resources/footer-logo.png`
+      }
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": `${siteConfig.url}/feed/posts/${postSlug}`
+    },
+    "keywords": [
+      post.categoryName || "Daily Positive Wisdom",
+      "Positive Psychology",
+      "Mind Training",
+      "Dr. Naveen Ellangala",
+      "Mental Fitness",
+      "Indian Wisdom"
+    ]
+  };
+}

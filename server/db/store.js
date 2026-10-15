@@ -451,11 +451,13 @@ export async function deleteDbBlog(id) {
 
 // --- ORDER DB OPERATIONS ---
 export async function getDbOrders() {
+  if (!pool) return [];
   const [rows] = await pool.query('SELECT * FROM orders ORDER BY pk DESC');
   return rows.map(rowToOrder);
 }
 
 export async function getDbOrderById(id) {
+  if (!pool) return null;
   const [rows] = await pool.query('SELECT * FROM orders WHERE id = ? LIMIT 1', [id]);
   return rows[0] ? rowToOrder(rows[0]) : null;
 }
@@ -463,11 +465,13 @@ export async function getDbOrderById(id) {
 // Finds a still-unpaid order/enrollment by the Razorpay order id we stored (used by the webhook).
 // Once paid, paymentRef becomes "order|payment", so a repeat webhook finds nothing = no-op.
 export async function getDbOrderByPaymentRef(ref) {
+  if (!pool) return null;
   const [rows] = await pool.query('SELECT * FROM orders WHERE paymentRef = ? LIMIT 1', [ref]);
   return rows[0] ? rowToOrder(rows[0]) : null;
 }
 
 export async function getDbEnrollmentByPaymentRef(ref) {
+  if (!pool) return null;
   const [rows] = await pool.query('SELECT * FROM enrollments WHERE paymentRef = ? LIMIT 1', [ref]);
   return rows[0] ? rowToEnrollment(rows[0]) : null;
 }
@@ -552,6 +556,7 @@ export function deriveProgramType(programTitle = '') {
 }
 
 export async function getDbEnrollments() {
+  if (!pool) return [];
   const [rows] = await pool.query('SELECT * FROM enrollments ORDER BY pk DESC');
   return rows.map(rowToEnrollment);
 }

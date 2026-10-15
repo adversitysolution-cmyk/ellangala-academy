@@ -296,8 +296,8 @@ router.post('/community/posts/:id/save', async (req, res) => {
   }
 });
 
-// GET /api/community/sidebar-data
-router.get('/community/sidebar-data', async (req, res) => {
+// GET /api/community/sidebar-data & /api/community/sidebar
+router.get(['/community/sidebar-data', '/community/sidebar'], async (req, res) => {
   const channel = req.query.channel || req.query.category || 'all';
   const data = await getCommunitySidebarData(channel);
   res.json(data);

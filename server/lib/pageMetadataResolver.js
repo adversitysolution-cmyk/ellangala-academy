@@ -11,8 +11,11 @@ import {
   generateBookSchema,
   generateEventSchema,
   generateArticleSchema,
-  generateScholarlyArticleSchema
+  generateScholarlyArticleSchema,
+  generateFAQSchema,
+  generateCommunityPostSchema
 } from '../../src/seo/schemas/schemaGenerators.js';
+import { getPageFaqData } from '../../src/contents/faq.content.js';
 
 export async function resolvePageMetadata(pathname = '/') {
   const cleanPath = pathname.split('?')[0].replace(/\/+$/, '') || '/';
@@ -367,43 +370,49 @@ export async function resolvePageMetadata(pathname = '/') {
   }
 
   // 12b. Community Post Details & Feed OpenGraph Metadata
-  const communityMatch = cleanPath.match(/^\/community\/(?:posts\/)?([a-zA-Z0-9_-]+)$/);
-  if (communityMatch) {
-    const postId = communityMatch[1];
+  const feedPostMatch = cleanPath.match(/^\/(?:feed|community)\/(?:posts\/)?([a-zA-Z0-9_-]+)$/);
+  if (feedPostMatch) {
+    const postId = feedPostMatch[1];
     let post = null;
     try {
       post = await getCommunityPostById(postId, { includeDrafts: false });
-    } catch {}
+    } catch { }
     if (post && post.status === 'published') {
-      const postImg = post.mediaUrls?.[0]?.mediaUrl || siteConfig.defaultOgImage;
+      const postSlug = post.slug || post.id;
+      const rawImg = post.mediaUrls?.[0]?.mediaUrl;
+      const postImg = rawImg
+        ? (rawImg.startsWith('http') ? rawImg : `${baseDomain}${rawImg.startsWith('/') ? rawImg : '/' + rawImg}`)
+        : `${baseDomain}/assets/images/og-share-card.jpg`;
+
       return {
-        title: `${post.title} | Ellangala Community`,
-        description: post.content?.slice(0, 160) || siteConfig.defaultDescription,
-        canonical: `${baseDomain}/community/posts/${post.id}`,
-        image: postImg.startsWith('http') ? postImg : `${baseDomain}${postImg.startsWith('/') ? postImg : '/' + postImg}`,
+        title: `${post.title || 'Daily Wisdom Reflection'} | Ellangala Feed`,
+        description: post.content ? post.content.slice(0, 160) : 'Explore daily positive psychology wisdom, mind training reflections, and mental fitness insights by Dr. Naveen Ellangala.',
+        canonical: `${baseDomain}/feed/posts/${postSlug}`,
+        image: postImg,
         type: 'article',
         schemas: [
+          generateCommunityPostSchema(post),
           generateBreadcrumbSchema([
             { name: 'Home', path: '/' },
-            { name: 'Community', path: '/community' },
-            { name: post.title, path: `/community/posts/${post.id}` }
+            { name: 'Daily Feed', path: '/feed' },
+            { name: post.title || 'Wisdom Reflection', path: `/feed/posts/${postSlug}` }
           ])
         ]
       };
     }
   }
 
-  if (cleanPath === '/community') {
+  if (cleanPath === '/feed' || cleanPath === '/community') {
     return {
-      title: 'Community Feed & Mind Training Discussions | Ellangala’s Academy',
-      description: 'Explore positive psychology insights, mental conditioning reflections, and live masterclass discussions with Dr. Naveen Ellangala.',
-      canonical: `${baseDomain}/community`,
-      image: siteConfig.defaultOgImage,
+      title: 'Ellangala Feed | Daily Mind Training, Positive Psychology & Wisdom by Dr. Naveen Ellangala',
+      description: 'Explore daily positive psychology insights, guided mental workouts, life reflections, and interactive mind training discussions with Dr. Naveen Ellangala.',
+      canonical: `${baseDomain}/feed`,
+      image: `${baseDomain}/assets/images/og-share-card.jpg`,
       type: 'website',
       schemas: [
         generateBreadcrumbSchema([
           { name: 'Home', path: '/' },
-          { name: 'Community', path: '/community' }
+          { name: 'Daily Feed', path: '/feed' }
         ])
       ]
     };
@@ -421,7 +430,21 @@ export async function resolvePageMetadata(pathname = '/') {
 }
 
 export function buildHeadTagsHtml(meta) {
-  const schemasHtml = (meta.schemas || [])
+  const allSchemas = [...(meta.schemas || [])];
+  if (meta.canonical) {
+    try {
+      const parsedPath = new URL(meta.canonical).pathname || '/';
+      const pageFaq = getPageFaqData(parsedPath);
+      if (pageFaq && pageFaq.faqs && pageFaq.faqs.length > 0) {
+        const faqSchema = generateFAQSchema(pageFaq.faqs);
+        if (faqSchema) {
+          allSchemas.push(faqSchema);
+        }
+      }
+    } catch (_) {}
+  }
+
+  const schemasHtml = allSchemas
     .filter(Boolean)
     .map(s => `<script type="application/ld+json">${JSON.stringify(s)}</script>`)
     .join('\n    ');

@@ -8,8 +8,10 @@ import MobileNav from '../../../components/layout/MobileNav';
 import SearchPopup from '../../../components/layout/SearchPopup';
 import ScrollToTop from '../../../components/layout/ScrollToTop';
 import SEO from '../../../seo/SEO';
+import { generateCommunityPostSchema } from '../../../seo/schemas/schemaGenerators';
 import { useUterpyPlugins } from '../../../hooks/useUterpyPlugins';
 import { communityService, extractPostIdFromSlug, buildPostShareSlug } from '../services/communityService';
+import { eventService } from '../../events/services/eventService';
 import { CommunityAuthProvider, useCommunityAuth } from '../context/CommunityAuthContext';
 
 // Community Components
@@ -38,7 +40,8 @@ function CommunityFeedPageContent() {
   const [posts, setPosts] = useState([]);
   const [singlePost, setSinglePost] = useState(null);
   const [categories, setCategories] = useState([]);
-  const [sidebarData, setSidebarData] = useState({ upcomingEvents: [], recommendedCourses: [] });
+  const [sidebarData, setSidebarData] = useState({ featuredEvent: null, upcomingEvents: [], recommendedCourses: [] });
+  const [featuredEvent, setFeaturedEvent] = useState(null);
 
   const [currentView, setCurrentView] = useState('feed'); // 'feed' | 'learning' | 'saved' | 'workshops'
   const [selectedCategory, setSelectedCategory] = useState('all');
@@ -93,15 +96,46 @@ function CommunityFeedPageContent() {
   useEffect(() => {
     communityService.getCategories()
       .then(setCategories)
-      .catch(() => {});
+      .catch(() => { });
   }, []);
 
   // Fetch rule-based sidebar data whenever selected channel/category changes
   useEffect(() => {
     communityService.getSidebarData(selectedCategory)
-      .then(setSidebarData)
-      .catch(() => {});
+      .then((data) => {
+        setSidebarData(data);
+        if (data?.featuredEvent) {
+          setFeaturedEvent(data.featuredEvent);
+        } else if (Array.isArray(data?.upcomingEvents) && data.upcomingEvents.length > 0) {
+          setFeaturedEvent(data.upcomingEvents[0]);
+        }
+      })
+      .catch(() => { });
   }, [selectedCategory]);
+
+  // Ensure the single upcoming/featured event is always dynamically retrieved from published events
+  useEffect(() => {
+    eventService.getPublishedEvents()
+      .then((events) => {
+        const today = new Date().toISOString().split('T')[0];
+        const upcoming = (events || []).filter((e) => {
+          if (!e || e.status === 'completed' || e.status === 'cancelled') return false;
+          if (e.status && e.status !== 'published') return false;
+          const last = e.endDate || e.date;
+          return Boolean(last) && last >= today;
+        }).sort((a, b) => {
+          if (a.featured && !b.featured) return -1;
+          if (!a.featured && b.featured) return 1;
+          return new Date(a.date || a.createdAt) - new Date(b.date || b.createdAt);
+        });
+
+        const singleEvent = upcoming.find((e) => e.featured) || upcoming[0] || null;
+        if (singleEvent) {
+          setFeaturedEvent((prev) => prev || singleEvent);
+        }
+      })
+      .catch(() => { });
+  }, []);
 
   // Synchronize equal height and ratio between left sidebar cards and right sidebar cards
   useEffect(() => {
@@ -360,10 +394,10 @@ function CommunityFeedPageContent() {
     }
   };
 
-  // Featured event (only real featured events)
-  const featuredEvent = sidebarData?.featuredEvent || (
+  // Resolved featured event (from dynamic state, sidebar data, or first upcoming event)
+  const activeFeaturedEvent = featuredEvent || sidebarData?.featuredEvent || (
     Array.isArray(sidebarData?.upcomingEvents)
-      ? sidebarData.upcomingEvents.find(e => e.featured)
+      ? (sidebarData.upcomingEvents.find(e => e.featured) || sidebarData.upcomingEvents[0])
       : null
   );
 
@@ -395,6 +429,8 @@ function CommunityFeedPageContent() {
         description={seoDescription}
         canonical={seoCanonical}
         image={seoImage}
+        type={singlePost ? 'article' : 'website'}
+        structuredData={singlePost ? generateCommunityPostSchema(singlePost) : null}
       />
 
       <div className="custom-cursor">
@@ -507,8 +543,8 @@ function CommunityFeedPageContent() {
                     />
                   )}
 
-                  {/* VIEW 5: SAVED POSTS OR GENERAL FEED STREAM */}
-                  {!singlePostId && (currentView === 'feed' || currentView === 'saved') && (
+                  {/* VIEW 5: SAVED POSTS, GENERAL FEED STREAM, OR SINGLE SHARED POST */}
+                  {(currentView === 'feed' || currentView === 'saved') && (
                     <>
                       {/* Saved Header Banner (when in Saved view) */}
                       {currentView === 'saved' ? (
@@ -530,24 +566,26 @@ function CommunityFeedPageContent() {
                           </button>
                         </div>
                       ) : (
-                        <>
-                          {/* Welcome Hero Banner (feed only) */}
-                          <CommunityWelcomeBanner />
+                        !singlePostId && (
+                          <>
+                            {/* Welcome Hero Banner (feed only) */}
+                            <CommunityWelcomeBanner />
 
-                          {/* Featured Event Alert Bar (feed only) */}
-                          <CommunityFeaturedWorkshop event={featuredEvent} />
+                            {/* Featured Event Alert Bar (feed only) */}
+                            <CommunityFeaturedWorkshop event={activeFeaturedEvent} />
 
-                          {/* Feed Heading & Filter Tabs (feed only) */}
-                          <CommunityFeedFilters
-                            activeFilter={activeFilter}
-                            onSelectFilter={(f) => {
-                              setActiveFilter(f);
-                              if (f === 'saved') setCurrentView('saved');
-                              else setCurrentView('feed');
-                            }}
-                            totalPosts={totalPosts}
-                          />
-                        </>
+                            {/* Feed Heading & Filter Tabs (feed only) */}
+                            <CommunityFeedFilters
+                              activeFilter={activeFilter}
+                              onSelectFilter={(f) => {
+                                setActiveFilter(f);
+                                if (f === 'saved') setCurrentView('saved');
+                                else setCurrentView('feed');
+                              }}
+                              totalPosts={totalPosts}
+                            />
+                          </>
+                        )
                       )}
 
                       {/* Loading State */}
@@ -665,9 +703,61 @@ function CommunityFeedPageContent() {
                             <CommunityPostCard
                               key={post.id}
                               post={post}
-                              onPostUpdated={() => fetchPosts(page, false)}
+                              onPostUpdated={() => {
+                                if (singlePostId) {
+                                  const targetId = extractPostIdFromSlug(singlePostId);
+                                  communityService.getPostById(targetId)
+                                    .then((p) => {
+                                      if (p) {
+                                        setSinglePost(p);
+                                        setPosts([p]);
+                                      }
+                                    })
+                                    .catch(() => { });
+                                } else {
+                                  fetchPosts(page, false);
+                                }
+                              }}
                             />
                           ))}
+
+                          {/* When on Single Post view, add a helpful exploration footer */}
+                          {singlePostId && (
+                            <div style={{
+                              textAlign: 'center',
+                              padding: '24px 20px',
+                              background: '#FFFFFF',
+                              borderRadius: '16px',
+                              border: '1px solid #ECE7DE',
+                              marginTop: '8px'
+                            }}>
+                              <h4 style={{ margin: '0 0 6px 0', fontSize: '15px', fontWeight: '700', color: '#1E1A16' }}>
+                                Explore More Community Discussions
+                              </h4>
+                              <p style={{ margin: '0 0 16px 0', fontSize: '13px', color: '#64748B' }}>
+                                Join fellow learners in exploring positive psychology reflections, mind gym habits, and transformative insights.
+                              </p>
+                              <Link
+                                to="/feed"
+                                style={{
+                                  background: '#CA8A38',
+                                  color: '#FFFFFF',
+                                  border: 'none',
+                                  borderRadius: '8px',
+                                  padding: '10px 22px',
+                                  fontSize: '13px',
+                                  fontWeight: '700',
+                                  textDecoration: 'none',
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: '8px'
+                                }}
+                              >
+                                <span>Go to Community Feed</span>
+                                <ArrowLeft size={14} style={{ transform: 'rotate(180deg)' }} />
+                              </Link>
+                            </div>
+                          )}
 
                           {/* Pagination: Load More (feed only) */}
                           {!singlePostId && currentView === 'feed' && hasMore && (
@@ -710,8 +800,6 @@ function CommunityFeedPageContent() {
               </div>
             </div>
           </main>
-
-          <FooterOne />
         </div>
 
         <MobileNav />

@@ -10,7 +10,7 @@ export const communityService = {
           return session.user.id;
         }
       }
-    } catch (_) {}
+    } catch (_) { }
 
     let id = localStorage.getItem('ellangala_community_visitor_id');
     if (!id) {
@@ -33,13 +33,13 @@ export const communityService = {
           };
         }
       }
-    } catch (_) {}
+    } catch (_) { }
 
     const raw = localStorage.getItem('ellangala_community_visitor_profile');
     if (raw) {
       try {
         return JSON.parse(raw);
-      } catch (_) {}
+      } catch (_) { }
     }
     return {
       name: 'Academy Learner',
@@ -145,7 +145,7 @@ export const communityService = {
         const data = await res.json();
         return data.quoteCard;
       }
-    } catch (_) {}
+    } catch (_) { }
     return {
       quote: "A calmer mind creates a brighter life.",
       author: "DR. NAVEEN ELLANGALA",
@@ -160,7 +160,7 @@ export const communityService = {
         const data = await res.json();
         return data.heroBanner;
       }
-    } catch (_) {}
+    } catch (_) { }
     return {
       heading: "Welcome to the\nEllangala Feed",
       subheading: "Learn, reflect, and grow with Dr. Naveen Ellangala.",
@@ -217,7 +217,7 @@ export const communityService = {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` }
       });
-    } catch (_) {}
+    } catch (_) { }
   },
 
   async uploadAvatar(file) {

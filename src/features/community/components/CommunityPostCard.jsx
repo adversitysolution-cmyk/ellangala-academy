@@ -5,7 +5,6 @@ import {
   MessageSquare,
   Share2,
   Bookmark,
-  MoreHorizontal,
   CheckCircle2,
   Pin
 } from 'lucide-react';
@@ -151,21 +150,11 @@ export default function CommunityPostCard({ post, onPostUpdated }) {
               <span>{getTimeAgo()}</span>
               <span className="community-dot-sep">•</span>
               <span className="community-post-cat-text">
-                {post.categoryName || 'Community Announcement'}
+                {post.categoryName || 'Daily Positive Wisdom'}
               </span>
             </div>
           </div>
         </div>
-
-        {/* More options button */}
-        <button
-          type="button"
-          className="community-post-more-btn"
-          title="More options"
-          onClick={handleToggleSave}
-        >
-          <MoreHorizontal size={18} />
-        </button>
       </div>
 
       {/* Post Title */}

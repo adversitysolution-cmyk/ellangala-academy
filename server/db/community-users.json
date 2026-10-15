@@ -6,12 +6,23 @@
     "email": "ananya.rao@example.com",
     "avatarUrl": "/assets/images/team/member-avatar.png",
     "status": "active",
-    "topics": ["Positive MindGym", "Daily Positive Wisdom", "Mindfulness"],
+    "topics": [
+      "Positive MindGym",
+      "Daily Positive Wisdom",
+      "Mindfulness"
+    ],
     "enrolledCourses": [
-      { "id": "course-1", "title": "Foundation in Applied Positive Psychology (FAPP)", "progress": 65 }
+      {
+        "id": "course-1",
+        "title": "Foundation in Applied Positive Psychology (FAPP)",
+        "progress": 65
+      }
     ],
     "enrolledEvents": [
-      { "id": "event-1", "title": "Positive MindGym Experiential Circle" }
+      {
+        "id": "event-1",
+        "title": "Positive MindGym Experiential Circle"
+      }
     ],
     "createdAt": "2026-10-13T09:36:37.298Z",
     "updatedAt": "2026-10-13T09:36:37.298Z"
@@ -23,9 +34,16 @@
     "email": "kavitha.m@example.com",
     "avatarUrl": "",
     "status": "active",
-    "topics": ["Daily Positive Wisdom", "Emotional Wellness"],
+    "topics": [
+      "Daily Positive Wisdom",
+      "Emotional Wellness"
+    ],
     "enrolledCourses": [
-      { "id": "course-2", "title": "Positive Parenting & Family Well-being", "progress": 30 }
+      {
+        "id": "course-2",
+        "title": "Positive Parenting & Family Well-being",
+        "progress": 30
+      }
     ],
     "enrolledEvents": [],
     "createdAt": "2026-10-13T08:15:20.000Z",
@@ -38,10 +56,16 @@
     "email": "rahul.v@example.com",
     "avatarUrl": "",
     "status": "active",
-    "topics": ["Positive MindGym", "Doctoral Insights"],
+    "topics": [
+      "Positive MindGym",
+      "Doctoral Insights"
+    ],
     "enrolledCourses": [],
     "enrolledEvents": [
-      { "id": "event-2", "title": "Cognitive Clarity & Inner Resilience Workshop" }
+      {
+        "id": "event-2",
+        "title": "Cognitive Clarity & Inner Resilience Workshop"
+      }
     ],
     "createdAt": "2026-10-12T14:22:10.000Z",
     "updatedAt": "2026-10-12T14:22:10.000Z"
@@ -53,12 +77,22 @@
     "email": "vikram.s@example.com",
     "avatarUrl": "",
     "status": "active",
-    "topics": ["Workshops & Events", "Executive Leadership"],
+    "topics": [
+      "Workshops & Events",
+      "Executive Leadership"
+    ],
     "enrolledCourses": [
-      { "id": "course-1", "title": "Foundation in Applied Positive Psychology (FAPP)", "progress": 90 }
+      {
+        "id": "course-1",
+        "title": "Foundation in Applied Positive Psychology (FAPP)",
+        "progress": 90
+      }
     ],
     "enrolledEvents": [
-      { "id": "event-1", "title": "Positive MindGym Experiential Circle" }
+      {
+        "id": "event-1",
+        "title": "Positive MindGym Experiential Circle"
+      }
     ],
     "createdAt": "2026-10-11T11:45:00.000Z",
     "updatedAt": "2026-10-11T11:45:00.000Z"
@@ -70,9 +104,16 @@
     "email": "sneha.patel@example.com",
     "avatarUrl": "",
     "status": "active",
-    "topics": ["Daily Positive Wisdom", "Bhagavad Gita Insights"],
+    "topics": [
+      "Daily Positive Wisdom",
+      "Bhagavad Gita Insights"
+    ],
     "enrolledCourses": [
-      { "id": "course-3", "title": "Self-Leadership & Purposeful Living", "progress": 45 }
+      {
+        "id": "course-3",
+        "title": "Self-Leadership & Purposeful Living",
+        "progress": 45
+      }
     ],
     "enrolledEvents": [],
     "createdAt": "2026-10-10T16:20:00.000Z",
@@ -85,7 +126,10 @@
     "email": "deepa.nair@example.com",
     "avatarUrl": "",
     "status": "active",
-    "topics": ["Positive MindGym", "Emotional Wellness"],
+    "topics": [
+      "Positive MindGym",
+      "Emotional Wellness"
+    ],
     "enrolledCourses": [],
     "enrolledEvents": [],
     "createdAt": "2026-10-09T10:10:00.000Z",
@@ -98,12 +142,22 @@
     "email": "r.joshi@university.edu",
     "avatarUrl": "",
     "status": "active",
-    "topics": ["Doctoral Insights", "Research & Methodology"],
+    "topics": [
+      "Doctoral Insights",
+      "Research & Methodology"
+    ],
     "enrolledCourses": [
-      { "id": "course-1", "title": "Foundation in Applied Positive Psychology (FAPP)", "progress": 100 }
+      {
+        "id": "course-1",
+        "title": "Foundation in Applied Positive Psychology (FAPP)",
+        "progress": 100
+      }
     ],
     "enrolledEvents": [
-      { "id": "event-3", "title": "Doctoral Positive Psychology Symposium" }
+      {
+        "id": "event-3",
+        "title": "Doctoral Positive Psychology Symposium"
+      }
     ],
     "createdAt": "2026-10-05T08:30:00.000Z",
     "updatedAt": "2026-10-05T08:30:00.000Z"
@@ -115,10 +169,16 @@
     "email": "sunita@example.com",
     "avatarUrl": "",
     "status": "active",
-    "topics": ["Positive MindGym", "Cognitive Restructuring"],
+    "topics": [
+      "Positive MindGym",
+      "Cognitive Restructuring"
+    ],
     "enrolledCourses": [],
     "enrolledEvents": [
-      { "id": "event-1", "title": "Positive MindGym Experiential Circle" }
+      {
+        "id": "event-1",
+        "title": "Positive MindGym Experiential Circle"
+      }
     ],
     "createdAt": "2026-10-13T09:50:00.000Z",
     "updatedAt": "2026-10-13T09:50:00.000Z"
@@ -130,7 +190,9 @@
     "email": "priyanka.d@gmail.com",
     "avatarUrl": "",
     "status": "inactive",
-    "topics": ["Positive Psychology"],
+    "topics": [
+      "Positive Psychology"
+    ],
     "enrolledCourses": [],
     "enrolledEvents": [],
     "createdAt": "2026-09-28T15:10:00.000Z",
@@ -143,9 +205,16 @@
     "email": "arjun.kulkarni@outlook.com",
     "avatarUrl": "",
     "status": "active",
-    "topics": ["Daily Positive Wisdom", "Mindfulness"],
+    "topics": [
+      "Daily Positive Wisdom",
+      "Mindfulness"
+    ],
     "enrolledCourses": [
-      { "id": "course-2", "title": "Positive Parenting & Family Well-being", "progress": 80 }
+      {
+        "id": "course-2",
+        "title": "Positive Parenting & Family Well-being",
+        "progress": 80
+      }
     ],
     "enrolledEvents": [],
     "createdAt": "2026-09-15T12:00:00.000Z",
@@ -158,7 +227,9 @@
     "email": "meera.nambiar@yahoo.com",
     "avatarUrl": "",
     "status": "inactive",
-    "topics": ["Emotional Wellness"],
+    "topics": [
+      "Emotional Wellness"
+    ],
     "enrolledCourses": [],
     "enrolledEvents": [],
     "createdAt": "2026-08-20T09:00:00.000Z",
@@ -171,7 +242,10 @@
     "email": "karthik.s@gmail.com",
     "avatarUrl": "",
     "status": "inactive",
-    "topics": ["Positive MindGym", "Workshops & Events"],
+    "topics": [
+      "Positive MindGym",
+      "Workshops & Events"
+    ],
     "enrolledCourses": [],
     "enrolledEvents": [],
     "createdAt": "2026-07-14T17:30:00.000Z",
@@ -184,12 +258,22 @@
     "email": "pooja.hegde@gmail.com",
     "avatarUrl": "",
     "status": "active",
-    "topics": ["Positive MindGym", "Mindfulness"],
+    "topics": [
+      "Positive MindGym",
+      "Mindfulness"
+    ],
     "enrolledCourses": [
-      { "id": "course-1", "title": "Foundation in Applied Positive Psychology (FAPP)", "progress": 25 }
+      {
+        "id": "course-1",
+        "title": "Foundation in Applied Positive Psychology (FAPP)",
+        "progress": 25
+      }
     ],
     "enrolledEvents": [
-      { "id": "event-1", "title": "Positive MindGym Experiential Circle" }
+      {
+        "id": "event-1",
+        "title": "Positive MindGym Experiential Circle"
+      }
     ],
     "createdAt": "2026-10-13T07:10:00.000Z",
     "updatedAt": "2026-10-13T07:10:00.000Z"
@@ -201,7 +285,10 @@
     "email": "r.iyer@gmail.com",
     "avatarUrl": "",
     "status": "active",
-    "topics": ["Daily Positive Wisdom", "Emotional Wellness"],
+    "topics": [
+      "Daily Positive Wisdom",
+      "Emotional Wellness"
+    ],
     "enrolledCourses": [],
     "enrolledEvents": [],
     "createdAt": "2026-10-12T18:40:00.000Z",
@@ -214,12 +301,22 @@
     "email": "sid.bhat@techconsult.com",
     "avatarUrl": "",
     "status": "active",
-    "topics": ["Executive Leadership", "Positive MindGym"],
+    "topics": [
+      "Executive Leadership",
+      "Positive MindGym"
+    ],
     "enrolledCourses": [
-      { "id": "course-3", "title": "Self-Leadership & Purposeful Living", "progress": 70 }
+      {
+        "id": "course-3",
+        "title": "Self-Leadership & Purposeful Living",
+        "progress": 70
+      }
     ],
     "enrolledEvents": [
-      { "id": "event-2", "title": "Cognitive Clarity & Inner Resilience Workshop" }
+      {
+        "id": "event-2",
+        "title": "Cognitive Clarity & Inner Resilience Workshop"
+      }
     ],
     "createdAt": "2026-10-11T09:15:00.000Z",
     "updatedAt": "2026-10-11T09:15:00.000Z"
@@ -231,10 +328,16 @@
     "email": "ananya.sen@kolkata.org",
     "avatarUrl": "",
     "status": "active",
-    "topics": ["Doctoral Insights", "Positive MindGym"],
+    "topics": [
+      "Doctoral Insights",
+      "Positive MindGym"
+    ],
     "enrolledCourses": [],
     "enrolledEvents": [
-      { "id": "event-3", "title": "Doctoral Positive Psychology Symposium" }
+      {
+        "id": "event-3",
+        "title": "Doctoral Positive Psychology Symposium"
+      }
     ],
     "createdAt": "2026-10-10T12:05:00.000Z",
     "updatedAt": "2026-10-10T12:05:00.000Z"
@@ -246,9 +349,15 @@
     "email": "girish.chandran@kerala.net",
     "avatarUrl": "",
     "status": "active",
-    "topics": ["Daily Positive Wisdom"],
+    "topics": [
+      "Daily Positive Wisdom"
+    ],
     "enrolledCourses": [
-      { "id": "course-2", "title": "Positive Parenting & Family Well-being", "progress": 55 }
+      {
+        "id": "course-2",
+        "title": "Positive Parenting & Family Well-being",
+        "progress": 55
+      }
     ],
     "enrolledEvents": [],
     "createdAt": "2026-10-09T14:30:00.000Z",
@@ -261,10 +370,16 @@
     "email": "nandini.reddy@hyderabad.in",
     "avatarUrl": "",
     "status": "active",
-    "topics": ["Mindfulness", "Emotional Wellness"],
+    "topics": [
+      "Mindfulness",
+      "Emotional Wellness"
+    ],
     "enrolledCourses": [],
     "enrolledEvents": [
-      { "id": "event-1", "title": "Positive MindGym Experiential Circle" }
+      {
+        "id": "event-1",
+        "title": "Positive MindGym Experiential Circle"
+      }
     ],
     "createdAt": "2026-10-08T11:20:00.000Z",
     "updatedAt": "2026-10-08T11:20:00.000Z"
@@ -276,7 +391,9 @@
     "email": "tanmay.ganguly@gmail.com",
     "avatarUrl": "",
     "status": "inactive",
-    "topics": ["Executive Leadership"],
+    "topics": [
+      "Executive Leadership"
+    ],
     "enrolledCourses": [],
     "enrolledEvents": [],
     "createdAt": "2026-10-07T16:45:00.000Z",
@@ -289,9 +406,16 @@
     "email": "rohit.m@delhicorporate.com",
     "avatarUrl": "",
     "status": "active",
-    "topics": ["Positive MindGym", "Self-Leadership"],
+    "topics": [
+      "Positive MindGym",
+      "Self-Leadership"
+    ],
     "enrolledCourses": [
-      { "id": "course-1", "title": "Foundation in Applied Positive Psychology (FAPP)", "progress": 40 }
+      {
+        "id": "course-1",
+        "title": "Foundation in Applied Positive Psychology (FAPP)",
+        "progress": 40
+      }
     ],
     "enrolledEvents": [],
     "createdAt": "2026-10-06T15:10:00.000Z",
@@ -304,10 +428,16 @@
     "email": "aishu.srinivas@gmail.com",
     "avatarUrl": "",
     "status": "active",
-    "topics": ["Daily Positive Wisdom", "Mindfulness"],
+    "topics": [
+      "Daily Positive Wisdom",
+      "Mindfulness"
+    ],
     "enrolledCourses": [],
     "enrolledEvents": [
-      { "id": "event-2", "title": "Cognitive Clarity & Inner Resilience Workshop" }
+      {
+        "id": "event-2",
+        "title": "Cognitive Clarity & Inner Resilience Workshop"
+      }
     ],
     "createdAt": "2026-10-05T10:00:00.000Z",
     "updatedAt": "2026-10-05T10:00:00.000Z"
@@ -319,9 +449,15 @@
     "email": "manoj.kumar@jaipur.co",
     "avatarUrl": "",
     "status": "active",
-    "topics": ["Positive Parenting"],
+    "topics": [
+      "Positive Parenting"
+    ],
     "enrolledCourses": [
-      { "id": "course-2", "title": "Positive Parenting & Family Well-being", "progress": 95 }
+      {
+        "id": "course-2",
+        "title": "Positive Parenting & Family Well-being",
+        "progress": 95
+      }
     ],
     "enrolledEvents": [],
     "createdAt": "2026-10-04T08:45:00.000Z",
@@ -334,12 +470,22 @@
     "email": "harini.subbu@chennai.edu",
     "avatarUrl": "",
     "status": "active",
-    "topics": ["Doctoral Insights", "Research & Methodology"],
+    "topics": [
+      "Doctoral Insights",
+      "Research & Methodology"
+    ],
     "enrolledCourses": [
-      { "id": "course-1", "title": "Foundation in Applied Positive Psychology (FAPP)", "progress": 85 }
+      {
+        "id": "course-1",
+        "title": "Foundation in Applied Positive Psychology (FAPP)",
+        "progress": 85
+      }
     ],
     "enrolledEvents": [
-      { "id": "event-3", "title": "Doctoral Positive Psychology Symposium" }
+      {
+        "id": "event-3",
+        "title": "Doctoral Positive Psychology Symposium"
+      }
     ],
     "createdAt": "2026-10-03T13:20:00.000Z",
     "updatedAt": "2026-10-03T13:20:00.000Z"
@@ -351,7 +497,9 @@
     "email": "vivek.chawla@gurgaon.in",
     "avatarUrl": "",
     "status": "inactive",
-    "topics": ["Workshops & Events"],
+    "topics": [
+      "Workshops & Events"
+    ],
     "enrolledCourses": [],
     "enrolledEvents": [],
     "createdAt": "2026-10-02T17:30:00.000Z",
@@ -364,10 +512,16 @@
     "email": "divya.n@kerala.com",
     "avatarUrl": "",
     "status": "active",
-    "topics": ["Daily Positive Wisdom", "Positive MindGym"],
+    "topics": [
+      "Daily Positive Wisdom",
+      "Positive MindGym"
+    ],
     "enrolledCourses": [],
     "enrolledEvents": [
-      { "id": "event-1", "title": "Positive MindGym Experiential Circle" }
+      {
+        "id": "event-1",
+        "title": "Positive MindGym Experiential Circle"
+      }
     ],
     "createdAt": "2026-10-01T09:10:00.000Z",
     "updatedAt": "2026-10-01T09:10:00.000Z"
@@ -379,9 +533,16 @@
     "email": "suresh.prabhu@mumbai.org",
     "avatarUrl": "",
     "status": "active",
-    "topics": ["Self-Leadership", "Mindfulness"],
+    "topics": [
+      "Self-Leadership",
+      "Mindfulness"
+    ],
     "enrolledCourses": [
-      { "id": "course-3", "title": "Self-Leadership & Purposeful Living", "progress": 60 }
+      {
+        "id": "course-3",
+        "title": "Self-Leadership & Purposeful Living",
+        "progress": 60
+      }
     ],
     "enrolledEvents": [],
     "createdAt": "2026-09-25T11:00:00.000Z",
@@ -394,7 +555,10 @@
     "email": "lakshmi.narayanan@coimbatore.in",
     "avatarUrl": "",
     "status": "active",
-    "topics": ["Positive MindGym", "Emotional Wellness"],
+    "topics": [
+      "Positive MindGym",
+      "Emotional Wellness"
+    ],
     "enrolledCourses": [],
     "enrolledEvents": [],
     "createdAt": "2026-09-20T14:15:00.000Z",
@@ -407,7 +571,9 @@
     "email": "abhishek.dubey@lucknow.com",
     "avatarUrl": "",
     "status": "inactive",
-    "topics": ["Doctoral Insights"],
+    "topics": [
+      "Doctoral Insights"
+    ],
     "enrolledCourses": [],
     "enrolledEvents": [],
     "createdAt": "2026-09-18T16:40:00.000Z",
@@ -420,9 +586,16 @@
     "email": "shweta.agarwal@noida.in",
     "avatarUrl": "",
     "status": "active",
-    "topics": ["Positive Parenting", "Daily Positive Wisdom"],
+    "topics": [
+      "Positive Parenting",
+      "Daily Positive Wisdom"
+    ],
     "enrolledCourses": [
-      { "id": "course-2", "title": "Positive Parenting & Family Well-being", "progress": 50 }
+      {
+        "id": "course-2",
+        "title": "Positive Parenting & Family Well-being",
+        "progress": 50
+      }
     ],
     "enrolledEvents": [],
     "createdAt": "2026-09-12T10:30:00.000Z",
@@ -435,12 +608,22 @@
     "email": "gautam.sen@calcutta.org",
     "avatarUrl": "",
     "status": "active",
-    "topics": ["Positive MindGym", "Cognitive Restructuring"],
+    "topics": [
+      "Positive MindGym",
+      "Cognitive Restructuring"
+    ],
     "enrolledCourses": [
-      { "id": "course-1", "title": "Foundation in Applied Positive Psychology (FAPP)", "progress": 75 }
+      {
+        "id": "course-1",
+        "title": "Foundation in Applied Positive Psychology (FAPP)",
+        "progress": 75
+      }
     ],
     "enrolledEvents": [
-      { "id": "event-2", "title": "Cognitive Clarity & Inner Resilience Workshop" }
+      {
+        "id": "event-2",
+        "title": "Cognitive Clarity & Inner Resilience Workshop"
+      }
     ],
     "createdAt": "2026-09-10T15:20:00.000Z",
     "updatedAt": "2026-09-10T15:20:00.000Z"
@@ -452,7 +635,9 @@
     "email": "ritu.singhania@delhi.org",
     "avatarUrl": "",
     "status": "active",
-    "topics": ["Daily Positive Wisdom"],
+    "topics": [
+      "Daily Positive Wisdom"
+    ],
     "enrolledCourses": [],
     "enrolledEvents": [],
     "createdAt": "2026-09-05T09:40:00.000Z",
@@ -465,9 +650,16 @@
     "email": "balaram.naidu@vizag.in",
     "avatarUrl": "",
     "status": "active",
-    "topics": ["Mindfulness", "Self-Leadership"],
+    "topics": [
+      "Mindfulness",
+      "Self-Leadership"
+    ],
     "enrolledCourses": [
-      { "id": "course-3", "title": "Self-Leadership & Purposeful Living", "progress": 85 }
+      {
+        "id": "course-3",
+        "title": "Self-Leadership & Purposeful Living",
+        "progress": 85
+      }
     ],
     "enrolledEvents": [],
     "createdAt": "2026-08-28T11:50:00.000Z",
@@ -480,7 +672,9 @@
     "email": "archana.b@kolkata.net",
     "avatarUrl": "",
     "status": "inactive",
-    "topics": ["Emotional Wellness"],
+    "topics": [
+      "Emotional Wellness"
+    ],
     "enrolledCourses": [],
     "enrolledEvents": [],
     "createdAt": "2026-08-15T13:10:00.000Z",
@@ -493,12 +687,22 @@
     "email": "vinay.kulkarni@pune.ac.in",
     "avatarUrl": "",
     "status": "active",
-    "topics": ["Doctoral Insights", "Research & Methodology"],
+    "topics": [
+      "Doctoral Insights",
+      "Research & Methodology"
+    ],
     "enrolledCourses": [
-      { "id": "course-1", "title": "Foundation in Applied Positive Psychology (FAPP)", "progress": 100 }
+      {
+        "id": "course-1",
+        "title": "Foundation in Applied Positive Psychology (FAPP)",
+        "progress": 100
+      }
     ],
     "enrolledEvents": [
-      { "id": "event-3", "title": "Doctoral Positive Psychology Symposium" }
+      {
+        "id": "event-3",
+        "title": "Doctoral Positive Psychology Symposium"
+      }
     ],
     "createdAt": "2026-08-01T10:05:00.000Z",
     "updatedAt": "2026-08-01T10:05:00.000Z"
@@ -510,10 +714,16 @@
     "email": "pranathi.reddy@hyderabad.co",
     "avatarUrl": "",
     "status": "active",
-    "topics": ["Positive MindGym", "Mindfulness"],
+    "topics": [
+      "Positive MindGym",
+      "Mindfulness"
+    ],
     "enrolledCourses": [],
     "enrolledEvents": [
-      { "id": "event-1", "title": "Positive MindGym Experiential Circle" }
+      {
+        "id": "event-1",
+        "title": "Positive MindGym Experiential Circle"
+      }
     ],
     "createdAt": "2026-07-25T16:00:00.000Z",
     "updatedAt": "2026-07-25T16:00:00.000Z"

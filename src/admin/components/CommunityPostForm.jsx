@@ -15,7 +15,8 @@ import {
   Clock,
   Sparkles,
   Link as LinkIcon,
-  ArrowLeft
+  ArrowLeft,
+  Lock
 } from 'lucide-react';
 import { communityAdminService } from '../services/communityAdminService';
 import { useAdminAuth } from '../context/AdminAuthContext';
@@ -60,16 +61,48 @@ function istInputToIso(val) {
   return !isNaN(fallback.getTime()) ? fallback.toISOString() : null;
 }
 
+const DEFAULT_TAGS = [
+  'Daily Positive Wisdom',
+  'Life Reflections',
+  'Positive MindGym',
+  'Mind Training',
+  'Spiritual Wisdom',
+  'Emotional Wellness',
+  'Doctoral Insights',
+  'Workshops & Events',
+  'Community Announcement'
+];
+
 export default function CommunityPostForm({ initialData = null, onSubmit, isSubmitting = false }) {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
   const { currentUser } = useAdminAuth();
 
+  const [availableTags, setAvailableTags] = useState(() => {
+    let base = [...DEFAULT_TAGS];
+    try {
+      const saved = localStorage.getItem('ellangala_community_custom_tags');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          base = Array.from(new Set([...base, ...parsed]));
+        }
+      }
+    } catch (_) {}
+    if (initialData?.categoryName && !base.includes(initialData.categoryName)) {
+      base.push(initialData.categoryName);
+    }
+    return base;
+  });
+
+  const [isAddingTag, setIsAddingTag] = useState(false);
+  const [newTagInput, setNewTagInput] = useState('');
+
   const [formData, setFormData] = useState({
     title: '',
     content: '',
-    categoryId: '',
-    categoryName: '',
+    categoryId: initialData?.categoryId || 'cat-wisdom',
+    categoryName: initialData?.categoryName || 'Daily Positive Wisdom',
     authorName: initialData?.authorName || currentUser?.name || 'Dr. Naveen Ellangala',
     authorRole: initialData?.authorRole || currentUser?.role || 'Founder & Positive Psychologist',
     authorAvatar: initialData?.authorAvatar !== undefined ? initialData.authorAvatar : (currentUser?.avatar || ''),
@@ -195,35 +228,26 @@ export default function CommunityPostForm({ initialData = null, onSubmit, isSubm
     });
   };
 
-  const handleCategoryChange = (e) => {
-    const catId = e.target.value;
-    const catObj = categories.find(c => c.id === catId);
+  const handleAddNewTag = () => {
+    const trimmed = newTagInput.trim();
+    if (!trimmed) return;
+    if (!availableTags.includes(trimmed)) {
+      const updated = [...availableTags, trimmed];
+      setAvailableTags(updated);
+      try {
+        localStorage.setItem('ellangala_community_custom_tags', JSON.stringify(updated));
+      } catch (_) {}
+    }
+    const tagSlug = 'tag-' + trimmed.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
     setFormData(prev => ({
       ...prev,
-      categoryId: catId,
-      categoryName: catObj ? catObj.name : ''
+      categoryName: trimmed,
+      categoryId: tagSlug
     }));
+    setNewTagInput('');
+    setIsAddingTag(false);
   };
 
-  const handleCourseChange = (e) => {
-    const slug = e.target.value;
-    const courseObj = courses.find(c => c.slug === slug);
-    setFormData(prev => ({
-      ...prev,
-      relatedCourseSlug: slug,
-      relatedCourseTitle: courseObj ? courseObj.title : ''
-    }));
-  };
-
-  const handleEventChange = (e) => {
-    const evtId = e.target.value;
-    const evtObj = events.find(ev => ev.id === evtId);
-    setFormData(prev => ({
-      ...prev,
-      relatedEventId: evtId,
-      relatedEventTitle: evtObj ? evtObj.title : ''
-    }));
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -263,6 +287,9 @@ export default function CommunityPostForm({ initialData = null, onSubmit, isSubm
 
     const payload = {
       ...formData,
+      categoryId: formData.categoryId || 'cat-mindgym',
+      categoryName: formData.categoryName || 'Positive MindGym',
+      authorName: 'Dr. Naveen Ellangala',
       mediaUrls: finalMedia,
       aspectRatio: formData.aspectRatio || '16:9',
       scheduledFor: formData.status === 'scheduled' && formData.scheduledFor
@@ -377,14 +404,167 @@ export default function CommunityPostForm({ initialData = null, onSubmit, isSubm
               </div>
 
               <div>
-                <label className="admin-label">Author Name</label>
-                <input
-                  type="text"
-                  value={formData.authorName}
-                  onChange={(e) => setFormData(prev => ({ ...prev, authorName: e.target.value }))}
-                  placeholder="Dr. Naveen Ellangala"
-                  className="admin-input"
-                />
+                <label className="admin-label" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
+                  <span>Author Name</span>
+                  <span style={{ fontSize: '11px', color: '#64748B', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                    <Lock size={12} color="#64748B" /> Permanent (Locked)
+                  </span>
+                </label>
+                <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                  <input
+                    type="text"
+                    readOnly
+                    disabled
+                    value={formData.authorName || 'Dr. Naveen Ellangala'}
+                    className="admin-input"
+                    style={{
+                      background: '#F1F5F9',
+                      color: '#334155',
+                      cursor: 'not-allowed',
+                      borderColor: '#CBD5E1',
+                      paddingRight: '36px',
+                      fontWeight: 600,
+                      userSelect: 'none'
+                    }}
+                  />
+                  <Lock
+                    size={16}
+                    color="#94A3B8"
+                    style={{ position: 'absolute', right: '12px', pointerEvents: 'none' }}
+                  />
+                </div>
+                <span style={{ fontSize: '11px', color: '#94A3B8', marginTop: '4px', display: 'block' }}>
+                  Official author identity is permanently locked to Dr. Naveen Ellangala.
+                </span>
+              </div>
+
+              {/* Post Tag / Topic Selector */}
+              <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                  <label className="admin-label" style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span>Post Tag / Topic</span>
+                    <span style={{ fontSize: '11px', color: '#CA8A38', fontWeight: 600 }}>
+                      (Appears on feed)
+                    </span>
+                  </label>
+                  {!isAddingTag && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsAddingTag(true);
+                        setNewTagInput('');
+                      }}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        color: '#CA8A38',
+                        fontSize: '12px',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '4px',
+                        padding: 0
+                      }}
+                    >
+                      <Plus size={13} /> Add New Tag
+                    </button>
+                  )}
+                </div>
+
+                {!isAddingTag ? (
+                  <div>
+                    <select
+                      className="admin-input"
+                      value={formData.categoryName || 'Daily Positive Wisdom'}
+                      onChange={(e) => {
+                        if (e.target.value === '__add_new__') {
+                          setIsAddingTag(true);
+                          setNewTagInput('');
+                        } else {
+                          const val = e.target.value;
+                          const tagSlug = 'tag-' + val.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+                          setFormData(prev => ({
+                            ...prev,
+                            categoryName: val,
+                            categoryId: tagSlug
+                          }));
+                        }
+                      }}
+                      style={{ height: '44px', fontWeight: 600, color: '#1E293B' }}
+                    >
+                      {availableTags.map(tag => (
+                        <option key={tag} value={tag}>{tag}</option>
+                      ))}
+                      <option value="__add_new__">+ Add New Tag...</option>
+                    </select>
+                  </div>
+                ) : (
+                  <div style={{
+                    display: 'flex',
+                    gap: '8px',
+                    alignItems: 'center',
+                    padding: '8px 12px',
+                    background: '#FFFDF9',
+                    border: '1px solid #FDE68A',
+                    borderRadius: '8px'
+                  }}>
+                    <input
+                      type="text"
+                      autoFocus
+                      className="admin-input"
+                      value={newTagInput}
+                      onChange={(e) => setNewTagInput(e.target.value)}
+                      placeholder="e.g. Life Reflections, Daily Positive Wisdom..."
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          handleAddNewTag();
+                        } else if (e.key === 'Escape') {
+                          setIsAddingTag(false);
+                          setNewTagInput('');
+                        }
+                      }}
+                      style={{ height: '38px', flex: 1, background: '#FFFFFF' }}
+                    />
+                    <button
+                      type="button"
+                      onClick={handleAddNewTag}
+                      className="btn-primary-gold"
+                      style={{
+                        padding: '8px 14px',
+                        fontSize: '12px',
+                        fontWeight: 700,
+                        borderRadius: '6px',
+                        whiteSpace: 'nowrap'
+                      }}
+                    >
+                      Save Tag
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsAddingTag(false);
+                        setNewTagInput('');
+                      }}
+                      style={{
+                        padding: '8px 12px',
+                        fontSize: '12px',
+                        fontWeight: 600,
+                        color: '#64748B',
+                        background: '#F1F5F9',
+                        border: 'none',
+                        borderRadius: '6px',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                )}
+                <span style={{ fontSize: '11px', color: '#94A3B8', marginTop: '4px', display: 'block' }}>
+                  Displays on the feed card next to timestamp: "2 days ago • {formData.categoryName || 'Daily Positive Wisdom'}"
+                </span>
               </div>
 
               <div>
@@ -396,12 +576,20 @@ export default function CommunityPostForm({ initialData = null, onSubmit, isSubm
                 </div>
                 <textarea
                   required
-                  rows={8}
+                  rows={9}
                   value={formData.content}
                   onChange={(e) => setFormData(prev => ({ ...prev, content: e.target.value }))}
                   placeholder="Share thoughtful positive psychology wisdom, quotes, or community announcements..."
-                  className="admin-input"
-                  style={{ lineHeight: '1.6', fontFamily: 'inherit' }}
+                  className="admin-textarea"
+                  style={{
+                    minHeight: '220px',
+                    height: 'auto',
+                    padding: '14px 16px',
+                    lineHeight: '1.6',
+                    fontFamily: 'inherit',
+                    fontSize: '14px',
+                    resize: 'vertical'
+                  }}
                 />
               </div>
             </div>
@@ -782,74 +970,6 @@ export default function CommunityPostForm({ initialData = null, onSubmit, isSubm
                   onChange={(e) => setFormData(prev => ({ ...prev, isPinned: e.target.checked }))}
                   style={{ width: '18px', height: '18px', cursor: 'pointer', accentColor: '#CA8A38' }}
                 />
-              </div>
-            </div>
-          </div>
-
-          {/* Card 4: Category Channel */}
-          <div className="admin-card">
-            <div className="admin-card__header">
-              <div>
-                <div className="admin-card__title">Category Channel</div>
-                <div className="admin-card__sub">Organize by community focus topic</div>
-              </div>
-            </div>
-
-            <div className="admin-card__body">
-              <label className="admin-label">
-                Select Channel <span style={{ color: '#EF4444' }}>*</span>
-              </label>
-              <select
-                className="admin-input"
-                value={formData.categoryId}
-                onChange={handleCategoryChange}
-                required
-              >
-                {categories.map(c => (
-                  <option key={c.id} value={c.id}>{c.name}</option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          {/* Card 5: Curriculum & Event Association */}
-          <div className="admin-card">
-            <div className="admin-card__header">
-              <div>
-                <div className="admin-card__title">Curriculum &amp; Event Links</div>
-                <div className="admin-card__sub">Optional academy workshop and course cross-linking</div>
-              </div>
-            </div>
-
-            <div className="admin-card__body" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <div>
-                <label className="admin-label">Related Course Program</label>
-                <select
-                  className="admin-input"
-                  value={formData.relatedCourseSlug}
-                  onChange={handleCourseChange}
-                >
-                  <option value="">— None (General Post) —</option>
-                  {courses.map(c => (
-                    <option key={c.slug} value={c.slug}>{c.title}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="admin-label">Related Scheduled Workshop</label>
-                <select
-                  className="admin-input"
-                  value={formData.relatedEventId}
-                  onChange={handleEventChange}
-                >
-                  <option value="">— None (No Event Link) —</option>
-                  {events.map(ev => (
-                    <option key={ev.id} value={ev.id}>
-                      {ev.title} {ev.date ? `(${ev.date})` : ''}
-                    </option>
-                  ))}
-                </select>
               </div>
             </div>
           </div>

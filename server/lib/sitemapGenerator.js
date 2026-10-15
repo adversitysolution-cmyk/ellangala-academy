@@ -3,6 +3,7 @@ import { getStore } from '../db/store.js';
 import { shopContent } from '../../src/contents/shop.content.js';
 import { programsData } from '../../src/contents/programsData.content.js';
 import { blogContent } from '../../src/contents/blog.content.js';
+import { getCommunityPosts } from '../db/communityStore.js';
 
 let cachedXml = null;
 let lastCacheTime = 0;
@@ -78,6 +79,7 @@ export async function getDynamicSitemapXml() {
     { loc: `${baseDomain}/resources/meditation`, priority: '0.8', changefreq: 'weekly' },
     { loc: `${baseDomain}/resources/free-downloads`, priority: '0.8', changefreq: 'weekly' },
     { loc: `${baseDomain}/events`, priority: '0.9', changefreq: 'daily' },
+    { loc: `${baseDomain}/feed`, priority: '0.9', changefreq: 'daily' },
     { loc: `${baseDomain}/blog`, priority: '0.85', changefreq: 'weekly' },
     { loc: `${baseDomain}/insights`, priority: '0.85', changefreq: 'weekly' },
     { loc: `${baseDomain}/contact`, priority: '0.8', changefreq: 'monthly' },
@@ -104,6 +106,7 @@ export async function getDynamicSitemapXml() {
   // 4. Dynamic Published Events from DB
   let eventUrls = [];
   let blogUrls = [];
+  let communityUrls = [];
 
   try {
     const store = await getStore();
@@ -129,6 +132,20 @@ export async function getDynamicSitemapXml() {
     console.warn('⚠️ Sitemap generator using static fallback for events/blogs:', err.message);
   }
 
+  // 4b. Dynamic Community Posts from DB / Store
+  try {
+    const commData = await getCommunityPosts({ limit: 100, status: 'published' });
+    const posts = commData?.posts || [];
+    communityUrls = posts.map(p => ({
+      loc: `${baseDomain}/feed/posts/${p.slug || p.id}`,
+      lastmod: p.updatedAt || p.publishedAt || p.createdAt,
+      changefreq: 'weekly',
+      priority: '0.85'
+    }));
+  } catch (err) {
+    console.warn('⚠️ Sitemap generator community posts fallback:', err.message);
+  }
+
   // 5. Fallback Static Blogs if DB has no blogs
   if (blogUrls.length === 0 && blogContent?.list?.posts) {
     blogUrls = blogContent.list.posts.map(post => ({
@@ -143,7 +160,8 @@ export async function getDynamicSitemapXml() {
     ...programRoutes,
     ...productRoutes,
     ...eventUrls,
-    ...blogUrls
+    ...blogUrls,
+    ...communityUrls
   ];
 
   cachedXml = generateSitemapXml(allUrls);

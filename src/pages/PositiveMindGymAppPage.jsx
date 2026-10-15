@@ -10,6 +10,7 @@ import ScrollToTop from '../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../hooks/useUterpyPlugins';
 import { homeContent } from '../contents/home.content';
 import TestimonialsSection from '../components/common/TestimonialsSection';
+import SEO from '../seo/SEO';
 
 import imgDailyWorkout from '../Images/POSITIVE MINDGYM APP/WhatsApp Image 2026-08-18 at 9.58.46 PM (1).jpeg';
 import imgHomeMindScore from '../Images/POSITIVE MINDGYM APP/WhatsApp Image 2026-08-18 at 9.58.46 PM.jpeg';
@@ -3879,6 +3880,11 @@ export default function PositiveMindGymAppPage() {
       <Preloader />
 
       <div className="page-wrapper" style={{ fontFamily: 'Outfit, sans-serif' }}>
+        <SEO
+          title="Positive MindGym App | Daily Mind Training, EQ & SQ | Ellangala’s Academy"
+          description="Transform your daily mental fitness with the Positive MindGym mobile app. Practice guided mindfulness, box breathing, daily affirmations, and mental hygiene habits."
+          canonical="/mindgym/app"
+        />
         <HeaderOne />
         <Hero />
         <HowItWorks />
@@ -3887,7 +3893,7 @@ export default function PositiveMindGymAppPage() {
         <WhyChooseUs />
         <TestimonialsSection />
         <FAQ />
-        <FooterOne />
+        <FooterOne hideFaq={true} />
       </div>
 
       <MobileNav />
