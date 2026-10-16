@@ -56,5 +56,17 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     sourcemap: false,
+    chunkSizeWarningLimit: 1000,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules/xlsx')) return 'vendor-xlsx';
+          if (id.includes('node_modules/pdf-lib') || id.includes('node_modules/@pdf-lib') || id.includes('node_modules/pdfkit')) return 'vendor-pdf';
+          if (id.includes('node_modules/react-quill-new') || id.includes('node_modules/quill')) return 'vendor-quill';
+          if (id.includes('node_modules/lucide-react')) return 'vendor-lucide';
+          if (id.includes('node_modules/react/') || id.includes('node_modules/react-dom/') || id.includes('node_modules/react-router') || id.includes('node_modules/react-helmet-async')) return 'vendor-react-core';
+        }
+      }
+    }
   },
 });

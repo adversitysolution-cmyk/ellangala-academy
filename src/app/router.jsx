@@ -2,27 +2,29 @@ import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 
 import HomeOne from '../pages/HomeOne';
-import About from '../pages/About';
-import PositiveWorkshops from '../pages/PositiveWorkshops';
-import PositiveMentoring from '../pages/PositiveMentoring';
-import MindGymPage from '../pages/MindGymPage';
-import PositiveMindGymAppPage from '../pages/PositiveMindGymAppPage';
-import ServicesDetails from '../pages/ServicesDetails';
-import FounderPage from '../pages/FounderPage';
-import BlogList from '../pages/BlogList';
-import BlogDetails from '../pages/BlogDetails';
-import Shop from '../pages/Shop';
-import ShopDetails from '../pages/ShopDetails';
-import Cart from '../pages/Cart';
-import Checkout from '../pages/Checkout';
-import FAQ from '../pages/FAQ';
-import Contact from '../pages/Contact';
-import Error404 from '../pages/Error404';
-import VideosOnTalksPage from '../pages/VideosOnTalksPage';
-import MeditationMusicPage from '../pages/MeditationMusicPage';
-import FreeResourcesPage from '../pages/FreeResourcesPage';
-import TrackOrderPage from '../pages/TrackOrderPage';
-import VerifyCertificate from '../pages/VerifyCertificate';
+
+// Secondary Public Pages (Lazy Loaded)
+const About = React.lazy(() => import('../pages/About'));
+const PositiveWorkshops = React.lazy(() => import('../pages/PositiveWorkshops'));
+const PositiveMentoring = React.lazy(() => import('../pages/PositiveMentoring'));
+const MindGymPage = React.lazy(() => import('../pages/MindGymPage'));
+const PositiveMindGymAppPage = React.lazy(() => import('../pages/PositiveMindGymAppPage'));
+const ServicesDetails = React.lazy(() => import('../pages/ServicesDetails'));
+const FounderPage = React.lazy(() => import('../pages/FounderPage'));
+const BlogList = React.lazy(() => import('../pages/BlogList'));
+const BlogDetails = React.lazy(() => import('../pages/BlogDetails'));
+const Shop = React.lazy(() => import('../pages/Shop'));
+const ShopDetails = React.lazy(() => import('../pages/ShopDetails'));
+const Cart = React.lazy(() => import('../pages/Cart'));
+const Checkout = React.lazy(() => import('../pages/Checkout'));
+const FAQ = React.lazy(() => import('../pages/FAQ'));
+const Contact = React.lazy(() => import('../pages/Contact'));
+const Error404 = React.lazy(() => import('../pages/Error404'));
+const VideosOnTalksPage = React.lazy(() => import('../pages/VideosOnTalksPage'));
+const MeditationMusicPage = React.lazy(() => import('../pages/MeditationMusicPage'));
+const FreeResourcesPage = React.lazy(() => import('../pages/FreeResourcesPage'));
+const TrackOrderPage = React.lazy(() => import('../pages/TrackOrderPage'));
+const VerifyCertificate = React.lazy(() => import('../pages/VerifyCertificate'));
 
 // Layout & Context
 import MobileNav from '../components/layout/MobileNav';
@@ -32,49 +34,49 @@ import EnrollModal from '../components/common/EnrollModal';
 import { CommunityAuthProvider } from '../features/community/context/CommunityAuthContext';
 import CommunityAuthModal from '../features/community/components/CommunityAuthModal';
 
-// Admin System Imports
+// Admin System Imports (Lazy Loaded)
 import { AdminAuthProvider } from '../admin/context/AdminAuthContext';
 import AdminProtectedRoute from '../admin/components/AdminProtectedRoute';
-import AdminLoginPage from '../admin/pages/AdminLoginPage';
-import AdminDashboardPage from '../admin/pages/AdminDashboardPage';
-import AdminNotificationsPage from '../admin/pages/AdminNotificationsPage';
-import AdminUsersPage from '../admin/pages/AdminUsersPage';
-import EnrollmentListPage from '../admin/pages/EnrollmentListPage';
-import EnrollmentDetailPage from '../admin/pages/EnrollmentDetailPage';
-import OrderListPage from '../admin/pages/OrderListPage';
-import OrderDetailPage from '../admin/pages/OrderDetailPage';
+const AdminLoginPage = React.lazy(() => import('../admin/pages/AdminLoginPage'));
+const AdminDashboardPage = React.lazy(() => import('../admin/pages/AdminDashboardPage'));
+const AdminNotificationsPage = React.lazy(() => import('../admin/pages/AdminNotificationsPage'));
+const AdminUsersPage = React.lazy(() => import('../admin/pages/AdminUsersPage'));
+const EnrollmentListPage = React.lazy(() => import('../admin/pages/EnrollmentListPage'));
+const EnrollmentDetailPage = React.lazy(() => import('../admin/pages/EnrollmentDetailPage'));
+const OrderListPage = React.lazy(() => import('../admin/pages/OrderListPage'));
+const OrderDetailPage = React.lazy(() => import('../admin/pages/OrderDetailPage'));
 
-// Events Module Imports
-import EventsPage from '../features/events/pages/EventsPage';
-import EventDetailsPage from '../features/events/pages/EventDetailsPage';
-import EventRegisterPage from '../features/events/pages/EventRegisterPage';
+// Events Module Imports (Lazy Loaded)
+const EventsPage = React.lazy(() => import('../features/events/pages/EventsPage'));
+const EventDetailsPage = React.lazy(() => import('../features/events/pages/EventDetailsPage'));
+const EventRegisterPage = React.lazy(() => import('../features/events/pages/EventRegisterPage'));
 
-// Community Module Imports
-import CommunityFeedPage from '../features/community/pages/CommunityFeedPage';
-import EventListPage from '../admin/pages/EventListPage';
-import EventCreatePage from '../admin/pages/EventCreatePage';
-import EventEditPage from '../admin/pages/EventEditPage';
-import EventRegistrationsPage from '../admin/pages/EventRegistrationsPage';
-import EventCertificatesPage from '../admin/pages/EventCertificatesPage';
-import CertificateImportPage from '../admin/pages/CertificateImportPage';
-import CertificateBatchPage from '../admin/pages/CertificateBatchPage';
-import CertificateTemplatesPage from '../admin/pages/CertificateTemplatesPage';
+// Community Module Imports (Lazy Loaded)
+const CommunityFeedPage = React.lazy(() => import('../features/community/pages/CommunityFeedPage'));
+const EventListPage = React.lazy(() => import('../admin/pages/EventListPage'));
+const EventCreatePage = React.lazy(() => import('../admin/pages/EventCreatePage'));
+const EventEditPage = React.lazy(() => import('../admin/pages/EventEditPage'));
+const EventRegistrationsPage = React.lazy(() => import('../admin/pages/EventRegistrationsPage'));
+const EventCertificatesPage = React.lazy(() => import('../admin/pages/EventCertificatesPage'));
+const CertificateImportPage = React.lazy(() => import('../admin/pages/CertificateImportPage'));
+const CertificateBatchPage = React.lazy(() => import('../admin/pages/CertificateBatchPage'));
+const CertificateTemplatesPage = React.lazy(() => import('../admin/pages/CertificateTemplatesPage'));
 
-// Admin Blogs Module Imports
-import BlogListPage from '../admin/pages/BlogListPage';
-import BlogCreatePage from '../admin/pages/BlogCreatePage';
-import BlogEditPage from '../admin/pages/BlogEditPage';
+// Admin Blogs Module Imports (Lazy Loaded)
+const BlogListPage = React.lazy(() => import('../admin/pages/BlogListPage'));
+const BlogCreatePage = React.lazy(() => import('../admin/pages/BlogCreatePage'));
+const BlogEditPage = React.lazy(() => import('../admin/pages/BlogEditPage'));
 
-// Admin Community Module Imports
-import CommunityAdminPage from '../admin/pages/CommunityAdminPage';
-import CommunityPostCreatePage from '../admin/pages/CommunityPostCreatePage';
-import CommunityPostEditPage from '../admin/pages/CommunityPostEditPage';
+// Admin Community Module Imports (Lazy Loaded)
+const CommunityAdminPage = React.lazy(() => import('../admin/pages/CommunityAdminPage'));
+const CommunityPostCreatePage = React.lazy(() => import('../admin/pages/CommunityPostCreatePage'));
+const CommunityPostEditPage = React.lazy(() => import('../admin/pages/CommunityPostEditPage'));
 
-// Admin Products Module Imports
-import ProductListPage from '../admin/pages/ProductListPage';
-import CouponListPage from '../admin/pages/CouponListPage';
-import ProductCreatePage from '../admin/pages/ProductCreatePage';
-import ProductEditPage from '../admin/pages/ProductEditPage';
+// Admin Products Module Imports (Lazy Loaded)
+const ProductListPage = React.lazy(() => import('../admin/pages/ProductListPage'));
+const CouponListPage = React.lazy(() => import('../admin/pages/CouponListPage'));
+const ProductCreatePage = React.lazy(() => import('../admin/pages/ProductCreatePage'));
+const ProductEditPage = React.lazy(() => import('../admin/pages/ProductEditPage'));
 
 function ScrollToTopOnRoute() {
   const { pathname, hash } = useLocation();
@@ -106,7 +108,8 @@ export default function AppRouter() {
               <MobileNav />
               <EnrollModal />
               <CommunityAuthModal />
-              <Routes>
+              <React.Suspense fallback={null}>
+                <Routes>
               {/* Core Public Pages */}
               <Route path="/" element={<HomeOne />} />
 
@@ -481,6 +484,7 @@ export default function AppRouter() {
               {/* 404 Fallback */}
               <Route path="*" element={<Error404 />} />
             </Routes>
+          </React.Suspense>
           </MobileNavProvider>
         </EnrollModalProvider>
         </CommunityAuthProvider>

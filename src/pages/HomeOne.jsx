@@ -185,7 +185,7 @@ export default function HomeOne() {
                     <div className="services-one__single-img">
                       <div className="inner">
                         <Link to={svc.link} style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          <img src={svc.image} alt={svc.title} />
+                          <img src={svc.image} alt={svc.title} loading="lazy" decoding="async" />
                         </Link>
                       </div>
                       <div className="services-one__single-img-icon">
@@ -248,7 +248,7 @@ export default function HomeOne() {
                     <img src="/assets/images/shapes/why-choose-v1-shape2.png" alt="#" />
                   </div>
                   <div className="why-choose-one__img1">
-                    <img src="/assets/images/resources/why-choose-v1-img1.png" alt="Why Choose Ellangala Academy" />
+                    <img src="/assets/images/resources/why-choose-v1-img1.png" alt="Why Choose Ellangala Academy" loading="lazy" decoding="async" />
                   </div>
                 </div>
               </div>
@@ -388,6 +388,8 @@ export default function HomeOne() {
                           <img
                             src={cs.image}
                             alt={cs.title}
+                            loading="lazy"
+                            decoding="async"
                             style={{
                               width: '100%',
                               height: '100%',
@@ -502,7 +504,7 @@ export default function HomeOne() {
                 style={{ backgroundImage: 'url(/assets/images/backgrounds/therapy-v1-bg.jpg)' }}
               ></div>
               <div className="therapy-one__img1 wow slideInRight" data-wow-delay="100ms" data-wow-duration="2500ms">
-                <img src="/assets/images/resources/therapy-v1-img1.png" alt="#" />
+                <img src="/assets/images/resources/therapy-v1-img1.png" alt="#" loading="lazy" decoding="async" />
               </div>
               <div className="shape1"></div>
               <div className="shape2"></div>
@@ -631,6 +633,8 @@ export default function HomeOne() {
                         <img
                           src={post.image}
                           alt={post.title}
+                          loading="lazy"
+                          decoding="async"
                           style={{ width: '100%', height: '360px', objectFit: 'cover' }}
                         />
                       </div>

@@ -109,9 +109,36 @@ app.use((req, res, next) => {
 // 4. Serve Static Assets from Dist (Production) + public assets + persistent uploaded images
 const distDir = path.join(rootDir, 'dist');
 const publicDir = path.join(rootDir, 'public');
-app.use(express.static(distDir));
-app.use(express.static(publicDir));
-app.use('/uploads', express.static(uploadsDir));
+
+// 4a. Hashed Vite bundles in dist/assets -> cache for 1 year immutable
+app.use('/assets', express.static(path.join(distDir, 'assets'), {
+  maxAge: '1y',
+  immutable: true
+}));
+
+// 4b. Standard production dist assets
+app.use(express.static(distDir, {
+  maxAge: '1d',
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith('.html')) {
+      res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+    }
+  }
+}));
+
+// 4c. Public static directory (images, favicons, fonts)
+app.use(express.static(publicDir, {
+  maxAge: '30d',
+  setHeaders: (res, filePath) => {
+    if (/\.(jpg|jpeg|png|webp|avif|svg|ico|woff|woff2|ttf)$/i.test(filePath)) {
+      res.setHeader('Cache-Control', 'public, max-age=2592000, stale-while-revalidate=86400');
+    }
+  }
+}));
+
+app.use('/uploads', express.static(uploadsDir, {
+  maxAge: '7d'
+}));
 // NOTE: certificate PDFs in certificatesDir are deliberately NOT served statically —
 // access only via token-gated /api/certificates/file/:token or admin download.
 
@@ -146,6 +173,7 @@ app.get('*', async (req, res) => {
     }
 
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
     if (pageMeta.is404) {
       res.status(404).send(finalHtml);
     } else {
