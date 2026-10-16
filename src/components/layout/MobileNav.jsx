@@ -27,7 +27,12 @@ export default function MobileNav() {
         <div className="mobile-nav__header-bar">
           <div className="logo-box">
             <Link to="/" onClick={handleClose} aria-label="logo image">
-              <img src="/assets/images/resources/logo-1.png" alt="Ellangala's Academy Logo" style={{ maxHeight: '60px', width: 'auto' }} />
+              <img
+                src="/assets/images/resources/logo-1.webp"
+                onError={(e) => { e.currentTarget.src = '/assets/images/resources/logo-1.png'; }}
+                alt="Ellangala's Academy Logo"
+                style={{ maxHeight: '60px', width: 'auto', display: 'block' }}
+              />
             </Link>
           </div>
           <span className="mobile-nav__close" onClick={handleClose} aria-label="Close menu">

@@ -17,7 +17,7 @@ export default function Preloader() {
       <div
         className="preloader__image"
         style={{
-          backgroundImage: 'url(/assets/images/resources/ellangalas-logo.png)',
+          backgroundImage: 'url(/assets/images/resources/ellangalas-logo.webp)',
           backgroundSize: '160px auto',
           backgroundPosition: 'center center',
           backgroundRepeat: 'no-repeat',

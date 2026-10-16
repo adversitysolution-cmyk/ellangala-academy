@@ -138,7 +138,7 @@ export default function HomeOne() {
         <section className="intro-one">
           <div
             className="intro-one__pattern"
-            style={{ backgroundImage: 'url(/assets/images/pattern/intro-v1-pattern.jpg)' }}
+            style={{ backgroundImage: 'url(/assets/images/pattern/intro-v1-pattern.webp)' }}
           ></div>
           <div className="container">
             <ul className="row">
@@ -185,7 +185,13 @@ export default function HomeOne() {
                     <div className="services-one__single-img">
                       <div className="inner">
                         <Link to={svc.link} style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          <img src={svc.image} alt={svc.title} loading="lazy" decoding="async" />
+                          <img
+                            src={svc.image.replace(/\.(png|jpe?g)$/i, '.webp')}
+                            onError={(e) => { e.currentTarget.src = svc.image; }}
+                            alt={svc.title}
+                            loading="lazy"
+                            decoding="async"
+                          />
                         </Link>
                       </div>
                       <div className="services-one__single-img-icon">
@@ -248,7 +254,13 @@ export default function HomeOne() {
                     <img src="/assets/images/shapes/why-choose-v1-shape2.png" alt="#" />
                   </div>
                   <div className="why-choose-one__img1">
-                    <img src="/assets/images/resources/why-choose-v1-img1.png" alt="Why Choose Ellangala Academy" loading="lazy" decoding="async" />
+                    <img
+                      src="/assets/images/resources/why-choose-v1-img1.webp"
+                      onError={(e) => { e.currentTarget.src = '/assets/images/resources/why-choose-v1-img1.png'; }}
+                      alt="Why Choose Ellangala Academy"
+                      loading="lazy"
+                      decoding="async"
+                    />
                   </div>
                 </div>
               </div>
@@ -386,7 +398,8 @@ export default function HomeOne() {
                       <div className="case-one__single-img" style={{ position: 'relative', width: '100%', aspectRatio: '1 / 1', overflow: 'hidden', backgroundColor: '#FAF8F5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <Link to={cs.link} style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                           <img
-                            src={cs.image}
+                            src={cs.image.replace(/\.(png|jpe?g)$/i, '.webp')}
+                            onError={(e) => { e.currentTarget.src = cs.image; }}
                             alt={cs.title}
                             loading="lazy"
                             decoding="async"
@@ -455,7 +468,7 @@ export default function HomeOne() {
             <div className="counter-one__inner">
               <div
                 className="counter-one__inner-bg"
-                style={{ backgroundImage: 'url(/assets/images/backgrounds/counter-v1-bg.jpg)' }}
+                style={{ backgroundImage: 'url(/assets/images/backgrounds/counter-v1-bg.webp)' }}
               ></div>
               <div className="row">
                 {homeContent.counter.map((cnt, idx) => (
@@ -497,14 +510,33 @@ export default function HomeOne() {
             <div className="therapy-one__inner">
               <div
                 className="therapy-one__pattern"
-                style={{ backgroundImage: 'url(/assets/images/pattern/therapy-v1-pattern.png)' }}
+                style={{ backgroundImage: 'url(/assets/images/pattern/therapy-v1-pattern.webp)' }}
               ></div>
               <div
                 className="therapy-one__bg"
-                style={{ backgroundImage: 'url(/assets/images/backgrounds/therapy-v1-bg.jpg)' }}
+                style={{ backgroundImage: 'url(/assets/images/backgrounds/therapy-v1-bg.webp)' }}
               ></div>
-              <div className="therapy-one__img1 wow slideInRight" data-wow-delay="100ms" data-wow-duration="2500ms">
-                <img src="/assets/images/resources/therapy-v1-img1.png" alt="#" loading="lazy" decoding="async" />
+              <div
+                className="therapy-one__img1 wow slideInRight"
+                data-wow-delay="100ms"
+                data-wow-duration="2500ms"
+                style={{
+                  display: 'flex',
+                  alignItems: 'flex-end',
+                  justifyContent: 'flex-end',
+                  pointerEvents: 'none',
+                }}
+              >
+                <img
+                  src="/assets/images/resources/therapy-v1-img1.webp"
+                  onError={(e) => { e.currentTarget.src = '/assets/images/resources/therapy-v1-img1.png'; }}
+                  alt="Dr. Naveen Ellangala - Founder & Vision"
+                  loading="lazy"
+                  decoding="async"
+                  width="510"
+                  height="833"
+                  style={{ maxHeight: '833px', width: 'auto', maxWidth: '100%', objectFit: 'contain', display: 'block' }}
+                />
               </div>
               <div className="shape1"></div>
               <div className="shape2"></div>

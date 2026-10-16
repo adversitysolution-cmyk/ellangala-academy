@@ -89,7 +89,7 @@ export default function TestimonialsSection({ data }) {
       `}</style>
       <div
         className="testimonial-one__pattern"
-        style={{ backgroundImage: 'url(/assets/images/pattern/testimonial-v1-pattern1.png)' }}
+        style={{ backgroundImage: 'url(/assets/images/pattern/testimonial-v1-pattern1.webp)' }}
       ></div>
       <div className="carousel-control-block__outer">
         <div className="carousel-control-block">

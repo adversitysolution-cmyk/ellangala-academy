@@ -33,7 +33,7 @@ export const homeContent = {
       },
     },
     {
-      bgImage: "/assets/images/slider/slider-v1-img3.jpg",
+      bgImage: "/assets/images/slider/slider-v1-img3.webp",
       title: "Learn. Reflect. \nGrow with purpose \nevery day",
       subtitle: "Programs Designed for Meaningful Growth",
       primaryBtn: {

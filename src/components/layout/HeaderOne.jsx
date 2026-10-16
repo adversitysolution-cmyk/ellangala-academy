@@ -85,7 +85,12 @@ export default function HeaderOne() {
                   <div className="main-header-one__bottom-left">
                     <div className="logo-one">
                       <Link to="/">
-                        <img src="/assets/images/resources/logo-1.png" alt="Ellangala's Academy Logo" style={{ maxHeight: '72px', width: 'auto' }} />
+                        <img
+                          src="/assets/images/resources/logo-1.webp"
+                          onError={(e) => { e.currentTarget.src = '/assets/images/resources/logo-1.png'; }}
+                          alt="Ellangala's Academy Logo"
+                          style={{ maxHeight: '72px', width: 'auto', display: 'block' }}
+                        />
                       </Link>
                     </div>
 

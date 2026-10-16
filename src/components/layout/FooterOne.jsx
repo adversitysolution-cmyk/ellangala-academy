@@ -4,7 +4,7 @@ import { commonContent } from '../../contents/common.content';
 import SubscribeOne from '../common/SubscribeOne';
 import WhatsAppCommunitySection from '../common/WhatsAppCommunitySection';
 import FAQSection from '../common/FAQSection';
-import footerBgImg from '../../ChatGPT Image Aug 19, 2026, 06_31_05 PM.png';
+import footerBgImg from '../../ChatGPT Image Aug 19, 2026, 06_31_05 PM.webp';
 
 export default function FooterOne({ hideSubscribe = false, hideCommunity = false, hideFaq = false }) {
   const { footer } = commonContent;
@@ -32,7 +32,14 @@ export default function FooterOne({ hideSubscribe = false, hideCommunity = false
                 <div className="footer-widget__column footer-widget__about">
                   <div className="footer-widget__logo">
                     <Link to="/">
-                      <img src="/assets/images/resources/footer-logo.png" alt="Ellangala's Academy Logo" style={{ maxHeight: '95px', width: 'auto' }} />
+                      <img
+                        src="/assets/images/resources/footer-logo.webp"
+                        onError={(e) => { e.currentTarget.src = '/assets/images/resources/footer-logo.png'; }}
+                        alt="Ellangala's Academy Logo"
+                        loading="lazy"
+                        decoding="async"
+                        style={{ maxHeight: '95px', width: 'auto', display: 'block' }}
+                      />
                     </Link>
                   </div>
                   <div className="footer-widget__about-text-box">
