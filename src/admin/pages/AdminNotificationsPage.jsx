@@ -306,12 +306,13 @@ export default function AdminNotificationsPage() {
       )}
 
       {/* Metrics Row */}
-      <div className="admin-stats-grid" style={{ marginBottom: '24px' }}>
+      <div className="admin-stats-grid admin-grid admin-grid--4" style={{ marginBottom: '24px' }}>
         <StatCard
           title="Unread Activity"
           value={unreadCount}
           icon={Bell}
           color="#DC2626"
+          bgColor="#FEF2F2"
           subtitle="Awaiting your review"
         />
         <StatCard
@@ -319,6 +320,7 @@ export default function AdminNotificationsPage() {
           value={likesCommentsCount}
           icon={MessageSquare}
           color="#2563EB"
+          bgColor="#EFF6FF"
           subtitle="Feed & workshop engagement"
         />
         <StatCard
@@ -326,6 +328,7 @@ export default function AdminNotificationsPage() {
           value={registrationsCount}
           icon={UserPlus}
           color="#059669"
+          bgColor="#ECFDF5"
           subtitle="New seekers & students"
         />
         <StatCard
@@ -333,6 +336,7 @@ export default function AdminNotificationsPage() {
           value={ordersEnrollmentsCount}
           icon={ShoppingBag}
           color="#CA8A38"
+          bgColor="#FFF7E8"
           subtitle="Purchases & workshop seats"
         />
       </div>

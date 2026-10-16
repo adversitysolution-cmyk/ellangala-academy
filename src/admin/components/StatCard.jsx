@@ -1,14 +1,24 @@
 import React from 'react';
 
-export default function StatCard({ title, value, icon: Icon, color = '#CA8A38', bgColor = '#FFF7E8', subtext }) {
+export default function StatCard({
+  title,
+  value,
+  icon: Icon,
+  color = '#CA8A38',
+  bgColor = '#FFF7E8',
+  subtext,
+  subtitle,
+  subtextColor
+}) {
+  const note = subtext || subtitle;
   return (
     <div className="admin-stat-card">
       <div>
         <div className="admin-stat-card__val">{value}</div>
         <div className="admin-stat-card__lbl">{title}</div>
-        {subtext && (
-          <div style={{ fontSize: '12px', color: '#059669', fontWeight: '700', marginTop: '6px' }}>
-            {subtext}
+        {note && (
+          <div style={{ fontSize: '12px', color: subtextColor || (subtext ? '#059669' : '#64748B'), fontWeight: '500', marginTop: '6px' }}>
+            {note}
           </div>
         )}
       </div>
