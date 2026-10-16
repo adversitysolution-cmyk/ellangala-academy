@@ -4,7 +4,7 @@ import AdminLayout from '../components/AdminLayout';
 import StatCard from '../components/StatCard';
 import StatusBadge from '../components/StatusBadge';
 import ActionMenu from '../components/ActionMenu';
-import { eventService } from '../../features/events/services/eventService';
+import { eventService, formatEventTimeRange } from '../../features/events/services/eventService';
 import { enrollmentService } from '../services/enrollmentService';
 import { EVENT_CATEGORIES } from '../../features/events/data/eventSeedData';
 import {
@@ -335,7 +335,7 @@ export default function EventListPage() {
                               {formatDate(evt.date)}
                             </div>
                             <div style={{ fontSize: '12px', color: '#667085', marginTop: '2px' }}>
-                              {evt.startTime} – {evt.endTime}
+                              {formatEventTimeRange(evt.startTime, evt.endTime, evt.timeDisplay)}
                             </div>
                           </td>
 

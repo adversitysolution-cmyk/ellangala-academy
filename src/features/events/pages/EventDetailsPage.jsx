@@ -9,7 +9,7 @@ import MobileNav from '../../../components/layout/MobileNav';
 import SearchPopup from '../../../components/layout/SearchPopup';
 import ScrollToTop from '../../../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../../../hooks/useUterpyPlugins';
-import { eventService, isEventClosed } from '../services/eventService';
+import { eventService, isEventClosed, formatEventTimeRange } from '../services/eventService';
 import { initialEvents } from '../data/eventSeedData';
 import { useEnrollModal } from '../../../context/EnrollModalContext';
 import {
@@ -368,7 +368,7 @@ export default function EventDetailsPage() {
                         </tr>
                         <tr style={{ borderBottom: '1px solid #F1F5F9' }}>
                           <td style={{ padding: '12px 16px', fontWeight: '700', color: '#0F231B', backgroundColor: '#FAF8F5' }}>Time</td>
-                          <td style={{ padding: '12px 16px', color: '#334155' }}>{event.timeDisplay || `${event.startTime} – ${event.endTime}`}</td>
+                          <td style={{ padding: '12px 16px', color: '#334155' }}>{formatEventTimeRange(event.startTime, event.endTime, event.timeDisplay)}</td>
                         </tr>
                         <tr style={{ borderBottom: '1px solid #F1F5F9' }}>
                           <td style={{ padding: '12px 16px', fontWeight: '700', color: '#0F231B', backgroundColor: '#FAF8F5' }}>Language</td>
@@ -581,7 +581,7 @@ export default function EventDetailsPage() {
                         <div>
                           <div style={{ fontSize: '12px', fontWeight: '700', color: '#64748B', textTransform: 'uppercase' }}>Time</div>
                           <div style={{ fontSize: '14.5px', fontWeight: '700', color: '#0F231B', marginTop: '2px' }}>
-                            {event.timeDisplay || `${event.startTime} – ${event.endTime}`}
+                            {formatEventTimeRange(event.startTime, event.endTime, event.timeDisplay)}
                           </div>
                         </div>
                       </div>

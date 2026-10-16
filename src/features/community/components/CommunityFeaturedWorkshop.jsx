@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Clock, Monitor, ChevronRight, Calendar } from 'lucide-react';
+import { formatEventTimeRange } from '../../events/services/eventService';
 
 export default function CommunityFeaturedWorkshop({ event }) {
   let monthDisplay = event?.monthDisplay;
@@ -20,8 +21,8 @@ export default function CommunityFeaturedWorkshop({ event }) {
   }
 
   const detailUrl = event ? `/events/${event.slug || event.id}` : '/events';
-  const timeText = event?.timeDisplay || (event?.startTime ? `${event.startTime}${event?.endTime ? ` – ${event.endTime}` : ''}` : '6:30 PM – 7:30 PM (IST)');
-  const tagText = event?.featured ? 'FEATURED EVENT' : (event?.subtitle || event?.category || 'UPCOMING EVENT').toUpperCase();
+  const timeText = formatEventTimeRange(event?.startTime, event?.endTime, event?.timeDisplay) || 'TBA';
+  const tagText = event?.featured ? 'FEATURED EVENT' : (event?.category || event?.subtitle || 'UPCOMING EVENT').toUpperCase();
 
   return (
     <div className="community-workshop-alert-card">
@@ -37,9 +38,9 @@ export default function CommunityFeaturedWorkshop({ event }) {
         <div className="community-wa-body-row">
           <Link to={detailUrl} style={{ textDecoration: 'none' }}>
             <div className="community-wa-date-box" style={{ cursor: 'pointer' }}>
-              <span className="community-wa-date-month">{monthDisplay || 'OCT'}</span>
-              <span className="community-wa-date-day">{dayDisplay || '10'}</span>
-              <span className="community-wa-date-dow">{dayOfWeek || 'SAT'}</span>
+              <span className="community-wa-date-month">{monthDisplay || ''}</span>
+              <span className="community-wa-date-day">{dayDisplay || ''}</span>
+              <span className="community-wa-date-dow">{dayOfWeek || ''}</span>
             </div>
           </Link>
 

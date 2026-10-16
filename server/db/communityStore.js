@@ -1230,21 +1230,35 @@ export async function getCommunitySidebarData(channelId = 'all') {
     events = await getDbEvents();
   } catch (_) { }
 
-  // Filter upcoming published events (endDate >= today, or date >= today) — never display completed/cancelled
-  const today = new Date().toISOString().split('T')[0];
+  // Filter upcoming published events (date >= today, end time not passed) — never display completed/cancelled/draft
+  const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+  const now = new Date();
   const isUpcoming = (e) => {
-    if (!e || e.status === 'completed' || e.status === 'cancelled') return false;
+    if (!e || e.status === 'completed' || e.status === 'cancelled' || e.status === 'draft') return false;
     if (e.status && e.status !== 'published') return false;
-    const last = e.endDate || e.date;
-    return Boolean(last) && last >= today;
+    if (!e.date || e.date < today) return false;
+    if (e.date === today && e.endTime) {
+      const match = e.endTime.trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)?$/i);
+      if (match) {
+        let h = parseInt(match[1], 10);
+        const m = parseInt(match[2], 10);
+        const ampm = match[3] ? match[3].toUpperCase() : null;
+        if (ampm === 'PM' && h < 12) h += 12;
+        if (ampm === 'AM' && h === 12) h = 0;
+        const [y, mon, d] = e.date.split('-').map(Number);
+        const endDt = new Date(y, mon - 1, d, h, m, 59);
+        if (endDt.getTime() <= now.getTime()) return false;
+      }
+    }
+    return true;
   };
 
   const upcomingEvents = (events || [])
     .filter(isUpcoming)
     .sort((a, b) => {
-      if (a.featured && !b.featured) return -1;
-      if (!a.featured && b.featured) return 1;
-      return new Date(a.date || a.createdAt) - new Date(b.date || b.createdAt);
+      const timeA = a.startTime ? `${a.date}T${a.startTime}` : a.date;
+      const timeB = b.startTime ? `${b.date}T${b.startTime}` : b.date;
+      return timeA.localeCompare(timeB);
     })
     .slice(0, 3)
     .map(e => {
@@ -1277,7 +1291,7 @@ export async function getCommunitySidebarData(channelId = 'all') {
       };
     });
 
-  const featuredEvent = upcomingEvents.find(e => e.featured) || upcomingEvents[0] || null;
+  const featuredEvent = upcomingEvents[0] || null;
 
   const featuredCourse = {
     slug: 'positive-psychology-meaningful-life',

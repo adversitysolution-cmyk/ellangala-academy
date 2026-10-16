@@ -9,7 +9,7 @@ import MobileNav from '../../../components/layout/MobileNav';
 import SearchPopup from '../../../components/layout/SearchPopup';
 import ScrollToTop from '../../../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../../../hooks/useUterpyPlugins';
-import { eventService, isEventClosed } from '../services/eventService';
+import { eventService, isEventClosed, formatEventTimeRange } from '../services/eventService';
 import { useEnrollModal } from '../../../context/EnrollModalContext';
 import { Calendar, Clock, MapPin, Sparkles, ArrowRight, Video, Globe, Brain } from 'lucide-react';
 import SEO from '../../../seo/SEO';
@@ -255,7 +255,7 @@ export default function EventsPage() {
                         )}
                         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: '#334155' }}>
                           <Clock size={15} style={{ color: '#CA8A38', flexShrink: 0 }} />
-                          <span><strong>Time:</strong> {featuredEvent.timeDisplay || `${featuredEvent.startTime} – ${featuredEvent.endTime}`}</span>
+                          <span><strong>Time:</strong> {formatEventTimeRange(featuredEvent.startTime, featuredEvent.endTime, featuredEvent.timeDisplay)}</span>
                         </div>
                         {featuredEvent.perspective && (
                           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: '#334155' }}>
@@ -393,7 +393,7 @@ export default function EventsPage() {
                               </div>
                               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                                 <Clock size={14} style={{ color: '#CA8A38' }} />
-                                <span>{event.timeDisplay || `${event.startTime} – ${event.endTime}`}</span>
+                                <span>{formatEventTimeRange(event.startTime, event.endTime, event.timeDisplay)}</span>
                               </div>
                             </div>
                           </div>
@@ -560,7 +560,7 @@ export default function EventsPage() {
                             </div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                               <Clock size={14} style={{ color: '#CA8A38' }} />
-                              <span>{event.timeDisplay || `${event.startTime} – ${event.endTime}`}</span>
+                              <span>{formatEventTimeRange(event.startTime, event.endTime, event.timeDisplay)}</span>
                             </div>
                           </div>
                         </div>

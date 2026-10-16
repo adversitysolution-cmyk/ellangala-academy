@@ -11,7 +11,7 @@ import SEO from '../../../seo/SEO';
 import { generateCommunityPostSchema } from '../../../seo/schemas/schemaGenerators';
 import { useUterpyPlugins } from '../../../hooks/useUterpyPlugins';
 import { communityService, extractPostIdFromSlug, buildPostShareSlug } from '../services/communityService';
-import { eventService } from '../../events/services/eventService';
+import { eventService, getNextEligibleUpcomingEvent } from '../../events/services/eventService';
 import { CommunityAuthProvider, useCommunityAuth } from '../context/CommunityAuthContext';
 
 // Community Components
@@ -104,37 +104,35 @@ function CommunityFeedPageContent() {
     communityService.getSidebarData(selectedCategory)
       .then((data) => {
         setSidebarData(data);
-        if (data?.featuredEvent) {
-          setFeaturedEvent(data.featuredEvent);
-        } else if (Array.isArray(data?.upcomingEvents) && data.upcomingEvents.length > 0) {
-          setFeaturedEvent(data.upcomingEvents[0]);
-        }
       })
       .catch(() => { });
   }, [selectedCategory]);
 
-  // Ensure the single upcoming/featured event is always dynamically retrieved from published events
+  // Connect Feed page's Featured Events card to the existing Events page & event management system:
+  // Dynamically resolve only the next upcoming eligible event with earliest start date/time
   useEffect(() => {
-    eventService.getPublishedEvents()
-      .then((events) => {
-        const today = new Date().toISOString().split('T')[0];
-        const upcoming = (events || []).filter((e) => {
-          if (!e || e.status === 'completed' || e.status === 'cancelled') return false;
-          if (e.status && e.status !== 'published') return false;
-          const last = e.endDate || e.date;
-          return Boolean(last) && last >= today;
-        }).sort((a, b) => {
-          if (a.featured && !b.featured) return -1;
-          if (!a.featured && b.featured) return 1;
-          return new Date(a.date || a.createdAt) - new Date(b.date || b.createdAt);
+    const fetchNextUpcomingEvent = () => {
+      eventService.getPublishedEvents()
+        .then((events) => {
+          const nextEvent = getNextEligibleUpcomingEvent(events);
+          setFeaturedEvent(nextEvent);
+        })
+        .catch(() => {
+          setFeaturedEvent(null);
         });
+    };
 
-        const singleEvent = upcoming.find((e) => e.featured) || upcoming[0] || null;
-        if (singleEvent) {
-          setFeaturedEvent((prev) => prev || singleEvent);
-        }
-      })
-      .catch(() => { });
+    fetchNextUpcomingEvent();
+
+    // Re-check periodically (30s) and on window focus so card updates automatically when event finishes,
+    // or when admin creates, edits, cancels, or deletes an event
+    const interval = setInterval(fetchNextUpcomingEvent, 30000);
+    window.addEventListener('focus', fetchNextUpcomingEvent);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('focus', fetchNextUpcomingEvent);
+    };
   }, []);
 
   // Synchronize equal height and ratio between left sidebar cards and right sidebar cards
@@ -303,12 +301,8 @@ function CommunityFeedPageContent() {
     }
   };
 
-  // Resolved featured event (from dynamic state, sidebar data, or first upcoming event)
-  const activeFeaturedEvent = featuredEvent || sidebarData?.featuredEvent || (
-    Array.isArray(sidebarData?.upcomingEvents)
-      ? (sidebarData.upcomingEvents.find(e => e.featured) || sidebarData.upcomingEvents[0])
-      : null
-  );
+  // Resolved featured event (displays next eligible upcoming event, or null for fallback message)
+  const activeFeaturedEvent = featuredEvent;
 
   // Dynamic SEO metadata
   let seoTitle = 'Ellangala Feed | Daily Mind Training & Wisdom';

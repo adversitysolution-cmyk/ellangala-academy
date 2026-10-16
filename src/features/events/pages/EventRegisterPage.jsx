@@ -9,7 +9,7 @@ import MobileNav from '../../../components/layout/MobileNav';
 import SearchPopup from '../../../components/layout/SearchPopup';
 import ScrollToTop from '../../../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../../../hooks/useUterpyPlugins';
-import { eventService, isEventClosed } from '../services/eventService';
+import { eventService, isEventClosed, formatEventTimeRange } from '../services/eventService';
 import { enrollmentService } from '../../../admin/services/enrollmentService';
 import { paymentService } from '../../../admin/services/paymentService';
 import { useCommunityAuth } from '../../community/context/CommunityAuthContext';
@@ -234,7 +234,7 @@ export default function EventRegisterPage() {
                   </div>
                   <div style={{ fontSize: '14px', color: '#334155', display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <Clock size={18} style={{ color: '#CA8A38' }} />
-                    <span>Time: <strong>{event.startTime} – {event.endTime}</strong></span>
+                    <span>Time: <strong>{formatEventTimeRange(event.startTime, event.endTime, event.timeDisplay)}</strong></span>
                   </div>
                   <div style={{ fontSize: '14px', color: '#334155', display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <MapPin size={18} style={{ color: '#CA8A38' }} />
@@ -285,7 +285,7 @@ export default function EventRegisterPage() {
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                         <Clock size={16} style={{ color: '#CA8A38' }} />
-                        <span>{event.startTime} – {event.endTime}</span>
+                        <span>{formatEventTimeRange(event.startTime, event.endTime, event.timeDisplay)}</span>
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                         <MapPin size={16} style={{ color: '#CA8A38' }} />
