@@ -57,6 +57,10 @@ router.get('/events/:slug', async (req, res) => {
 
 // Admin: POST /api/admin/events
 router.post('/admin/events', async (req, res) => {
+  const today = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+  if (!req.body.date || req.body.date < today) {
+    return res.status(400).json({ error: 'Event date cannot be in the past.' });
+  }
   try {
     const newRecord = await saveDbEvent(req.body);
     res.status(201).json(newRecord);

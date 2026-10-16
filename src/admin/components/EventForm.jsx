@@ -377,6 +377,7 @@ export default function EventForm({ initialData, onSubmit, isEditing = false }) 
                   type="date"
                   required
                   value={date}
+                  min={isEditing ? undefined : new Date().toLocaleDateString('en-CA')}
                   onChange={(e) => setDate(e.target.value)}
                   className="admin-input"
                 />

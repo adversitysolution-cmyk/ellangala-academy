@@ -88,12 +88,11 @@ export const eventService = {
   }
 };
 
-// Closed once the last day (endDate, else date) is before today (local date), or marked completed/cancelled.
+// Closed once the start date is before today (local date), or marked completed/cancelled.
 export function isEventClosed(e) {
   if (!e) return false;
   if (e.status === 'completed' || e.status === 'cancelled') return true;
   const d = new Date();
   const today = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-  const last = e.endDate || e.date;
-  return Boolean(last) && last < today;
+  return Boolean(e.date) && e.date < today;
 }
