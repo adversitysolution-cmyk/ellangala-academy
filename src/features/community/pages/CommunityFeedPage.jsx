@@ -626,7 +626,7 @@ function CommunityFeedPageContent() {
 
                           {/* When on Single Post view, add a helpful exploration footer */}
                           {singlePostId && (
-                            <div style={{
+                            <div className="community-single-post-footer" style={{
                               textAlign: 'center',
                               padding: '24px 20px',
                               background: '#FFFFFF',

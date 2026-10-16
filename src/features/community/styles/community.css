@@ -438,9 +438,19 @@
     height: 0;
   }
 
+  /* Bottom edge styling: all cards at the bottom of columns have sharp edges at the bottom */
   .community-sidebar-sticky > *:last-child,
-  .community-feed-stream > *:last-child {
+  .community-left-sidebar > *:last-child,
+  .community-right-sidebar > *:last-child,
+  .community-mindgym-card,
+  .community-rec-card,
+  .community-feed-stream > *:last-child,
+  .community-feed-stream > div > *:last-child,
+  .community-feed-stream .community-mock-post-card:last-child,
+  .community-single-post-footer {
     margin-bottom: 0 !important;
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
   }
 }
 
