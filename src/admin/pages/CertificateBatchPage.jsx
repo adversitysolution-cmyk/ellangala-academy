@@ -11,17 +11,25 @@ export default function CertificateBatchPage() {
   const [state, setState] = useState(null);
   const [error, setError] = useState('');
   const timer = useRef(null);
+  const failures = useRef(0);
+
+  const stopPolling = () => {
+    if (timer.current) { clearInterval(timer.current); timer.current = null; }
+  };
 
   const poll = async () => {
     try {
       const res = await certificateService.getBatchProgress(batchId);
+      failures.current = 0;
+      setError('');
       setState(res);
       const { generated, failed, total } = res.progress;
-      if (total > 0 && generated + failed >= total && timer.current) {
-        clearInterval(timer.current);
-        timer.current = null;
-      }
-    } catch (e) { setError(e.message); }
+      // total === 0: generation never queued any job (e.g. everyone already certified), nothing to wait for.
+      if (total === 0 || generated + failed >= total) stopPolling();
+    } catch (e) {
+      setError(e.message || 'Could not load batch progress.');
+      if (++failures.current >= 3) stopPolling(); // give up after 3 consecutive failures; user can reload
+    }
   };
 
   useEffect(() => {
@@ -32,15 +40,19 @@ export default function CertificateBatchPage() {
   }, [batchId]);
 
   const retry = async () => {
-    await certificateService.retryBatch(batchId);
-    if (!timer.current) timer.current = setInterval(poll, 2500);
-    poll();
+    try {
+      await certificateService.retryBatch(batchId);
+      failures.current = 0;
+      if (!timer.current) timer.current = setInterval(poll, 2500);
+      poll();
+    } catch (e) { setError(e.message || 'Retry failed.'); }
   };
 
   const p = state?.progress || { generated: 0, processing: 0, failed: 0, total: 0 };
   const done = p.generated + p.failed;
   const pct = p.total ? Math.round((done / p.total) * 100) : 0;
   const complete = p.total > 0 && done >= p.total;
+  const empty = state && p.total === 0;
 
   return (
     <AdminLayout title="Certificate Batch" subtitle={`Batch ${batchId}`}>
@@ -52,7 +64,9 @@ export default function CertificateBatchPage() {
         {error && <div style={{ ...card, color: '#DC2626', padding: '12px 20px' }}>{error}</div>}
 
         <div style={card}>
-          {complete
+          {empty
+            ? <div style={{ fontWeight: 800, color: '#0A2347', marginBottom: '12px' }}>No new certificates were generated for this batch. Everyone in the sheet already had one.</div>
+            : complete
             ? <div style={{ display: 'flex', gap: '10px', alignItems: 'center', color: '#059669', fontWeight: 800, marginBottom: '12px' }}><CheckCircle2 size={22} /> Batch processing complete</div>
             : <div style={{ fontWeight: 800, color: '#0A2347', marginBottom: '12px' }}>Processing certificates…</div>}
 

@@ -73,6 +73,11 @@ export default function CertificateImportPage() {
     setBusy(true); setError('');
     try {
       const res = await certificateService.generate(uploadInfo.batch.id);
+      if (!res.created) {
+        setError('No new certificates were created: everyone in this sheet already has a certificate for this event.');
+        setBusy(false); setShowConfirm(false);
+        return;
+      }
       navigate(`/admin/events/${id}/certificates/batches/${res.batchId}`);
     } catch (e) { setError(e.message); setBusy(false); setShowConfirm(false); }
   };

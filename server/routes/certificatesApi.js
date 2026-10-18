@@ -301,7 +301,7 @@ router.post('/admin/certificate-imports/:batchId/generate', async (req, res) => 
     }
   }
 
-  await cs.updateBatch(batch.id, { status: 'generating' });
+  if (created) await cs.updateBatch(batch.id, { status: 'generating' });
   await cs.logAudit({
     actor: req.adminEmail, action: 'CertificatesGenerated', eventId: event.id,
     targetType: 'batch', targetId: batch.id, metadata: { created, alreadyCertified }
