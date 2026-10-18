@@ -310,13 +310,16 @@ async function renderClassic({ template, vars, assets }) {
     .text(template.signatoryTitle || 'Founder', 90, rowY + 20, { width: 180 });
   safeImage(doc, sealImg, cx - 40, rowY - 50, { fit: [80, 80] });
 
-  // QR + certificate id (bottom-right)
-  const qrSize = 96;
-  doc.image(qrPng, W - 90 - qrSize, rowY - 46, { width: qrSize, height: qrSize });
-  doc.font('Helvetica-Bold').fontSize(9).fillColor(NAVY)
-    .text(`Certificate ID: ${vars.certificate_id}`, W - 300, rowY + 58, { width: 240, align: 'right' });
-  doc.font('Helvetica').fontSize(7.5).fillColor(INK)
-    .text(`Verify at ${vars.verification_url}`, W - 300, rowY + 72, { width: 240, align: 'right' });
+  // QR + certificate id (bottom-right). Kept well inside the frame and drawn on a light panel so it
+  // stays readable whatever background/corner ornaments a template uploads.
+  const qrSize = 84, panelW = 150, panelH = 128;
+  const panelX = W - 105 - panelW, panelY = rowY - 70;
+  doc.save().fillOpacity(0.88).roundedRect(panelX, panelY, panelW, panelH, 8).fill('#FFFFFF').restore();
+  doc.image(qrPng, panelX + (panelW - qrSize) / 2, panelY + 8, { width: qrSize, height: qrSize });
+  doc.font('Helvetica-Bold').fontSize(8).fillColor(NAVY)
+    .text(vars.certificate_id, panelX, panelY + qrSize + 16, { width: panelW, align: 'center', lineBreak: false });
+  doc.font('Helvetica').fontSize(7).fillColor(INK)
+    .text('Scan the QR code to verify', panelX, panelY + qrSize + 30, { width: panelW, align: 'center', lineBreak: false });
 
   doc.end();
   return done;
