@@ -218,29 +218,66 @@ async function renderClassic({ template, vars, assets }) {
       align: 'center', characterSpacing: 2
     });
 
-  // Participant name is rendered bold navy; event name etc. always come from the current event.
-  const NAME_MARK = '\u0000';
+  // Name and event title are bold navy. PDFKit mis-positions centered `continued` chunks
+  // with Kannada/complex scripts (lines overlap), so words are measured and placed here.
+  const B0 = '\u0001', B1 = '\u0002';
   const body = renderTemplate(
     template.bodyText ||
       'This is to certify that {{participant_name}} has successfully completed "{{event_name}}" at {{organization_name}}, {{event_date_text}}.',
-    { ...vars, participant_name: NAME_MARK }
+    { ...vars, participant_name: B0 + vars.participant_name + B1, event_name: B0 + vars.event_name + B1 }
   );
-  doc.moveDown(0.5);
-  const bodyFont = NON_LATIN.test(body + vars.participant_name) && fs.existsSync(UNICODE_FONT_PATH) ? UNICODE_FONT_PATH : 'Helvetica';
-  const nameFont = bodyFont === 'Helvetica' ? 'Helvetica-Bold' : bodyFont;
-  const parts = body.split(NAME_MARK);
-  parts.forEach((part, i) => {
-    const last = i === parts.length - 1;
-    const opts = i === 0
-      ? { width: W - 180, align: 'center', lineGap: 6, continued: !last }
-      : { continued: !last };
-    doc.font(bodyFont).fontSize(15).fillColor(INK);
-    if (i === 0) doc.text(part, 90, 260, opts); else doc.text(part, opts);
-    if (!last) {
-      doc.font(nameFont).fontSize(17).fillColor(NAVY).text(vars.participant_name, { continued: true });
-    }
-  });
-  doc.text('', { continued: false });
+  const plain = body.replace(/[\u0001\u0002]/g, '');
+  const unicode = NON_LATIN.test(plain) && fs.existsSync(UNICODE_FONT_PATH);
+  const bodyFont = unicode ? UNICODE_FONT_PATH : 'Helvetica';
+  const boldFont = unicode ? UNICODE_FONT_PATH : 'Helvetica-Bold';
+
+  const words = [];
+  let bold = false;
+  for (const tok of body.split(/([\u0001\u0002]|\s+)/)) {
+    if (tok === B0) bold = true;
+    else if (tok === B1) bold = false;
+    else if (tok && !/^\s+$/.test(tok)) words.push({ text: tok, bold, gap: false });
+    else if (tok) words.push({ gap: true });
+  }
+  // glue words that touch (e.g. `"` + name, name + `"`) so they never wrap apart
+  const units = [];
+  for (let i = 0; i < words.length; i++) {
+    const w = words[i];
+    if (w.gap) { units.push(null); continue; }
+    (units.length && units[units.length - 1] !== null ? units[units.length - 1] : units[units.push([]) - 1]).push(w);
+  }
+
+  const SIZE = 15, LINE = SIZE + 6, MAXW = W - 180;
+  const fontFor = (w) => (w.bold ? boldFont : bodyFont);
+  const measure = (w) => doc.font(fontFor(w)).fontSize(SIZE).widthOfString(w.text);
+  const spaceW = doc.font(bodyFont).fontSize(SIZE).widthOfString(' ');
+  const lines = [];
+  let cur = [], curW = 0;
+  for (const u of units.filter(Boolean)) {
+    const uw = u.reduce((n, w) => n + measure(w), 0);
+    if (cur.length && curW + spaceW + uw > MAXW) { lines.push({ cur, curW }); cur = []; curW = 0; }
+    curW += (cur.length ? spaceW : 0) + uw;
+    cur.push(u);
+  }
+  if (cur.length) lines.push({ cur, curW });
+
+  let y = 260;
+  for (const { cur: line, curW: lw } of lines) {
+    let x = (W - lw) / 2;
+    line.forEach((u, i) => {
+      if (i) x += spaceW;
+      for (const w of u) {
+        doc.font(fontFor(w)).fontSize(SIZE).fillColor(w.bold ? NAVY : INK);
+        if (w.bold && unicode) {
+          doc.lineWidth(0.5).strokeColor(NAVY).text(w.text, x, y, { lineBreak: false, fill: true, stroke: true });
+        } else {
+          doc.text(w.text, x, y, { lineBreak: false });
+        }
+        x += measure(w);
+      }
+    });
+    y += LINE;
+  }
 
   // signature + seal row
   const rowY = H - 150;
