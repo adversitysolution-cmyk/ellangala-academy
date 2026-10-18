@@ -310,11 +310,9 @@ async function renderClassic({ template, vars, assets }) {
     .text(template.signatoryTitle || 'Founder', 90, rowY + 20, { width: 180 });
   safeImage(doc, sealImg, cx - 40, rowY - 50, { fit: [80, 80] });
 
-  // QR + certificate id (bottom-right). Kept well inside the frame and drawn on a light panel so it
-  // stays readable whatever background/corner ornaments a template uploads.
-  const qrSize = 84, panelW = 150, panelH = 128;
-  const panelX = W - 105 - panelW, panelY = rowY - 70;
-  doc.save().fillOpacity(0.88).roundedRect(panelX, panelY, panelW, panelH, 8).fill('#FFFFFF').restore();
+  // QR + certificate id (bottom-right). Kept well inside the frame, clear of corner ornaments.
+  const qrSize = 84, panelW = 150;
+  const panelX = W - 105 - panelW, panelY = rowY - 62;
   doc.image(qrPng, panelX + (panelW - qrSize) / 2, panelY + 8, { width: qrSize, height: qrSize });
   doc.font('Helvetica-Bold').fontSize(8).fillColor(NAVY)
     .text(vars.certificate_id, panelX, panelY + qrSize + 16, { width: panelW, align: 'center', lineBreak: false });
