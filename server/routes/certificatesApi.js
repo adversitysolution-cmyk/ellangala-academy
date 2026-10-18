@@ -378,6 +378,18 @@ router.post('/admin/certificates/:id/resend', async (req, res) => {
   res.json({ ok: true });
 });
 
+// Re-renders the PDF with the template's current design (certificates keep their templateId; edits to
+// the template don't touch already-issued PDFs until regenerated).
+router.post('/admin/certificates/:id/regenerate', async (req, res) => {
+  const certificate = await cs.getCertificateById(req.params.id);
+  if (!certificate) return res.status(404).json({ error: 'Certificate not found' });
+  if (certificate.status === 'revoked') return res.status(400).json({ error: 'Cannot regenerate a revoked certificate.' });
+  await cs.enqueueJob({ type: 'generate', certificateId: certificate.id, batchId: certificate.batchId, force: true });
+  await cs.logAudit({ actor: req.adminEmail, action: 'CertificateRegenerated', eventId: certificate.eventId, targetType: 'certificate', targetId: certificate.id });
+  kickWorker();
+  res.json({ ok: true });
+});
+
 router.post('/admin/certificates/:id/revoke', async (req, res) => {
   const reason = String(req.body.reason || '').trim();
   if (!reason) return res.status(400).json({ error: 'A revocation reason is required.' });

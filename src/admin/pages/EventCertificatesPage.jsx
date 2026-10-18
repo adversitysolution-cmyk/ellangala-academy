@@ -75,6 +75,12 @@ export default function EventCertificatesPage() {
     setSavingCfg(false);
   };
 
+  const doRegenerate = async (certId) => {
+    setBusy(certId);
+    try { await certificateService.regenerate(certId); await load(); } catch (e) { setError(e.message); }
+    setBusy('');
+  };
+
   const doResend = async (certId) => {
     setBusy(certId);
     try { await certificateService.resend(certId); await load(); } catch (e) { setError(e.message); }
@@ -228,6 +234,7 @@ export default function EventCertificatesPage() {
                               downloadCertificatePdf(c.id, `${c.certificateNumber}.pdf`).catch((e) => setError(e.message))
                           },
                           { label: busy === c.id ? 'Sending…' : 'Resend Email', icon: Send, onClick: () => doResend(c.id) },
+                          ...(c.status === 'revoked' ? [] : [{ label: 'Regenerate PDF', icon: RefreshCw, onClick: () => doRegenerate(c.id) }]),
                           { divider: true },
                           ...(c.status === 'revoked' ? [] : [{ label: 'Revoke', icon: Ban, danger: true, onClick: () => setRevokeFor(c.id) }])
                         ]} />

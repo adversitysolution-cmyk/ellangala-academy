@@ -72,6 +72,9 @@ export const certificateService = {
   resend(id) {
     return adminFetch(`/admin/certificates/${id}/resend`, { method: 'POST' });
   },
+  regenerate(id) {
+    return adminFetch(`/admin/certificates/${id}/regenerate`, { method: 'POST' });
+  },
   revoke(id, reason) {
     return adminFetch(`/admin/certificates/${id}/revoke`, { method: 'POST', body: JSON.stringify({ reason }) });
   },

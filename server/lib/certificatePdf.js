@@ -3,6 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import PDFDocument from 'pdfkit';
 import QRCode from 'qrcode';
+import sharp from 'sharp';
 import { PDFDocument as PDFLibDocument, StandardFonts, rgb } from 'pdf-lib';
 import fontkit from '@pdf-lib/fontkit';
 import { renderTemplate } from './certificateTemplate.js';
@@ -25,10 +26,21 @@ function hexRgb(hex, fallback = [0, 0, 0]) {
   return rgb(r / 255, g / 255, b / 255);
 }
 
-function safeImage(doc, path, ...args) {
+// PDFKit only embeds PNG/JPEG; uploads are often WebP, so anything else is converted to PNG.
+async function loadImage(file) {
   try {
-    if (path && fs.existsSync(path)) doc.image(path, ...args);
-  } catch { /* a missing/corrupt asset must not fail the whole batch */ }
+    if (!file || !fs.existsSync(file)) return null;
+    const buf = fs.readFileSync(file);
+    const isPng = buf.slice(1, 4).toString() === 'PNG';
+    const isJpg = buf[0] === 0xff && buf[1] === 0xd8;
+    return isPng || isJpg ? buf : await sharp(buf).png().toBuffer();
+  } catch { return null; } // a missing/corrupt asset must not fail the whole batch
+}
+
+function safeImage(doc, img, ...args) {
+  try {
+    if (img) doc.image(img, ...args);
+  } catch { /* unreadable image data: skip rather than fail the batch */ }
 }
 
 async function qrBuffer(data) {
@@ -195,19 +207,28 @@ async function renderClassic({ template, vars, assets }) {
   const W = doc.page.width;
   const H = doc.page.height;
 
-  if (assets.backgroundPath) safeImage(doc, assets.backgroundPath, 0, 0, { width: W, height: H });
+  const [bgImg, logoImg, signatureImg, sealImg] = await Promise.all(
+    [assets.backgroundPath, assets.logoPath, assets.signaturePath, assets.sealPath].map(loadImage)
+  );
+
+  if (bgImg) safeImage(doc, bgImg, 0, 0, { width: W, height: H });
   else doc.rect(0, 0, W, H).fill('#FFFDF8');
 
-  // decorative border
-  doc.lineWidth(3).strokeColor(GOLD).rect(24, 24, W - 48, H - 48).stroke();
-  doc.lineWidth(1).strokeColor(NAVY).rect(32, 32, W - 64, H - 64).stroke();
+  // Fallback border only: an uploaded background already carries its own frame.
+  if (!bgImg) {
+    doc.lineWidth(3).strokeColor(GOLD).rect(24, 24, W - 48, H - 48).stroke();
+    doc.lineWidth(1).strokeColor(NAVY).rect(32, 32, W - 64, H - 64).stroke();
+  }
 
   const cx = W / 2;
 
-  if (assets.logoPath) safeImage(doc, assets.logoPath, cx - 140, 44, { fit: [280, 80], align: 'center' });
+  safeImage(doc, logoImg, cx - 140, 44, { fit: [280, 80], align: 'center' });
 
-  doc.fillColor(NAVY).font('Helvetica-Bold').fontSize(26)
-    .text(template.organizationName || 'Ellangala’s Academy', 0, 132, { align: 'center' });
+  // Blank organization name = no heading (the logo usually carries the name).
+  if (template.organizationName) {
+    doc.fillColor(NAVY).font('Helvetica-Bold').fontSize(26)
+      .text(template.organizationName, 0, 132, { align: 'center' });
+  }
   if (template.address) {
     doc.font('Helvetica').fontSize(10).fillColor(INK)
       .text(template.address, 0, 164, { align: 'center' });
@@ -281,13 +302,13 @@ async function renderClassic({ template, vars, assets }) {
 
   // signature + seal row
   const rowY = H - 150;
-  safeImage(doc, assets.signaturePath, 90, rowY - 40, { fit: [150, 45] });
+  safeImage(doc, signatureImg, 90, rowY - 40, { fit: [150, 45] });
   doc.moveTo(90, rowY).lineTo(260, rowY).strokeColor(INK).lineWidth(0.8).stroke();
   doc.font('Helvetica-Bold').fontSize(11).fillColor(NAVY)
     .text(template.signatoryName || 'Dr. Naveen Ellangala', 90, rowY + 6, { width: 180 });
   doc.font('Helvetica').fontSize(9).fillColor(INK)
     .text(template.signatoryTitle || 'Founder', 90, rowY + 20, { width: 180 });
-  safeImage(doc, assets.sealPath, cx - 40, rowY - 50, { fit: [80, 80] });
+  safeImage(doc, sealImg, cx - 40, rowY - 50, { fit: [80, 80] });
 
   // QR + certificate id (bottom-right)
   const qrSize = 96;
