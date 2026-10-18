@@ -48,4 +48,15 @@ const overlay = await renderCertificatePdf({
 fs.unlinkSync(bg);
 assert.equal(overlay.slice(0, 5).toString(), '%PDF-', 'overlay with background renders');
 
+// Regression: a WebP logo (PDFKit can't embed WebP natively) must still end up on the certificate.
+const sharp = (await import('sharp')).default;
+const webp = path.join(os.tmpdir(), `certlogo-${Date.now()}.webp`);
+fs.writeFileSync(webp, await sharp({ create: { width: 40, height: 20, channels: 3, background: '#0A2347' } }).webp().toBuffer());
+const classicVars = { participant_name: 'A B', certificate_id: 'X-1', verification_url: 'https://x.test/v' };
+const countImages = (buf) => (buf.toString('latin1').match(/\/Subtype \/Image/g) || []).length;
+const noLogo = await renderCertificatePdf({ template: {}, vars: classicVars });
+const withLogo = await renderCertificatePdf({ template: {}, vars: classicVars, assets: { logoPath: webp } });
+fs.unlinkSync(webp);
+assert.ok(countImages(withLogo) > countImages(noLogo), 'webp logo is embedded');
+
 console.log('certificatePdf.test.js OK', pdf.length, 'bytes (classic + overlay)');
