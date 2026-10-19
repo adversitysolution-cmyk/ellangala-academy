@@ -48,7 +48,7 @@ export async function getActiveTemplate() {
 
 const TEMPLATE_FIELDS = ['name', 'organizationName', 'signatoryName', 'signatoryTitle', 'address',
   'headingText', 'bodyText', 'logoUrl', 'signatureUrl', 'sealUrl', 'backgroundUrl',
-  'renderMode', 'overlayConfig', 'isActive'];
+  'renderMode', 'overlayConfig', 'qualifications', 'isActive'];
 
 export async function saveTemplate(data) {
   const ts = now();

@@ -14,7 +14,7 @@ const EMPTY = {
   address: '', headingText: 'Certificate of Completion',
   bodyText: 'This is to certify that {{participant_name}} has successfully completed the "{{event_name}}" course at {{organization_name}}, {{event_date_text}}.',
   logoUrl: '', signatureUrl: '', sealUrl: '', backgroundUrl: '',
-  renderMode: 'classic', overlayConfig: null, isActive: true
+  renderMode: 'classic', overlayConfig: null, qualifications: '', isActive: true
 };
 
 // Overlay-mode position knobs (top-left PDF points). Blank = built-in default.
@@ -95,6 +95,10 @@ export default function CertificateTemplatesPage() {
             <label style={{ display: 'block', fontSize: '13px', fontWeight: 700, color: '#334155', marginTop: '14px' }}>
               Body Text
               <textarea className="admin-textarea" rows={4} style={{ marginTop: '4px' }} value={form.bodyText} onChange={(e) => set('bodyText', e.target.value)} />
+            </label>
+            <label style={{ display: 'block', fontSize: '13px', fontWeight: 700, color: '#334155', marginTop: '14px' }}>
+              Qualifications (optional, shown below the seal)
+              <textarea className="admin-textarea" rows={2} maxLength={200} style={{ marginTop: '4px' }} value={form.qualifications || ''} onChange={(e) => set('qualifications', e.target.value)} />
             </label>
             <div style={{ fontSize: '11.5px', color: '#64748B', marginTop: '6px' }}>
               Placeholders: {PLACEHOLDERS.map((p) => <code key={p} style={{ background: '#F1F5F9', padding: '1px 5px', borderRadius: '4px', marginRight: '4px' }}>{p}</code>)}

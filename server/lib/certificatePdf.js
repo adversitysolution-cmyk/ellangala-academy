@@ -222,20 +222,29 @@ async function renderClassic({ template, vars, assets }) {
 
   const cx = W / 2;
 
-  safeImage(doc, logoImg, cx - 140, 44, { fit: [280, 80], align: 'center' });
+  // Header flows top-down from the logo's real height, so a missing/short logo or blank
+  // organization name never leaves a gap.
+  let hy = 44;
+  if (logoImg) {
+    safeImage(doc, logoImg, cx - 140, hy, { fit: [280, 80], align: 'center' });
+    const { width, height } = await sharp(logoImg).metadata();
+    hy += height * Math.min(280 / width, 80 / height) + 10;
+  }
 
   // Blank organization name = no heading (the logo usually carries the name).
   if (template.organizationName) {
     doc.fillColor(NAVY).font('Helvetica-Bold').fontSize(26)
-      .text(template.organizationName, 0, 132, { align: 'center' });
+      .text(template.organizationName, 0, hy, { align: 'center' });
+    hy += 34;
   }
   if (template.address) {
     doc.font('Helvetica').fontSize(10).fillColor(INK)
-      .text(template.address, 0, 164, { align: 'center' });
+      .text(template.address, 0, hy, { align: 'center' });
+    hy += 30;
   }
 
   doc.fillColor(GOLD).font('Helvetica-Bold').fontSize(30)
-    .text((template.headingText || 'Certificate of Completion').toUpperCase(), 0, 200, {
+    .text((template.headingText || 'Certificate of Completion').toUpperCase(), 0, hy, {
       align: 'center', characterSpacing: 2
     });
 
@@ -282,7 +291,7 @@ async function renderClassic({ template, vars, assets }) {
   }
   if (cur.length) lines.push({ cur, curW });
 
-  let y = 260;
+  let y = hy + 60;
   for (const { cur: line, curW: lw } of lines) {
     let x = (W - lw) / 2;
     line.forEach((u, i) => {
@@ -309,6 +318,15 @@ async function renderClassic({ template, vars, assets }) {
   doc.font('Helvetica').fontSize(9).fillColor(INK)
     .text(template.signatoryTitle || 'Founder', 90, rowY + 20, { width: 180 });
   safeImage(doc, sealImg, cx - 40, rowY - 50, { fit: [80, 80] });
+
+  // Optional qualifications/credentials line(s) centred under the seal; clipped to 3 lines so a long
+  // entry can never run into the footer ornament.
+  const quals = String(template.qualifications || '').trim();
+  if (quals) {
+    doc.font(NON_LATIN.test(quals) && fs.existsSync(UNICODE_FONT_PATH) ? UNICODE_FONT_PATH : 'Helvetica')
+      .fontSize(8.5).fillColor(INK)
+      .text(quals, cx - 150, rowY + 36, { width: 300, height: 34, align: 'center', ellipsis: true });
+  }
 
   // QR + certificate id (bottom-right). Kept well inside the frame, clear of corner ornaments.
   const qrSize = 84, panelW = 150;

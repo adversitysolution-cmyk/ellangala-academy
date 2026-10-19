@@ -59,4 +59,11 @@ const withLogo = await renderCertificatePdf({ template: {}, vars: classicVars, a
 fs.unlinkSync(webp);
 assert.ok(countImages(withLogo) > countImages(noLogo), 'webp logo is embedded');
 
+// Optional qualifications line(s) under the seal render (incl. very long and Kannada text) without failing the batch.
+const withQuals = await renderCertificatePdf({
+  template: { qualifications: 'Ph.D. Psychology • Certified Trainer\n' + 'x'.repeat(500) + ' ಕನ್ನಡ' },
+  vars: classicVars
+});
+assert.equal(withQuals.slice(0, 5).toString(), '%PDF-', 'qualifications render');
+
 console.log('certificatePdf.test.js OK', pdf.length, 'bytes (classic + overlay)');

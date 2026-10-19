@@ -81,7 +81,8 @@ export async function ensureSchema() {
     ['events', 'ADD COLUMN duration VARCHAR(60)'],
     ['events', 'ADD COLUMN extra JSON'],
     ['certificate_templates', "ADD COLUMN renderMode VARCHAR(20) DEFAULT 'classic'"],
-    ['certificate_templates', 'ADD COLUMN overlayConfig JSON']
+    ['certificate_templates', 'ADD COLUMN overlayConfig JSON'],
+    ['certificate_templates', 'ADD COLUMN qualifications TEXT']
   ]) {
     try {
       await pool.query(`ALTER TABLE ${table} ${ddl}`);
