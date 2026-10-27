@@ -39,7 +39,7 @@ export default function FAQSection({
   return (
     <section
       className={`faq-page faq-section-global ${className}`}
-      style={{ paddingTop: '90px', paddingBottom: '90px' }}
+      style={{ paddingTop: '90px', paddingBottom: '90px', overflow: 'hidden' }}
       itemScope
       itemType="https://schema.org/FAQPage"
     >
@@ -140,12 +140,12 @@ export default function FAQSection({
         {showBottom && faqContent.bottom && (
           <div className="row">
             <div className="col-xl-12">
-              <div className="faq-page__bottom">
+              <div className="faq-page__bottom" style={{ flexWrap: 'wrap', overflow: 'hidden' }}>
                 <div className="email">
                   <a href={faqContent.bottom.emailLink}>{faqContent.bottom.email}</a>
                 </div>
-                <div className="text">
-                  <p>{faqContent.bottom.text}</p>
+                <div className="text" style={{ maxWidth: '100%' }}>
+                  <p style={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>{faqContent.bottom.text}</p>
                 </div>
               </div>
             </div>

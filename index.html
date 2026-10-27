@@ -65,9 +65,92 @@
 
   <!-- Core Layout & CLS Prevention Styles -->
   <style>
-    /* Cumulative Layout Shift (CLS) Stabilization */
+    /* Cumulative Layout Shift (CLS) Stabilization & Responsive Viewport Guardrails */
+    html, body {
+      overflow-x: hidden;
+      max-width: 100%;
+    }
+    .page-wrapper {
+      overflow-x: hidden;
+      width: 100%;
+      max-width: 100%;
+      position: relative;
+    }
     .main-slider-one, .main-slider { min-height: 520px; background-color: #f7f5f0; contain-intrinsic-size: 520px; }
-    @media (max-width: 768px) { .main-slider-one, .main-slider { min-height: 380px; } }
+    @media (max-width: 1199px) {
+      .main-menu__main-menu-box { display: none !important; }
+      .main-header-one__top { display: none !important; }
+      .main-header-one__bottom-inner {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        width: 100% !important;
+        padding: 8px 16px !important;
+      }
+      .main-header-one__bottom-left {
+        width: auto !important;
+        display: flex !important;
+        align-items: center !important;
+      }
+      .main-header-one__bottom-left .logo-one img {
+        max-height: 46px !important;
+        width: auto !important;
+      }
+      .main-header-one__bottom-right {
+        display: flex !important;
+        align-items: center !important;
+        gap: 12px !important;
+        margin-left: auto !important;
+      }
+      .mobile-nav-toggle-box {
+        display: flex !important;
+        align-items: center !important;
+      }
+      .mobile-nav__toggler {
+        font-size: 24px !important;
+        color: #1e1a16 !important;
+        padding: 6px !important;
+      }
+    }
+    @media (max-width: 991px) {
+      .therapy-one__bg { display: none !important; }
+      .therapy-one__img1 { display: none !important; }
+      .therapy-one__inner { overflow: hidden !important; padding: 50px 16px 40px !important; }
+      .therapy-one__left { max-width: 100% !important; width: 100% !important; margin-bottom: 25px !important; }
+      .therapy-one__right-content {
+        position: relative !important;
+        left: 0 !important;
+        bottom: 0 !important;
+        margin: 25px auto 0 !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        padding: 30px 20px !important;
+        border-radius: 12px !important;
+        box-sizing: border-box !important;
+      }
+      .therapy-one__right-content::before,
+      .therapy-one__right-content::after {
+        display: none !important;
+      }
+    }
+    @media (max-width: 768px) {
+      .main-slider-one, .main-slider { min-height: auto; }
+      .main-slider-one .owl-nav { display: none !important; }
+      /* Mobile overflow safeguards */
+      .case-one__nav-btn { display: none !important; }
+      .therapy-one__img1 { display: none !important; }
+      .therapy-one__inner { overflow: hidden !important; }
+    }
+    @media (pointer: coarse) {
+      .custom-cursor__cursor,
+      .custom-cursor__cursor-two {
+        display: none !important;
+      }
+    }
+    .owl-carousel, .thm-owl__carousel {
+      overflow: hidden !important;
+      max-width: 100% !important;
+    }
     /* Screen reader accessible hidden crawler block */
     .visually-hidden { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0, 0, 0, 0) !important; white-space: nowrap !important; border: 0 !important; }
   </style>
@@ -78,6 +161,8 @@
   <link rel="stylesheet" href="/assets/vendors/animate/custom-animate.css" />
   <link rel="stylesheet" href="/assets/vendors/fontawesome/css/all.min.css" />
   <link rel="stylesheet" href="/assets/vendors/swiper/swiper.min.css" />
+  <link rel="stylesheet" href="/assets/vendors/owl-carousel/owl.carousel.min.css" />
+  <link rel="stylesheet" href="/assets/vendors/owl-carousel/owl.theme.default.min.css" />
   <link rel="stylesheet" href="/assets/vendors/flaticon/style.css" />
   <link rel="stylesheet" href="/assets/css/uterpy.css" />
   <link rel="stylesheet" href="/assets/css/uterpy-responsive.css" />
@@ -91,8 +176,6 @@
   <link rel="stylesheet" href="/assets/vendors/tiny-slider/tiny-slider.min.css" media="print" onload="this.media='all'" />
   <link rel="stylesheet" href="/assets/vendors/reey-font/stylesheet.css" media="print" onload="this.media='all'" />
   <link rel="stylesheet" href="/assets/vendors/the-sayinistic-font/stylesheet.css" media="print" onload="this.media='all'" />
-  <link rel="stylesheet" href="/assets/vendors/owl-carousel/owl.carousel.min.css" media="print" onload="this.media='all'" />
-  <link rel="stylesheet" href="/assets/vendors/owl-carousel/owl.theme.default.min.css" media="print" onload="this.media='all'" />
   <link rel="stylesheet" href="/assets/vendors/bxslider/jquery.bxslider.css" media="print" onload="this.media='all'" />
   <link rel="stylesheet" href="/assets/vendors/bootstrap-select/css/bootstrap-select.min.css" media="print" onload="this.media='all'" />
   <link rel="stylesheet" href="/assets/vendors/vegas/vegas.min.css" media="print" onload="this.media='all'" />

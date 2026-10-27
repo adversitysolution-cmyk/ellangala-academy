@@ -87,6 +87,97 @@ export default function AboutEllangalaAcademySection() {
         fontFamily: "'Outfit', 'DM Sans', sans-serif"
       }}
     >
+      <style>{`
+        .about-exact-video-container {
+          width: 100%;
+          max-width: 430px;
+          border-radius: 16px;
+          overflow: hidden;
+          position: relative;
+          margin-top: 3cm;
+          margin-bottom: 35px;
+        }
+        .about-exact-card {
+          background-color: #FFFFFF;
+          border-radius: 16px;
+          border-left: 4px solid #CA8A38;
+          border-top: 1px solid #EFEAE1;
+          border-right: 1px solid #EFEAE1;
+          border-bottom: 1px solid #EFEAE1;
+          box-shadow: 0 10px 32px rgba(0, 0, 0, 0.04);
+          padding: 40px 36px;
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          position: relative;
+          overflow: hidden;
+        }
+        .about-exact-point-row {
+          display: flex;
+          align-items: center;
+          gap: 24px;
+          flex: 1;
+        }
+        .about-exact-badge {
+          width: 78px;
+          height: 78px;
+          min-width: 78px;
+          border-radius: 50%;
+          background-color: #FCF8F2;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+          box-shadow: 0 3px 10px rgba(202, 138, 56, 0.12);
+        }
+        .about-exact-badge svg {
+          width: 42px;
+          height: 42px;
+          display: block;
+        }
+        .about-exact-text {
+          font-size: 17px;
+          line-height: 1.65;
+          color: #1A202C;
+          margin: 0;
+          font-weight: 500;
+          letter-spacing: 0.05px;
+          font-family: 'Outfit', 'DM Sans', sans-serif;
+        }
+
+        @media (max-width: 991px) {
+          .about-exact-video-container {
+            margin-top: 24px !important;
+            margin-bottom: 24px !important;
+          }
+        }
+
+        @media (max-width: 767px) {
+          .about-exact-card {
+            padding: 24px 18px !important;
+            border-radius: 12px !important;
+          }
+          .about-exact-point-row {
+            align-items: flex-start !important;
+            gap: 14px !important;
+          }
+          .about-exact-badge {
+            width: 48px !important;
+            height: 48px !important;
+            min-width: 48px !important;
+            margin-top: 2px !important;
+          }
+          .about-exact-badge svg {
+            width: 26px !important;
+            height: 26px !important;
+          }
+          .about-exact-text {
+            font-size: 15px !important;
+            line-height: 1.6 !important;
+          }
+        }
+      `}</style>
       <div className="container" style={{ maxWidth: '1280px', position: 'relative', zIndex: 6 }}>
         <div className="row align-items-stretch g-4 g-lg-5">
           {/* ================= LEFT COLUMN ================= */}
@@ -156,17 +247,7 @@ export default function AboutEllangalaAcademySection() {
               </p>
 
               {/* Academy Video in Middle */}
-              <div
-                style={{
-                  width: '100%',
-                  maxWidth: '430px',
-                  borderRadius: '16px',
-                  overflow: 'hidden',
-                  position: 'relative',
-                  marginTop: '3cm',
-                  marginBottom: '35px'
-                }}
-              >
+              <div className="about-exact-video-container">
                 <video
                   src={academyVideo}
                   autoPlay
@@ -187,25 +268,7 @@ export default function AboutEllangalaAcademySection() {
 
           {/* ================= RIGHT COLUMN (Card) ================= */}
           <div className="col-xl-7 col-lg-7 col-md-12 d-flex">
-            <div
-              className="about-exact-card"
-              style={{
-                backgroundColor: '#FFFFFF',
-                borderRadius: '16px',
-                borderLeft: '4px solid #CA8A38',
-                borderTop: '1px solid #EFEAE1',
-                borderRight: '1px solid #EFEAE1',
-                borderBottom: '1px solid #EFEAE1',
-                boxShadow: '0 10px 32px rgba(0, 0, 0, 0.04)',
-                padding: '40px 36px',
-                width: '100%',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                position: 'relative',
-                overflow: 'hidden'
-              }}
-            >
+            <div className="about-exact-card">
               {/* Middle Layer Decorative Background Image */}
               <div
                 style={{
@@ -225,45 +288,19 @@ export default function AboutEllangalaAcademySection() {
                 {points.map((item, index) => (
                   <div key={item.id} style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
                     <div
+                      className="about-exact-point-row"
                       style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '24px',
-                        padding: index === 0 ? '0 0 22px' : '22px 0',
-                        flex: 1
+                        padding: index === 0 ? '0 0 22px' : '22px 0'
                       }}
                     >
                       {/* Soft Pale Cream Circle Badge with Gold Icon */}
-                      <div
-                        style={{
-                          width: '78px',
-                          height: '78px',
-                          minWidth: '78px',
-                          borderRadius: '50%',
-                          backgroundColor: '#FCF8F2',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          flexShrink: 0,
-                          boxShadow: '0 3px 10px rgba(202, 138, 56, 0.12)'
-                        }}
-                      >
+                      <div className="about-exact-badge">
                         {item.icon}
                       </div>
 
                       {/* Paragraph Text */}
-                      <div style={{ flex: 1 }}>
-                        <p
-                          style={{
-                            fontSize: '17px',
-                            lineHeight: '1.65',
-                            color: '#1A202C',
-                            margin: 0,
-                            fontWeight: '500',
-                            letterSpacing: '0.05px',
-                            fontFamily: "'Outfit', 'DM Sans', sans-serif"
-                          }}
-                        >
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <p className="about-exact-text">
                           {item.text}
                         </p>
                       </div>

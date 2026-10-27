@@ -651,6 +651,8 @@
         dynamicCurrentMenuClass(mainNavUL);
     }
 
+    // React MobileNav component handles its own state, mega-menu, accordions and links
+    /*
     if ($(".main-menu__list").length && $(".mobile-nav__container").length) {
         let navContent = document.querySelector(".main-menu__list").outerHTML;
         let mobileNavContainer = document.querySelector(".mobile-nav__container");
@@ -681,7 +683,9 @@
             });
         });
     }
+    */
 
+    /*
     if ($(".mobile-nav__toggler").length) {
         $(".mobile-nav__toggler").on("click", function (e) {
             e.preventDefault();
@@ -689,6 +693,7 @@
             $("body").toggleClass("locked");
         });
     }
+    */
 
     if ($(".search-toggler").length) {
         $(".search-toggler").on("click", function (e) {

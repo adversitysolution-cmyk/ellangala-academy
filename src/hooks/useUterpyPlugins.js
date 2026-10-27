@@ -5,8 +5,22 @@ export function useUterpyPlugins() {
   const location = useLocation();
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      if (typeof window === 'undefined' || !window.jQuery) return;
+    let attempts = 0;
+    const maxAttempts = 30; // Check up to 3 seconds
+    let intervalId = null;
+
+    const runInit = () => {
+      if (typeof window === 'undefined' || !window.jQuery) {
+        attempts++;
+        if (attempts >= maxAttempts && intervalId) {
+          clearInterval(intervalId);
+        }
+        return false;
+      }
+
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
 
       const $ = window.jQuery;
 
@@ -14,7 +28,6 @@ export function useUterpyPlugins() {
       if ($('.preloader').length) {
         $('.preloader').fadeOut(200);
       }
-
 
       // 2. Search Overlay Toggle
       if ($('.search-toggler').length) {
@@ -36,7 +49,7 @@ export function useUterpyPlugins() {
       }
 
       // 4. Owl Carousels
-      if ($.fn.owlCarousel) {
+      if ($.fn && $.fn.owlCarousel) {
         if ($('.thm-owl__carousel').length) {
           $('.thm-owl__carousel').each(function () {
             const elm = $(this);
@@ -154,7 +167,7 @@ export function useUterpyPlugins() {
           boxClass: 'wow',
           animateClass: 'animated',
           offset: 0,
-          mobile: true,
+          mobile: false, // Prevents hidden offscreen overflow on small screens
           live: true,
         }).init();
       }
@@ -193,11 +206,10 @@ export function useUterpyPlugins() {
         });
       }
 
-      // 8. Custom Cursor Tracker
-      if ($('.custom-cursor__cursor').length) {
+      // 8. Custom Cursor Tracker (Desktop only)
+      if ($('.custom-cursor__cursor').length && window.matchMedia && !window.matchMedia('(pointer: coarse)').matches) {
         const cursor = document.querySelector('.custom-cursor__cursor');
         const cursorTwo = document.querySelector('.custom-cursor__cursor-two');
-        const links = document.querySelectorAll('a, button, .thm-btn');
 
         const onMouseMove = (e) => {
           if (cursor && cursorTwo) {
@@ -236,11 +248,18 @@ export function useUterpyPlugins() {
       };
 
       $(window).off('scroll', onScroll).on('scroll', onScroll);
+      return true;
+    };
 
-    }, 150);
+    const initialTimer = setTimeout(() => {
+      if (!runInit()) {
+        intervalId = setInterval(runInit, 100);
+      }
+    }, 100);
 
     return () => {
-      clearTimeout(timer);
+      clearTimeout(initialTimer);
+      if (intervalId) clearInterval(intervalId);
     };
   }, [location.pathname]);
 }

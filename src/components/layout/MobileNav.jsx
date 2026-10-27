@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { commonContent } from '../../contents/common.content';
 import { useMobileNav } from '../../context/MobileNavContext';
+import '../../assets/css/mobile-nav.css';
 
 export default function MobileNav() {
   const { mobileNav, header } = commonContent;

@@ -94,7 +94,7 @@ export default function HeaderOne() {
                       </Link>
                     </div>
 
-                    <div className="main-menu__main-menu-box">
+                    <div className="main-menu__main-menu-box d-none d-xl-block">
                       <ul className="main-menu__list">
                         <li>
                           <Link to="/">{header.nav.home}</Link>

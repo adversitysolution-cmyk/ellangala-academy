@@ -507,7 +507,7 @@ export default function HomeOne() {
         {/* Start Therapy One */}
         <section className="therapy-one">
           <div className="container">
-            <div className="therapy-one__inner">
+            <div className="therapy-one__inner" style={{ overflow: 'hidden' }}>
               <div
                 className="therapy-one__pattern"
                 style={{ backgroundImage: 'url(/assets/images/pattern/therapy-v1-pattern.webp)' }}
