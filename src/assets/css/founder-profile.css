@@ -2877,6 +2877,7 @@ html {
 
   .main-header-one__bottom-right-btn {
     flex-shrink: 0 !important;
+    margin-right: 2cm !important;
   }
 
   .main-header-one__bottom-right-btn .thm-btn,

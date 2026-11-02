@@ -563,7 +563,7 @@ export default function CommunityPostForm({ initialData = null, onSubmit, isSubm
                   </div>
                 )}
                 <span style={{ fontSize: '11px', color: '#94A3B8', marginTop: '4px', display: 'block' }}>
-                  Displays on the feed card next to timestamp: "2 days ago • {formData.categoryName || 'Daily Positive Wisdom'}"
+                  Displays on the feed card next to date: "Oct 15, 2026 • {formData.categoryName || 'Daily Positive Wisdom'}"
                 </span>
               </div>
 

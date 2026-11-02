@@ -1938,6 +1938,15 @@ Main Header Two
 .main-header-one__bottom-right-btn {
   position: relative;
   display: block;
+  margin-right: 2cm;
+}
+
+.main-header-one__container {
+  width: 100%;
+  max-width: 100%;
+  padding: 0 clamp(16px, 2vw, 32px);
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .main-header-one__bottom-right-btn .thm-btn {

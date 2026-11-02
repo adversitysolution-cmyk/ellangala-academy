@@ -95,16 +95,21 @@ export default function CommunityPostCard({ post, onPostUpdated }) {
     setShowShareModal(true);
   };
 
-  // Human friendly time badge e.g. "3 days ago"
-  const getTimeAgo = () => {
-    if (post.id === 'seed-pinned-1' || post.title?.includes('Welcome')) return '3 days ago';
-    if (post.id === 'seed-thought-2' || post.title?.includes('Thought for Today')) return '2 days ago';
-    if (post.id === 'seed-meditation-3' || post.title?.includes('Guided Meditation')) return '4 days ago';
-    if (!post.publishedAt) return 'Recently';
-    const diffHours = Math.round((Date.now() - new Date(post.publishedAt).getTime()) / (1000 * 60 * 60));
-    if (diffHours < 24) return `${Math.max(1, diffHours)}h ago`;
-    const days = Math.round(diffHours / 24);
-    return `${days} days ago`;
+  // Display actual date of posting e.g. "Oct 15, 2026"
+  const getPostDate = () => {
+    const rawDate = post.publishedAt || post.createdAt;
+    if (!rawDate) return '';
+    try {
+      const d = new Date(rawDate);
+      if (isNaN(d.getTime())) return String(rawDate);
+      return d.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+      });
+    } catch {
+      return String(rawDate);
+    }
   };
 
   return (
@@ -147,8 +152,10 @@ export default function CommunityPostCard({ post, onPostUpdated }) {
             </div>
 
             <div className="community-post-subline">
-              <span>{getTimeAgo()}</span>
-              <span className="community-dot-sep">•</span>
+              {getPostDate() && <span>{getPostDate()}</span>}
+              {getPostDate() && (
+                <span className="community-dot-sep">•</span>
+              )}
               <span className="community-post-cat-text">
                 {post.categoryName || 'Daily Positive Wisdom'}
               </span>

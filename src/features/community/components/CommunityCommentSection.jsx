@@ -177,7 +177,7 @@ export default function CommunityCommentSection({ postId, onCommentAdded }) {
                     ) : null}
                   </div>
                   <span className="community-comment-bubble-time">
-                    {new Date(c.createdAt).toLocaleDateString()}
+                    {c.createdAt ? new Date(c.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : ''}
                   </span>
                 </div>
                 <p className="community-comment-bubble-text">{c.content}</p>

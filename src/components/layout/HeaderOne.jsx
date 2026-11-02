@@ -441,7 +441,7 @@ export default function HeaderOne() {
                         )}
                       </Link>
                     </div>
-                    <div className="main-header-one__bottom-right-btn d-none d-xl-block" style={{ flexShrink: 0 }}>
+                    <div className="main-header-one__bottom-right-btn d-none d-xl-block" style={{ flexShrink: 0, marginRight: '2cm' }}>
                       <Link to="/contact" className="thm-btn" style={{ whiteSpace: 'nowrap', padding: '10px 20px', fontSize: '13.5px', borderRadius: '0px' }}>
                         {header.requestBookText || "Contact Us"}
                       </Link>
