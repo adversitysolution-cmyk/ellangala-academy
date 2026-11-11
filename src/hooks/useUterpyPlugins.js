@@ -8,6 +8,8 @@ export function useUterpyPlugins() {
     let attempts = 0;
     const maxAttempts = 30; // Check up to 3 seconds
     let intervalId = null;
+    let activeMouseMove = null;
+    let activeScroll = null;
 
     const runInit = () => {
       if (typeof window === 'undefined' || !window.jQuery) {
@@ -211,7 +213,10 @@ export function useUterpyPlugins() {
         const cursor = document.querySelector('.custom-cursor__cursor');
         const cursorTwo = document.querySelector('.custom-cursor__cursor-two');
 
-        const onMouseMove = (e) => {
+        if (activeMouseMove) {
+          window.removeEventListener('mousemove', activeMouseMove);
+        }
+        activeMouseMove = (e) => {
           if (cursor && cursorTwo) {
             cursor.style.transform = `translate3d(calc(${e.clientX}px - 50%), calc(${e.clientY}px - 50%), 0)`;
             cursorTwo.style.left = e.clientX + 'px';
@@ -219,8 +224,7 @@ export function useUterpyPlugins() {
           }
         };
 
-        window.removeEventListener('mousemove', onMouseMove);
-        window.addEventListener('mousemove', onMouseMove);
+        window.addEventListener('mousemove', activeMouseMove, { passive: true });
       }
 
       // 9. Preloader Hiding
@@ -228,18 +232,13 @@ export function useUterpyPlugins() {
         $('.preloader').fadeOut(300);
       }
 
-      // 10. Sticky Header on Scroll
-      const onScroll = () => {
-        if ($('.stricked-menu').length) {
-          const stricky = $('.stricked-menu');
-          if ($(window).scrollTop() > 130) {
-            stricky.addClass('stricky-fixed');
-          } else {
-            stricky.removeClass('stricky-fixed');
-          }
-        }
+      // 10. Scroll-to-Top Visibility on Scroll
+      if (activeScroll) {
+        window.removeEventListener('scroll', activeScroll);
+      }
+      activeScroll = () => {
         if ($('.scroll-to-top').length) {
-          if ($(window).scrollTop() > 100) {
+          if (window.scrollY > 100) {
             $('.scroll-to-top').fadeIn(500);
           } else {
             $('.scroll-to-top').fadeOut(500);
@@ -247,7 +246,7 @@ export function useUterpyPlugins() {
         }
       };
 
-      $(window).off('scroll', onScroll).on('scroll', onScroll);
+      window.addEventListener('scroll', activeScroll, { passive: true });
       return true;
     };
 
@@ -260,6 +259,8 @@ export function useUterpyPlugins() {
     return () => {
       clearTimeout(initialTimer);
       if (intervalId) clearInterval(intervalId);
+      if (activeMouseMove) window.removeEventListener('mousemove', activeMouseMove);
+      if (activeScroll) window.removeEventListener('scroll', activeScroll);
     };
   }, [location.pathname]);
 }

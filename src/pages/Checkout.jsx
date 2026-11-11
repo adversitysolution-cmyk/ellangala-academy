@@ -5,7 +5,6 @@ import FooterOne from '../components/layout/FooterOne';
 import PageHeader from '../components/common/PageHeader';
 import Preloader from '../components/layout/Preloader';
 import CustomCursor from '../components/layout/CustomCursor';
-import MobileNav from '../components/layout/MobileNav';
 import SearchPopup from '../components/layout/SearchPopup';
 import ScrollToTop from '../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../hooks/useUterpyPlugins';
@@ -369,26 +368,26 @@ export default function Checkout() {
                       <div className="coupon-box mt-4">
                         <div className="title-box mb-2"><p><strong>Have a coupon?</strong></p></div>
                         {couponCode ? (
-                          <div className="alert alert-success d-flex justify-content-between align-items-center" style={{ padding: '8px 14px', marginBottom: 0 }}>
+                          <div className="alert alert-success d-flex justify-content-between align-items-center flex-wrap gap-2" style={{ padding: '8px 14px', marginBottom: 0 }}>
                             <span><i className="fas fa-check-circle me-2"></i>{couponSuccess || `Coupon ${couponCode} applied`}</span>
                             <button type="button" className="btn btn-sm btn-link text-danger p-0" onClick={removeCoupon}>Remove</button>
                           </div>
                         ) : (
                           <>
-                            <div style={{ display: 'flex', gap: '8px' }}>
+                            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                               <input
                                 type="text"
                                 placeholder="Enter coupon code"
                                 value={inputCoupon}
                                 onChange={(e) => setInputCoupon(e.target.value)}
-                                style={{ flex: 1, padding: '10px 14px', borderRadius: '8px', border: '1px solid #CBD5E1', fontSize: '14px' }}
+                                style={{ flex: '1 1 160px', minWidth: 0, padding: '10px 14px', borderRadius: '8px', border: '1px solid #CBD5E1', fontSize: '14px' }}
                               />
                               <button
                                 type="button"
                                 className="thm-btn"
                                 disabled={couponLoading}
                                 onClick={() => applyCoupon(inputCoupon)}
-                                style={{ padding: '10px 18px', fontSize: '13px' }}
+                                style={{ padding: '10px 18px', fontSize: '13px', flexShrink: 0 }}
                               >
                                 <span>{couponLoading ? '…' : 'Apply'}</span>
                               </button>
@@ -454,7 +453,6 @@ export default function Checkout() {
         <FooterOne />
       </div>
 
-      <MobileNav />
       <SearchPopup />
       <ScrollToTop />
     </>

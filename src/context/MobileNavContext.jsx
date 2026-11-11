@@ -21,10 +21,24 @@ export function MobileNavProvider({ children }) {
     setIsOpen(false);
   }, [location.pathname]);
 
-  // Handle body lock
+  // Handle body lock, Escape key, and focus return to toggle button
   useEffect(() => {
     if (isOpen) {
       document.body.classList.add('locked');
+      const onKeyDown = (e) => {
+        if (e.key === 'Escape') {
+          setIsOpen(false);
+          const toggler = document.querySelector('.mobile-nav__toggler');
+          if (toggler && typeof toggler.focus === 'function') {
+            setTimeout(() => toggler.focus(), 50);
+          }
+        }
+      };
+      document.addEventListener('keydown', onKeyDown);
+      return () => {
+        document.body.classList.remove('locked');
+        document.removeEventListener('keydown', onKeyDown);
+      };
     } else {
       document.body.classList.remove('locked');
     }

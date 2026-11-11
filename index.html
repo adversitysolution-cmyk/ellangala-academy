@@ -67,11 +67,11 @@
   <style>
     /* Cumulative Layout Shift (CLS) Stabilization & Responsive Viewport Guardrails */
     html, body {
-      overflow-x: hidden;
+      overflow-x: clip;
       max-width: 100%;
     }
     .page-wrapper {
-      overflow-x: hidden;
+      overflow-x: clip;
       width: 100%;
       max-width: 100%;
       position: relative;
@@ -99,17 +99,25 @@
       .main-header-one__bottom-right {
         display: flex !important;
         align-items: center !important;
-        gap: 12px !important;
+        gap: 10px !important;
         margin-left: auto !important;
       }
+      .main-header-one__bottom-right-btn { display: none !important; }
       .mobile-nav-toggle-box {
         display: flex !important;
         align-items: center !important;
       }
       .mobile-nav__toggler {
-        font-size: 24px !important;
-        color: #1e1a16 !important;
-        padding: 6px !important;
+        width: 42px !important;
+        height: 42px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: #CA8A38 !important;
+        color: #ffffff !important;
+        border-radius: 8px !important;
+        font-size: 19px !important;
+        padding: 0 !important;
       }
     }
     @media (max-width: 991px) {

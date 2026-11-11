@@ -5,7 +5,6 @@ import FooterOne from '../components/layout/FooterOne';
 import PageHeader from '../components/common/PageHeader';
 import Preloader from '../components/layout/Preloader';
 import CustomCursor from '../components/layout/CustomCursor';
-import MobileNav from '../components/layout/MobileNav';
 import SearchPopup from '../components/layout/SearchPopup';
 import ScrollToTop from '../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../hooks/useUterpyPlugins';
@@ -13,14 +12,11 @@ import SEO from '../seo/SEO';
 import { certificateVerifyService } from '../admin/services/certificateService';
 import { ShieldCheck, ShieldAlert, ShieldX, Search, Download } from 'lucide-react';
 
-const box = { backgroundColor: '#FFFFFF', borderRadius: '20px', padding: '36px', border: '1px solid #ECE7DE', boxShadow: '0 4px 20px rgba(0,0,0,0.04)' };
-const row = { display: 'flex', justifyContent: 'space-between', gap: '16px', fontSize: '14px', color: '#334155', padding: '8px 0', borderBottom: '1px solid #F1F5F9' };
-
 function Result({ result, token }) {
   if (!result) return null;
   if (result.status === 'NOT_FOUND') {
     return (
-      <div style={{ ...box, marginTop: '24px', textAlign: 'center' }}>
+      <div className="verify-card-box" style={{ marginTop: '24px', textAlign: 'center' }}>
         <ShieldX size={40} style={{ color: '#DC2626' }} />
         <h3 style={{ fontSize: '20px', fontWeight: 800, color: '#0F231B', margin: '12px 0 4px' }}>Certificate Not Found</h3>
         <p style={{ color: '#64748B', fontSize: '14px', margin: 0 }}>No certificate matches that ID. Check the ID and try again.</p>
@@ -29,16 +25,16 @@ function Result({ result, token }) {
   }
   const revoked = result.status === 'REVOKED';
   return (
-    <div style={{ ...box, marginTop: '24px', borderColor: revoked ? '#FCA5A5' : '#A7F3D0' }}>
+    <div className="verify-card-box" style={{ marginTop: '24px', borderColor: revoked ? '#FCA5A5' : '#A7F3D0' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: revoked ? '#DC2626' : '#059669', marginBottom: '18px' }}>
         {revoked ? <ShieldAlert size={26} /> : <ShieldCheck size={26} />}
         <h3 style={{ fontSize: '20px', fontWeight: 800, margin: 0 }}>{revoked ? 'Certificate Revoked' : 'Valid Certificate'}</h3>
       </div>
-      <div style={row}><span>Participant Name</span><strong>{result.participantName}</strong></div>
-      <div style={row}><span>Event</span><strong>{result.eventName}</strong></div>
-      <div style={row}><span>Event Date</span><strong>{result.eventDateText}</strong></div>
-      <div style={row}><span>Certificate ID</span><strong style={{ fontFamily: 'monospace' }}>{result.certificateId}</strong></div>
-      <div style={{ ...row, borderBottom: 'none' }}><span>Issued By</span><strong>{result.issuedBy}</strong></div>
+      <div className="verify-detail-row"><span>Participant Name</span><strong>{result.participantName}</strong></div>
+      <div className="verify-detail-row"><span>Event</span><strong>{result.eventName}</strong></div>
+      <div className="verify-detail-row"><span>Event Date</span><strong>{result.eventDateText}</strong></div>
+      <div className="verify-detail-row"><span>Certificate ID</span><strong style={{ fontFamily: 'monospace' }}>{result.certificateId}</strong></div>
+      <div className="verify-detail-row" style={{ borderBottom: 'none' }}><span>Issued By</span><strong>{result.issuedBy}</strong></div>
       {token && !revoked && (
         <a href={`/api/certificates/file/${token}`} target="_blank" rel="noopener noreferrer"
           style={{
@@ -100,7 +96,7 @@ export default function VerifyCertificate() {
         <section style={{ paddingTop: '60px', paddingBottom: '90px', backgroundColor: '#FAF8F5' }}>
           <div className="container" style={{ maxWidth: '640px' }}>
             {!token && (
-              <div style={box}>
+              <div className="verify-card-box">
                 <div style={{ textAlign: 'center', marginBottom: '24px' }}>
                   <div style={{ width: '56px', height: '56px', borderRadius: '50%', backgroundColor: '#FAF5EC', color: '#CA8A38', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px' }}>
                     <ShieldCheck size={26} />
@@ -122,15 +118,14 @@ export default function VerifyCertificate() {
               </div>
             )}
 
-            {token && loading && <div style={{ ...box, textAlign: 'center', color: '#64748B' }}>Verifying certificate…</div>}
-            {token && error && <div style={{ ...box, textAlign: 'center', color: '#DC2626' }}>{error}</div>}
+            {token && loading && <div className="verify-card-box" style={{ textAlign: 'center', color: '#64748B' }}>Verifying certificate…</div>}
+            {token && error && <div className="verify-card-box" style={{ textAlign: 'center', color: '#DC2626' }}>{error}</div>}
             <Result result={result} token={token} />
           </div>
         </section>
 
         <FooterOne hideSubscribe={true} />
       </div>
-      <MobileNav />
       <SearchPopup />
       <ScrollToTop />
     </>

@@ -64,7 +64,7 @@ export default function AdminDashboardPage() {
     >
       <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
         {/* 4 Summary Cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px, 100%), 1fr))', gap: '20px' }}>
           <StatCard
             title="Total Enrollments"
             value={enrollments.length}

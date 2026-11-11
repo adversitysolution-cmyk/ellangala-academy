@@ -5,7 +5,6 @@ import FooterOne from '../../../components/layout/FooterOne';
 import PageHeader from '../../../components/common/PageHeader';
 import Preloader from '../../../components/layout/Preloader';
 import CustomCursor from '../../../components/layout/CustomCursor';
-import MobileNav from '../../../components/layout/MobileNav';
 import SearchPopup from '../../../components/layout/SearchPopup';
 import ScrollToTop from '../../../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../../../hooks/useUterpyPlugins';
@@ -179,10 +178,10 @@ export default function EventRegisterPage() {
             ) : isSubmitted ? (
               /* Registration Success Confirmation Card */
               <div
+                className="event-detail-card"
                 style={{
                   backgroundColor: '#FFFFFF',
                   borderRadius: '24px',
-                  padding: '50px 36px',
                   border: '1.5px solid #D1FAE5',
                   boxShadow: '0 10px 30px rgba(0,0,0,0.06)',
                   textAlign: 'center',
@@ -260,7 +259,7 @@ export default function EventRegisterPage() {
               <div className="row gy-4">
                 {/* Left Column: Event Summary Card */}
                 <div className="col-lg-5">
-                  <div style={{ backgroundColor: '#FFFFFF', borderRadius: '20px', padding: '28px', border: '1px solid #ECE7DE', boxShadow: '0 4px 20px rgba(0,0,0,0.04)', height: '100%' }}>
+                  <div className="event-detail-card" style={{ backgroundColor: '#FFFFFF', borderRadius: '20px', border: '1px solid #ECE7DE', boxShadow: '0 4px 20px rgba(0,0,0,0.04)', height: '100%' }}>
                     <div style={{ width: '100%', height: '180px', borderRadius: '12px', overflow: 'hidden', marginBottom: '20px', backgroundColor: '#0F172A' }}>
                       <img
                         src={event.image}
@@ -307,7 +306,7 @@ export default function EventRegisterPage() {
 
                 {/* Right Column: Registration Form */}
                 <div className="col-lg-7">
-                  <div style={{ backgroundColor: '#FFFFFF', borderRadius: '20px', padding: '36px', border: '1px solid #ECE7DE', boxShadow: '0 6px 25px rgba(0,0,0,0.05)' }}>
+                  <div className="event-detail-card" style={{ backgroundColor: '#FFFFFF', borderRadius: '20px', border: '1px solid #ECE7DE', boxShadow: '0 6px 25px rgba(0,0,0,0.05)' }}>
                     <h2 style={{ fontSize: '24px', fontWeight: '800', color: '#0F231B', marginBottom: '8px' }}>
                       Attendee Registration Form
                     </h2>
@@ -514,7 +513,6 @@ export default function EventRegisterPage() {
         <FooterOne />
       </div>
 
-      <MobileNav />
       <SearchPopup />
       <ScrollToTop />
     </>

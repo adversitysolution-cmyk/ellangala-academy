@@ -28,7 +28,7 @@ export default function FooterOne({ hideSubscribe = false, hideCommunity = false
           <div className="container-fluid px-4 px-lg-5" style={{ maxWidth: '1480px' }}>
             <div className="row gy-4">
               {/* Start Footer Widget Column */}
-              <div className="col-xl-3 col-lg-4 col-md-6 wow animated fadeInUp" data-wow-delay="0.1s">
+              <div className="col-xl-3 col-lg-6 col-md-6 wow animated fadeInUp" data-wow-delay="0.1s">
                 <div className="footer-widget__column footer-widget__about">
                   <div className="footer-widget__logo">
                     <Link to="/">
@@ -70,7 +70,7 @@ export default function FooterOne({ hideSubscribe = false, hideCommunity = false
               {/* End Footer Widget Column */}
 
               {/* Start Footer Widget Column */}
-              <div className="col-xl-3 col-lg-4 col-md-6 wow animated fadeInUp" data-wow-delay="0.3s">
+              <div className="col-xl-3 col-lg-6 col-md-6 wow animated fadeInUp" data-wow-delay="0.3s">
                 <div className="footer-widget__column footer-widget__contact clearfix">
                   <div className="footer-widget__title-box">
                     <h3 className="footer-widget__title">{footer.contactTitle}</h3>
@@ -130,7 +130,7 @@ export default function FooterOne({ hideSubscribe = false, hideCommunity = false
               {/* End Footer Widget Column */}
 
               {/* Start Footer Widget Column */}
-              <div className="col-xl-3 col-lg-3 col-md-6 wow animated fadeInUp" data-wow-delay="0.5s">
+              <div className="col-xl-3 col-lg-6 col-md-6 wow animated fadeInUp" data-wow-delay="0.5s">
                 <div className="footer-widget__column footer-widget__service clearfix">
                   <div className="footer-widget__title-box">
                     <h3 className="footer-widget__title">{footer.essentialsTitle}</h3>
@@ -163,7 +163,7 @@ export default function FooterOne({ hideSubscribe = false, hideCommunity = false
               {/* End Footer Widget Column */}
 
               {/* Start Footer Widget Column */}
-              <div className="col-xl-3 col-lg-3 col-md-6 wow animated fadeInUp" data-wow-delay="0.7s">
+              <div className="col-xl-3 col-lg-6 col-md-6 wow animated fadeInUp" data-wow-delay="0.7s">
                 <div className="footer-widget__column footer-widget__programs clearfix">
                   <div className="footer-widget__title-box">
                     <h3 className="footer-widget__title">Our Programs</h3>

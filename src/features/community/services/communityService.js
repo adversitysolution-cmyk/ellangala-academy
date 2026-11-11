@@ -29,7 +29,7 @@ export const communityService = {
           return {
             name: session.user.name,
             email: session.user.email || '',
-            avatar: session.user.avatarUrl || '/assets/images/resources/founder-avatar.png'
+            avatar: session.user.avatarUrl || '/assets/images/team/naveen-ellangala.jpg'
           };
         }
       }
@@ -44,7 +44,7 @@ export const communityService = {
     return {
       name: 'Academy Learner',
       email: '',
-      avatar: '/assets/images/resources/founder-avatar.png'
+      avatar: '/assets/images/team/naveen-ellangala.jpg'
     };
   },
 

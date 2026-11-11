@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { commonContent } from '../../contents/common.content';
 import { useCart } from '../../context/CartContext';
 import { useMobileNav } from '../../context/MobileNavContext';
@@ -7,7 +7,32 @@ import { useMobileNav } from '../../context/MobileNavContext';
 export default function HeaderOne() {
   const { header } = commonContent;
   const { totalCount } = useCart();
-  const { toggleMobileNav } = useMobileNav();
+  const { isOpen, toggleMobileNav } = useMobileNav();
+  const [openMenu, setOpenMenu] = useState(null);
+  const navRef = useRef(null);
+  const location = useLocation();
+
+  useEffect(() => {
+    setOpenMenu(null);
+  }, [location.pathname, location.hash]);
+
+  useEffect(() => {
+    if (!openMenu) return;
+    const handleOutside = (e) => {
+      if (navRef.current && !navRef.current.contains(e.target)) {
+        setOpenMenu(null);
+      }
+    };
+    const handleKey = (e) => {
+      if (e.key === 'Escape') setOpenMenu(null);
+    };
+    document.addEventListener('mousedown', handleOutside);
+    document.addEventListener('keydown', handleKey);
+    return () => {
+      document.removeEventListener('mousedown', handleOutside);
+      document.removeEventListener('keydown', handleKey);
+    };
+  }, [openMenu]);
 
   const scrollToSection = (id) => {
     const el = document.getElementById(id);
@@ -94,12 +119,16 @@ export default function HeaderOne() {
                       </Link>
                     </div>
 
-                    <div className="main-menu__main-menu-box d-none d-xl-block">
+                    <div className="main-menu__main-menu-box d-none d-xl-block" ref={navRef}>
                       <ul className="main-menu__list">
                         <li>
                           <Link to="/">{header.nav.home}</Link>
                         </li>
-                        <li className="dropdown">
+                        <li
+                          className={`dropdown ${openMenu === 'about' ? 'nav-open' : ''}`}
+                          onMouseEnter={() => setOpenMenu('about')}
+                          onMouseLeave={() => setOpenMenu((cur) => (cur === 'about' ? null : cur))}
+                        >
                           <Link to="/about">{header.nav.about}</Link>
                           <ul>
                             <li>
@@ -119,8 +148,20 @@ export default function HeaderOne() {
                             </li>
                           </ul>
                         </li>
-                        <li className="dropdown programs-megamenu-item">
-                          <a href="#" onClick={(e) => e.preventDefault()}>{header.nav.services}</a>
+                        <li
+                          className={`dropdown programs-megamenu-item ${openMenu === 'programs' ? 'nav-open' : ''}`}
+                          onMouseEnter={() => setOpenMenu('programs')}
+                          onMouseLeave={() => setOpenMenu((cur) => (cur === 'programs' ? null : cur))}
+                        >
+                          <button
+                            type="button"
+                            className="nav-trigger-btn"
+                            aria-expanded={openMenu === 'programs'}
+                            aria-haspopup="true"
+                            onClick={() => setOpenMenu((cur) => (cur === 'programs' ? null : 'programs'))}
+                          >
+                            {header.nav.services}
+                          </button>
                           <div className="programs-megamenu">
                             <div className="programs-megamenu__inner">
                               {/* Column 1: POSITIVE WORKSHOPS */}
@@ -340,7 +381,11 @@ export default function HeaderOne() {
                           </ul>
                         </li>
                         */}
-                        <li className="dropdown books-dropdown-item">
+                        <li
+                          className={`dropdown books-dropdown-item ${openMenu === 'resources' ? 'nav-open' : ''}`}
+                          onMouseEnter={() => setOpenMenu('resources')}
+                          onMouseLeave={() => setOpenMenu((cur) => (cur === 'resources' ? null : cur))}
+                        >
                           <Link to="/resources">{header.nav.shop}</Link>
                           <ul className="books-two-column-menu">
                             {header.booksList ? (
@@ -441,24 +486,23 @@ export default function HeaderOne() {
                         )}
                       </Link>
                     </div>
-                    <div className="main-header-one__bottom-right-btn d-none d-xl-block" style={{ flexShrink: 0, marginRight: '2cm' }}>
+                    <div className="main-header-one__bottom-right-btn d-none d-xl-block">
                       <Link to="/contact" className="thm-btn" style={{ whiteSpace: 'nowrap', padding: '10px 20px', fontSize: '13.5px', borderRadius: '0px' }}>
                         {header.requestBookText || "Contact Us"}
                       </Link>
                     </div>
                     {/* Mobile Hamburger Toggle Button */}
                     <div className="mobile-nav-toggle-box d-flex d-xl-none">
-                      <a
-                        href="#"
+                      <button
+                        type="button"
                         className="mobile-nav__toggler"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          toggleMobileNav();
-                        }}
+                        onClick={toggleMobileNav}
+                        aria-expanded={isOpen}
+                        aria-controls="mobile-nav-drawer"
                         aria-label="Toggle mobile menu"
                       >
-                        <i className="fa fa-bars"></i>
-                      </a>
+                        <i className="fa fa-bars" aria-hidden="true"></i>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -467,10 +511,6 @@ export default function HeaderOne() {
           </nav>
         </div>
       </header>
-
-      <div className="stricky-header stricky-header__one stricked-menu main-menu">
-        <div className="sticky-header__content"></div>
-      </div>
     </>
   );
 }

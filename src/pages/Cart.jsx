@@ -5,7 +5,6 @@ import FooterOne from '../components/layout/FooterOne';
 import PageHeader from '../components/common/PageHeader';
 import Preloader from '../components/layout/Preloader';
 import CustomCursor from '../components/layout/CustomCursor';
-import MobileNav from '../components/layout/MobileNav';
 import SearchPopup from '../components/layout/SearchPopup';
 import ScrollToTop from '../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../hooks/useUterpyPlugins';
@@ -332,7 +331,7 @@ export default function Cart() {
                     </form>
 
                     {couponSuccess && (
-                      <div className="alert alert-success mt-2 d-flex justify-content-between align-items-center" style={{ padding: '8px 16px' }}>
+                      <div className="alert alert-success mt-2 d-flex justify-content-between align-items-center flex-wrap gap-2" style={{ padding: '8px 16px' }}>
                         <span><i className="fas fa-check-circle me-2"></i>{couponSuccess}</span>
                         <button
                           type="button"
@@ -473,7 +472,6 @@ export default function Cart() {
         <FooterOne />
       </div>
 
-      <MobileNav />
       <SearchPopup />
       <ScrollToTop />
     </>

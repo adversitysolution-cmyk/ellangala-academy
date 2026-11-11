@@ -46,6 +46,13 @@ export default function AdminSidebar({ isOpen, onClose }) {
 
   return (
     <>
+      {isOpen && (
+        <div
+          className="admin-sidebar-backdrop d-lg-none"
+          onClick={onClose}
+          aria-hidden="true"
+        />
+      )}
       <aside className={`admin-sidebar ${isOpen ? 'open' : ''}`}>
         <div>
           {/* Brand Area */}
@@ -61,6 +68,7 @@ export default function AdminSidebar({ isOpen, onClose }) {
             <button
               type="button"
               onClick={onClose}
+              aria-label="Close navigation sidebar"
               className="d-lg-none"
               style={{
                 background: 'none',

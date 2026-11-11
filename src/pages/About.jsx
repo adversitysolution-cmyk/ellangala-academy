@@ -5,7 +5,6 @@ import FooterOne from '../components/layout/FooterOne';
 import PageHeader from '../components/common/PageHeader';
 import Preloader from '../components/layout/Preloader';
 import CustomCursor from '../components/layout/CustomCursor';
-import MobileNav from '../components/layout/MobileNav';
 import SearchPopup from '../components/layout/SearchPopup';
 import ScrollToTop from '../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../hooks/useUterpyPlugins';
@@ -332,7 +331,7 @@ export default function About() {
                 className="therapy-one__bg"
                 style={{ backgroundImage: 'url(/assets/images/backgrounds/therapy-v1-bg.jpg)' }}
               ></div>
-              <div className="therapy-one__img1 wow slideInRight" data-wow-delay="100ms" data-wow-duration="2500ms">
+              <div className="therapy-one__img1 wow fadeInUp" data-wow-delay="100ms" data-wow-duration="2500ms">
                 <img src="/assets/images/resources/therapy-v1-img1.png" alt="#" />
               </div>
               <div className="shape1"></div>
@@ -473,7 +472,6 @@ export default function About() {
         <FooterOne />
       </div>
 
-      <MobileNav />
       <SearchPopup />
       <ScrollToTop />
     </>

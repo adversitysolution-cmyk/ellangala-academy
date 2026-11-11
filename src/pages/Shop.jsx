@@ -5,7 +5,6 @@ import FooterOne from '../components/layout/FooterOne';
 import PageHeader from '../components/common/PageHeader';
 import Preloader from '../components/layout/Preloader';
 import CustomCursor from '../components/layout/CustomCursor';
-import MobileNav from '../components/layout/MobileNav';
 import SearchPopup from '../components/layout/SearchPopup';
 import ScrollToTop from '../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../hooks/useUterpyPlugins';
@@ -121,7 +120,7 @@ export default function Shop() {
         <section className="shop-page" style={{ paddingTop: '50px', paddingBottom: '90px' }}>
           <div className="container">
             {/* Circular Image Category Filter Options */}
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '60px', marginBottom: '45px', flexWrap: 'wrap' }}>
+            <div className="shop-circle-tabs" style={{ display: 'flex', justifyContent: 'center', gap: '60px', marginBottom: '45px', flexWrap: 'wrap' }}>
               {resourceCategories.map((cat) => {
                 const isActive = activeCategory === cat.id;
                 const count = products.filter((p) =>
@@ -309,7 +308,6 @@ export default function Shop() {
         <FooterOne />
       </div>
 
-      <MobileNav />
       <SearchPopup />
       <ScrollToTop />
     </>

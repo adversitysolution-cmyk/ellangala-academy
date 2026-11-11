@@ -35,7 +35,13 @@ app.use(cors());
 // Keep the raw body: the Razorpay webhook signature is computed over it.
 app.use(express.json({ verify: (req, _res, buf) => { req.rawBody = buf; } }));
 
-// 1. API Endpoints
+// 1. API Endpoints (always uncached)
+app.use('/api', (req, res, next) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  next();
+});
 app.use('/api', adminAuthApi); // POST /api/admin/login (public)
 app.use('/api/admin', requireAdminAuth); // everything else under /api/admin/* requires a session
 app.use('/api', eventsApi);
@@ -83,6 +89,8 @@ app.use((req, res, next) => {
 // 3b. Canonicalization (www -> non-www, HTTP -> HTTPS) & Security Headers (HSTS)
 app.use((req, res, next) => {
   const host = req.headers.host || '';
+  const hostname = host.split(':')[0].toLowerCase();
+  const isLocalHost = hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '[::1]';
   const proto = req.headers['x-forwarded-proto'] || req.protocol;
 
   // Enforce HSTS (Strict-Transport-Security) & Security Headers
@@ -92,52 +100,109 @@ app.use((req, res, next) => {
   res.setHeader('X-XSS-Protection', '1; mode=block');
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
 
-  // Redirect www.ellangala.com to ellangala.com (301 Permanent Redirect)
-  if (host.startsWith('www.')) {
-    const cleanHost = host.replace(/^www\./i, '');
-    return res.redirect(301, `https://${cleanHost}${req.originalUrl}`);
-  }
+  if (!isLocalHost) {
+    // Redirect www.ellangala.com to ellangala.com (301 Permanent Redirect)
+    if (host.startsWith('www.')) {
+      const cleanHost = host.replace(/^www\./i, '');
+      return res.redirect(301, `https://${cleanHost}${req.originalUrl}`);
+    }
 
-  // Redirect HTTP to HTTPS in production
-  if (process.env.NODE_ENV === 'production' && proto === 'http') {
-    return res.redirect(301, `https://${host}${req.originalUrl}`);
+    // Redirect HTTP to HTTPS in production
+    if (process.env.NODE_ENV === 'production' && proto === 'http') {
+      return res.redirect(301, `https://${host}${req.originalUrl}`);
+    }
   }
 
   next();
 });
 
-// 4. Serve Static Assets from Dist (Production) + public assets + persistent uploaded images
+// 4. Serve Static Assets from Dist (Production) + persistent uploaded images
 const distDir = path.join(rootDir, 'dist');
 const publicDir = path.join(rootDir, 'public');
+const manifestPath = path.join(distDir, '.vite', 'manifest.json');
+let cachedHashedAssetSet = new Set();
+let cachedManifestMtime = 0;
 
-// 4a. Hashed Vite bundles in dist/assets -> cache for 1 year immutable
-app.use('/assets', express.static(path.join(distDir, 'assets'), {
-  maxAge: '1y',
-  immutable: true
-}));
+function getHashedAssetSet() {
+  try {
+    if (!fs.existsSync(manifestPath)) {
+      cachedHashedAssetSet = new Set();
+      cachedManifestMtime = 0;
+      return cachedHashedAssetSet;
+    }
+    const stat = fs.statSync(manifestPath);
+    if (stat.mtimeMs !== cachedManifestMtime) {
+      const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf-8'));
+      const nextSet = new Set();
+      for (const entry of Object.values(manifest)) {
+        if (entry?.file) nextSet.add(`/${entry.file.replace(/^\/+/, '')}`);
+        for (const cssFile of entry?.css || []) nextSet.add(`/${cssFile.replace(/^\/+/, '')}`);
+        for (const assetFile of entry?.assets || []) nextSet.add(`/${assetFile.replace(/^\/+/, '')}`);
+      }
+      cachedHashedAssetSet = nextSet;
+      cachedManifestMtime = stat.mtimeMs;
+    }
+  } catch {
+    // Keep last valid set if manifest is briefly unavailable during rebuild
+  }
+  return cachedHashedAssetSet;
+}
 
-// 4b. Standard production dist assets
-app.use(express.static(distDir, {
-  maxAge: '1d',
+const staticDirToServe = fs.existsSync(distDir) ? distDir : publicDir;
+
+// 4a. /assets: long-term immutable ONLY for content-hashed Vite bundles or ?v= versioned assets;
+// all other unhashed static assets (images, fonts, vendor files) revalidate via ETag cleanly.
+app.use('/assets', express.static(path.join(staticDirToServe, 'assets'), {
+  etag: true,
+  lastModified: true,
+  maxAge: 0,
   setHeaders: (res, filePath) => {
-    if (filePath.endsWith('.html')) {
+    const req = res.req;
+    const reqPath = `/assets${req?.path || ''}`;
+    const hasVersionQuery = Boolean(req?.query?.v && /^[a-z0-9_-]{6,}$/i.test(String(req.query.v)));
+    const isHashedBundle = getHashedAssetSet().has(reqPath) ||
+      (/[/\\]dist[/\\]assets[/\\][^/\\]+$/i.test(filePath) && /-[A-Za-z0-9_-]{8}\.(?:js|mjs|css)$/i.test(filePath));
+
+    if (hasVersionQuery || isHashedBundle) {
+      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    } else {
       res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
     }
   }
 }));
 
-// 4c. Public static directory (images, favicons, fonts)
-app.use(express.static(publicDir, {
-  maxAge: '30d',
+// 4b. Root static files in dist (robots.txt, etc.) — index: false ensures `/` goes through dynamic SSR metadata & no-store headers
+app.use(express.static(staticDirToServe, {
+  index: false,
+  etag: true,
+  lastModified: true,
+  maxAge: 0,
   setHeaders: (res, filePath) => {
-    if (/\.(jpg|jpeg|png|webp|avif|svg|ico|woff|woff2|ttf)$/i.test(filePath)) {
-      res.setHeader('Cache-Control', 'public, max-age=2592000, stale-while-revalidate=86400');
+    if (filePath.endsWith('.html')) {
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+      res.setHeader('Pragma', 'no-cache');
+      res.setHeader('Expires', '0');
+    } else {
+      res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
     }
   }
 }));
 
+// Block internal JSON auth/session/profile stores inside uploadsDir from public HTTP access
+app.use('/uploads', (req, res, next) => {
+  if (/\.json$/i.test(req.path)) {
+    return res.status(404).end();
+  }
+  next();
+});
+
 app.use('/uploads', express.static(uploadsDir, {
-  maxAge: '7d'
+  etag: true,
+  lastModified: true,
+  maxAge: 0,
+  setHeaders: (res) => {
+    res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+  }
 }));
 // NOTE: certificate PDFs in certificatesDir are deliberately NOT served statically —
 // access only via token-gated /api/certificates/file/:token or admin download.
@@ -173,7 +238,10 @@ app.get('*', async (req, res) => {
     }
 
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
-    res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+    res.setHeader('Vary', 'Accept-Encoding');
     if (pageMeta.is404) {
       res.status(404).send(finalHtml);
     } else {

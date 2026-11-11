@@ -5,7 +5,6 @@ import FooterOne from '../components/layout/FooterOne';
 import PageHeader from '../components/common/PageHeader';
 import Preloader from '../components/layout/Preloader';
 import CustomCursor from '../components/layout/CustomCursor';
-import MobileNav from '../components/layout/MobileNav';
 import SearchPopup from '../components/layout/SearchPopup';
 import ScrollToTop from '../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../hooks/useUterpyPlugins';
@@ -59,15 +58,7 @@ export default function TrackOrderPage() {
 
         <section style={{ paddingTop: '60px', paddingBottom: '90px', backgroundColor: '#FAF8F5' }}>
           <div className="container" style={{ maxWidth: '640px' }}>
-            <div
-              style={{
-                backgroundColor: '#FFFFFF',
-                borderRadius: '20px',
-                padding: '36px',
-                border: '1px solid #ECE7DE',
-                boxShadow: '0 4px 20px rgba(0,0,0,0.04)'
-              }}
-            >
+            <div className="track-order-card">
               <div style={{ textAlign: 'center', marginBottom: '28px' }}>
                 <div
                   style={{
@@ -143,16 +134,7 @@ export default function TrackOrderPage() {
             </div>
 
             {order && (
-              <div
-                style={{
-                  backgroundColor: '#FFFFFF',
-                  borderRadius: '20px',
-                  padding: '32px',
-                  border: '1px solid #ECE7DE',
-                  boxShadow: '0 4px 20px rgba(0,0,0,0.04)',
-                  marginTop: '24px'
-                }}
-              >
+              <div className="track-order-card" style={{ marginTop: '24px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
                   <CheckCircle2 size={20} style={{ color: '#059669' }} />
                   <h3 style={{ fontSize: '18px', fontWeight: '800', color: '#0F231B', margin: 0 }}>
@@ -161,23 +143,23 @@ export default function TrackOrderPage() {
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '14px', color: '#334155', marginBottom: '20px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <div className="track-order-row">
                     <span>Status</span>
                     <strong>{order.status}</strong>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <div className="track-order-row">
                     <span>Payment</span>
                     <strong>{order.paymentStatus} ({order.paymentMethod === 'online' ? 'Online' : 'Cash on Delivery'})</strong>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <div className="track-order-row">
                     <span>Delivering to</span>
                     <strong>{order.city}{order.state ? `, ${order.state}` : ''}</strong>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <div className="track-order-row">
                     <span>Placed on</span>
                     <strong>{formatDate(order.createdAt)}</strong>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <div className="track-order-row">
                     <span>Last updated</span>
                     <strong>{formatDate(order.updatedAt)}</strong>
                   </div>
@@ -185,12 +167,12 @@ export default function TrackOrderPage() {
 
                 <div style={{ borderTop: '1px solid #F1F5F9', paddingTop: '16px' }}>
                   {(order.items || []).map((item, idx) => (
-                    <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13.5px', color: '#475569', marginBottom: '8px' }}>
+                    <div key={idx} className="track-order-row" style={{ fontSize: '13.5px', color: '#475569', marginBottom: '8px' }}>
                       <span>{item.title || item.name} {item.quantity ? `× ${item.quantity}` : ''}</span>
                       {item.price !== undefined && <span>₹{item.price}</span>}
                     </div>
                   ))}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '15px', fontWeight: '800', color: '#0F231B', marginTop: '12px', paddingTop: '12px', borderTop: '1px solid #F1F5F9' }}>
+                  <div className="track-order-row" style={{ fontSize: '15px', fontWeight: '800', color: '#0F231B', marginTop: '12px', paddingTop: '12px', borderTop: '1px solid #F1F5F9' }}>
                     <span>Total</span>
                     <span>₹{order.totalAmount}</span>
                   </div>
@@ -203,7 +185,6 @@ export default function TrackOrderPage() {
         <FooterOne hideSubscribe={true} />
       </div>
 
-      <MobileNav />
       <SearchPopup />
       <ScrollToTop />
     </>

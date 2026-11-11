@@ -5,7 +5,6 @@ import FooterOne from '../../../components/layout/FooterOne';
 import PageHeader from '../../../components/common/PageHeader';
 import Preloader from '../../../components/layout/Preloader';
 import CustomCursor from '../../../components/layout/CustomCursor';
-import MobileNav from '../../../components/layout/MobileNav';
 import SearchPopup from '../../../components/layout/SearchPopup';
 import ScrollToTop from '../../../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../../../hooks/useUterpyPlugins';
@@ -114,7 +113,7 @@ export default function EventsPage() {
             </div>
 
             {/* Filter Tabs (Upcoming / Past) */}
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', marginBottom: '45px' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '16px', marginBottom: '45px' }}>
               <button
                 type="button"
                 onClick={() => setActiveTab('upcoming')}
@@ -169,14 +168,13 @@ export default function EventsPage() {
               >
                 <div className="row g-0 align-items-center">
                   <div className="col-lg-6">
-                    <div style={{ height: '100%', minHeight: '380px', position: 'relative', overflow: 'hidden' }}>
+                    <div className="events-featured-media">
                       <img
                         src={featuredEvent.image}
                         alt={featuredEvent.title}
                         onError={(e) => {
                           e.currentTarget.src = '/assets/images/events/bhagavadgita-meaningful-life-series-5.jpg';
                         }}
-                        style={{ width: '100%', height: '100%', objectFit: 'cover', minHeight: '380px' }}
                       />
                       <div
                         style={{
@@ -198,7 +196,7 @@ export default function EventsPage() {
                     </div>
                   </div>
                   <div className="col-lg-6">
-                    <div style={{ padding: '36px 40px' }}>
+                    <div className="events-featured-body">
                       <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px', flexWrap: 'wrap' }}>
                         <span
                           style={{
@@ -234,7 +232,7 @@ export default function EventsPage() {
                       <div
                         style={{
                           display: 'grid',
-                          gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))',
+                          gridTemplateColumns: 'repeat(auto-fit, minmax(min(170px, 100%), 1fr))',
                           gap: '10px',
                           marginBottom: '26px',
                           backgroundColor: '#FAF8F5',
@@ -368,7 +366,7 @@ export default function EventsPage() {
                           </div>
 
                           {/* Event Info */}
-                          <div style={{ padding: '24px' }}>
+                          <div className="event-info-card-body">
                             {event.subtitle && (
                               <div style={{ fontSize: '12px', fontWeight: '800', color: '#CA8A38', textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: '6px' }}>
                                 {event.subtitle}
@@ -400,15 +398,7 @@ export default function EventsPage() {
                         </div>
 
                         {/* Card Bottom CTA Bar */}
-                        <div
-                          style={{
-                            padding: '16px 24px 20px',
-                            borderTop: '1px solid #F1F5F9',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '10px'
-                          }}
-                        >
+                        <div className="event-cta-bar">
                           <Link
                             to={`/events/${event.id}`}
                             style={{
@@ -542,7 +532,7 @@ export default function EventsPage() {
                         </div>
 
                         {/* Event Info */}
-                        <div style={{ padding: '24px' }}>
+                        <div className="event-info-card-body">
                           <h3 style={{ fontSize: '19px', fontWeight: '800', color: '#0F231B', lineHeight: '1.35', marginBottom: '10px' }}>
                             <Link to={`/events/${event.id}`} style={{ color: '#0F231B', textDecoration: 'none' }}>
                               {event.title}
@@ -566,15 +556,7 @@ export default function EventsPage() {
                         </div>
                       </div>
 
-                      <div
-                        style={{
-                          padding: '16px 24px 20px',
-                          borderTop: '1px solid #F1F5F9',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '10px'
-                        }}
-                      >
+                      <div className="event-cta-bar">
                         <Link
                           to={`/events/${event.id}`}
                           style={{
@@ -649,7 +631,6 @@ export default function EventsPage() {
         <FooterOne />
       </div>
 
-      <MobileNav />
       <SearchPopup />
       <ScrollToTop />
     </>

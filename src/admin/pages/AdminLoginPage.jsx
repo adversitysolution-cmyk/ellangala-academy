@@ -46,26 +46,14 @@ export default function AdminLoginPage() {
       }}
     >
       <SEO title="Admin Login | Ellangala’s Academy" noindex={true} />
-      <div
-        style={{
-          width: '100%',
-          maxWidth: '920px',
-          backgroundColor: '#FFFFFF',
-          borderRadius: '24px',
-          boxShadow: '0 20px 50px rgba(15, 23, 42, 0.08)',
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
-          overflow: 'hidden',
-          border: '1px solid #EFE8DD'
-        }}
-      >
+      <div className="admin-login-grid">
         {/* Left Side: Academy Branding */}
         <div
+          className="admin-login-brand-panel"
           style={{
             backgroundImage: 'linear-gradient(135deg, rgba(15, 23, 42, 0.94) 0%, rgba(30, 41, 59, 0.96) 100%), url("/assets/images/slider/sidebanner bg.png")',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            padding: '48px 36px',
             color: '#FFFFFF',
             display: 'flex',
             flexDirection: 'column',
@@ -115,7 +103,7 @@ export default function AdminLoginPage() {
         </div>
 
         {/* Right Side: Login Form */}
-        <div style={{ padding: '48px 40px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        <div className="admin-login-form-panel" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
           <h3 style={{ fontSize: '22px', fontWeight: '700', color: '#0F231B', marginBottom: '6px' }}>
             Sign In to Dashboard
           </h3>

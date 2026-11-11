@@ -4,7 +4,6 @@ import HeaderOne from '../components/layout/HeaderOne';
 import FooterOne from '../components/layout/FooterOne';
 import Preloader from '../components/layout/Preloader';
 import CustomCursor from '../components/layout/CustomCursor';
-import MobileNav from '../components/layout/MobileNav';
 import SearchPopup from '../components/layout/SearchPopup';
 import ScrollToTop from '../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../hooks/useUterpyPlugins';
@@ -123,33 +122,6 @@ function Hero() {
         .phone-card-hover {
           transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s ease;
         }
-        @media (max-width: 1200px) {
-          .hero-mockup-wrapper {
-            transform: scale(0.92);
-            transform-origin: center center;
-          }
-        }
-        @media (max-width: 991px) {
-          .hero-mockup-wrapper {
-            transform: scale(0.82);
-            transform-origin: center center;
-            margin: 20px auto;
-          }
-        }
-        @media (max-width: 600px) {
-          .hero-mockup-wrapper {
-            transform: scale(0.62);
-            transform-origin: center center;
-            margin: -40px auto;
-          }
-        }
-        @media (max-width: 420px) {
-          .hero-mockup-wrapper {
-            transform: scale(0.5);
-            transform-origin: center center;
-            margin: -70px auto;
-          }
-        }
       `}</style>
 
       {/* ─── Background Subtle Geometric Accents ─── */}
@@ -247,8 +219,8 @@ function Hero() {
           {/* LEFT COLUMN: MARKETING & DOWNLOAD CONTENT                */}
           {/* ======================================================== */}
           <div
-            className="col-xl-6 col-lg-6 col-md-12"
-            style={{ paddingRight: '28px', marginBottom: '40px' }}
+            className="col-xl-6 col-lg-6 col-md-12 pmg-hero-col-left"
+            style={{ marginBottom: '40px' }}
           >
             {/* 1. Pill Badge */}
             <div
@@ -460,18 +432,12 @@ function Hero() {
 
             {/* 6. Impact Statistics Card with Premium SVG Icons */}
             <div
+              className="pmg-impact-stats-card"
               style={{
                 backgroundColor: '#FFFFFF',
                 borderRadius: '18px',
                 border: '1px solid #ECE7DE',
-                padding: '16px 24px',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '20px',
                 boxShadow: '0 8px 30px rgba(6, 36, 78, 0.04)',
-                maxWidth: '560px',
-                width: '100%',
-                justifyContent: 'space-between',
               }}
             >
               {/* Stat 1: Lives Impacted */}
@@ -523,7 +489,7 @@ function Hero() {
               </div>
 
               {/* Divider */}
-              <div style={{ width: '1px', height: '38px', backgroundColor: '#ECE7DE' }} />
+              <div className="pmg-impact-divider" style={{ width: '1px', height: '38px', backgroundColor: '#ECE7DE' }} />
 
               {/* Stat 2: Workshops */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1 }}>
@@ -573,7 +539,7 @@ function Hero() {
               </div>
 
               {/* Divider */}
-              <div style={{ width: '1px', height: '38px', backgroundColor: '#ECE7DE' }} />
+              <div className="pmg-impact-divider" style={{ width: '1px', height: '38px', backgroundColor: '#ECE7DE' }} />
 
               {/* Stat 3: App Rating */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: 1 }}>
@@ -617,30 +583,23 @@ function Hero() {
           {/* RIGHT COLUMN: 5 SYMMETRICALLY LAYERED 3D PHONE MOCKUPS   */}
           {/* ======================================================== */}
           <div
-            className="col-xl-6 col-lg-6 col-md-12"
-            style={{
-              position: 'relative',
-              minHeight: '600px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
+            className="col-xl-6 col-lg-6 col-md-12 pmg-hero-phone-col"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
           >
-            {/* Phone Group Container */}
-            <div
-              className="hero-mockup-wrapper"
-              style={{
-                position: 'relative',
-                width: '100%',
-                maxWidth: '660px',
-                height: '560px',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
+            {/* Phone Group Stage + Container */}
+            <div className="pmg-hero-mockup-stage">
+              <div
+                className="hero-mockup-wrapper"
+                style={{
+                  position: 'relative',
+                  width: '660px',
+                  height: '560px',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
               {/* ──────────────────────────────────────────────────────────── */}
               {/* 1. FAR LEFT PHONE (Back Left - Layer 1)                     */}
               {/* ──────────────────────────────────────────────────────────── */}
@@ -1050,6 +1009,7 @@ function Hero() {
                   </div>
                 </div>
               </div>
+            </div>
             </div>
 
             {/* Pagination Indicators & Controls with Smooth Transitions */}
@@ -1710,11 +1670,11 @@ function HowItWorks() {
           </div>
 
           {/* ─── Center Phone Mockup (Practice Tools Screen) ─── */}
-          <div style={{ display: 'flex', justifyContent: 'center', position: 'relative' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', position: 'relative', width: '100%' }}>
             <div
               style={{
-                width: '290px',
-                height: '575px',
+                width: 'min(290px, 100%)',
+                aspectRatio: '290 / 575',
                 borderRadius: '40px',
                 backgroundColor: '#061325',
                 padding: '8px',
@@ -2181,11 +2141,11 @@ function FeaturesA() {
           }}
         >
           {/* ─── Left Column: Phone Mockup (Book a Session Screen) ─── */}
-          <div style={{ display: 'flex', justifyContent: 'center', position: 'relative' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', position: 'relative', width: '100%' }}>
             <div
               style={{
-                width: '320px',
-                height: '635px',
+                width: 'min(320px, 100%)',
+                aspectRatio: '320 / 635',
                 borderRadius: '44px',
                 backgroundColor: '#061325',
                 padding: '9px',
@@ -2872,11 +2832,11 @@ function FeaturesB() {
           </div>
 
           {/* ─── Right Column: Phone Mockup (Namaste Home Screen) ─── */}
-          <div style={{ display: 'flex', justifyContent: 'center', position: 'relative' }}>
+          <div style={{ display: 'flex', justifyContent: 'center', position: 'relative', width: '100%' }}>
             <div
               style={{
-                width: '320px',
-                height: '635px',
+                width: 'min(320px, 100%)',
+                aspectRatio: '320 / 635',
                 borderRadius: '44px',
                 backgroundColor: '#061325',
                 padding: '9px',
@@ -3777,13 +3737,12 @@ function FAQ() {
                 {/* Expanded Answer Body */}
                 {isOpen && (
                   <div
+                    className="pmg-faq-answer"
                     style={{
-                      padding: '0 26px 22px 80px',
                       fontSize: '15px',
                       color: '#5A6B82',
                       lineHeight: '1.75',
                       borderTop: '1px solid #F0EAE1',
-                      paddingTop: '14px',
                     }}
                   >
                     {f.a}
@@ -3853,14 +3812,14 @@ function Newsletter() {
             Thank you! You'll hear from us soon.
           </div>
         ) : (
-          <form onSubmit={e => { e.preventDefault(); setSubmitted(true); }} style={{ display: 'flex', gap: 10 }}>
+          <form className="pmg-newsletter-form" onSubmit={e => { e.preventDefault(); setSubmitted(true); }}>
             <input
               type="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
               placeholder="your@email.com"
               required
-              style={{ flex: 1, padding: '14px 18px', borderRadius: 12, border: '1.5px solid rgba(27,42,74,0.15)', background: '#fff', fontSize: 15, color: '#1B2A4A', outline: 'none' }}
+              style={{ flex: '1 1 200px', minWidth: 0, padding: '14px 18px', borderRadius: 12, border: '1.5px solid rgba(27,42,74,0.15)', background: '#fff', fontSize: 15, color: '#1B2A4A', outline: 'none' }}
             />
             <button type="submit" style={{ background: '#1B2A4A', color: '#fff', padding: '14px 24px', borderRadius: 12, border: 'none', fontWeight: 700, fontSize: 15, cursor: 'pointer', whiteSpace: 'nowrap' }}>Subscribe</button>
           </form>
@@ -3896,7 +3855,6 @@ export default function PositiveMindGymAppPage() {
         <FooterOne hideFaq={true} />
       </div>
 
-      <MobileNav />
       <SearchPopup />
       <ScrollToTop />
     </>

@@ -512,3 +512,15 @@
     display: none;
   }
 }
+
+@media (max-width: 575px) {
+  .methodology-circle-container {
+    width: min(290px, calc(100vw - 32px));
+    height: min(290px, calc(100vw - 32px));
+  }
+
+  .methodology-card {
+    padding: 16px 14px;
+    gap: 12px;
+  }
+}

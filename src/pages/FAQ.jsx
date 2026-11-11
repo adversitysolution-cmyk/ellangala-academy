@@ -5,7 +5,6 @@ import FooterOne from '../components/layout/FooterOne';
 import PageHeader from '../components/common/PageHeader';
 import Preloader from '../components/layout/Preloader';
 import CustomCursor from '../components/layout/CustomCursor';
-import MobileNav from '../components/layout/MobileNav';
 import SearchPopup from '../components/layout/SearchPopup';
 import ScrollToTop from '../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../hooks/useUterpyPlugins';
@@ -74,12 +73,12 @@ export default function FAQ() {
                 </div>
               </div>
 
-              <div className="col-xl-4 col-lg-5 wow slideInRight" data-wow-delay="500ms" data-wow-duration="2500ms">
+              <div className="col-xl-4 col-lg-5 wow fadeInUp" data-wow-delay="500ms" data-wow-duration="2500ms">
                 <div className="faq-page__right">
                   <div className="faq-page__form" style={{ padding: '42px 30px 42px 30px' }}>
                     <div
                       className="faq-page__right-bg"
-                      style={{ backgroundImage: 'url(/assets/images/backgrounds/faq-page-bg1.jpg)' }}
+                      style={{ backgroundImage: 'url(/assets/images/backgrounds/therapy-v1-bg.webp)' }}
                     ></div>
                     <div className="title-box">
                       <h2>
@@ -134,7 +133,6 @@ export default function FAQ() {
         <FooterOne hideFaq={true} />
       </div>
 
-      <MobileNav />
       <SearchPopup />
       <ScrollToTop />
     </>

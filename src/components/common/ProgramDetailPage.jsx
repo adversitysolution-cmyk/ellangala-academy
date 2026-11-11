@@ -6,7 +6,6 @@ import PageHeader from '../common/PageHeader';
 import ServiceSidebar from '../common/ServiceSidebar';
 import Preloader from '../layout/Preloader';
 import CustomCursor from '../layout/CustomCursor';
-import MobileNav from '../layout/MobileNav';
 import SearchPopup from '../layout/SearchPopup';
 import ScrollToTop from '../layout/ScrollToTop';
 import { useUterpyPlugins } from '../../hooks/useUterpyPlugins';
@@ -31,7 +30,7 @@ export default function ProgramDetailPage({ data }) {
         <PageHeader title={data.title} pageName={data.title} />
 
         {/* Main Content & Sidebar Section */}
-        <section className="services-details" style={{ padding: '80px 0' }}>
+        <section className="services-details program-detail-section">
           <div className="container">
             <div className="row">
               {/* Sidebar Component */}
@@ -115,7 +114,7 @@ export default function ProgramDetailPage({ data }) {
                   </div>
 
                   {/* 03. WHY IT MATTERS */}
-                  <div className="services-details__content-text2" style={{ marginBottom: '40px', padding: '28px 30px', backgroundColor: '#FAF8F5', borderRadius: '12px', borderLeft: '4px solid #CA8A38' }}>
+                  <div className="services-details__content-text2 program-detail-why" style={{ backgroundColor: '#FAF8F5', borderRadius: '12px', borderLeft: '4px solid #CA8A38' }}>
                     <h2
                       style={{
                         fontSize: '22px',
@@ -198,7 +197,7 @@ export default function ProgramDetailPage({ data }) {
                   </div>
 
                   {/* 06. HOW IT WORKS */}
-                  <div style={{ marginBottom: '48px', padding: '32px 28px', backgroundColor: '#FAF8F5', borderRadius: '16px', border: '1px solid #EFE6D8' }}>
+                  <div className="program-detail-how" style={{ backgroundColor: '#FAF8F5', borderRadius: '16px', border: '1px solid #EFE6D8' }}>
                     <h2
                       style={{
                         fontSize: '22px',
@@ -216,7 +215,7 @@ export default function ProgramDetailPage({ data }) {
                     <div
                       style={{
                         display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(min(130px, 100%), 1fr))',
                         gap: '12px',
                         marginBottom: '24px',
                       }}
@@ -292,7 +291,7 @@ export default function ProgramDetailPage({ data }) {
                       Our Approach
                     </h2>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))', gap: '16px' }}>
                       {data.approach.items.map((app, idx) => (
                         <div
                           key={idx}
@@ -335,7 +334,7 @@ export default function ProgramDetailPage({ data }) {
                       </h2>
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: '18px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(210px, 100%), 1fr))', gap: '18px' }}>
                       {/* THOUGHTS Column */}
                       <div
                         style={{
@@ -446,7 +445,7 @@ export default function ProgramDetailPage({ data }) {
                   {/* 09. TWO SIGNATURE HIGHLIGHT BOXES */}
                   {data.highlights && data.highlights.length >= 2 && (
                     <div style={{ marginBottom: '44px' }}>
-                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px, 100%), 1fr))', gap: '16px' }}>
                         {data.highlights.map((hl, idx) => (
                           <div
                             key={idx}
@@ -470,10 +469,10 @@ export default function ProgramDetailPage({ data }) {
 
                   {/* 10. FINAL CTA */}
                   <div
+                    className="program-detail-cta"
                     style={{
                       backgroundColor: '#1E2B37',
                       borderRadius: '16px',
-                      padding: '40px 32px',
                       textAlign: 'center',
                       color: '#ffffff',
                       boxShadow: '0 12px 30px rgba(0, 0, 0, 0.15)',
@@ -524,7 +523,6 @@ export default function ProgramDetailPage({ data }) {
         <FooterOne />
       </div>
 
-      <MobileNav />
       <SearchPopup />
       <ScrollToTop />
     </>

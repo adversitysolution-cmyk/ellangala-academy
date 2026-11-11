@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { commonContent } from '../../contents/common.content';
 import { useMobileNav } from '../../context/MobileNavContext';
 import '../../assets/css/mobile-nav.css';
@@ -8,6 +8,7 @@ import '../../assets/css/mobile-nav.css';
 export default function MobileNav() {
   const { mobileNav, header } = commonContent;
   const { isOpen, closeMobileNav } = useMobileNav();
+  const { pathname } = useLocation();
 
   // Accordion open/close states
   const [openPrograms, setOpenPrograms] = useState(false);
@@ -17,12 +18,23 @@ export default function MobileNav() {
   const [openAbout, setOpenAbout] = useState(false);
   const [openResources, setOpenResources] = useState(false);
 
+  if (pathname === '/login' || pathname.startsWith('/admin')) {
+    return null;
+  }
+
   const handleClose = () => {
     closeMobileNav();
   };
 
   const navContent = (
-    <div className={`mobile-nav__wrapper ${isOpen ? 'expanded' : ''}`}>
+    <div
+      id="mobile-nav-drawer"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Mobile navigation"
+      aria-hidden={!isOpen}
+      className={`mobile-nav__wrapper ${isOpen ? 'expanded' : ''}`}
+    >
       <div className="mobile-nav__overlay" onClick={handleClose}></div>
       <div className="mobile-nav__content">
         <div className="mobile-nav__header-bar">
@@ -36,9 +48,14 @@ export default function MobileNav() {
               />
             </Link>
           </div>
-          <span className="mobile-nav__close" onClick={handleClose} aria-label="Close menu">
-            <i className="fa fa-times"></i>
-          </span>
+          <button
+            type="button"
+            className="mobile-nav__close"
+            onClick={handleClose}
+            aria-label="Close menu"
+          >
+            <i className="fa fa-times" aria-hidden="true"></i>
+          </button>
         </div>
 
         {/* Top Mobile Action Button */}

@@ -5,7 +5,6 @@ import FooterOne from '../components/layout/FooterOne';
 import PageHeader from '../components/common/PageHeader';
 import Preloader from '../components/layout/Preloader';
 import CustomCursor from '../components/layout/CustomCursor';
-import MobileNav from '../components/layout/MobileNav';
 import SearchPopup from '../components/layout/SearchPopup';
 import ScrollToTop from '../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../hooks/useUterpyPlugins';
@@ -48,7 +47,7 @@ export default function ShopDetails() {
     const fallbackList = shopContent.shop.products;
     
     Promise.all([
-      bookId ? productService.getProductById(bookId).catch(() => null) : Promise.resolve(null),
+      bookId ? productService.getProductById(bookId, { admin: false }).catch(() => null) : Promise.resolve(null),
       productService.getPublishedProducts().catch(() => [])
     ]).then(([fetchedProduct, allProducts]) => {
       const combinedAll = Array.isArray(allProducts) && allProducts.length > 0 ? allProducts : fallbackList;
@@ -712,7 +711,6 @@ export default function ShopDetails() {
         <FooterOne />
       </div>
 
-      <MobileNav />
       <SearchPopup />
       <ScrollToTop />
     </>

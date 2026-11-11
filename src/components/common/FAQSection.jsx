@@ -95,12 +95,12 @@ export default function FAQSection({
           </div>
 
           {/* Right Column: Help & Contact Sidebar Card */}
-          <div className="col-xl-4 col-lg-5 wow slideInRight" data-wow-delay="300ms" data-wow-duration="1500ms">
+          <div className="col-xl-4 col-lg-5 wow fadeInUp" data-wow-delay="300ms" data-wow-duration="1500ms">
             <div className="faq-page__right">
               <div className="faq-page__form" style={{ padding: '42px 30px 42px 30px' }}>
                 <div
                   className="faq-page__right-bg"
-                  style={{ backgroundImage: 'url(/assets/images/backgrounds/faq-page-bg1.jpg)' }}
+                  style={{ backgroundImage: 'url(/assets/images/backgrounds/therapy-v1-bg.webp)' }}
                 ></div>
                 <div className="title-box">
                   <h2>

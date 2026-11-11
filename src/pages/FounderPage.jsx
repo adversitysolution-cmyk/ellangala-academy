@@ -4,7 +4,6 @@ import HeaderOne from '../components/layout/HeaderOne';
 import FooterOne from '../components/layout/FooterOne';
 import Preloader from '../components/layout/Preloader';
 import CustomCursor from '../components/layout/CustomCursor';
-import MobileNav from '../components/layout/MobileNav';
 import SearchPopup from '../components/layout/SearchPopup';
 import ScrollToTop from '../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../hooks/useUterpyPlugins';
@@ -16,13 +15,6 @@ import { generatePersonSchema, generateBreadcrumbSchema } from '../seo/schemas/s
 import founderHeroBg from '../Images/Founder PAge Hero.png';
 import founderBooksShowcaseImg from '../Images/ChatGPT Image Sep 1, 2026, 07_43_59 PM.png';
 import founderPortraitBlueImg from '../Images/Team Members Images/Naveen Ellangala.png';
-
-// Image assets
-const founderBooksImg = '/assets/images/resources/therapy-v1-img1.png';
-const mindGymImg = '/assets/images/services/mind-gym.png';
-const studentProgramsImg = '/assets/images/services/positive-psychology.png';
-const specializedAreasImg = '/assets/images/services/indian-culture.png';
-const portraitImg = '/assets/images/team/naveen-ellangala.jpg';
 
 export default function FounderPage() {
   useUterpyPlugins();
@@ -361,29 +353,24 @@ export default function FounderPage() {
                       <img
                         src={founderPortraitBlueImg}
                         alt="Dr. Naveen Ellangala"
-                        style={{
-                          width: '100%',
-                          height: '595px',
-                          objectFit: 'cover',
-                          objectPosition: 'center 12%',
-                          display: 'block'
-                        }}
+                        className="founder-portrait-img"
                       />
                     </div>
 
                     {/* Floating Midnight Bio Card (Slightly Wider Than Photo) */}
-                    <div style={{
-                      position: 'relative',
-                      zIndex: 4,
-                      marginTop: '-30px',
-                      width: 'calc(100% + 36px)',
-                      marginLeft: '-18px',
-                      background: '#0C1827',
-                      borderRadius: '26px',
-                      padding: '32px 28px 28px',
-                      boxShadow: '0 26px 56px rgba(2, 20, 42, 0.5)',
-                      border: '1px solid rgba(255, 255, 255, 0.06)'
-                    }}>
+                    <div
+                      className="founder-bio-floating-card"
+                      style={{
+                        position: 'relative',
+                        zIndex: 4,
+                        marginTop: '-30px',
+                        background: '#0C1827',
+                        borderRadius: '26px',
+                        padding: '32px 28px 28px',
+                        boxShadow: '0 26px 56px rgba(2, 20, 42, 0.5)',
+                        border: '1px solid rgba(255, 255, 255, 0.06)'
+                      }}
+                    >
                       {/* Gold Circular User Badge */}
                       <div style={{
                         position: 'absolute',
@@ -470,7 +457,7 @@ export default function FounderPage() {
                 </div>
 
                 {/* RIGHT: Editorial Content & Biography in Card Layout */}
-                <div className="col-lg-7 col-md-12" style={{ paddingLeft: '25px' }}>
+                <div className="col-lg-7 col-md-12 founder-text-col-offset">
                   <div style={{
                     backgroundColor: '#FFFFFF',
                     borderRadius: '20px',
@@ -1195,7 +1182,6 @@ export default function FounderPage() {
         <FooterOne />
       </div>
 
-      <MobileNav />
       <SearchPopup />
       <ScrollToTop />
     </>

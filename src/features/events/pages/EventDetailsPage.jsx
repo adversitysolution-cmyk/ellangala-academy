@@ -5,7 +5,6 @@ import FooterOne from '../../../components/layout/FooterOne';
 import PageHeader from '../../../components/common/PageHeader';
 import Preloader from '../../../components/layout/Preloader';
 import CustomCursor from '../../../components/layout/CustomCursor';
-import MobileNav from '../../../components/layout/MobileNav';
 import SearchPopup from '../../../components/layout/SearchPopup';
 import ScrollToTop from '../../../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../../../hooks/useUterpyPlugins';
@@ -172,7 +171,7 @@ export default function EventDetailsPage() {
               {/* Left Column: Event Content */}
               <div className="col-xl-8 col-lg-7">
                 {/* Hero Card */}
-                <div style={{ backgroundColor: '#FFFFFF', borderRadius: '20px', padding: '36px', border: '1px solid #ECE7DE', boxShadow: '0 4px 20px rgba(0,0,0,0.04)', marginBottom: '32px' }}>
+                <div className="event-detail-card" style={{ backgroundColor: '#FFFFFF', borderRadius: '20px', border: '1px solid #ECE7DE', boxShadow: '0 4px 20px rgba(0,0,0,0.04)', marginBottom: '32px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px', flexWrap: 'wrap' }}>
                     <span
                       style={{
@@ -255,18 +254,18 @@ export default function EventDetailsPage() {
                   </div>
 
                   {/* Cover Image */}
-                  <div style={{ width: '100%', height: '420px', borderRadius: '16px', overflow: 'hidden', backgroundColor: '#0F172A', boxShadow: '0 6px 20px rgba(0,0,0,0.08)' }}>
+                  <div style={{ width: '100%', borderRadius: '16px', overflow: 'hidden', backgroundColor: '#0F172A', boxShadow: '0 6px 20px rgba(0,0,0,0.08)' }}>
                     <img
                       src={event.image}
                       alt={event.title}
+                      className="event-detail-cover"
                       onError={(e) => { e.currentTarget.src = '/assets/images/events/bhagavadgita-meaningful-life-series-5.jpg'; }}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     />
                   </div>
                 </div>
 
                 {/* About the Program */}
-                <div style={{ backgroundColor: '#FFFFFF', borderRadius: '20px', padding: '36px', border: '1px solid #ECE7DE', boxShadow: '0 4px 20px rgba(0,0,0,0.04)', marginBottom: '32px' }}>
+                <div className="event-detail-card" style={{ backgroundColor: '#FFFFFF', borderRadius: '20px', border: '1px solid #ECE7DE', boxShadow: '0 4px 20px rgba(0,0,0,0.04)', marginBottom: '32px' }}>
                   <h3 style={{ fontSize: '22px', fontWeight: '800', color: '#0F231B', marginBottom: '16px', borderBottom: '2px solid #FAF5EC', paddingBottom: '12px' }}>
                     About the Program
                   </h3>
@@ -277,11 +276,11 @@ export default function EventDetailsPage() {
 
                 {/* What You Will Learn */}
                 {Array.isArray(event.whatYouWillLearn) && event.whatYouWillLearn.length > 0 && (
-                  <div style={{ backgroundColor: '#FFFFFF', borderRadius: '20px', padding: '36px', border: '1px solid #ECE7DE', boxShadow: '0 4px 20px rgba(0,0,0,0.04)', marginBottom: '32px' }}>
+                  <div className="event-detail-card" style={{ backgroundColor: '#FFFFFF', borderRadius: '20px', border: '1px solid #ECE7DE', boxShadow: '0 4px 20px rgba(0,0,0,0.04)', marginBottom: '32px' }}>
                     <h3 style={{ fontSize: '22px', fontWeight: '800', color: '#0F231B', marginBottom: '18px', borderBottom: '2px solid #FAF5EC', paddingBottom: '12px' }}>
                       What You Will Learn
                     </h3>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '14px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: '14px' }}>
                       {event.whatYouWillLearn.map((point, idx) => (
                         <div
                           key={idx}
@@ -307,7 +306,7 @@ export default function EventDetailsPage() {
 
                 {/* Program Highlights */}
                 {Array.isArray(event.highlights) && event.highlights.length > 0 && (
-                  <div style={{ backgroundColor: '#FFFFFF', borderRadius: '20px', padding: '36px', border: '1px solid #ECE7DE', boxShadow: '0 4px 20px rgba(0,0,0,0.04)', marginBottom: '32px' }}>
+                  <div className="event-detail-card" style={{ backgroundColor: '#FFFFFF', borderRadius: '20px', border: '1px solid #ECE7DE', boxShadow: '0 4px 20px rgba(0,0,0,0.04)', marginBottom: '32px' }}>
                     <h3 style={{ fontSize: '22px', fontWeight: '800', color: '#0F231B', marginBottom: '18px', borderBottom: '2px solid #FAF5EC', paddingBottom: '12px' }}>
                       Program Highlights
                     </h3>
@@ -351,7 +350,7 @@ export default function EventDetailsPage() {
                 )}
 
                 {/* Event Information Table */}
-                <div style={{ backgroundColor: '#FFFFFF', borderRadius: '20px', padding: '36px', border: '1px solid #ECE7DE', boxShadow: '0 4px 20px rgba(0,0,0,0.04)', marginBottom: '32px' }}>
+                <div className="event-detail-card" style={{ backgroundColor: '#FFFFFF', borderRadius: '20px', border: '1px solid #ECE7DE', boxShadow: '0 4px 20px rgba(0,0,0,0.04)', marginBottom: '32px' }}>
                   <h3 style={{ fontSize: '22px', fontWeight: '800', color: '#0F231B', marginBottom: '18px', borderBottom: '2px solid #FAF5EC', paddingBottom: '12px' }}>
                     Event Information
                   </h3>
@@ -389,7 +388,7 @@ export default function EventDetailsPage() {
 
                 {/* Who Should Attend? */}
                 {Array.isArray(event.whoIsItFor) && event.whoIsItFor.length > 0 && (
-                  <div style={{ backgroundColor: '#FFFFFF', borderRadius: '20px', padding: '36px', border: '1px solid #ECE7DE', boxShadow: '0 4px 20px rgba(0,0,0,0.04)', marginBottom: '32px' }}>
+                  <div className="event-detail-card" style={{ backgroundColor: '#FFFFFF', borderRadius: '20px', border: '1px solid #ECE7DE', boxShadow: '0 4px 20px rgba(0,0,0,0.04)', marginBottom: '32px' }}>
                     <h3 style={{ fontSize: '22px', fontWeight: '800', color: '#0F231B', marginBottom: '16px', borderBottom: '2px solid #FAF5EC', paddingBottom: '12px' }}>
                       Who Should Attend?
                     </h3>
@@ -420,14 +419,14 @@ export default function EventDetailsPage() {
 
                 {/* Expected Outcomes */}
                 {Array.isArray(event.expectedOutcomes) && event.expectedOutcomes.length > 0 && (
-                  <div style={{ backgroundColor: '#FFFFFF', borderRadius: '20px', padding: '36px', border: '1px solid #ECE7DE', boxShadow: '0 4px 20px rgba(0,0,0,0.04)', marginBottom: '32px' }}>
+                  <div className="event-detail-card" style={{ backgroundColor: '#FFFFFF', borderRadius: '20px', border: '1px solid #ECE7DE', boxShadow: '0 4px 20px rgba(0,0,0,0.04)', marginBottom: '32px' }}>
                     <h3 style={{ fontSize: '22px', fontWeight: '800', color: '#0F231B', marginBottom: '18px', borderBottom: '2px solid #FAF5EC', paddingBottom: '12px' }}>
                       Expected Outcomes
                     </h3>
                     <p style={{ fontSize: '15px', color: '#64748B', marginBottom: '16px' }}>
                       After completing the program, participants will:
                     </p>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '12px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))', gap: '12px' }}>
                       {event.expectedOutcomes.map((point, idx) => (
                         <div
                           key={idx}
@@ -455,10 +454,10 @@ export default function EventDetailsPage() {
                 {/* Inspirational Quote Section */}
                 {event.quote && (
                   <div
+                    className="event-detail-card"
                     style={{
                       background: 'linear-gradient(135deg, #1B2A38 0%, #0F172A 100%)',
                       borderRadius: '20px',
-                      padding: '36px 40px',
                       color: '#FFFFFF',
                       boxShadow: '0 8px 30px rgba(15, 23, 42, 0.15)',
                       marginBottom: '32px',
@@ -478,7 +477,7 @@ export default function EventDetailsPage() {
 
                 {/* FAQ Section */}
                 {Array.isArray(event.faqs) && event.faqs.length > 0 && (
-                  <div style={{ backgroundColor: '#FFFFFF', borderRadius: '20px', padding: '36px', border: '1px solid #ECE7DE', boxShadow: '0 4px 20px rgba(0,0,0,0.04)', marginBottom: '32px' }}>
+                  <div className="event-detail-card" style={{ backgroundColor: '#FFFFFF', borderRadius: '20px', border: '1px solid #ECE7DE', boxShadow: '0 4px 20px rgba(0,0,0,0.04)', marginBottom: '32px' }}>
                     <h3 style={{ fontSize: '22px', fontWeight: '800', color: '#0F231B', marginBottom: '18px', borderBottom: '2px solid #FAF5EC', paddingBottom: '12px' }}>
                       Frequently Asked Questions
                     </h3>
@@ -497,7 +496,7 @@ export default function EventDetailsPage() {
                             <HelpCircle size={17} style={{ color: '#CA8A38', flexShrink: 0 }} />
                             <span>{faq.question}</span>
                           </div>
-                          <p style={{ fontSize: '14px', color: '#475569', lineHeight: '1.65', margin: 0, paddingLeft: '25px' }}>
+                          <p className="event-faq-answer">
                             {faq.answer}
                           </p>
                         </div>
@@ -508,11 +507,11 @@ export default function EventDetailsPage() {
 
                 {/* Final CTA Section */}
                 <div
+                  className="event-detail-card"
                   style={{
                     backgroundColor: '#FAF5EC',
                     border: '1.5px solid #E8C77D',
                     borderRadius: '20px',
-                    padding: '40px',
                     textAlign: 'center',
                     boxShadow: '0 6px 20px rgba(202, 138, 56, 0.08)'
                   }}
@@ -543,8 +542,8 @@ export default function EventDetailsPage() {
 
               {/* Right Column: Information & Registration Sidebar */}
               <div className="col-xl-4 col-lg-5">
-                <div style={{ position: 'sticky', top: '100px' }}>
-                  <div style={{ backgroundColor: '#FFFFFF', borderRadius: '20px', padding: '30px', border: '1.5px solid #ECE7DE', boxShadow: '0 6px 25px rgba(0,0,0,0.06)', marginBottom: '24px' }}>
+                <div className="event-sidebar-sticky">
+                  <div className="event-detail-card" style={{ backgroundColor: '#FFFFFF', borderRadius: '20px', border: '1.5px solid #ECE7DE', boxShadow: '0 6px 25px rgba(0,0,0,0.06)', marginBottom: '24px' }}>
                     <h3 style={{ fontSize: '20px', fontWeight: '800', color: '#0F231B', marginBottom: '20px', borderBottom: '1px solid #F1F5F9', paddingBottom: '12px' }}>
                       Event Key Details
                     </h3>
@@ -675,7 +674,6 @@ export default function EventDetailsPage() {
         <FooterOne />
       </div>
 
-      <MobileNav />
       <SearchPopup />
       <ScrollToTop />
     </>

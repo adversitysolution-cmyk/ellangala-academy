@@ -247,17 +247,19 @@
     overflow: hidden;
   }
 
-  .philosophy-main-img {
-    transform: scale(1.2);
-    transform-origin: center center;
-  }
-
+  .philosophy-main-img,
   .philosophy-main-img:hover {
-    transform: scale(1.22);
+    transform: none !important;
   }
 
   .philosophy-points::before {
     left: 88px;
+  }
+}
+
+@media (max-width: 991px) {
+  .philosophy-heading-line {
+    white-space: normal;
   }
 }
 
@@ -295,7 +297,33 @@
     padding-top: 8px;
   }
 
-  .philosophy-main-img {
-    transform: scale(1.1);
+  .philosophy-main-img,
+  .philosophy-main-img:hover {
+    transform: none !important;
+  }
+}
+
+@media (max-width: 575px) {
+  .philosophy-point-item {
+    gap: 12px;
+  }
+
+  .philosophy-point-badge {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+  }
+
+  .philosophy-point-badge svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .philosophy-point-dot {
+    margin-top: 19px;
+  }
+
+  .philosophy-points::before {
+    left: 65px;
   }
 }

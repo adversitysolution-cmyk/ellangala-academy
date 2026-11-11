@@ -76,33 +76,6 @@ export default function PositivePsychologySection() {
         .phone-card-hover {
           transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s ease;
         }
-        @media (max-width: 1200px) {
-          .hero-mockup-wrapper {
-            transform: scale(0.92);
-            transform-origin: center center;
-          }
-        }
-        @media (max-width: 991px) {
-          .hero-mockup-wrapper {
-            transform: scale(0.82);
-            transform-origin: center center;
-            margin: 20px auto;
-          }
-        }
-        @media (max-width: 600px) {
-          .hero-mockup-wrapper {
-            transform: scale(0.62);
-            transform-origin: center center;
-            margin: -40px auto;
-          }
-        }
-        @media (max-width: 420px) {
-          .hero-mockup-wrapper {
-            transform: scale(0.5);
-            transform-origin: center center;
-            margin: -70px auto;
-          }
-        }
       `}</style>
 
       {/* ─── Background Subtle Elements ─── */}
@@ -200,8 +173,8 @@ export default function PositivePsychologySection() {
           {/* LEFT COLUMN: MARKETING & DOWNLOAD CONTENT                */}
           {/* ======================================================== */}
           <div
-            className="col-xl-6 col-lg-6 col-md-12"
-            style={{ paddingRight: '28px', marginBottom: '40px' }}
+            className="col-xl-6 col-lg-6 col-md-12 pmg-hero-col-left"
+            style={{ marginBottom: '40px' }}
           >
             {/* 1. Pill Badge */}
             <div
@@ -413,18 +386,12 @@ export default function PositivePsychologySection() {
 
             {/* 6. Impact Statistics Card with Premium SVG Icons */}
             <div
+              className="pmg-impact-stats-card"
               style={{
                 backgroundColor: '#FFFFFF',
                 borderRadius: '18px',
                 border: '1px solid #ECE7DE',
-                padding: '16px 24px',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '20px',
                 boxShadow: '0 8px 30px rgba(6, 36, 78, 0.04)',
-                maxWidth: '560px',
-                width: '100%',
-                justifyContent: 'space-between',
               }}
             >
               {/* Stat 1: Lives Impacted */}
@@ -476,7 +443,7 @@ export default function PositivePsychologySection() {
               </div>
 
               {/* Divider */}
-              <div style={{ width: '1px', height: '38px', backgroundColor: '#ECE7DE' }} />
+              <div className="pmg-impact-divider" style={{ width: '1px', height: '38px', backgroundColor: '#ECE7DE' }} />
 
               {/* Stat 2: Workshops */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1 }}>
@@ -526,7 +493,7 @@ export default function PositivePsychologySection() {
               </div>
 
               {/* Divider */}
-              <div style={{ width: '1px', height: '38px', backgroundColor: '#ECE7DE' }} />
+              <div className="pmg-impact-divider" style={{ width: '1px', height: '38px', backgroundColor: '#ECE7DE' }} />
 
               {/* Stat 3: App Rating */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: 1 }}>
@@ -570,30 +537,23 @@ export default function PositivePsychologySection() {
           {/* RIGHT COLUMN: 5 SYMMETRICALLY LAYERED 3D PHONE MOCKUPS   */}
           {/* ======================================================== */}
           <div
-            className="col-xl-6 col-lg-6 col-md-12"
-            style={{
-              position: 'relative',
-              minHeight: '600px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
+            className="col-xl-6 col-lg-6 col-md-12 pmg-hero-phone-col"
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
           >
-            {/* Phone Group Container */}
-            <div
-              className="hero-mockup-wrapper"
-              style={{
-                position: 'relative',
-                width: '100%',
-                maxWidth: '660px',
-                height: '560px',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
+            {/* Phone Group Stage + Container */}
+            <div className="pmg-hero-mockup-stage">
+              <div
+                className="hero-mockup-wrapper"
+                style={{
+                  position: 'relative',
+                  width: '660px',
+                  height: '560px',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
               {/* ──────────────────────────────────────────────────────────── */}
               {/* 1. FAR LEFT PHONE (Back Left - Layer 1)                     */}
               {/* ──────────────────────────────────────────────────────────── */}
@@ -1003,6 +963,7 @@ export default function PositivePsychologySection() {
                   </div>
                 </div>
               </div>
+            </div>
             </div>
 
             {/* Pagination Indicators & Controls with Smooth Transitions */}

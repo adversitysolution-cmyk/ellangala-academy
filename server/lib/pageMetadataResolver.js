@@ -1,6 +1,7 @@
 import { siteConfig } from '../../src/seo/siteConfig.js';
 import { shopContent } from '../../src/contents/shop.content.js';
 import { programsData } from '../../src/contents/programsData.content.js';
+import { serviceDetailsContent } from '../../src/contents/serviceDetails.content.js';
 import { blogContent } from '../../src/contents/blog.content.js';
 import { getStore } from '../db/store.js';
 import { getCommunityPostById } from '../db/communityStore.js';
@@ -105,7 +106,12 @@ export async function resolvePageMetadata(pathname = '/') {
   }
 
   // 5. Positive Mentoring
-  if (cleanPath === '/positive-mentoring' || cleanPath === '/mentoring') {
+  if (
+    cleanPath === '/positive-mentoring' ||
+    cleanPath === '/mentoring' ||
+    cleanPath === '/1-on-1-mentoring' ||
+    cleanPath === '/one-on-one-mentoring'
+  ) {
     return {
       title: 'Positive Mentoring | 1-on-1 Personalized Guidance | Ellangala’s Academy',
       description: 'One-on-one reflective mentoring sessions tailored for students, professionals, parents, and individuals seeking purpose, focus, and clarity.',
@@ -122,7 +128,7 @@ export async function resolvePageMetadata(pathname = '/') {
   }
 
   // 6. MindGym & MindGym App
-  if (cleanPath === '/mindgym') {
+  if (cleanPath === '/mindgym' || cleanPath === '/mind-gym-programs') {
     return {
       title: 'Positive MindGym | Practical Mind Training & Mental Fitness | Ellangala’s Academy',
       description: 'Daily mental fitness workouts, cognitive drills, emotional hygiene routines, and guided practice created by Dr. Naveen Ellangala.',
@@ -172,8 +178,27 @@ export async function resolvePageMetadata(pathname = '/') {
     };
   }
 
-  // 8. Individual Book / Shop Detail (`/shop/:id` or `/resources/:id`)
-  const shopMatch = cleanPath.match(/^\/(?:shop|resources)\/([a-zA-Z0-9_-]+)$/);
+  // 8. Individual Book / Shop Detail (`/shop/:id`, `/resources/:id`, `/shop-details`, etc.)
+  if (
+    cleanPath === '/shop-details' ||
+    cleanPath === '/resources-details' ||
+    cleanPath === '/services-details' ||
+    cleanPath === '/service-details' ||
+    cleanPath === '/personal-counselling'
+  ) {
+    return {
+      title:
+        cleanPath.includes('shop') || cleanPath.includes('resources')
+          ? 'Book & Resource Details | Ellangala’s Academy'
+          : 'Program & Service Details | Ellangala’s Academy',
+      description: siteConfig.defaultDescription,
+      canonical: `${baseDomain}${cleanPath}`,
+      image: siteConfig.defaultOgImage,
+      type: 'website'
+    };
+  }
+
+  const shopMatch = cleanPath.match(/^\/(?:shop|resources|shop-details|resources-details)\/([a-zA-Z0-9_-]+)$/);
   if (shopMatch) {
     const productId = shopMatch[1].toLowerCase();
     const product = (shopContent?.shop?.products || []).find(
@@ -200,7 +225,7 @@ export async function resolvePageMetadata(pathname = '/') {
     }
   }
 
-  // 9. Program Details (`/programs/:slug` or `/services/:slug`)
+  // 9. Program Details (`/programs/:slug`, `/services/:slug`, `/mentoring/:slug`, `/mindgym/:slug`)
   const programMatch = cleanPath.match(/^\/(?:programs|services|mentoring|mindgym)\/([a-zA-Z0-9_-]+)$/);
   if (programMatch) {
     const slug = programMatch[1];
@@ -218,6 +243,24 @@ export async function resolvePageMetadata(pathname = '/') {
             { name: 'Home', path: '/' },
             { name: 'Programs', path: '/positive-workshops' },
             { name: program.title, path: `/programs/${slug}` }
+          ])
+        ]
+      };
+    }
+    const service = serviceDetailsContent?.[slug];
+    if (service) {
+      const serviceImg = service.image || siteConfig.defaultOgImage;
+      const servicePath = service.path || cleanPath;
+      return {
+        title: `${service.title} | Ellangala’s Academy`,
+        description: service.tagline || service.text1?.slice(0, 160) || siteConfig.defaultDescription,
+        canonical: `${baseDomain}${servicePath}`,
+        image: serviceImg.startsWith('http') ? serviceImg : `${baseDomain}${serviceImg.startsWith('/') ? serviceImg : '/' + serviceImg}`,
+        type: 'website',
+        schemas: [
+          generateBreadcrumbSchema([
+            { name: 'Home', path: '/' },
+            { name: service.headerTitle || service.title, path: servicePath }
           ])
         ]
       };
@@ -241,32 +284,46 @@ export async function resolvePageMetadata(pathname = '/') {
     };
   }
 
-  const eventMatch = cleanPath.match(/^\/events\/([a-zA-Z0-9_-]+)$/);
+  const eventMatch = cleanPath.match(/^\/events\/([a-zA-Z0-9_-]+)(?:\/register)?$/);
   if (eventMatch) {
     const eventSlug = eventMatch[1];
+    const isRegister = cleanPath.endsWith('/register');
     try {
       const store = await getStore();
       const event = (store?.events || []).find(e => e.slug === eventSlug || e.id === eventSlug);
       if (event) {
         const eventImg = event.image || siteConfig.defaultOgImage;
         return {
-          title: `${event.title} | Events | Ellangala’s Academy`,
+          title: isRegister
+            ? `Register: ${event.title} | Events | Ellangala’s Academy`
+            : `${event.title} | Events | Ellangala’s Academy`,
           description: event.shortDescription || event.description?.slice(0, 160) || siteConfig.defaultDescription,
-          canonical: `${baseDomain}/events/${event.id}`,
+          canonical: `${baseDomain}/events/${event.slug || event.id}${isRegister ? '/register' : ''}`,
           image: eventImg.startsWith('http') ? eventImg : `${baseDomain}${eventImg.startsWith('/') ? eventImg : '/' + eventImg}`,
           type: 'event',
+          noindex: isRegister,
           schemas: [
             generateEventSchema(event),
             generateBreadcrumbSchema([
               { name: 'Home', path: '/' },
               { name: 'Events', path: '/events' },
-              { name: event.title, path: `/events/${event.id}` }
+              { name: event.title, path: `/events/${event.slug || event.id}` }
             ])
           ]
         };
       }
     } catch {
       // Ignore DB error and fallback
+    }
+    if (isRegister) {
+      return {
+        title: 'Event Registration | Ellangala’s Academy',
+        description: siteConfig.defaultDescription,
+        canonical: `${baseDomain}${cleanPath}`,
+        image: siteConfig.defaultOgImage,
+        type: 'website',
+        noindex: true
+      };
     }
   }
 
@@ -284,6 +341,16 @@ export async function resolvePageMetadata(pathname = '/') {
           { name: 'Blog', path: '/blog' }
         ])
       ]
+    };
+  }
+
+  if (cleanPath === '/blog-details') {
+    return {
+      title: 'Blog Article | Ellangala’s Academy',
+      description: siteConfig.defaultDescription,
+      canonical: `${baseDomain}/blog`,
+      image: siteConfig.defaultOgImage,
+      type: 'website'
     };
   }
 
@@ -353,13 +420,14 @@ export async function resolvePageMetadata(pathname = '/') {
     };
   }
 
-  if (cleanPath === '/verify-certificate') {
+  if (cleanPath === '/verify-certificate' || cleanPath.startsWith('/verify/c/')) {
     return {
       title: 'Verify Certificate Authenticity | Ellangala’s Academy',
       description: 'Official online verification portal for workshop and program completion certificates issued by Ellangala’s Academy.',
       canonical: `${baseDomain}/verify-certificate`,
       image: siteConfig.defaultOgImage,
       type: 'website',
+      noindex: cleanPath.startsWith('/verify/c/'),
       schemas: [
         generateBreadcrumbSchema([
           { name: 'Home', path: '/' },
@@ -370,6 +438,17 @@ export async function resolvePageMetadata(pathname = '/') {
   }
 
   // 12b. Community Post Details & Feed OpenGraph Metadata
+  if (['/feed/saved', '/feed/profile', '/community/saved', '/community/profile'].includes(cleanPath)) {
+    return {
+      title: 'Ellangala Feed | Saved & Profile | Ellangala’s Academy',
+      description: 'View your saved reflections and activity on Ellangala Feed.',
+      canonical: `${baseDomain}/feed`,
+      image: `${baseDomain}/assets/images/og-share-card.jpg`,
+      type: 'website',
+      noindex: true
+    };
+  }
+
   const feedPostMatch = cleanPath.match(/^\/(?:feed|community)\/(?:posts\/)?([a-zA-Z0-9_-]+)$/);
   if (feedPostMatch) {
     const postId = feedPostMatch[1];
@@ -419,7 +498,7 @@ export async function resolvePageMetadata(pathname = '/') {
   }
 
   // 12c. Free Resources & Video Hubs
-  if (cleanPath === '/free-resources') {
+  if (cleanPath === '/free-resources' || cleanPath === '/resources/free-downloads') {
     return {
       title: 'Free Video Masterclasses & Mind Resources | Ellangala’s Academy',
       description: 'Access curated talks, masterclasses, and practical mind training wisdom by Dr. Naveen Ellangala on YouTube and streaming audio.',
@@ -429,7 +508,7 @@ export async function resolvePageMetadata(pathname = '/') {
     };
   }
 
-  if (cleanPath === '/meditation-music') {
+  if (cleanPath === '/meditation-music' || cleanPath === '/resources/meditation' || cleanPath === '/meditation') {
     return {
       title: 'Meditation & Mind Training Music | Ellangala’s Academy',
       description: 'Explore uplifting and calming meditation audio, contemplative frequencies, and soothing compositions.',
@@ -439,7 +518,7 @@ export async function resolvePageMetadata(pathname = '/') {
     };
   }
 
-  if (cleanPath === '/videos-on-talks') {
+  if (cleanPath === '/videos-on-talks' || cleanPath === '/resources/videos' || cleanPath === '/videos') {
     return {
       title: 'Videos & Keynote Talks | Dr. Naveen Ellangala',
       description: 'Watch video talks on mental wellness, positive psychology, emotional strength, and conscious parenting.',
@@ -449,10 +528,16 @@ export async function resolvePageMetadata(pathname = '/') {
     };
   }
 
-  // 12d. Cart, Checkout, Order Tracking & Protected Pages
-  if (['/cart', '/checkout', '/track-order', '/admin', '/login'].includes(cleanPath)) {
+  // 12d. Cart, Checkout, Order Tracking & Protected Admin Pages
+  if (
+    ['/cart', '/checkout', '/track-order', '/login'].includes(cleanPath) ||
+    cleanPath === '/admin' ||
+    cleanPath.startsWith('/admin/')
+  ) {
     return {
-      title: `${cleanPath.slice(1).replace('-', ' ').toUpperCase()} | Ellangala’s Academy`,
+      title: cleanPath.startsWith('/admin') || cleanPath === '/login'
+        ? 'Admin Portal | Ellangala’s Academy'
+        : `${cleanPath.slice(1).replace(/-/g, ' ').toUpperCase()} | Ellangala’s Academy`,
       description: siteConfig.defaultDescription,
       canonical: `${baseDomain}${cleanPath}`,
       image: siteConfig.defaultOgImage,
@@ -494,11 +579,15 @@ export function buildHeadTagsHtml(meta) {
     .map(s => `<script type="application/ld+json">${JSON.stringify(s)}</script>`)
     .join('\n    ');
 
+  const robotsContent = meta.noindex
+    ? 'noindex, nofollow'
+    : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1';
+
   return `
     <title>${escapeHtml(meta.title)}</title>
     <meta name="description" content="${escapeHtml(meta.description)}" />
     <link rel="canonical" href="${escapeHtml(meta.canonical)}" />
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="robots" content="${robotsContent}" />
 
     <!-- Open Graph / Social Media -->
     <meta property="og:site_name" content="${escapeHtml(siteConfig.name)}" />

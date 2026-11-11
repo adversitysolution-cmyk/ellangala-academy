@@ -9,7 +9,7 @@ export function generateOrganizationSchema() {
     "legalName": siteConfig.legalName,
     "url": siteConfig.url,
     "logo": `${siteConfig.url}/assets/images/resources/footer-logo.png`,
-    "image": `${siteConfig.url}/assets/images/resources/hero-founder.png`,
+    "image": `${siteConfig.url}/assets/images/team/naveen-ellangala.jpg`,
     "description": siteConfig.defaultDescription,
     "email": siteConfig.contact.email,
     "telephone": siteConfig.contact.phone,

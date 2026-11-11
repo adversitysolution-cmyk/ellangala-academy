@@ -15,8 +15,9 @@ export const productService = {
     return res.json();
   },
 
-  async getProductById(id) {
-    const res = await fetch(`${API_BASE}/products/${encodeURIComponent(id)}?admin=true`);
+  async getProductById(id, { admin = true } = {}) {
+    const qs = admin ? '?admin=true' : '';
+    const res = await fetch(`${API_BASE}/products/${encodeURIComponent(id)}${qs}`);
     if (!res.ok) return null;
     return res.json();
   },

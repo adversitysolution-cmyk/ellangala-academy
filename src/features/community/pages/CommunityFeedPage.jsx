@@ -4,7 +4,6 @@ import HeaderOne from '../../../components/layout/HeaderOne';
 import FooterOne from '../../../components/layout/FooterOne';
 import Preloader from '../../../components/layout/Preloader';
 import CustomCursor from '../../../components/layout/CustomCursor';
-import MobileNav from '../../../components/layout/MobileNav';
 import SearchPopup from '../../../components/layout/SearchPopup';
 import ScrollToTop from '../../../components/layout/ScrollToTop';
 import SEO from '../../../seo/SEO';
@@ -705,7 +704,6 @@ function CommunityFeedPageContent() {
           </main>
         </div>
 
-        <MobileNav />
         <SearchPopup />
         <ScrollToTop />
 

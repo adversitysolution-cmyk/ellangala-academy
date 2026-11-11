@@ -409,7 +409,7 @@ export default function EnrollModal() {
                 </div>
 
                 {/* Phone Number & Email (Side by Side on desktop) */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                <div className="enroll-modal-two-col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                   <div>
                     <label style={{ display: 'block', fontSize: '12px', fontWeight: '700', color: '#374151', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.4px' }}>
                       Phone Number <span style={{ color: '#EF4444' }}>*</span>
