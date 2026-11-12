@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { useCommunityAuth } from '../context/CommunityAuthContext';
 import { communityService } from '../services/communityService';
+import '../styles/communityAuthModal.css';
 
 const AVAILABLE_TOPICS = [
   { id: 'psychology', label: 'Positive Psychology' },

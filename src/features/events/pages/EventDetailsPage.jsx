@@ -107,7 +107,9 @@ export default function EventDetailsPage() {
     openEnrollModal(event.title, {
       sourceType: 'Event',
       eventId: event.id,
-      eventTitle: event.title
+      eventTitle: event.title,
+      priceType: event.priceType,
+      price: event.price
     });
   };
 

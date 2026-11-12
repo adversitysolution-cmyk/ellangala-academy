@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useEnrollModal } from '../../context/EnrollModalContext';
 import { useCommunityAuth } from '../../features/community/context/CommunityAuthContext';
 import { enrollmentService } from '../../admin/services/enrollmentService';
@@ -50,24 +50,45 @@ export default function EnrollModal() {
   const [submitError, setSubmitError] = useState('');
   const [pendingId, setPendingId] = useState(null); // unpaid event registration awaiting a payment retry
   const [paid, setPaid] = useState(false);
+  const lastSyncedUserIdRef = useRef(null);
 
   // Auto-fill user contact info from authenticated session whenever available
   useEffect(() => {
-    if (isOpen && user) {
-      if (user.name && !fullName) setFullName(user.name);
-      if (user.phone && !phone) setPhone(user.phone);
-      if (user.email && !email) setEmail(user.email);
+    if (!user) {
+      if (lastSyncedUserIdRef.current !== null) {
+        lastSyncedUserIdRef.current = null;
+        setFullName('');
+        setPhone('');
+        setEmail('');
+      }
+      return;
+    }
+
+    if (isOpen) {
+      if (lastSyncedUserIdRef.current !== user.id) {
+        setFullName(user.name || '');
+        setPhone(user.phone || '');
+        setEmail(user.email || '');
+        lastSyncedUserIdRef.current = user.id;
+      } else {
+        if (user.name && !fullName) setFullName(user.name);
+        if (user.phone && !phone) setPhone(user.phone);
+        if (user.email && !email) setEmail(user.email);
+      }
     }
   }, [isOpen, user]);
 
-  // Auto-fill program field whenever modal opens or selectedProgram changes
+  // Auto-fill program/event field whenever modal opens or selection changes
   useEffect(() => {
     if (isOpen) {
       setIsSubmitted(false);
+      setSubmitError('');
       setPendingId(null);
       setPaid(false);
       const strTitle = typeof selectedProgram === 'string' ? selectedProgram.trim() : '';
-      if (strTitle) {
+      if (eventMeta?.sourceType === 'Event') {
+        setProgram(eventMeta.eventTitle || strTitle);
+      } else if (strTitle) {
         const lower = strTitle.toLowerCase();
         const matched = PROGRAM_OPTIONS.find(
           (opt) => opt.toLowerCase() === lower ||
@@ -79,11 +100,14 @@ export default function EnrollModal() {
         setProgram(PROGRAM_OPTIONS[0]);
       }
     }
-  }, [isOpen, selectedProgram]);
+  }, [isOpen, selectedProgram, eventMeta]);
 
   useEffect(() => { if (isOpen) preloadRazorpay(); }, [isOpen]);
 
   if (!isOpen) return null;
+
+  const isEvent = eventMeta?.sourceType === 'Event';
+  const isPaidEvent = isEvent && eventMeta?.priceType === 'Paid' && Number(eventMeta?.price) > 0;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -271,7 +295,7 @@ export default function EnrollModal() {
             >
               <div>
                 {/* Brand Header */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
+                <div className="enroll-modal__left-brand" style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
                   <div
                     style={{
                       width: '46px',
@@ -297,17 +321,20 @@ export default function EnrollModal() {
                 </div>
 
                 {/* Subtitle */}
-                <h4 style={{ fontSize: '22px', fontWeight: '800', color: '#111827', marginBottom: '14px', lineHeight: '1.3' }}>
-                  Empowering Minds, <br />
-                  Transforming Lives
-                </h4>
-                <p style={{ fontSize: '13.5px', color: '#4B5563', lineHeight: '1.65', marginBottom: '24px' }}>
-                  Take a purposeful step toward mental clarity, emotional strength, and authentic personal growth.
-                </p>
+                <div className="enroll-modal__left-copy">
+                  <h4 style={{ fontSize: '22px', fontWeight: '800', color: '#111827', marginBottom: '14px', lineHeight: '1.3' }}>
+                    Empowering Minds, <br />
+                    Transforming Lives
+                  </h4>
+                  <p style={{ fontSize: '13.5px', color: '#4B5563', lineHeight: '1.65', marginBottom: '24px' }}>
+                    Take a purposeful step toward mental clarity, emotional strength, and authentic personal growth.
+                  </p>
+                </div>
               </div>
 
               {/* 3 Light Trust Badges */}
               <div
+                className="enroll-modal__trust-badges"
                 style={{
                   display: 'grid',
                   gridTemplateColumns: 'repeat(3, 1fr)',
@@ -378,7 +405,7 @@ export default function EnrollModal() {
               }}
             >
               <h3 style={{ fontSize: '20px', fontWeight: '800', color: '#1F2937', marginBottom: '18px' }}>
-                Enrollment Form
+                {isEvent ? 'Event Registration' : 'Enrollment Form'}
               </h3>
 
               <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
@@ -489,7 +516,7 @@ export default function EnrollModal() {
                 {/* Program Selection (Auto-filled!) */}
                 <div>
                   <label style={{ display: 'block', fontSize: '12px', fontWeight: '700', color: '#374151', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.4px' }}>
-                    Interested Program / Service <span style={{ color: '#EF4444' }}>*</span>
+                    {isEvent ? 'Selected Event' : 'Interested Program / Service'} <span style={{ color: '#EF4444' }}>*</span>
                   </label>
                   <select
                     required
@@ -508,14 +535,20 @@ export default function EnrollModal() {
                       cursor: 'pointer',
                     }}
                   >
-                    {!PROGRAM_OPTIONS.includes(program) && program && (
-                      <option value={program}>{program}</option>
+                    {isEvent ? (
+                      program && <option value={program}>{program}</option>
+                    ) : (
+                      <>
+                        {!PROGRAM_OPTIONS.includes(program) && program && (
+                          <option value={program}>{program}</option>
+                        )}
+                        {PROGRAM_OPTIONS.map((opt, i) => (
+                          <option key={i} value={opt}>
+                            {opt}
+                          </option>
+                        ))}
+                      </>
                     )}
-                    {PROGRAM_OPTIONS.map((opt, i) => (
-                      <option key={i} value={opt}>
-                        {opt}
-                      </option>
-                    ))}
                   </select>
                 </div>
 
@@ -585,7 +618,15 @@ export default function EnrollModal() {
                     }
                   }}
                 >
-                  <span>{isSubmitting ? 'Submitting...' : pendingId ? 'Retry Payment' : eventMeta ? 'Submit Enrollment Request' : 'Pay ₹999 & Enroll'}</span>
+                  <span>
+                    {isSubmitting
+                      ? (isPaidEvent || !eventMeta ? 'Opening Payment...' : 'Submitting...')
+                      : pendingId
+                        ? 'Retry Payment'
+                        : isEvent
+                          ? (isPaidEvent ? `Proceed to Payment (₹${eventMeta.price})` : 'Confirm Event Registration')
+                          : 'Pay ₹999 & Enroll'}
+                  </span>
                   <i className="fas fa-paper-plane" style={{ fontSize: '12px' }}></i>
                 </button>
               </form>
@@ -595,18 +636,48 @@ export default function EnrollModal() {
       </div>
 
       <style>{`
+        @keyframes enrollModalFadeIn {
+          from { opacity: 0; transform: translateY(8px) scale(0.985); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .enroll-modal__container input,
+        .enroll-modal__container select,
+        .enroll-modal__container textarea {
+          box-sizing: border-box;
+        }
         @media (max-width: 768px) {
           .enroll-modal__grid {
             grid-template-columns: 1fr !important;
-            max-height: 85vh;
+            max-height: 88vh;
+            max-height: 88dvh;
             overflow-y: auto;
+            min-height: 0 !important;
           }
           .enroll-modal__left {
-            padding: 28px 20px !important;
+            padding: 18px 20px 14px !important;
             border-right: none !important;
+            border-bottom: 1px solid #EFE4D2;
+          }
+          .enroll-modal__left-brand {
+            margin-bottom: 0 !important;
+          }
+          .enroll-modal__left-copy,
+          .enroll-modal__trust-badges {
+            display: none !important;
           }
           .enroll-modal__right {
-            padding: 24px 20px !important;
+            padding: 20px 20px 24px !important;
+            justify-content: flex-start !important;
+          }
+        }
+        @media (max-width: 575px) {
+          .enroll-modal-two-col {
+            grid-template-columns: 1fr !important;
+          }
+          .enroll-modal__right input,
+          .enroll-modal__right select,
+          .enroll-modal__right textarea {
+            font-size: 16px !important;
           }
         }
       `}</style>

@@ -51,11 +51,14 @@ export default function EventsPage() {
     ? upcomingEvents.filter((e) => e.id !== featuredEvent.id)
     : upcomingEvents;
 
-  const handleRegisterClick = (eventTitle, eventId) => {
-    openEnrollModal(eventTitle, {
+  const handleRegisterClick = (event) => {
+    if (!event) return;
+    openEnrollModal(event.title, {
       sourceType: 'Event',
-      eventId: eventId,
-      eventTitle: eventTitle
+      eventId: event.id,
+      eventTitle: event.title,
+      priceType: event.priceType,
+      price: event.price
     });
   };
 
@@ -282,7 +285,7 @@ export default function EventsPage() {
 
                         <button
                           type="button"
-                          onClick={() => handleRegisterClick(featuredEvent.title, featuredEvent.id)}
+                          onClick={() => handleRegisterClick(featuredEvent)}
                           style={{
                             padding: '12px 24px',
                             borderRadius: '8px',
@@ -432,7 +435,7 @@ export default function EventsPage() {
 
                           <button
                             type="button"
-                            onClick={() => handleRegisterClick(event.title, event.id)}
+                            onClick={() => handleRegisterClick(event)}
                             style={{
                               flex: 1,
                               padding: '9px 12px',

@@ -18,21 +18,15 @@ export function EnrollModalProvider({ children }) {
         : 'Please sign up or log in to enroll in academy programs and ongoing learning activities.';
 
       openAuthModal('signup', notice, () => {
-        if (programTitle) setSelectedProgram(programTitle);
-        if (extraMeta) setEventMeta(extraMeta);
+        setSelectedProgram(programTitle || '');
+        setEventMeta(extraMeta || null);
         setIsOpen(true);
       });
       return;
     }
 
-    if (programTitle) {
-      setSelectedProgram(programTitle);
-    }
-    if (extraMeta) {
-      setEventMeta(extraMeta);
-    } else {
-      setEventMeta(null);
-    }
+    setSelectedProgram(programTitle || '');
+    setEventMeta(extraMeta || null);
     setIsOpen(true);
   };
 

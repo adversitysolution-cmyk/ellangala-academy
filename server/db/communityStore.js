@@ -1492,7 +1492,7 @@ export async function createCommunityUser({ name, phone, email, password, avatar
   if (!pool) {
     // Check uniqueness in memoryStore
     for (const u of memoryStore.users.values()) {
-      if (normalizePhone(u.phone) === cleanPhone) {
+      if (phonesMatch(u.phone, cleanPhone)) {
         throw new Error('A community account with this mobile number already exists. Please sign in.');
       }
     }
@@ -1520,8 +1520,17 @@ export async function createCommunityUser({ name, phone, email, password, avatar
   }
 
   // MySQL persistence
-  const [existing] = await pool.query('SELECT id FROM community_users WHERE phone = ? LIMIT 1', [cleanPhone]);
-  if (existing.length > 0) {
+  let existing = [];
+  if (cleanPhone.length >= 8) {
+    const phoneSuffix = cleanPhone.slice(-8);
+    [existing] = await pool.query(
+      'SELECT id, phone FROM community_users WHERE phone = ? OR phone LIKE ?',
+      [cleanPhone, `%${phoneSuffix}`]
+    );
+  } else {
+    [existing] = await pool.query('SELECT id, phone FROM community_users WHERE phone = ?', [cleanPhone]);
+  }
+  if (existing.some((u) => phonesMatch(u.phone, cleanPhone))) {
     throw new Error('A community account with this mobile number already exists. Please sign in.');
   }
 
@@ -1563,6 +1572,34 @@ export async function createCommunityUser({ name, phone, email, password, avatar
   });
 }
 
+export function buildCommunityAuthLookup(identifier) {
+  const trimmed = String(identifier || '').trim();
+  const cleanPhone = normalizePhone(trimmed);
+  if (cleanPhone.length >= 8) {
+    const phoneSuffix = cleanPhone.slice(-8);
+    return {
+      trimmed,
+      cleanPhone,
+      sql: 'SELECT * FROM community_users WHERE phone = ? OR phone LIKE ? OR LOWER(TRIM(name)) = LOWER(?)',
+      params: [cleanPhone, `%${phoneSuffix}`, trimmed]
+    };
+  }
+  if (cleanPhone.length >= 7) {
+    return {
+      trimmed,
+      cleanPhone,
+      sql: 'SELECT * FROM community_users WHERE phone = ? OR LOWER(TRIM(name)) = LOWER(?)',
+      params: [cleanPhone, trimmed]
+    };
+  }
+  return {
+    trimmed,
+    cleanPhone,
+    sql: 'SELECT * FROM community_users WHERE LOWER(TRIM(name)) = LOWER(?)',
+    params: [trimmed]
+  };
+}
+
 export async function authenticateCommunityUser({ identifier, password }) {
   if (!identifier?.trim()) throw new Error('Mobile number or name is required.');
   if (!password) throw new Error('Password is required.');
@@ -1574,19 +1611,16 @@ export async function authenticateCommunityUser({ identifier, password }) {
   const newTokenExpiresAt = new Date(Date.now() + THIRTY_DAYS_MS).toISOString();
 
   if (!pool) {
-    let found = null;
+    const trimmedLower = trimmed.toLowerCase();
+    const candidates = [];
     for (const u of memoryStore.users.values()) {
-      if (phonesMatch(u.phone, trimmed)) {
-        found = u;
-        break;
-      }
-      if (u.name.toLowerCase() === trimmed.toLowerCase()) {
-        found = u;
-        break;
+      if (phonesMatch(u.phone, trimmed) || u.name.trim().toLowerCase() === trimmedLower) {
+        candidates.push(u);
       }
     }
 
-    if (!found || !verifyCommunityPassword(password, found.passwordHash)) {
+    const found = candidates.find((u) => verifyCommunityPassword(password, u.passwordHash));
+    if (!found) {
       throw new Error('Invalid mobile number/name or password. Please verify your credentials.');
     }
 
@@ -1597,19 +1631,18 @@ export async function authenticateCommunityUser({ identifier, password }) {
     return sanitizeCommunityUser(found);
   }
 
-  // MySQL search by phone or name
-  const phoneSuffix = cleanPhone.slice(-10);
-  const [rows] = await pool.query(
-    'SELECT * FROM community_users WHERE phone = ? OR phone LIKE ? OR LOWER(name) = LOWER(?) LIMIT 1',
-    [cleanPhone, `%${phoneSuffix}`, trimmed]
-  );
+  // MySQL search by phone or name (never run phone LIKE '%' when identifier is non-numeric)
+  const lookup = buildCommunityAuthLookup(trimmed);
+  const [rows] = await pool.query(lookup.sql, lookup.params);
 
-  if (rows.length === 0) {
-    throw new Error('Invalid mobile number/name or password. Please verify your credentials.');
-  }
+  const trimmedLower = trimmed.toLowerCase();
+  const candidates = rows.filter((u) => {
+    if (cleanPhone.length >= 7 && phonesMatch(u.phone, trimmed)) return true;
+    return String(u.name || '').trim().toLowerCase() === trimmedLower;
+  });
 
-  const userRow = rows[0];
-  if (!verifyCommunityPassword(password, userRow.passwordHash)) {
+  const userRow = candidates.find((u) => verifyCommunityPassword(password, u.passwordHash));
+  if (!userRow) {
     throw new Error('Invalid mobile number/name or password. Please verify your credentials.');
   }
 
@@ -1718,7 +1751,7 @@ export async function logoutCommunityUser(token) {
     }
     return true;
   }
-  await pool.query('UPDATE community_users SET token = NULL WHERE id = ?', [token]);
+  await pool.query('UPDATE community_users SET token = NULL WHERE token = ?', [token]);
   return true;
 }
 

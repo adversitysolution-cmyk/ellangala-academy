@@ -5,7 +5,7 @@ process.env.ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@ellangala.com';
 process.env.ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'test-admin-pass';
 
 const { default: app } = await import('./index.js');
-const { ensureCommunitySchema } = await import('./db/communityStore.js');
+const { ensureCommunitySchema, deleteCommunityUser } = await import('./db/communityStore.js');
 
 async function runAuthTests() {
   console.log('══════════════════════════════════════════════════════════════════');
@@ -17,11 +17,12 @@ async function runAuthTests() {
   const server = app.listen(0);
   const port = server.address().port;
   const baseUrl = `http://localhost:${port}/api`;
+  const createdUserIds = [];
 
   try {
     // TEST 1: Signup with required fields (Name, Phone, Password) and optional Email + Topics
     console.log('▶ Test 1: Community user registration with 30-day session token');
-    const testPhone = '+91 98765 43210';
+    const testPhone = '+91 90000 54321';
     const testName = 'Rohan Deshmukh';
     const testPass = 'mindfulPass123';
     const testEmail = 'rohan@example.com';
@@ -42,6 +43,7 @@ async function runAuthTests() {
     assert.equal(signupRes.status, 201, 'Signup must return 201 Created');
     const signupData = await signupRes.json();
     assert.ok(signupData.user, 'User object must be returned');
+    createdUserIds.push(signupData.user.id);
     assert.equal(signupData.user.name, testName);
     assert.ok(signupData.token, 'Session token must be provided');
     assert.ok(signupData.tokenExpiresAt, 'tokenExpiresAt must be provided');
@@ -52,19 +54,47 @@ async function runAuthTests() {
     assert.ok(days >= 29 && days <= 31, `Session expiry must be ~30 days (got ${days.toFixed(1)} days)`);
     console.log(`  ✅ Successfully registered user "${testName}" with 30-day session token.`);
 
-    // TEST 2: Reject duplicate registration with same mobile number
+    // TEST 2: Reject duplicate registration with same mobile number (with or without +91 prefix)
     console.log('▶ Test 2: Duplicate mobile number rejection');
     const dupRes = await fetch(`${baseUrl}/community/auth/signup`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         name: 'Another User',
-        phone: testPhone,
+        phone: '9000054321',
         password: 'anotherPassword'
       })
     });
-    assert.equal(dupRes.status, 400, 'Duplicate phone should be rejected with 400');
+    assert.equal(dupRes.status, 400, 'Duplicate phone (without country code) should be rejected with 400');
     console.log('  ✅ Duplicate mobile number successfully rejected.');
+
+    // TEST 2b: Sign up a second user and verify Name login resolves the second user cleanly
+    console.log('▶ Test 2b: Second user registration and Name-based login discrimination');
+    const secondRes = await fetch(`${baseUrl}/community/auth/signup`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: 'Naveen Test Seeker',
+        phone: '9000054322',
+        password: 'secondUserPass12'
+      })
+    });
+    assert.equal(secondRes.status, 201, 'Second user signup must return 201');
+    const secondData = await secondRes.json();
+    createdUserIds.push(secondData.user.id);
+
+    const secondLoginByName = await fetch(`${baseUrl}/community/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        identifier: 'naveen test seeker',
+        password: 'secondUserPass12'
+      })
+    });
+    assert.equal(secondLoginByName.status, 200, 'Second user must log in by name');
+    const secondLoginData = await secondLoginByName.json();
+    assert.equal(secondLoginData.user.id, secondData.user.id);
+    console.log('  ✅ Second user logged in accurately by Name without hitting first user.');
 
     // TEST 3: Login with Mobile Number
     console.log('▶ Test 3: Member login using Mobile Number + Password');
@@ -72,7 +102,7 @@ async function runAuthTests() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        identifier: '9876543210', // Raw digits without spaces
+        identifier: '9000054321', // Raw digits without spaces
         password: testPass
       })
     });
@@ -161,11 +191,16 @@ async function runAuthTests() {
     console.log('   ALL 9 COMMUNITY USER AUTH TESTS PASSED PERFECTLY!              ');
     console.log('══════════════════════════════════════════════════════════════════\n');
   } finally {
+    for (const id of createdUserIds) {
+      await deleteCommunityUser(id).catch(() => {});
+    }
     server.close();
   }
 }
 
-runAuthTests().catch((err) => {
-  console.error('❌ Community Auth Tests Failed:', err);
-  process.exit(1);
-});
+runAuthTests()
+  .then(() => process.exit(0))
+  .catch((err) => {
+    console.error('❌ Community Auth Tests Failed:', err);
+    process.exit(1);
+  });
