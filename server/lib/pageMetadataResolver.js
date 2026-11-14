@@ -14,7 +14,8 @@ import {
   generateArticleSchema,
   generateScholarlyArticleSchema,
   generateFAQSchema,
-  generateCommunityPostSchema
+  generateCommunityPostSchema,
+  generateDigitalResourceSchema
 } from '../../src/seo/schemas/schemaGenerators.js';
 import { getPageFaqData } from '../../src/contents/faq.content.js';
 
@@ -499,12 +500,35 @@ export async function resolvePageMetadata(pathname = '/') {
 
   // 12c. Free Resources & Video Hubs
   if (cleanPath === '/free-resources' || cleanPath === '/resources/free-downloads') {
+    const canonicalUrl = `${baseDomain}/free-resources`;
     return {
-      title: 'Free Video Masterclasses & Mind Resources | Ellangala’s Academy',
-      description: 'Access curated talks, masterclasses, and practical mind training wisdom by Dr. Naveen Ellangala on YouTube and streaming audio.',
-      canonical: `${baseDomain}/free-resources`,
+      title: 'Bhagavad Gita for a Meaningful Life | Free Workbook | Ellangala’s Academy',
+      description: 'Download the free Bhagavad Gita for a Meaningful Life workbook by Dr. Naveen Ellangala, available in English and Kannada, blending spiritual wisdom with psychological insight.',
+      canonical: canonicalUrl,
       image: siteConfig.defaultOgImage,
-      type: 'website'
+      type: 'website',
+      schemas: [
+        generateBreadcrumbSchema([
+          { name: 'Home', path: '/' },
+          { name: 'Bhagavad Gita for a Meaningful Life', path: '/free-resources' }
+        ]),
+        generateDigitalResourceSchema({
+          id: 'english',
+          name: 'Bhagavad Gita for a Meaningful Life (English)',
+          description: 'A free reflection workbook taking readers chapter by chapter through the Bhagavad Gita, from spiritual and psychological perspectives.',
+          pageUrl: '/free-resources',
+          fileUrl: '/assets/pdfs/bhagavad-gita-for-meaningful-life-english.pdf',
+          inLanguage: 'en'
+        }),
+        generateDigitalResourceSchema({
+          id: 'kannada',
+          name: 'ಅರ್ಥಪೂರ್ಣ ಜೀವನಕ್ಕಾಗಿ ಭಗವದ್ಗೀತೆ (Bhagavad Gita for a Meaningful Life, Kannada)',
+          description: 'ಆಧ್ಯಾತ್ಮಿಕ ಮತ್ತು ಮನೋವಿಜ್ಞಾನದ ನೆಲೆಯಲ್ಲಿ ಭಗವದ್ಗೀತೆಯ ಅಧ್ಯಾಯವಾರು ಪ್ರತಿಬಿಂಬ ಕಾರ್ಯಪುಸ್ತಕ.',
+          pageUrl: '/free-resources',
+          fileUrl: '/assets/pdfs/bhagavad-gita-for-meaningful-life-kannada.pdf',
+          inLanguage: 'kn'
+        })
+      ]
     };
   }
 
@@ -514,17 +538,29 @@ export async function resolvePageMetadata(pathname = '/') {
       description: 'Explore uplifting and calming meditation audio, contemplative frequencies, and soothing compositions.',
       canonical: `${baseDomain}/meditation-music`,
       image: siteConfig.defaultOgImage,
-      type: 'website'
+      type: 'website',
+      schemas: [
+        generateBreadcrumbSchema([
+          { name: 'Home', path: '/' },
+          { name: 'Meditation & Music', path: '/meditation' }
+        ])
+      ]
     };
   }
 
   if (cleanPath === '/videos-on-talks' || cleanPath === '/resources/videos' || cleanPath === '/videos') {
     return {
       title: 'Videos & Keynote Talks | Dr. Naveen Ellangala',
-      description: 'Watch video talks on mental wellness, positive psychology, emotional strength, and conscious parenting.',
-      canonical: `${baseDomain}/videos-on-talks`,
+      description: 'Watch keynote talks, free video masterclasses, and mind training lectures by Dr. Naveen Ellangala on mental wellness, positive psychology, and emotional resilience.',
+      canonical: `${baseDomain}/videos`,
       image: siteConfig.defaultOgImage,
-      type: 'website'
+      type: 'website',
+      schemas: [
+        generateBreadcrumbSchema([
+          { name: 'Home', path: '/' },
+          { name: 'Videos on Talks', path: '/videos' }
+        ])
+      ]
     };
   }
 

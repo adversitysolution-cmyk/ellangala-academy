@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export default function PageHeader({ title, pageName = title }) {
+export default function PageHeader({ title, pageName = title, headingTag = 'h1' }) {
+  const Heading = headingTag;
   return (
     <section className="page-header">
       <div
@@ -16,7 +17,7 @@ export default function PageHeader({ title, pageName = title }) {
 
       <div className="container" style={{ position: 'relative', zIndex: 5 }}>
         <div className="page-header__inner text-start">
-          <h2>{title}</h2>
+          <Heading>{title}</Heading>
           <ul className="thm-breadcrumb">
             <li>
               <Link to="/">Home</Link>

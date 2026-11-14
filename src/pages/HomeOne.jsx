@@ -74,6 +74,13 @@ export default function HomeOne() {
         {/* Start Main Slider One */}
         <section className="main-slider main-slider-one">
           <div className="main-slider-one__inner">
+            {/* Real, stable H1 kept outside the carousel track: owl-carousel's loop:true
+                clones slide markup for the infinite-scroll effect, which would otherwise
+                duplicate an <h1> placed inside a slide. Text matches the visible slide 1
+                headline exactly. */}
+            <h1 className="visually-hidden">
+              {homeContent.slider[0].title.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim()}
+            </h1>
             <div
               className="main-slider__carousel owl-carousel owl-theme thm-owl__carousel"
               data-owl-options='{"loop": true, "items": 1, "navText": ["<span class=\"icon-arrow-right\"></span>","<span class=\"icon-arrow-right1\"></span>"], "margin": 0, "dots": false, "nav": true, "animateOut": "slideOutDown", "animateIn": "fadeIn", "active": true, "smartSpeed": 1000, "autoplay": true, "autoplayTimeout": 7000, "autoplayHoverPause": false}'

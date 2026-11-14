@@ -8,6 +8,7 @@ import SearchPopup from '../components/layout/SearchPopup';
 import ScrollToTop from '../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../hooks/useUterpyPlugins';
 import SEO from '../seo/SEO';
+import { generateBreadcrumbSchema, generateDigitalResourceSchema } from '../seo/schemas/schemaGenerators';
 
 const pdfResources = [
   {
@@ -16,7 +17,10 @@ const pdfResources = [
     title: 'Bhagavad Gita for a Meaningful Life',
     subtitle: 'From Spiritual and Psychological Perspectives',
     file: '/assets/pdfs/bhagavad-gita-for-meaningful-life-english.pdf',
-    fileName: 'Bhagavad-Gita-for-a-Meaningful-Life-English.pdf'
+    fileName: 'Bhagavad-Gita-for-a-Meaningful-Life-English.pdf',
+    inLanguage: 'en',
+    schemaName: 'Bhagavad Gita for a Meaningful Life (English)',
+    schemaDescription: 'A free reflection workbook taking readers chapter by chapter through the Bhagavad Gita, from spiritual and psychological perspectives.'
   },
   {
     id: 'kannada',
@@ -24,7 +28,10 @@ const pdfResources = [
     title: '"ಅರ್ಥಪೂರ್ಣ ಜೀವನಕ್ಕಾಗಿ ಭಗವದ್ಗೀತೆ"',
     subtitle: 'ಆಧ್ಯಾತ್ಮಿಕ ಮತ್ತು ಮನೋವಿಜ್ಞಾನದ ನೆಲೆಯಲ್ಲಿ',
     file: '/assets/pdfs/bhagavad-gita-for-meaningful-life-kannada.pdf',
-    fileName: 'Bhagavad-Gita-for-a-Meaningful-Life-Kannada.pdf'
+    fileName: 'Bhagavad-Gita-for-a-Meaningful-Life-Kannada.pdf',
+    inLanguage: 'kn',
+    schemaName: 'ಅರ್ಥಪೂರ್ಣ ಜೀವನಕ್ಕಾಗಿ ಭಗವದ್ಗೀತೆ (Bhagavad Gita for a Meaningful Life, Kannada)',
+    schemaDescription: 'ಆಧ್ಯಾತ್ಮಿಕ ಮತ್ತು ಮನೋವಿಜ್ಞಾನದ ನೆಲೆಯಲ್ಲಿ ಭಗವದ್ಗೀತೆಯ ಅಧ್ಯಾಯವಾರು ಪ್ರತಿಬಿಂಬ ಕಾರ್ಯಪುಸ್ತಕ.'
   }
 ];
 
@@ -42,7 +49,21 @@ export default function FreeResourcesPage() {
         <SEO
           title="Bhagavad Gita for a Meaningful Life | Free Workbook | Ellangala’s Academy"
           description="Download the free Bhagavad Gita for a Meaningful Life workbook by Dr. Naveen Ellangala, available in English and Kannada, blending spiritual wisdom with psychological insight."
-          canonical="/resources/free-downloads"
+          canonical="/free-resources"
+          structuredData={[
+            generateBreadcrumbSchema([
+              { name: 'Home', path: '/' },
+              { name: 'Bhagavad Gita for a Meaningful Life', path: '/free-resources' }
+            ]),
+            ...pdfResources.map((resource) => generateDigitalResourceSchema({
+              id: resource.id,
+              name: resource.schemaName,
+              description: resource.schemaDescription,
+              pageUrl: '/free-resources',
+              fileUrl: resource.file,
+              inLanguage: resource.inLanguage
+            }))
+          ]}
         />
         <HeaderOne />
         <PageHeader title="Bhagavad Gita for a Meaningful Life" breadcrumb="Bhagavad Gita for a Meaningful Life" />

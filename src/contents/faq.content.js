@@ -213,7 +213,13 @@ export const pageFaqCatalog = {
     ]
   },
 
-  // 8. Contact Page
+  // 8. Dedicated FAQ Page
+  '/faq': {
+    sectionTitle: "Things to Keep in Mind",
+    faqs: defaultFaqs
+  },
+
+  // 9. Contact Page
   '/contact': {
     sectionTitle: "Contact & Appointments — Things to Keep in Mind",
     faqs: [
@@ -277,9 +283,13 @@ export function getPageFaqData(pathname = '/') {
     return { ...pageFaqCatalog['/contact'], sidebar: faqContent.sidebar, bottom: faqContent.bottom };
   }
 
+  // No FAQ content is actually visible on pages outside the catalog above —
+  // returning real FAQ data here would inject FAQPage schema that doesn't
+  // match on-page content, which is invalid per Google's structured data
+  // guidelines and doesn't scale as new pages are added.
   return {
     sectionTitle: faqContent.sectionTitle,
-    faqs: defaultFaqs,
+    faqs: [],
     sidebar: faqContent.sidebar,
     bottom: faqContent.bottom
   };

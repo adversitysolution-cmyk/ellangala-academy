@@ -145,7 +145,7 @@ export default function EventDetailsPage() {
           ]}
         />
         <HeaderOne />
-        <PageHeader title={event.title} breadcrumb={`Events / ${event.title}`} />
+        <PageHeader title={event.title} breadcrumb={`Events / ${event.title}`} headingTag="h2" />
 
         {/* Start Event Detail Page */}
         <section style={{ paddingTop: '60px', paddingBottom: '90px', backgroundColor: '#FAF8F5' }}>
