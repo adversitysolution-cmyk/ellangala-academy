@@ -15,7 +15,11 @@ const videoUrls = [
   "https://www.youtube.com/embed/egew6Kk8REw",
   "https://www.youtube.com/embed/QBDnfvPzp9Q",
   "https://www.youtube.com/embed/RZ0TOcSDOqY",
-  "https://www.youtube.com/embed/puIiUtzLLHw"
+  "https://www.youtube.com/embed/puIiUtzLLHw",
+  "https://www.youtube.com/embed/badU8RC8i8E",
+  "https://www.youtube.com/embed/pHDTXvkgwgk",
+  "https://www.youtube.com/embed/xLyaMchs6P0",
+  "https://www.youtube.com/embed/fBQd89ZW7H4"
 ];
 
 export default function VideosOnTalksPage() {
@@ -48,7 +52,7 @@ export default function VideosOnTalksPage() {
                 Videos on Talks by Dr. Naveen Ellangala
               </h2>
               <p style={{ fontSize: '15px', color: '#64748B', lineHeight: '1.65' }}>
-                Explore video presentations, keynote addresses, and mind training lectures on Positive Psychology and holistic wellbeing.
+                Explore video presentations, keynote addresses, free mind training lectures, and masterclasses on Positive Psychology and holistic wellbeing.
               </p>
             </div>
 
