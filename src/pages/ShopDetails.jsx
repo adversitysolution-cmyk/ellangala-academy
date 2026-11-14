@@ -525,7 +525,7 @@ export default function ShopDetails() {
                                   <div className="single-review-box-outer">
                                     <div className="single-review-box">
                                       <div className="img-box">
-                                        <img src="/assets/images/resources/review-img1.jpg" alt="#" />
+                                        <img src="/assets/images/resources/review-img1.jpg" alt="Sourav Ahamed, customer review" />
                                       </div>
                                       <div className="text-box">
                                         <div className="review-box">
@@ -551,7 +551,7 @@ export default function ShopDetails() {
                                   <div className="single-review-box-outer">
                                     <div className="single-review-box">
                                       <div className="img-box">
-                                        <img src="/assets/images/resources/review-img2.jpg" alt="#" />
+                                        <img src="/assets/images/resources/review-img2.jpg" alt="Dr. Priya Sharma, customer review" />
                                       </div>
                                       <div className="text-box">
                                         <div className="review-box">

@@ -515,7 +515,7 @@ export default function FounderPage() {
                       </div>
                       <div style={{ flex: 1 }}>
                         <p style={{ fontSize: '15px', lineHeight: '1.75', color: '#3A4B63', margin: 0, fontWeight: '400' }}>
-                          <strong>Dr. Naveen Ellangala</strong> is a <strong>Positive Psychologist, Holistic Life Coach, author and mind-training practitioner</strong> with over <strong>16 years of experience</strong> in the areas of mental wellbeing, self-awareness, personal growth and meaningful living. Through his workshops, educational initiatives and practical mind-training programs, he has reached more than <strong>20,000 individuals across 300+ institutions</strong>, with extensive engagement among government schools and colleges in <strong>Kerala and Karnataka</strong>.
+                          <strong>Dr. Naveen Ellangala</strong> is a <strong>Positive Psychologist, Holistic Life Coach, author and mind-training practitioner</strong> with over <strong>16 years of experience</strong> in the areas of mental wellbeing, self-awareness, personal growth and meaningful living. Through his <Link to="/positive-workshops" style={{ color: 'inherit', textDecoration: 'underline' }}>workshops</Link>, educational initiatives and practical mind-training programs, he has reached more than <strong>20,000 individuals across 300+ institutions</strong>, with extensive engagement among government schools and colleges in <strong>Kerala and Karnataka</strong>.
                         </p>
                       </div>
                     </div>
@@ -546,7 +546,7 @@ export default function FounderPage() {
                       </div>
                       <div style={{ flex: 1 }}>
                         <p style={{ fontSize: '15px', lineHeight: '1.75', color: '#3A4B63', margin: 0, fontWeight: '400' }}>
-                          He is the <strong>author of 17 books</strong>, including <strong>Bhagavadgita for Meaningful Life</strong>, <strong>MANAS SADHANA</strong>, and practical works exploring <strong>mental hygiene, Positive Psychology, self-awareness, happiness, mind training and purposeful living</strong>. He has also contributed as a columnist for <strong>“O Manase” in Yasha Karnataka weekly magazine</strong>, while his ideas and programs have been featured through <strong>television, radio and other public platforms</strong>. His contributions to mental wellbeing and education have also received recognition through various awards.
+                          He is the <strong><Link to="/shop" style={{ color: 'inherit', textDecoration: 'underline' }}>author of 17 books</Link></strong>, including <strong><Link to="/free-resources" style={{ color: 'inherit', textDecoration: 'underline' }}>Bhagavadgita for Meaningful Life</Link></strong>, <strong>MANAS SADHANA</strong>, and practical works exploring <strong>mental hygiene, Positive Psychology, self-awareness, happiness, mind training and purposeful living</strong>. He has also contributed as a columnist for <strong>“O Manase” in Yasha Karnataka weekly magazine</strong>, while his ideas and programs have been featured through <strong>television, radio and other public platforms</strong>. His contributions to mental wellbeing and education have also received recognition through various awards.
                         </p>
                       </div>
                     </div>
@@ -577,7 +577,7 @@ export default function FounderPage() {
                       </div>
                       <div style={{ flex: 1 }}>
                         <p style={{ fontSize: '15px', lineHeight: '1.75', color: '#3A4B63', margin: 0, fontWeight: '400' }}>
-                          Dr. Naveen is the creator of three key initiatives — <strong>Positive MindGym</strong>, <strong>Positive MindGym Center</strong> and the <strong>Positive Mind Toolkit</strong>. Together, they extend his vision of making <strong>mind training practical, structured and accessible for everyday life</strong>. These initiatives bring together guided practice, experiential learning and practical resources to strengthen areas such as <strong>mental fitness, self-awareness, focus, Emotional Intelligence (EQ), Spiritual Intelligence (SQ), positive thinking and meaningful living</strong>.
+                          Dr. Naveen is the creator of three key initiatives — <strong><Link to="/mindgym" style={{ color: 'inherit', textDecoration: 'underline' }}>Positive MindGym</Link></strong>, <strong><Link to="/mindgym/mind-gym" style={{ color: 'inherit', textDecoration: 'underline' }}>Positive MindGym Center</Link></strong> and the <strong><Link to="/mindgym/toolkit" style={{ color: 'inherit', textDecoration: 'underline' }}>Positive Mind Toolkit</Link></strong>. Together, they extend his vision of making <strong>mind training practical, structured and accessible for everyday life</strong>. These initiatives bring together guided practice, experiential learning and practical resources to strengthen areas such as <strong>mental fitness, self-awareness, focus, Emotional Intelligence (EQ), Spiritual Intelligence (SQ), positive thinking and meaningful living</strong>.
                         </p>
                       </div>
                     </div>
@@ -607,7 +607,7 @@ export default function FounderPage() {
                       </div>
                       <div style={{ flex: 1 }}>
                         <p style={{ fontSize: '15px', lineHeight: '1.75', color: '#3A4B63', margin: '0', fontWeight: '400' }}>
-                          His doctoral research, titled <strong>“A Study and Formulation of a PERMA Model of Positive Psychology Based on the Literary Works of Saint Purandaradasa,”</strong> explores the relationship between <strong>Positive Psychology and Indian wisdom</strong> in the context of human flourishing and purposeful living. Through his work, Dr. Naveen brings together <strong>Positive Psychology, Spiritual Psychology, Indian wisdom and practical mind training</strong> to help individuals better understand themselves, develop healthier mental habits and approach life with greater <strong>awareness, balance and purpose</strong>.
+                          His <Link to="/research" style={{ color: 'inherit', textDecoration: 'underline' }}>doctoral research</Link>, titled <strong>“A Study and Formulation of a PERMA Model of Positive Psychology Based on the Literary Works of Saint Purandaradasa,”</strong> explores the relationship between <strong>Positive Psychology and Indian wisdom</strong> in the context of human flourishing and purposeful living. Through his work, Dr. Naveen brings together <strong>Positive Psychology, Spiritual Psychology, Indian wisdom and practical mind training</strong> to help individuals better understand themselves, develop healthier mental habits and approach life with greater <strong>awareness, balance and purpose</strong>.
                         </p>
                       </div>
                     </div>

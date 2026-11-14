@@ -99,16 +99,16 @@ export default function About() {
         {/* Start Why Choose One */}
         <section className="why-choose-one why-choose-one--about">
           <div className="shape3 float-bob-x">
-            <img src="/assets/images/shapes/why-choose-v1-shape2.png" alt="#" />
+            <img src="/assets/images/shapes/why-choose-v1-shape2.png" alt="" />
           </div>
           <div className="shape5">
-            <img src="/assets/images/shapes/why-choose-v1-shape3.png" alt="#" />
+            <img src="/assets/images/shapes/why-choose-v1-shape3.png" alt="" />
           </div>
           <div className="shape6">
-            <img src="/assets/images/shapes/why-choose-v1-shape4.png" alt="#" />
+            <img src="/assets/images/shapes/why-choose-v1-shape4.png" alt="" />
           </div>
           <div className="shape7">
-            <img src="/assets/images/shapes/why-choose-v1-shape5.png" alt="#" />
+            <img src="/assets/images/shapes/why-choose-v1-shape5.png" alt="" />
           </div>
           <div className="container">
             <div className="row">
@@ -116,10 +116,10 @@ export default function About() {
                 <div className="why-choose-one__img">
                   <div className="shape2"></div>
                   <div className="shape1">
-                    <img src="/assets/images/shapes/why-choose-v1-shape1.png" alt="#" />
+                    <img src="/assets/images/shapes/why-choose-v1-shape1.png" alt="" />
                   </div>
                   <div className="shape4 float-bob-y">
-                    <img src="/assets/images/shapes/why-choose-v1-shape2.png" alt="#" />
+                    <img src="/assets/images/shapes/why-choose-v1-shape2.png" alt="" />
                   </div>
                   <div className="why-choose-one__img1">
                     <img src="/assets/images/resources/why-choose-v1-img1.png" alt="Why Choose Ellangala Academy" />
@@ -332,7 +332,7 @@ export default function About() {
                 style={{ backgroundImage: 'url(/assets/images/backgrounds/therapy-v1-bg.jpg)' }}
               ></div>
               <div className="therapy-one__img1 wow fadeInUp" data-wow-delay="100ms" data-wow-duration="2500ms">
-                <img src="/assets/images/resources/therapy-v1-img1.png" alt="#" />
+                <img src="/assets/images/resources/therapy-v1-img1.png" alt={aboutContent.therapy.title.replace(/\n/g, ' ')} />
               </div>
               <div className="shape1"></div>
               <div className="shape2"></div>
@@ -451,7 +451,7 @@ export default function About() {
                 >
                   <div className="team-one__single">
                     <div className="team-one__single-img">
-                      <img src={member.image} alt="#" />
+                      <img src={member.image} alt={member.name} />
                     </div>
                     <div className="team-one__single-content">
                       <div className="title-box text-center">

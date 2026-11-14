@@ -92,13 +92,13 @@ export default function HomeOne() {
                     style={{ backgroundImage: `url(${slide.bgImage})` }}
                   ></div>
                   <div className="shape1">
-                    <img src="/assets/images/shapes/slider-v1-shape1.png" alt="#" />
+                    <img src="/assets/images/shapes/slider-v1-shape1.png" alt="" />
                   </div>
                   <div className="shape2">
-                    <img src="/assets/images/shapes/slider-v1-shape2.png" alt="#" />
+                    <img src="/assets/images/shapes/slider-v1-shape2.png" alt="" />
                   </div>
                   <div className="shape3">
-                    <img src="/assets/images/shapes/slider-v1-shape3.png" alt="#" />
+                    <img src="/assets/images/shapes/slider-v1-shape3.png" alt="" />
                   </div>
                   <div className="slider-one__border"></div>
                   <div className="slider-one__border two"></div>
@@ -237,16 +237,16 @@ export default function HomeOne() {
         {/* Start Why Choose One */}
         <section className="why-choose-one">
           <div className="shape3 float-bob-x">
-            <img src="/assets/images/shapes/why-choose-v1-shape2.png" alt="#" />
+            <img src="/assets/images/shapes/why-choose-v1-shape2.png" alt="" />
           </div>
           <div className="shape5">
-            <img src="/assets/images/shapes/why-choose-v1-shape3.png" alt="#" />
+            <img src="/assets/images/shapes/why-choose-v1-shape3.png" alt="" />
           </div>
           <div className="shape6">
-            <img src="/assets/images/shapes/why-choose-v1-shape4.png" alt="#" />
+            <img src="/assets/images/shapes/why-choose-v1-shape4.png" alt="" />
           </div>
           <div className="shape7">
-            <img src="/assets/images/shapes/why-choose-v1-shape5.png" alt="#" />
+            <img src="/assets/images/shapes/why-choose-v1-shape5.png" alt="" />
           </div>
           <div className="container">
             <div className="row">
@@ -254,10 +254,10 @@ export default function HomeOne() {
                 <div className="why-choose-one__img">
                   <div className="shape2"></div>
                   <div className="shape1">
-                    <img src="/assets/images/shapes/why-choose-v1-shape1.png" alt="#" />
+                    <img src="/assets/images/shapes/why-choose-v1-shape1.png" alt="" />
                   </div>
                   <div className="shape4 float-bob-y">
-                    <img src="/assets/images/shapes/why-choose-v1-shape2.png" alt="#" />
+                    <img src="/assets/images/shapes/why-choose-v1-shape2.png" alt="" />
                   </div>
                   <div className="why-choose-one__img1">
                     <img
@@ -681,7 +681,7 @@ export default function HomeOne() {
                     <div className="blog-one__single-content" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                       <div className="blog-one__single-content-top">
                         <div className="shape1">
-                          <img src="/assets/images/shapes/blog-v1-shape1.png" alt="#" />
+                          <img src="/assets/images/shapes/blog-v1-shape1.png" alt="" />
                         </div>
                         <div className="date-box">
                           <h2>

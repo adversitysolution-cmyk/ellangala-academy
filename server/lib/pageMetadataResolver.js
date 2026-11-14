@@ -92,8 +92,8 @@ export async function resolvePageMetadata(pathname = '/') {
   // 4. Positive Workshops
   if (cleanPath === '/positive-workshops' || cleanPath === '/workshops') {
     return {
-      title: 'Positive Workshops | Practical Mind Training & Life Skills | Ellangala’s Academy',
-      description: 'Evidence-informed experiential workshops on Positive Psychology, Indian wisdom, stress management, parenting, and emotional wellness.',
+      title: 'Positive Workshops in Bengaluru & Karnataka | Ellangala’s Academy',
+      description: 'Explore interactive Positive Psychology, spiritual psychology, parenting, teaching, and workplace workshops by Dr. Naveen Ellangala, conducted across Bengaluru and Karnataka for personal and institutional growth.',
       canonical: `${baseDomain}/positive-workshops`,
       image: `${baseDomain}/assets/images/services/positive-psychology.png`,
       type: 'website',
@@ -114,8 +114,8 @@ export async function resolvePageMetadata(pathname = '/') {
     cleanPath === '/one-on-one-mentoring'
   ) {
     return {
-      title: 'Positive Mentoring | 1-on-1 Personalized Guidance | Ellangala’s Academy',
-      description: 'One-on-one reflective mentoring sessions tailored for students, professionals, parents, and individuals seeking purpose, focus, and clarity.',
+      title: 'Positive Mentoring in Bengaluru, Karnataka & Online | Ellangala’s Academy',
+      description: 'Tailored 1-on-1 Positive Mentoring pathways for students, parents, educators, and working professionals by Dr. Naveen Ellangala — in Bengaluru, Karnataka and via secure online sessions.',
       canonical: `${baseDomain}/positive-mentoring`,
       image: `${baseDomain}/assets/images/services/therapy-v1-img1.png`,
       type: 'website',
