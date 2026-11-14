@@ -81,7 +81,7 @@ export default function EventsPage() {
           ]}
         />
         <HeaderOne />
-        <PageHeader title="Events & Experiences" breadcrumb="Events" />
+        <PageHeader title="Events & Experiences" breadcrumb="Events" headingTag="h2" />
 
         {/* Start Public Events Page */}
         <section style={{ paddingTop: '60px', paddingBottom: '90px', backgroundColor: '#FAF8F5' }}>

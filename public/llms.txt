@@ -17,6 +17,8 @@
 - **Positive Mentoring**: Confidential 1-on-1 personalized guidance for individuals, professionals, students, and parents.
 - **Publications & Books**: 17 authored books by Dr. Naveen Ellangala and daily positive affirmation decks.
 - **Community Feed**: Daily wisdom, reflections, and guided audio mind workouts at https://ellangala.com/feed.
+- **Bhagavad Gita for a Meaningful Life (Free Workbook)**: A free downloadable reflection workbook by Dr. Naveen Ellangala, taking readers chapter by chapter through the Bhagavad Gita from spiritual and psychological perspectives, available in English and Kannada PDF at https://ellangala.com/free-resources.
+- **Videos on Talks**: Free keynote talks, masterclasses, and mind training video lectures by Dr. Naveen Ellangala at https://ellangala.com/videos.
 
 ## Canonical URLs
 - Home: https://ellangala.com/
@@ -28,4 +30,7 @@
 - Positive MindGym: https://ellangala.com/mindgym
 - Store & Books: https://ellangala.com/shop
 - Daily Feed: https://ellangala.com/feed
+- Bhagavad Gita for a Meaningful Life (Free Workbook): https://ellangala.com/free-resources
+- Videos on Talks: https://ellangala.com/videos
+- FAQ: https://ellangala.com/faq
 - Contact: https://ellangala.com/contact

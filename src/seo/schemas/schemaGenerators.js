@@ -398,6 +398,42 @@ export function generateFAQSchema(faqs = []) {
   };
 }
 
+// Reusable generator for free downloadable PDF resources (workbooks, guides).
+// Keeps structured data consistent as more free resources are added over time.
+export function generateDigitalResourceSchema(resource) {
+  if (!resource) return null;
+  const pageUrl = resource.pageUrl?.startsWith('http')
+    ? resource.pageUrl
+    : `${siteConfig.url}${resource.pageUrl?.startsWith('/') ? resource.pageUrl : '/' + (resource.pageUrl || '')}`;
+  const fileUrl = resource.fileUrl?.startsWith('http')
+    ? resource.fileUrl
+    : `${siteConfig.url}${resource.fileUrl?.startsWith('/') ? resource.fileUrl : '/' + (resource.fileUrl || '')}`;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "DigitalDocument",
+    "@id": `${pageUrl}#resource-${resource.id || resource.inLanguage || 'default'}`,
+    "name": resource.name,
+    "description": resource.description,
+    "url": pageUrl,
+    "inLanguage": resource.inLanguage || "en",
+    "isAccessibleForFree": true,
+    "encodingFormat": "application/pdf",
+    "contentUrl": fileUrl,
+    "author": {
+      "@type": "Person",
+      "@id": `${siteConfig.url}/founder/#person`,
+      "name": resource.author || siteConfig.founder.name,
+      "url": `${siteConfig.url}/founder`
+    },
+    "publisher": {
+      "@type": "Organization",
+      "@id": `${siteConfig.url}/#organization`,
+      "name": siteConfig.name
+    }
+  };
+}
+
 export function generateCommunityPostSchema(post) {
   if (!post) return null;
   const postSlug = post.slug || post.id;

@@ -10,7 +10,7 @@ import ScrollToTop from '../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../hooks/useUterpyPlugins';
 import { faqContent } from '../contents/faq.content';
 import SEO from '../seo/SEO';
-import { generateBreadcrumbSchema } from '../seo/schemas/schemaGenerators';
+import { generateBreadcrumbSchema, generateFAQSchema } from '../seo/schemas/schemaGenerators';
 
 export default function FAQ() {
   useUterpyPlugins();
@@ -30,7 +30,8 @@ export default function FAQ() {
             generateBreadcrumbSchema([
               { name: 'Home', path: '/' },
               { name: 'FAQ', path: '/faq' }
-            ])
+            ]),
+            generateFAQSchema(faqContent.faqs)
           ]}
         />
         <HeaderOne />

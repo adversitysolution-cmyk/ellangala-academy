@@ -8,6 +8,7 @@ import SearchPopup from '../components/layout/SearchPopup';
 import ScrollToTop from '../components/layout/ScrollToTop';
 import { useUterpyPlugins } from '../hooks/useUterpyPlugins';
 import SEO from '../seo/SEO';
+import { generateBreadcrumbSchema } from '../seo/schemas/schemaGenerators';
 
 const videoUrls = [
   "https://www.youtube.com/embed/smb1UusRZ98",
@@ -32,9 +33,15 @@ export default function VideosOnTalksPage() {
 
       <div className="page-wrapper">
         <SEO
-          title="Keynote Talks, Seminars & Lectures by Dr. Naveen Ellangala | Ellangala’s Academy"
-          description="Watch keynote speeches, university seminars, and mind-training video presentations by Dr. Naveen Ellangala on human flourishing, positive mindset, and resilience."
-          canonical="/resources/videos"
+          title="Videos & Keynote Talks | Dr. Naveen Ellangala | Ellangala’s Academy"
+          description="Watch keynote talks, free video masterclasses, and mind training lectures by Dr. Naveen Ellangala on mental wellness, positive psychology, and emotional resilience."
+          canonical="/videos"
+          structuredData={[
+            generateBreadcrumbSchema([
+              { name: 'Home', path: '/' },
+              { name: 'Videos on Talks', path: '/videos' }
+            ])
+          ]}
         />
         <HeaderOne />
         <PageHeader title="Videos on Talks" breadcrumb="Videos on Talks" />
