@@ -87,10 +87,11 @@ export async function getDynamicSitemapXml() {
     { loc: `${baseDomain}/verify-certificate`, priority: '0.7', changefreq: 'monthly' }
   ];
 
-  // 2. Program Details Routes
-  const programSlugs = Object.keys(programsData || {});
-  const programRoutes = programSlugs.map(slug => ({
-    loc: `${baseDomain}/programs/${slug}`,
+  // 2. Program Details Routes — workshop-type programs live under /programs/,
+  // mentoring-type programs under /mentoring/ (matches the actual internal
+  // links in ServiceSidebar and the self-referencing canonical each page sets).
+  const programRoutes = Object.values(programsData || {}).map(program => ({
+    loc: `${baseDomain}/${program.type === 'mentoring' ? 'mentoring' : 'programs'}/${program.slug}`,
     changefreq: 'monthly',
     priority: '0.85'
   }));

@@ -16,6 +16,20 @@ import { blogContent } from '../contents/blog.content';
 import SEO from '../seo/SEO';
 import { generateArticleSchema, generateBreadcrumbSchema } from '../seo/schemas/schemaGenerators';
 
+// Maps each blog category to the most relevant program page, so every post
+// links to real, related content instead of ending as a dead end.
+const CATEGORY_PROGRAM_LINKS = {
+  'Positive Psychology': { path: '/programs/positive-psychology-meaningful-life', label: 'Positive Psychology for a Meaningful Life' },
+  'Indian Culture & Wisdom': { path: '/programs/bhagavadgita-for-daily-life', label: 'Bhagavad Gita for Daily Life' },
+  'Positive Parenting': { path: '/programs/positive-parenting', label: 'Positive Parenting' },
+  'Workplace Wellness': { path: '/programs/positive-psychology-at-the-workplace', label: 'Positive Psychology at the Workplace' },
+  'Student Mentoring': { path: '/mentoring/student-mentoring', label: 'Student Mentoring' },
+  'Mind Training': { path: '/programs/the-art-of-mind-training', label: 'The Art of Mind Training' },
+  'Spiritual Psychology': { path: '/programs/spiritual-psychology-purposeful-life', label: 'Spiritual Psychology for Daily Life' },
+  'Emotional Fitness': { path: '/programs/mind-and-emotional-wellness', label: 'Mind & Emotional Wellness' }
+};
+const DEFAULT_PROGRAM_LINK = { path: '/positive-workshops', label: 'Positive Workshops' };
+
 export default function BlogDetails() {
   useUterpyPlugins();
   const [searchParams] = useSearchParams();
@@ -101,6 +115,8 @@ export default function BlogDetails() {
     quote: post.details?.quote || post.excerpt,
     articleImage: articleCoverImg,
   };
+
+  const relatedProgram = CATEGORY_PROGRAM_LINKS[postDetails.category] || DEFAULT_PROGRAM_LINK;
 
   const form = blogContent?.form || {
     title: 'Leave a Comment',
@@ -235,11 +251,18 @@ export default function BlogDetails() {
                       {postDetails.text3}
                     </p>
                     <div className="img-box text-center" style={{ padding: '20px', backgroundColor: '#fcfaf7', borderRadius: '24px', margin: '30px 0' }}>
-                      <img
-                        src={postDetails.articleImage}
-                        alt="Related Program Article"
-                        style={{ maxHeight: '340px', width: 'auto', margin: '0 auto', borderRadius: '16px', objectFit: 'contain' }}
-                      />
+                      <Link to={relatedProgram.path}>
+                        <img
+                          src={postDetails.articleImage}
+                          alt={`Related program: ${relatedProgram.label}`}
+                          style={{ maxHeight: '340px', width: 'auto', margin: '0 auto', borderRadius: '16px', objectFit: 'contain' }}
+                        />
+                      </Link>
+                      <p style={{ marginTop: '14px', fontSize: '14px' }}>
+                        <Link to={relatedProgram.path} style={{ fontWeight: '600' }}>
+                          Explore the {relatedProgram.label} program →
+                        </Link>
+                      </p>
                     </div>
                   </div>
 

@@ -9,10 +9,10 @@ export default function SubscribeOne() {
       <div className="shape3 float-bob-x"></div>
       <div className="shape4 float-bob-y"></div>
       <div className="shape5 float-bob-y">
-        <img src="/assets/images/shapes/subscribe-v1-shape1.png" alt="#" />
+        <img src="/assets/images/shapes/subscribe-v1-shape1.png" alt="" />
       </div>
       <div className="shape6 float-bob-y">
-        <img src="/assets/images/shapes/subscribe-v1-shape2.png" alt="#" />
+        <img src="/assets/images/shapes/subscribe-v1-shape2.png" alt="" />
       </div>
 
       <div className="container">

@@ -25,16 +25,16 @@ export default function Error404() {
         {/* Start Error Page */}
         <section className="error-page">
           <div className="shape1">
-            <img src="/assets/images/shapes/error-page-shape1.png" alt="#" />
+            <img src="/assets/images/shapes/error-page-shape1.png" alt="" />
           </div>
           <div className="shape2">
-            <img src="/assets/images/shapes/error-page-shape2.png" alt="#" />
+            <img src="/assets/images/shapes/error-page-shape2.png" alt="" />
           </div>
           <div className="shape3">
-            <img src="/assets/images/shapes/error-page-shape3.png" alt="#" />
+            <img src="/assets/images/shapes/error-page-shape3.png" alt="" />
           </div>
           <div className="shape4">
-            <img src="/assets/images/shapes/error-page-shape4.png" alt="#" />
+            <img src="/assets/images/shapes/error-page-shape4.png" alt="" />
           </div>
           <div className="container">
             <div className="row">

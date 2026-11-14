@@ -121,7 +121,7 @@ export default function BlogList() {
                       <div className="blog-one__single-content" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                         <div className="blog-one__single-content-top">
                           <div className="shape1">
-                            <img src="/assets/images/shapes/blog-v1-shape1.png" alt="#" />
+                            <img src="/assets/images/shapes/blog-v1-shape1.png" alt="" />
                           </div>
                           <div className="date-box">
                             <h2>

@@ -108,8 +108,8 @@ export default function PositiveWorkshops() {
 
       <div className="page-wrapper">
         <SEO
-          title="Positive Workshops | Ellangala’s Academy"
-          description="Explore interactive Positive Psychology, spiritual psychology, parenting, teaching, and workplace workshops by Dr. Naveen Ellangala for personal and institutional growth."
+          title="Positive Workshops in Bengaluru & Karnataka | Ellangala’s Academy"
+          description="Explore interactive Positive Psychology, spiritual psychology, parenting, teaching, and workplace workshops by Dr. Naveen Ellangala, conducted across Bengaluru and Karnataka for personal and institutional growth."
           canonical="/positive-workshops"
           structuredData={[
             generateOrganizationSchema(),

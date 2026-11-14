@@ -108,8 +108,8 @@ export default function PositiveMentoring() {
 
       <div className="page-wrapper">
         <SEO
-          title="Positive Mentoring | Ellangala’s Academy"
-          description="Tailored 1-on-1 Positive Mentoring pathways for students, parents, educators, and working professionals by Dr. Naveen Ellangala."
+          title="Positive Mentoring in Bengaluru, Karnataka & Online | Ellangala’s Academy"
+          description="Tailored 1-on-1 Positive Mentoring pathways for students, parents, educators, and working professionals by Dr. Naveen Ellangala — in Bengaluru, Karnataka and via secure online sessions."
           canonical="/positive-mentoring"
           structuredData={[
             generateOrganizationSchema(),
