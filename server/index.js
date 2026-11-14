@@ -73,7 +73,11 @@ const legacyRedirects = [
   { pattern: /^\/about\/founder(\/.*)?$/i, target: '/founder' },
   { pattern: /^\/about\/dr-naveen-ellangala(\/.*)?$/i, target: '/founder' },
   { pattern: /^\/about\/naveen-ellangala(\/.*)?$/i, target: '/founder' },
-  { pattern: /^\/founder\.html$/i, target: '/founder' }
+  { pattern: /^\/founder\.html$/i, target: '/founder' },
+  // Old WordPress site structure (404s surfaced in Search Console after migration)
+  { pattern: /^\/about\/approach(\/.*)?$/i, target: '/about' },
+  { pattern: /^\/collabs(\/.*)?$/i, target: '/' },
+  { pattern: /^\/events\/-\/?$/i, target: '/events' }
 ];
 
 app.use((req, res, next) => {
@@ -82,6 +86,19 @@ app.use((req, res, next) => {
     if (r.pattern.test(reqPath)) {
       return res.redirect(301, r.target);
     }
+  }
+  next();
+});
+
+// 3c. Trailing-slash normalization (301): /founder/ -> /founder, /blog-details/x/ -> /blog-details/x
+// Keeps one canonical URL per page instead of Google indexing both forms.
+app.use((req, res, next) => {
+  const reqPath = req.path;
+  const isApiOrAsset = reqPath.startsWith('/api/') || reqPath.startsWith('/assets/') || reqPath.startsWith('/uploads/');
+  if (req.method === 'GET' && !isApiOrAsset && reqPath.length > 1 && reqPath.endsWith('/')) {
+    const stripped = reqPath.replace(/\/+$/, '') || '/';
+    const query = req._parsedUrl?.search || '';
+    return res.redirect(301, stripped + query);
   }
   next();
 });

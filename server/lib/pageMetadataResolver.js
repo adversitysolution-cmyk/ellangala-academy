@@ -236,14 +236,14 @@ export async function resolvePageMetadata(pathname = '/') {
       return {
         title: `${program.title} | Programs | Ellangala’s Academy`,
         description: program.shortPositioning || program.whatIs?.content?.slice(0, 160) || siteConfig.defaultDescription,
-        canonical: `${baseDomain}/programs/${slug}`,
+        canonical: `${baseDomain}${cleanPath}`,
         image: heroImg.startsWith('http') ? heroImg : `${baseDomain}${heroImg.startsWith('/') ? heroImg : '/' + heroImg}`,
         type: 'website',
         schemas: [
           generateBreadcrumbSchema([
             { name: 'Home', path: '/' },
             { name: 'Programs', path: '/positive-workshops' },
-            { name: program.title, path: `/programs/${slug}` }
+            { name: program.title, path: cleanPath }
           ])
         ]
       };
