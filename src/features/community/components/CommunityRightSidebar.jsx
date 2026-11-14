@@ -86,7 +86,7 @@ export default function CommunityRightSidebar({ sidebarData, selectedCategory = 
               Video Masterclasses &amp; Talks
             </span>
           </div>
-          <Link to="/free-resources" className="community-card-link">
+          <Link to="/videos" className="community-card-link">
             <span>View all</span>
             <span>→</span>
           </Link>
