@@ -46,7 +46,7 @@ export const commonContent = {
       { name: "Feed", path: "/feed" },
       { name: "Videos on Talks", path: "/videos" },
       { name: "Meditation & Music", path: "/meditation" },
-      { name: "Bhagavad Gita for Meaningful Life", path: "/free-resources" }
+      { name: "Free Resources", path: "/free-resources" }
     ]
   },
 
