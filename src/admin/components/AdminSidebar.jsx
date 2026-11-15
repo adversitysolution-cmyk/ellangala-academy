@@ -9,6 +9,7 @@ import {
   TicketPercent,
   Award,
   MessageSquareShare,
+  Newspaper,
   LogOut,
   X,
   Camera,
@@ -39,6 +40,7 @@ export default function AdminSidebar({ isOpen, onClose }) {
     { label: 'Events', icon: CalendarDays, path: '/admin/events' },
     { label: 'Certificate Templates', icon: Award, path: '/admin/certificate-templates' },
     { label: 'Feed', icon: MessageSquareShare, path: '/admin/feed' },
+    { label: 'Blogs', icon: Newspaper, path: '/admin/blogs' },
     { label: 'Products', icon: BookOpen, path: '/admin/products' },
     { label: 'Coupons', icon: TicketPercent, path: '/admin/coupons' },
     { label: 'Book Orders', icon: ShoppingBag, path: '/admin/orders' }
