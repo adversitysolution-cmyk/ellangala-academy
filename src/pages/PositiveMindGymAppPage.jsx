@@ -134,7 +134,7 @@ function Hero() {
           width: '24px',
           height: '24px',
           borderRadius: '50%',
-          border: '2px solid rgba(217, 164, 65, 0.4)',
+          border: '2px solid rgba(216, 165, 75, 0.4)',
           pointerEvents: 'none',
         }}
       />
@@ -147,7 +147,7 @@ function Hero() {
           width: '18px',
           height: '18px',
           borderRadius: '50%',
-          border: '1.5px solid rgba(217, 164, 65, 0.35)',
+          border: '1.5px solid rgba(216, 165, 75, 0.35)',
           pointerEvents: 'none',
         }}
       />
@@ -172,7 +172,7 @@ function Hero() {
               width: '4px',
               height: '4px',
               borderRadius: '50%',
-              backgroundColor: '#D9A441',
+              backgroundColor: '#D8A54B',
             }}
           />
         ))}
@@ -187,7 +187,7 @@ function Hero() {
           width: '760px',
           height: '760px',
           borderRadius: '50%',
-          border: '1px solid rgba(217, 164, 65, 0.08)',
+          border: '1px solid rgba(216, 165, 75, 0.08)',
           pointerEvents: 'none',
         }}
       />
@@ -199,7 +199,7 @@ function Hero() {
           width: '640px',
           height: '640px',
           borderRadius: '50%',
-          border: '1px solid rgba(217, 164, 65, 0.06)',
+          border: '1px solid rgba(216, 165, 75, 0.06)',
           pointerEvents: 'none',
         }}
       />
@@ -228,12 +228,12 @@ function Hero() {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '9px',
-                border: '1.5px solid #D9A441',
+                border: '1.5px solid #D8A54B',
                 borderRadius: '50px',
                 padding: '7px 18px',
                 backgroundColor: 'rgba(250, 248, 243, 0.8)',
                 marginBottom: '26px',
-                boxShadow: '0 2px 8px rgba(217, 164, 65, 0.08)',
+                boxShadow: '0 2px 8px rgba(216, 165, 75, 0.08)',
               }}
             >
               <svg
@@ -241,7 +241,7 @@ function Hero() {
                 height="16"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="#D9A441"
+                stroke="#D8A54B"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -255,7 +255,7 @@ function Hero() {
                   fontSize: '12px',
                   fontWeight: '700',
                   letterSpacing: '0.12em',
-                  color: '#D9A441',
+                  color: '#D8A54B',
                   textTransform: 'uppercase',
                   fontFamily: "'DM Sans', sans-serif",
                 }}
@@ -271,7 +271,7 @@ function Hero() {
                 fontSize: 'clamp(42px, 4.4vw, 68px)',
                 lineHeight: '1.1',
                 fontWeight: '700',
-                color: '#06244E',
+                color: '#021B41',
                 margin: '0 0 20px 0',
                 letterSpacing: '-1px',
               }}
@@ -282,14 +282,14 @@ function Hero() {
                 style={{
                   fontStyle: 'italic',
                   fontWeight: '700',
-                  color: '#D9A441',
+                  color: '#D8A54B',
                   fontFamily: "'Playfair Display', Georgia, serif",
                   marginRight: '10px',
                 }}
               >
                 Transform
               </em>
-              <span style={{ color: '#06244E' }}>Your Life.</span>
+              <span style={{ color: '#021B41' }}>Your Life.</span>
             </h1>
 
             {/* 3. Decorative Gold Divider */}
@@ -305,13 +305,13 @@ function Hero() {
                 style={{
                   width: '46px',
                   height: '2px',
-                  backgroundColor: '#D9A441',
+                  backgroundColor: '#D8A54B',
                   borderRadius: '2px',
                 }}
               />
               <span
                 style={{
-                  color: '#D9A441',
+                  color: '#D8A54B',
                   fontSize: '17px',
                   lineHeight: '1',
                   display: 'flex',
@@ -323,7 +323,7 @@ function Hero() {
                   height="18"
                   viewBox="0 0 24 24"
                   fill="none"
-                  stroke="#D9A441"
+                  stroke="#D8A54B"
                   strokeWidth="1.8"
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -337,7 +337,7 @@ function Hero() {
                 style={{
                   width: '46px',
                   height: '2px',
-                  backgroundColor: '#D9A441',
+                  backgroundColor: '#D8A54B',
                   borderRadius: '2px',
                 }}
               />
@@ -386,7 +386,7 @@ function Hero() {
                   fontWeight: '700',
                   letterSpacing: '0.02em',
                   textDecoration: 'none',
-                  boxShadow: '0 10px 25px rgba(6, 29, 61, 0.2)',
+                  boxShadow: '0 10px 25px rgba(2, 27, 65, 0.2)',
                 }}
               >
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style={{ flexShrink: 0 }}>
@@ -414,9 +414,9 @@ function Hero() {
                   letterSpacing: '0.02em',
                   textDecoration: 'none',
                   backgroundColor: '#FFFFFF',
-                  color: '#061D3D',
-                  border: '2px solid #D9A441',
-                  boxShadow: '0 8px 20px rgba(217, 164, 65, 0.16)',
+                  color: '#021B41',
+                  border: '2px solid #D8A54B',
+                  boxShadow: '0 8px 20px rgba(216, 165, 75, 0.16)',
                 }}
               >
                 <svg width="20" height="20" viewBox="0 0 24 24" style={{ flexShrink: 0 }}>
@@ -437,7 +437,7 @@ function Hero() {
                 backgroundColor: '#FFFFFF',
                 borderRadius: '18px',
                 border: '1px solid #ECE7DE',
-                boxShadow: '0 8px 30px rgba(6, 36, 78, 0.04)',
+                boxShadow: '0 8px 30px rgba(2, 27, 65, 0.04)',
               }}
             >
               {/* Stat 1: Lives Impacted */}
@@ -447,7 +447,7 @@ function Hero() {
                     width: '42px',
                     height: '42px',
                     borderRadius: '12px',
-                    background: 'rgba(217, 164, 65, 0.12)',
+                    background: 'rgba(216, 165, 75, 0.12)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -459,7 +459,7 @@ function Hero() {
                     height="20"
                     viewBox="0 0 24 24"
                     fill="none"
-                    stroke="#D9A441"
+                    stroke="#D8A54B"
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -476,7 +476,7 @@ function Hero() {
                       fontFamily: "'Playfair Display', Georgia, serif",
                       fontSize: '23px',
                       fontWeight: '700',
-                      color: '#06244E',
+                      color: '#021B41',
                       lineHeight: 1.1,
                     }}
                   >
@@ -498,7 +498,7 @@ function Hero() {
                     width: '42px',
                     height: '42px',
                     borderRadius: '12px',
-                    background: 'rgba(217, 164, 65, 0.12)',
+                    background: 'rgba(216, 165, 75, 0.12)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -510,7 +510,7 @@ function Hero() {
                     height="20"
                     viewBox="0 0 24 24"
                     fill="none"
-                    stroke="#D9A441"
+                    stroke="#D8A54B"
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -526,7 +526,7 @@ function Hero() {
                       fontFamily: "'Playfair Display', Georgia, serif",
                       fontSize: '23px',
                       fontWeight: '700',
-                      color: '#06244E',
+                      color: '#021B41',
                       lineHeight: 1.1,
                     }}
                   >
@@ -548,14 +548,14 @@ function Hero() {
                     width: '42px',
                     height: '42px',
                     borderRadius: '12px',
-                    background: 'rgba(217, 164, 65, 0.12)',
+                    background: 'rgba(216, 165, 75, 0.12)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     flexShrink: 0,
                   }}
                 >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="#D9A441">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="#D8A54B">
                     <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                   </svg>
                 </div>
@@ -565,7 +565,7 @@ function Hero() {
                       fontFamily: "'Playfair Display', Georgia, serif",
                       fontSize: '23px',
                       fontWeight: '700',
-                      color: '#06244E',
+                      color: '#021B41',
                       lineHeight: 1.1,
                     }}
                   >
@@ -778,7 +778,7 @@ function Hero() {
                   backgroundColor: '#061325',
                   padding: '9px',
                   boxShadow:
-                    '0 32px 80px rgba(6, 36, 78, 0.38), 0 8px 24px rgba(0,0,0,0.18)',
+                    '0 32px 80px rgba(2, 27, 65, 0.38), 0 8px 24px rgba(0,0,0,0.18)',
                   zIndex: 5,
                   opacity: 1,
                   border: '2.5px solid #3B4B66',
@@ -1039,7 +1039,7 @@ function Hero() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   cursor: 'pointer',
-                  color: '#06244E',
+                  color: '#021B41',
                   boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
                   transition: 'all 0.2s ease',
                   padding: 0,
@@ -1061,13 +1061,13 @@ function Hero() {
                     height: '8px',
                     borderRadius: '6px',
                     backgroundColor:
-                      dot === activeDot ? '#D9A441' : 'rgba(156, 163, 175, 0.45)',
+                      dot === activeDot ? '#D8A54B' : 'rgba(156, 163, 175, 0.45)',
                     border: 'none',
                     padding: 0,
                     cursor: 'pointer',
                     transition: 'all 0.45s cubic-bezier(0.4, 0, 0.2, 1)',
                     boxShadow:
-                      dot === activeDot ? '0 2px 8px rgba(217, 164, 65, 0.45)' : 'none',
+                      dot === activeDot ? '0 2px 8px rgba(216, 165, 75, 0.45)' : 'none',
                   }}
                   aria-label={`Slide ${dot + 1}`}
                 />
@@ -1086,7 +1086,7 @@ function Hero() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   cursor: 'pointer',
-                  color: '#06244E',
+                  color: '#021B41',
                   boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
                   transition: 'all 0.2s ease',
                   padding: 0,
@@ -1132,14 +1132,14 @@ function Hero() {
           {/* Thin Gold Border Line along wave curve */}
           <path
             d="M0,115 C260,195 520,80 820,130 C1080,180 1280,75 1440,105"
-            stroke="#D9A441"
+            stroke="#D8A54B"
             strokeWidth="3.8"
             fill="none"
           />
           {/* Deep Navy Solid Wave Fill */}
           <path
             d="M0,115 C260,195 520,80 820,130 C1080,180 1280,75 1440,105 L1440,230 L0,230 Z"
-            fill="#061D3D"
+            fill="#021B41"
           />
         </svg>
 
@@ -1158,41 +1158,41 @@ function Hero() {
           <svg viewBox="0 0 120 75" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M60,10 C56,22 45,35 30,42 C40,40 52,32 60,10 Z"
-              stroke="#D9A441"
+              stroke="#D8A54B"
               strokeWidth="1.7"
               fill="none"
             />
             <path
               d="M60,10 C64,22 75,35 90,42 C80,40 68,32 60,10 Z"
-              stroke="#D9A441"
+              stroke="#D8A54B"
               strokeWidth="1.7"
               fill="none"
             />
             <path
               d="M60,5 C55,20 35,38 10,48 C28,46 48,35 60,5 Z"
-              stroke="#D9A441"
+              stroke="#D8A54B"
               strokeWidth="1.7"
               fill="none"
             />
             <path
               d="M60,5 C65,20 85,38 110,48 C92,46 72,35 60,5 Z"
-              stroke="#D9A441"
+              stroke="#D8A54B"
               strokeWidth="1.7"
               fill="none"
             />
             <path
               d="M60,2 C58,25 48,46 25,60 C42,56 56,42 60,2 Z"
-              stroke="#D9A441"
+              stroke="#D8A54B"
               strokeWidth="1.7"
               fill="none"
             />
             <path
               d="M60,2 C62,25 72,46 95,60 C78,56 64,42 60,2 Z"
-              stroke="#D9A441"
+              stroke="#D8A54B"
               strokeWidth="1.7"
               fill="none"
             />
-            <circle cx="60" cy="62" r="3" fill="#D9A441" />
+            <circle cx="60" cy="62" r="3" fill="#D8A54B" />
           </svg>
         </div>
       </div>
@@ -1359,7 +1359,7 @@ function HowItWorks() {
         {Array.from({ length: 20 }).map((_, i) => (
           <div
             key={`tl-dot-${i}`}
-            style={{ width: '4px', height: '4px', borderRadius: '50%', backgroundColor: '#D9A441' }}
+            style={{ width: '4px', height: '4px', borderRadius: '50%', backgroundColor: '#D8A54B' }}
           />
         ))}
       </div>
@@ -1380,7 +1380,7 @@ function HowItWorks() {
         {Array.from({ length: 20 }).map((_, i) => (
           <div
             key={`br-dot-${i}`}
-            style={{ width: '4px', height: '4px', borderRadius: '50%', backgroundColor: '#D9A441' }}
+            style={{ width: '4px', height: '4px', borderRadius: '50%', backgroundColor: '#D8A54B' }}
           />
         ))}
       </div>
@@ -1395,7 +1395,7 @@ function HowItWorks() {
           width: '640px',
           height: '640px',
           borderRadius: '50%',
-          border: '1px solid rgba(217, 164, 65, 0.14)',
+          border: '1px solid rgba(216, 165, 75, 0.14)',
           pointerEvents: 'none',
         }}
       />
@@ -1408,7 +1408,7 @@ function HowItWorks() {
           width: '780px',
           height: '780px',
           borderRadius: '50%',
-          border: '1px dashed rgba(217, 164, 65, 0.1)',
+          border: '1px dashed rgba(216, 165, 75, 0.1)',
           pointerEvents: 'none',
         }}
       />
@@ -1428,25 +1428,25 @@ function HowItWorks() {
         <svg viewBox="0 0 160 180" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
             d="M-20 180 C20 140 40 90 60 20"
-            stroke="#D9A441"
+            stroke="#D8A54B"
             strokeWidth="1.8"
             strokeLinecap="round"
           />
           <path
             d="M10 145 C25 130 45 132 40 115 C25 125 15 135 10 145 Z"
-            fill="#D9A441"
+            fill="#D8A54B"
           />
           <path
             d="M28 115 C45 100 65 105 60 88 C45 98 35 108 28 115 Z"
-            fill="#D9A441"
+            fill="#D8A54B"
           />
           <path
             d="M45 80 C60 65 80 70 75 55 C60 65 52 75 45 80 Z"
-            fill="#D9A441"
+            fill="#D8A54B"
           />
           <path
             d="M60 20 C68 30 72 45 60 50 C52 40 50 30 60 20 Z"
-            fill="#D9A441"
+            fill="#D8A54B"
           />
         </svg>
       </div>
@@ -1467,25 +1467,25 @@ function HowItWorks() {
         <svg viewBox="0 0 160 180" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
             d="M-20 180 C20 140 40 90 60 20"
-            stroke="#D9A441"
+            stroke="#D8A54B"
             strokeWidth="1.8"
             strokeLinecap="round"
           />
           <path
             d="M10 145 C25 130 45 132 40 115 C25 125 15 135 10 145 Z"
-            fill="#D9A441"
+            fill="#D8A54B"
           />
           <path
             d="M28 115 C45 100 65 105 60 88 C45 98 35 108 28 115 Z"
-            fill="#D9A441"
+            fill="#D8A54B"
           />
           <path
             d="M45 80 C60 65 80 70 75 55 C60 65 52 75 45 80 Z"
-            fill="#D9A441"
+            fill="#D8A54B"
           />
           <path
             d="M60 20 C68 30 72 45 60 50 C52 40 50 30 60 20 Z"
-            fill="#D9A441"
+            fill="#D8A54B"
           />
         </svg>
       </div>
@@ -1505,16 +1505,16 @@ function HowItWorks() {
             }}
           >
             <span style={{ display: 'flex', gap: '3px' }}>
-              <span style={{ width: '3px', height: '3px', borderRadius: '50%', backgroundColor: '#D9A441' }} />
-              <span style={{ width: '3px', height: '3px', borderRadius: '50%', backgroundColor: '#D9A441' }} />
-              <span style={{ width: '3px', height: '3px', borderRadius: '50%', backgroundColor: '#D9A441' }} />
+              <span style={{ width: '3px', height: '3px', borderRadius: '50%', backgroundColor: '#D8A54B' }} />
+              <span style={{ width: '3px', height: '3px', borderRadius: '50%', backgroundColor: '#D8A54B' }} />
+              <span style={{ width: '3px', height: '3px', borderRadius: '50%', backgroundColor: '#D8A54B' }} />
             </span>
             <svg
               width="24"
               height="20"
               viewBox="0 0 24 24"
               fill="none"
-              stroke="#D9A441"
+              stroke="#D8A54B"
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -1524,9 +1524,9 @@ function HowItWorks() {
               <path d="M12 17v4" />
             </svg>
             <span style={{ display: 'flex', gap: '3px' }}>
-              <span style={{ width: '3px', height: '3px', borderRadius: '50%', backgroundColor: '#D9A441' }} />
-              <span style={{ width: '3px', height: '3px', borderRadius: '50%', backgroundColor: '#D9A441' }} />
-              <span style={{ width: '3px', height: '3px', borderRadius: '50%', backgroundColor: '#D9A441' }} />
+              <span style={{ width: '3px', height: '3px', borderRadius: '50%', backgroundColor: '#D8A54B' }} />
+              <span style={{ width: '3px', height: '3px', borderRadius: '50%', backgroundColor: '#D8A54B' }} />
+              <span style={{ width: '3px', height: '3px', borderRadius: '50%', backgroundColor: '#D8A54B' }} />
             </span>
           </div>
 
@@ -1536,7 +1536,7 @@ function HowItWorks() {
               fontSize: '12.5px',
               fontWeight: '700',
               letterSpacing: '0.18em',
-              color: '#D9A441',
+              color: '#D8A54B',
               textTransform: 'uppercase',
               marginBottom: '10px',
             }}
@@ -1550,7 +1550,7 @@ function HowItWorks() {
               fontFamily: "'Playfair Display', Georgia, serif",
               fontSize: 'clamp(32px, 3.8vw, 48px)',
               fontWeight: '700',
-              color: '#06244E',
+              color: '#021B41',
               margin: '0 0 12px 0',
               letterSpacing: '-0.5px',
             }}
@@ -1604,11 +1604,11 @@ function HowItWorks() {
                     flexShrink: 0,
                     backgroundColor: '#FFFFFF',
                     borderRadius: '18px',
-                    border: '1.5px solid rgba(217, 164, 65, 0.28)',
+                    border: '1.5px solid rgba(216, 165, 75, 0.28)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    boxShadow: '0 8px 24px rgba(6, 36, 78, 0.06)',
+                    boxShadow: '0 8px 24px rgba(2, 27, 65, 0.06)',
                   }}
                 >
                   {s.icon}
@@ -1620,7 +1620,7 @@ function HowItWorks() {
                     style={{
                       fontSize: '14px',
                       fontWeight: '800',
-                      color: '#D9A441',
+                      color: '#D8A54B',
                       letterSpacing: '0.08em',
                       marginBottom: '4px',
                     }}
@@ -1632,7 +1632,7 @@ function HowItWorks() {
                       fontFamily: "'Playfair Display', Georgia, serif",
                       fontSize: '21px',
                       fontWeight: '700',
-                      color: '#06244E',
+                      color: '#021B41',
                       marginBottom: '8px',
                       lineHeight: '1.25',
                     }}
@@ -1661,7 +1661,7 @@ function HowItWorks() {
                     top: '28px',
                     width: '36px',
                     height: '2px',
-                    borderBottom: '2px dashed rgba(217, 164, 65, 0.45)',
+                    borderBottom: '2px dashed rgba(216, 165, 75, 0.45)',
                     pointerEvents: 'none',
                   }}
                 />
@@ -1679,7 +1679,7 @@ function HowItWorks() {
                 backgroundColor: '#061325',
                 padding: '8px',
                 boxShadow:
-                  '0 30px 80px rgba(6, 36, 78, 0.28), 0 10px 25px rgba(0, 0, 0, 0.15)',
+                  '0 30px 80px rgba(2, 27, 65, 0.28), 0 10px 25px rgba(0, 0, 0, 0.15)',
                 border: '2.5px solid #334155',
                 position: 'relative',
                 overflow: 'hidden',
@@ -1751,7 +1751,7 @@ function HowItWorks() {
                     top: '28px',
                     width: '36px',
                     height: '2px',
-                    borderBottom: '2px dashed rgba(217, 164, 65, 0.45)',
+                    borderBottom: '2px dashed rgba(216, 165, 75, 0.45)',
                     pointerEvents: 'none',
                   }}
                 />
@@ -1764,11 +1764,11 @@ function HowItWorks() {
                     flexShrink: 0,
                     backgroundColor: '#FFFFFF',
                     borderRadius: '18px',
-                    border: '1.5px solid rgba(217, 164, 65, 0.28)',
+                    border: '1.5px solid rgba(216, 165, 75, 0.28)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    boxShadow: '0 8px 24px rgba(6, 36, 78, 0.06)',
+                    boxShadow: '0 8px 24px rgba(2, 27, 65, 0.06)',
                   }}
                 >
                   {s.icon}
@@ -1780,7 +1780,7 @@ function HowItWorks() {
                     style={{
                       fontSize: '14px',
                       fontWeight: '800',
-                      color: '#D9A441',
+                      color: '#D8A54B',
                       letterSpacing: '0.08em',
                       marginBottom: '4px',
                     }}
@@ -1792,7 +1792,7 @@ function HowItWorks() {
                       fontFamily: "'Playfair Display', Georgia, serif",
                       fontSize: '21px',
                       fontWeight: '700',
-                      color: '#06244E',
+                      color: '#021B41',
                       marginBottom: '8px',
                       lineHeight: '1.25',
                     }}
@@ -1827,7 +1827,7 @@ function HowItWorks() {
             alignItems: 'center',
             justifyContent: 'space-between',
             gap: '20px',
-            boxShadow: '0 8px 30px rgba(6, 36, 78, 0.04)',
+            boxShadow: '0 8px 30px rgba(2, 27, 65, 0.04)',
             maxWidth: '1080px',
             margin: '0 auto',
             flexWrap: 'wrap',
@@ -1840,19 +1840,19 @@ function HowItWorks() {
                 width: '36px',
                 height: '36px',
                 borderRadius: '10px',
-                backgroundColor: 'rgba(217, 164, 65, 0.12)',
+                backgroundColor: 'rgba(216, 165, 75, 0.12)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 flexShrink: 0,
               }}
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D9A441" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D8A54B" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                 <path d="m9 12 2 2 4-4" />
               </svg>
             </div>
-            <span style={{ fontSize: '13.5px', fontWeight: '700', color: '#06244E' }}>
+            <span style={{ fontSize: '13.5px', fontWeight: '700', color: '#021B41' }}>
               Science-backed Practices
             </span>
           </div>
@@ -1864,20 +1864,20 @@ function HowItWorks() {
                 width: '36px',
                 height: '36px',
                 borderRadius: '10px',
-                backgroundColor: 'rgba(217, 164, 65, 0.12)',
+                backgroundColor: 'rgba(216, 165, 75, 0.12)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 flexShrink: 0,
               }}
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D9A441" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D8A54B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M12 3c-1.5 3-4 6.5-7 9 3 1.5 6 1.5 7-2 1 3.5 4 3.5 7 2-3-2.5-5.5-6-7-9z" />
                 <path d="M12 10c-2.5 3.5-5.5 6-8.5 7 3.5 2 7 1.5 8.5-1 1.5 2.5 5 3 8.5 1-3-1-6-3.5-8.5-7z" />
                 <path d="M12 17v4" />
               </svg>
             </div>
-            <span style={{ fontSize: '13.5px', fontWeight: '700', color: '#06244E' }}>
+            <span style={{ fontSize: '13.5px', fontWeight: '700', color: '#021B41' }}>
               Rooted in Spirituality
             </span>
           </div>
@@ -1889,20 +1889,20 @@ function HowItWorks() {
                 width: '36px',
                 height: '36px',
                 borderRadius: '10px',
-                backgroundColor: 'rgba(217, 164, 65, 0.12)',
+                backgroundColor: 'rgba(216, 165, 75, 0.12)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 flexShrink: 0,
               }}
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D9A441" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D8A54B" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="10" />
                 <circle cx="12" cy="12" r="6" />
-                <circle cx="12" cy="12" r="2" fill="#D9A441" />
+                <circle cx="12" cy="12" r="2" fill="#D8A54B" />
               </svg>
             </div>
-            <span style={{ fontSize: '13.5px', fontWeight: '700', color: '#06244E' }}>
+            <span style={{ fontSize: '13.5px', fontWeight: '700', color: '#021B41' }}>
               Daily Habits for Lasting Change
             </span>
           </div>
@@ -1914,19 +1914,19 @@ function HowItWorks() {
                 width: '36px',
                 height: '36px',
                 borderRadius: '10px',
-                backgroundColor: 'rgba(217, 164, 65, 0.12)',
+                backgroundColor: 'rgba(216, 165, 75, 0.12)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 flexShrink: 0,
               }}
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D9A441" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D8A54B" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                 <circle cx="12" cy="7" r="4" />
               </svg>
             </div>
-            <span style={{ fontSize: '13.5px', fontWeight: '700', color: '#06244E' }}>
+            <span style={{ fontSize: '13.5px', fontWeight: '700', color: '#021B41' }}>
               Guided by Experts
             </span>
           </div>
@@ -1956,19 +1956,19 @@ function FeaturesA() {
       icon: (
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
           {/* Meditating Yogi Silhouette with Aura */}
-          <circle cx="12" cy="7" r="2.8" fill="#D9A441" />
+          <circle cx="12" cy="7" r="2.8" fill="#D8A54B" />
           <path
             d="M12 11c-2.5 0-4.2 1.5-4.2 3.8v2.2c0 .8.8 1.5 1.6 1.5h5.2c.8 0 1.6-.7 1.6-1.5v-2.2c0-2.3-1.7-3.8-4.2-3.8z"
-            fill="#D9A441"
+            fill="#D8A54B"
           />
           <path
             d="M6 19.5c1-1.8 3-2.5 6-2.5s5 .7 6 2.5c.7 1.2-.2 2.5-1.5 2.5H7.5c-1.3 0-2.2-1.3-1.5-2.5z"
             fill="#B45309"
           />
           {/* Aura sparks */}
-          <circle cx="7" cy="6" r="1" fill="#D9A441" />
-          <circle cx="17" cy="6" r="1" fill="#D9A441" />
-          <circle cx="12" cy="2" r="1" fill="#D9A441" />
+          <circle cx="7" cy="6" r="1" fill="#D8A54B" />
+          <circle cx="17" cy="6" r="1" fill="#D8A54B" />
+          <circle cx="12" cy="2" r="1" fill="#D8A54B" />
         </svg>
       ),
     },
@@ -1977,19 +1977,19 @@ function FeaturesA() {
       icon: (
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
           {/* Affirmation Speech / Note Card with Heart / Check */}
-          <rect x="3" y="4" width="18" height="15" rx="5" fill="#FEF3C7" stroke="#D9A441" strokeWidth="1.6" />
+          <rect x="3" y="4" width="18" height="15" rx="5" fill="#FEF3C7" stroke="#D8A54B" strokeWidth="1.6" />
           <path
             d="M12 8.5c-.8-1-2.2-1-3 0s-.2 2.2.8 3l2.2 2.2 2.2-2.2c1-.8 1.6-2 .8-3s-2.2-1-3 0z"
-            fill="#D9A441"
+            fill="#D8A54B"
           />
-          <path d="M7 19l2-2" stroke="#D9A441" strokeWidth="1.6" strokeLinecap="round" />
+          <path d="M7 19l2-2" stroke="#D8A54B" strokeWidth="1.6" strokeLinecap="round" />
         </svg>
       ),
     },
     {
       title: 'Brain training — Schulte Table, Stroop Effect',
       icon: (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D9A441" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D8A54B" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
           {/* Brain / Neural Cog */}
           <path d="M9.5 2A4.5 4.5 0 0 0 5 6.5C5 7.4 5.3 8.3 5.8 9A4.5 4.5 0 0 0 3 13c0 2 1.3 3.7 3.1 4.3A4.5 4.5 0 0 0 10 21.5c.7 0 1.4-.2 2-.5" />
           <path d="M14.5 2A4.5 4.5 0 0 1 19 6.5c0 .9-.3 1.8-.8 2.5A4.5 4.5 0 0 1 21 13c0 2-1.3 3.7-3.1 4.3A4.5 4.5 0 0 1 14 21.5c-.7 0-1.4-.2-2-.5" />
@@ -2000,11 +2000,11 @@ function FeaturesA() {
     {
       title: 'Real coach, real 1-on-1 sessions',
       icon: (
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D9A441" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D8A54B" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
           {/* Coach User Profile */}
           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
           <circle cx="12" cy="7" r="4" />
-          <path d="M12 1v2M8 2l1 1.5M16 2l-1 1.5" stroke="#D9A441" />
+          <path d="M12 1v2M8 2l1 1.5M16 2l-1 1.5" stroke="#D8A54B" />
         </svg>
       ),
     },
@@ -2036,9 +2036,9 @@ function FeaturesA() {
       >
         <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
           {/* Outer Ring */}
-          <circle cx="200" cy="200" r="190" stroke="#D9A441" strokeWidth="1" strokeDasharray="3 3" />
-          <circle cx="200" cy="200" r="170" stroke="#D9A441" strokeWidth="1.2" />
-          <circle cx="200" cy="200" r="140" stroke="#D9A441" strokeWidth="0.8" />
+          <circle cx="200" cy="200" r="190" stroke="#D8A54B" strokeWidth="1" strokeDasharray="3 3" />
+          <circle cx="200" cy="200" r="170" stroke="#D8A54B" strokeWidth="1.2" />
+          <circle cx="200" cy="200" r="140" stroke="#D8A54B" strokeWidth="0.8" />
           {/* Petals */}
           {Array.from({ length: 16 }).map((_, i) => {
             const rot = i * 22.5;
@@ -2046,11 +2046,11 @@ function FeaturesA() {
               <g key={`petal-${i}`} transform={`rotate(${rot} 200 200)`}>
                 <path
                   d="M200 30 C212 90 220 130 200 170 C180 130 188 90 200 30 Z"
-                  stroke="#D9A441"
+                  stroke="#D8A54B"
                   strokeWidth="1"
-                  fill="rgba(217, 164, 65, 0.03)"
+                  fill="rgba(216, 165, 75, 0.03)"
                 />
-                <circle cx="200" cy="45" r="2.5" fill="#D9A441" />
+                <circle cx="200" cy="45" r="2.5" fill="#D8A54B" />
               </g>
             );
           })}
@@ -2063,7 +2063,7 @@ function FeaturesA() {
           position: 'absolute',
           top: '80px',
           left: '70px',
-          color: '#D9A441',
+          color: '#D8A54B',
           opacity: 0.7,
           pointerEvents: 'none',
         }}
@@ -2083,8 +2083,8 @@ function FeaturesA() {
           pointerEvents: 'none',
         }}
       >
-        <div style={{ width: '12px', height: '12px', borderRadius: '50%', border: '1.5px solid #D9A441' }} />
-        <div style={{ width: '8px', height: '8px', borderRadius: '50%', border: '1.5px solid #D9A441' }} />
+        <div style={{ width: '12px', height: '12px', borderRadius: '50%', border: '1.5px solid #D8A54B' }} />
+        <div style={{ width: '8px', height: '8px', borderRadius: '50%', border: '1.5px solid #D8A54B' }} />
       </div>
 
       {/* Concentric Arc & Anchors Behind Phone */}
@@ -2097,7 +2097,7 @@ function FeaturesA() {
           width: '560px',
           height: '560px',
           borderRadius: '50%',
-          border: '1.5px dashed rgba(217, 164, 65, 0.22)',
+          border: '1.5px dashed rgba(216, 165, 75, 0.22)',
           pointerEvents: 'none',
         }}
       >
@@ -2112,13 +2112,13 @@ function FeaturesA() {
             height: '12px',
             borderRadius: '50%',
             backgroundColor: '#FAF8F3',
-            border: '2px solid #D9A441',
+            border: '2px solid #D8A54B',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
           }}
         >
-          <div style={{ width: '4px', height: '4px', borderRadius: '50%', backgroundColor: '#D9A441' }} />
+          <div style={{ width: '4px', height: '4px', borderRadius: '50%', backgroundColor: '#D8A54B' }} />
         </div>
       </div>
 
@@ -2150,7 +2150,7 @@ function FeaturesA() {
                 backgroundColor: '#061325',
                 padding: '9px',
                 boxShadow:
-                  '0 35px 90px rgba(6, 36, 78, 0.22), 0 12px 30px rgba(0, 0, 0, 0.12)',
+                  '0 35px 90px rgba(2, 27, 65, 0.22), 0 12px 30px rgba(0, 0, 0, 0.12)',
                 border: '2.5px solid #334155',
                 position: 'relative',
                 overflow: 'hidden',
@@ -2209,7 +2209,7 @@ function FeaturesA() {
                 marginBottom: '16px',
               }}
             >
-              <span style={{ width: '42px', height: '1px', backgroundColor: '#D9A441', opacity: 0.6 }} />
+              <span style={{ width: '42px', height: '1px', backgroundColor: '#D8A54B', opacity: 0.6 }} />
               <div
                 style={{
                   display: 'flex',
@@ -2218,11 +2218,11 @@ function FeaturesA() {
                   fontSize: '12.5px',
                   fontWeight: '700',
                   letterSpacing: '0.18em',
-                  color: '#D9A441',
+                  color: '#D8A54B',
                   textTransform: 'uppercase',
                 }}
               >
-                <svg width="18" height="15" viewBox="0 0 24 24" fill="none" stroke="#D9A441" strokeWidth="2">
+                <svg width="18" height="15" viewBox="0 0 24 24" fill="none" stroke="#D8A54B" strokeWidth="2">
                   <path d="M12 3c-1.5 3-4 6.5-7 9 3 1.5 6 1.5 7-2 1 3.5 4 3.5 7 2-3-2.5-5.5-6-7-9z" />
                   <path d="M12 10c-2.5 3.5-5.5 6-8.5 7 3.5 2 7 1.5 8.5-1 1.5 2.5 5 3 8.5 1-3-1-6-3.5-8.5-7z" />
                   <path d="M12 17v4" />
@@ -2230,7 +2230,7 @@ function FeaturesA() {
                 <span>SACRED MODULES</span>
                 <span style={{ fontSize: '10px' }}>✦</span>
               </div>
-              <span style={{ width: '42px', height: '1px', backgroundColor: '#D9A441', opacity: 0.6 }} />
+              <span style={{ width: '42px', height: '1px', backgroundColor: '#D8A54B', opacity: 0.6 }} />
             </div>
 
             {/* Heading */}
@@ -2239,7 +2239,7 @@ function FeaturesA() {
                 fontFamily: "'Playfair Display', Georgia, serif",
                 fontSize: 'clamp(34px, 4.2vw, 52px)',
                 fontWeight: '700',
-                color: '#06244E',
+                color: '#021B41',
                 margin: '0 0 14px 0',
                 lineHeight: 1.15,
                 letterSpacing: '-0.5px',
@@ -2247,12 +2247,12 @@ function FeaturesA() {
             >
               Everything Your Mind
               <br />
-              Needs, In <span style={{ color: '#D9A441' }}>One App</span>
+              Needs, In <span style={{ color: '#D8A54B' }}>One App</span>
             </h2>
 
             {/* Small Lotus Icon Separator */}
             <div style={{ marginBottom: '22px' }}>
-              <svg width="22" height="18" viewBox="0 0 24 24" fill="none" stroke="#D9A441" strokeWidth="2">
+              <svg width="22" height="18" viewBox="0 0 24 24" fill="none" stroke="#D8A54B" strokeWidth="2">
                 <path d="M12 3c-1.5 3-4 6.5-7 9 3 1.5 6 1.5 7-2 1 3.5 4 3.5 7 2-3-2.5-5.5-6-7-9z" />
                 <path d="M12 10c-2.5 3.5-5.5 6-8.5 7 3.5 2 7 1.5 8.5-1 1.5 2.5 5 3 8.5 1-3-1-6-3.5-8.5-7z" />
                 <path d="M12 17v4" />
@@ -2299,12 +2299,12 @@ function FeaturesA() {
                         height: '46px',
                         borderRadius: '50%',
                         backgroundColor: '#FFFFFF',
-                        border: '1.5px solid rgba(217, 164, 65, 0.35)',
+                        border: '1.5px solid rgba(216, 165, 75, 0.35)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         flexShrink: 0,
-                        boxShadow: '0 4px 14px rgba(217, 164, 65, 0.12)',
+                        boxShadow: '0 4px 14px rgba(216, 165, 75, 0.12)',
                       }}
                     >
                       {f.icon}
@@ -2315,7 +2315,7 @@ function FeaturesA() {
                       style={{
                         fontSize: '15.5px',
                         fontWeight: '700',
-                        color: '#06244E',
+                        color: '#021B41',
                         letterSpacing: '-0.2px',
                       }}
                     >
@@ -2328,7 +2328,7 @@ function FeaturesA() {
                     <div
                       style={{
                         height: '1px',
-                        borderBottom: '1px dotted rgba(217, 164, 65, 0.35)',
+                        borderBottom: '1px dotted rgba(216, 165, 75, 0.35)',
                         width: '100%',
                       }}
                     />
@@ -2349,24 +2349,24 @@ function FeaturesA() {
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '12px',
-                  background: 'linear-gradient(135deg, #D9A441 0%, #B88220 100%)',
+                  background: 'linear-gradient(135deg, #D8A54B 0%, #C49238 100%)',
                   color: '#FFFFFF',
                   padding: '14px 34px',
                   borderRadius: '50px',
                   fontWeight: '700',
                   fontSize: '15px',
                   textDecoration: 'none',
-                  boxShadow: '0 10px 25px rgba(217, 164, 65, 0.4)',
+                  boxShadow: '0 10px 25px rgba(216, 165, 75, 0.4)',
                   transition: 'all 0.3s ease',
                   cursor: 'pointer',
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'translateY(-2px)';
-                  e.currentTarget.style.boxShadow = '0 14px 30px rgba(217, 164, 65, 0.55)';
+                  e.currentTarget.style.boxShadow = '0 14px 30px rgba(216, 165, 75, 0.55)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = 'none';
-                  e.currentTarget.style.boxShadow = '0 10px 25px rgba(217, 164, 65, 0.4)';
+                  e.currentTarget.style.boxShadow = '0 10px 25px rgba(216, 165, 75, 0.4)';
                 }}
               >
                 {/* Download Circle Icon */}
@@ -2389,8 +2389,8 @@ function FeaturesA() {
               </a>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ width: '30px', height: '1px', backgroundColor: '#D9A441', opacity: 0.5 }} />
-                <span style={{ fontSize: '11px', color: '#D9A441' }}>✦</span>
+                <span style={{ width: '30px', height: '1px', backgroundColor: '#D8A54B', opacity: 0.5 }} />
+                <span style={{ fontSize: '11px', color: '#D8A54B' }}>✦</span>
               </div>
             </div>
           </div>
@@ -2415,7 +2415,7 @@ function FeaturesB() {
     {
       label: 'Brahmari Breathing',
       icon: (
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D9A441" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D8A54B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M2 12c3-4 6-4 9 0s6 4 9 0" />
           <path d="M5 8c2.5-3 5-3 7 0s5 3 7 0" opacity="0.6" />
         </svg>
@@ -2424,7 +2424,7 @@ function FeaturesB() {
     {
       label: 'Affirmations',
       icon: (
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D9A441" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D8A54B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="12" cy="12" r="9" />
           <path d="M12 8v4" />
           <path d="M12 16h.01" />
@@ -2434,7 +2434,7 @@ function FeaturesB() {
     {
       label: 'Brain Boost',
       icon: (
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D9A441" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D8A54B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
         </svg>
       ),
@@ -2442,7 +2442,7 @@ function FeaturesB() {
     {
       label: 'Schulte Table',
       icon: (
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D9A441" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D8A54B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <rect x="3" y="3" width="7" height="7" />
           <rect x="14" y="3" width="7" height="7" />
           <rect x="14" y="14" width="7" height="7" />
@@ -2456,7 +2456,7 @@ function FeaturesB() {
     {
       label: 'Stroop Effect',
       icon: (
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D9A441" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D8A54B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
         </svg>
       ),
@@ -2464,7 +2464,7 @@ function FeaturesB() {
     {
       label: 'Box Breathing',
       icon: (
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D9A441" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D8A54B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
           <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
           <line x1="12" y1="22.08" x2="12" y2="12" />
@@ -2474,7 +2474,7 @@ function FeaturesB() {
     {
       label: 'Jyothirdhyana',
       icon: (
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D9A441" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D8A54B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M12 3c-1.5 3-4 6.5-7 9 3 1.5 6 1.5 7-2 1 3.5 4 3.5 7 2-3-2.5-5.5-6-7-9z" />
           <path d="M12 10c-2.5 3.5-5.5 6-8.5 7 3.5 2 7 1.5 8.5-1 1.5 2.5 5 3 8.5 1-3-1-6-3.5-8.5-7z" />
           <path d="M12 17v4" />
@@ -2511,19 +2511,19 @@ function FeaturesB() {
             width: '42px',
             height: '42px',
             borderRadius: '50%',
-            border: '1.5px solid rgba(217, 164, 65, 0.5)',
+            border: '1.5px solid rgba(216, 165, 75, 0.5)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
           }}
         >
-          <svg width="20" height="16" viewBox="0 0 24 24" fill="none" stroke="#D9A441" strokeWidth="2">
+          <svg width="20" height="16" viewBox="0 0 24 24" fill="none" stroke="#D8A54B" strokeWidth="2">
             <path d="M12 3c-1.5 3-4 6.5-7 9 3 1.5 6 1.5 7-2 1 3.5 4 3.5 7 2-3-2.5-5.5-6-7-9z" />
             <path d="M12 10c-2.5 3.5-5.5 6-8.5 7 3.5 2 7 1.5 8.5-1 1.5 2.5 5 3 8.5 1-3-1-6-3.5-8.5-7z" />
             <path d="M12 17v4" />
           </svg>
         </div>
-        <div style={{ width: '18px', height: '18px', borderTop: '1px solid rgba(217, 164, 65, 0.4)', borderRight: '1px solid rgba(217, 164, 65, 0.4)' }} />
+        <div style={{ width: '18px', height: '18px', borderTop: '1px solid rgba(216, 165, 75, 0.4)', borderRight: '1px solid rgba(216, 165, 75, 0.4)' }} />
       </div>
 
       {/* ─── Far Left Lotus Petal Line Flourish ─── */}
@@ -2539,8 +2539,8 @@ function FeaturesB() {
         }}
       >
         <svg viewBox="0 0 200 200" fill="none">
-          <path d="M10 180 C40 100 80 50 140 10 C180 80 150 140 10 180 Z" stroke="#D9A441" strokeWidth="1.2" />
-          <path d="M25 180 C60 120 100 70 160 30" stroke="#D9A441" strokeWidth="1" strokeDasharray="3 3" />
+          <path d="M10 180 C40 100 80 50 140 10 C180 80 150 140 10 180 Z" stroke="#D8A54B" strokeWidth="1.2" />
+          <path d="M25 180 C60 120 100 70 160 30" stroke="#D8A54B" strokeWidth="1" strokeDasharray="3 3" />
         </svg>
       </div>
 
@@ -2560,7 +2560,7 @@ function FeaturesB() {
         {Array.from({ length: 16 }).map((_, i) => (
           <div
             key={`dot-${i}`}
-            style={{ width: '4px', height: '4px', borderRadius: '50%', backgroundColor: '#D9A441' }}
+            style={{ width: '4px', height: '4px', borderRadius: '50%', backgroundColor: '#D8A54B' }}
           />
         ))}
       </div>
@@ -2575,7 +2575,7 @@ function FeaturesB() {
           width: '580px',
           height: '580px',
           borderRadius: '50%',
-          border: '1.5px dashed rgba(217, 164, 65, 0.22)',
+          border: '1.5px dashed rgba(216, 165, 75, 0.22)',
           pointerEvents: 'none',
         }}
       >
@@ -2590,13 +2590,13 @@ function FeaturesB() {
             height: '12px',
             borderRadius: '50%',
             backgroundColor: '#FAF8F3',
-            border: '2px solid #D9A441',
+            border: '2px solid #D8A54B',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
           }}
         >
-          <div style={{ width: '4px', height: '4px', borderRadius: '50%', backgroundColor: '#D9A441' }} />
+          <div style={{ width: '4px', height: '4px', borderRadius: '50%', backgroundColor: '#D8A54B' }} />
         </div>
       </div>
 
@@ -2606,7 +2606,7 @@ function FeaturesB() {
           position: 'absolute',
           top: '140px',
           right: '60px',
-          color: '#D9A441',
+          color: '#D8A54B',
           opacity: 0.7,
           pointerEvents: 'none',
         }}
@@ -2645,7 +2645,7 @@ function FeaturesB() {
                 marginBottom: '16px',
               }}
             >
-              <span style={{ width: '36px', height: '1px', backgroundColor: '#D9A441', opacity: 0.6 }} />
+              <span style={{ width: '36px', height: '1px', backgroundColor: '#D8A54B', opacity: 0.6 }} />
               <div
                 style={{
                   display: 'flex',
@@ -2654,7 +2654,7 @@ function FeaturesB() {
                   fontSize: '12.5px',
                   fontWeight: '700',
                   letterSpacing: '0.18em',
-                  color: '#D9A441',
+                  color: '#D8A54B',
                   textTransform: 'uppercase',
                 }}
               >
@@ -2662,7 +2662,7 @@ function FeaturesB() {
                 <span>BUILT FOR FOCUS</span>
                 <span style={{ fontSize: '10px' }}>✦</span>
               </div>
-              <span style={{ width: '36px', height: '1px', backgroundColor: '#D9A441', opacity: 0.6 }} />
+              <span style={{ width: '36px', height: '1px', backgroundColor: '#D8A54B', opacity: 0.6 }} />
             </div>
 
             {/* Heading */}
@@ -2671,7 +2671,7 @@ function FeaturesB() {
                 fontFamily: "'Playfair Display', Georgia, serif",
                 fontSize: 'clamp(34px, 4.2vw, 54px)',
                 fontWeight: '700',
-                color: '#06244E',
+                color: '#021B41',
                 margin: '0 0 14px 0',
                 lineHeight: 1.15,
                 letterSpacing: '-0.5px',
@@ -2679,7 +2679,7 @@ function FeaturesB() {
             >
               Boost Focus, Calm,
               <br />
-              and <span style={{ fontStyle: 'italic', color: '#D9A441' }}>Confidence</span>
+              and <span style={{ fontStyle: 'italic', color: '#D8A54B' }}>Confidence</span>
             </h2>
 
             {/* Lotus Divider: ── ✦ 🪷 ✦ ── */}
@@ -2691,13 +2691,13 @@ function FeaturesB() {
                 marginBottom: '22px',
               }}
             >
-              <span style={{ width: '40px', height: '1px', backgroundColor: '#D9A441', opacity: 0.5 }} />
-              <svg width="20" height="16" viewBox="0 0 24 24" fill="none" stroke="#D9A441" strokeWidth="2">
+              <span style={{ width: '40px', height: '1px', backgroundColor: '#D8A54B', opacity: 0.5 }} />
+              <svg width="20" height="16" viewBox="0 0 24 24" fill="none" stroke="#D8A54B" strokeWidth="2">
                 <path d="M12 3c-1.5 3-4 6.5-7 9 3 1.5 6 1.5 7-2 1 3.5 4 3.5 7 2-3-2.5-5.5-6-7-9z" />
                 <path d="M12 10c-2.5 3.5-5.5 6-8.5 7 3.5 2 7 1.5 8.5-1 1.5 2.5 5 3 8.5 1-3-1-6-3.5-8.5-7z" />
                 <path d="M12 17v4" />
               </svg>
-              <span style={{ width: '40px', height: '1px', backgroundColor: '#D9A441', opacity: 0.5 }} />
+              <span style={{ width: '40px', height: '1px', backgroundColor: '#D8A54B', opacity: 0.5 }} />
             </div>
 
             {/* Paragraph */}
@@ -2728,11 +2728,11 @@ function FeaturesB() {
                       border: '1.5px solid #E8DFD0',
                       borderRadius: '50px',
                       padding: '8px 18px',
-                      boxShadow: '0 4px 16px rgba(6, 36, 78, 0.04)',
+                      boxShadow: '0 4px 16px rgba(2, 27, 65, 0.04)',
                     }}
                   >
                     {p.icon}
-                    <span style={{ fontSize: '13.5px', fontWeight: '700', color: '#06244E' }}>{p.label}</span>
+                    <span style={{ fontSize: '13.5px', fontWeight: '700', color: '#021B41' }}>{p.label}</span>
                   </div>
                 ))}
               </div>
@@ -2750,11 +2750,11 @@ function FeaturesB() {
                       border: '1.5px solid #E8DFD0',
                       borderRadius: '50px',
                       padding: '8px 18px',
-                      boxShadow: '0 4px 16px rgba(6, 36, 78, 0.04)',
+                      boxShadow: '0 4px 16px rgba(2, 27, 65, 0.04)',
                     }}
                   >
                     {p.icon}
-                    <span style={{ fontSize: '13.5px', fontWeight: '700', color: '#06244E' }}>{p.label}</span>
+                    <span style={{ fontSize: '13.5px', fontWeight: '700', color: '#021B41' }}>{p.label}</span>
                   </div>
                 ))}
               </div>
@@ -2786,7 +2786,7 @@ function FeaturesB() {
                   fontWeight: '700',
                   letterSpacing: '0.02em',
                   textDecoration: 'none',
-                  boxShadow: '0 10px 25px rgba(6, 29, 61, 0.2)',
+                  boxShadow: '0 10px 25px rgba(2, 27, 65, 0.2)',
                 }}
               >
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style={{ flexShrink: 0 }}>
@@ -2814,9 +2814,9 @@ function FeaturesB() {
                   letterSpacing: '0.02em',
                   textDecoration: 'none',
                   backgroundColor: '#FFFFFF',
-                  color: '#061D3D',
-                  border: '2px solid #D9A441',
-                  boxShadow: '0 8px 20px rgba(217, 164, 65, 0.16)',
+                  color: '#021B41',
+                  border: '2px solid #D8A54B',
+                  boxShadow: '0 8px 20px rgba(216, 165, 75, 0.16)',
                 }}
               >
                 <svg width="20" height="20" viewBox="0 0 24 24" style={{ flexShrink: 0 }}>
@@ -2841,7 +2841,7 @@ function FeaturesB() {
                 backgroundColor: '#061325',
                 padding: '9px',
                 boxShadow:
-                  '0 35px 90px rgba(6, 36, 78, 0.22), 0 12px 30px rgba(0, 0, 0, 0.12)',
+                  '0 35px 90px rgba(2, 27, 65, 0.22), 0 12px 30px rgba(0, 0, 0, 0.12)',
                 border: '2.5px solid #334155',
                 position: 'relative',
                 overflow: 'hidden',
@@ -2911,13 +2911,13 @@ function WhyChooseUs() {
       desc: 'Led by Dr. Naveen, Psychologist, Life Coach, and mindfulness expert with 16+ years of experience.',
       pillText: '16+ Years Experience',
       pillIcon: (
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D9A441" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D8A54B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-          <circle cx="12" cy="7" r="4" fill="rgba(217, 164, 65, 0.2)" />
+          <circle cx="12" cy="7" r="4" fill="rgba(216, 165, 75, 0.2)" />
         </svg>
       ),
       topIcon: (
-        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#D9A441" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#D8A54B" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
           <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
           <path d="M6 12v5c3 3 9 3 12 0v-5" />
         </svg>
@@ -2928,17 +2928,17 @@ function WhyChooseUs() {
       desc: 'Blends science-backed breathwork, chakra healing, cognitive exercises, and Indian spiritual wisdom.',
       pillText: 'Science Backed Practices',
       pillIcon: (
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D9A441" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D8A54B" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
           <path d="m9 12 2 2 4-4" />
         </svg>
       ),
       topIcon: (
-        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#D9A441" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#D8A54B" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
           <path d="M10 2v7.31M14 2v7.31M8.5 2h7M14 9.3a6.5 6.5 0 1 1-4 0" />
-          <circle cx="11" cy="15" r="1" fill="#D9A441" />
-          <circle cx="14" cy="17" r="1" fill="#D9A441" />
-          <circle cx="10" cy="18" r="1" fill="#D9A441" />
+          <circle cx="11" cy="15" r="1" fill="#D8A54B" />
+          <circle cx="14" cy="17" r="1" fill="#D8A54B" />
+          <circle cx="10" cy="18" r="1" fill="#D8A54B" />
         </svg>
       ),
     },
@@ -2947,14 +2947,14 @@ function WhyChooseUs() {
       desc: 'Mind Score, daily streaks, habit builder — see your mental fitness grow, one practice at a time.',
       pillText: 'Visible. Measurable. Meaningful.',
       pillIcon: (
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D9A441" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D8A54B" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="12" cy="12" r="10" />
           <circle cx="12" cy="12" r="6" />
-          <circle cx="12" cy="12" r="2" fill="#D9A441" />
+          <circle cx="12" cy="12" r="2" fill="#D8A54B" />
         </svg>
       ),
       topIcon: (
-        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#D9A441" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#D8A54B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <line x1="6" y1="20" x2="6" y2="16" />
           <line x1="12" y1="20" x2="12" y2="10" />
           <line x1="18" y1="20" x2="18" y2="6" />
@@ -2988,8 +2988,8 @@ function WhyChooseUs() {
           pointerEvents: 'none',
         }}
       >
-        <div style={{ width: '18px', height: '18px', borderRadius: '50%', border: '1.5px solid #D9A441' }} />
-        <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#D9A441' }} />
+        <div style={{ width: '18px', height: '18px', borderRadius: '50%', border: '1.5px solid #D8A54B' }} />
+        <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#D8A54B' }} />
       </div>
 
       {/* Top Right Dot Grid */}
@@ -3008,7 +3008,7 @@ function WhyChooseUs() {
         {Array.from({ length: 16 }).map((_, i) => (
           <div
             key={`tr-dot-${i}`}
-            style={{ width: '4px', height: '4px', borderRadius: '50%', backgroundColor: '#D9A441' }}
+            style={{ width: '4px', height: '4px', borderRadius: '50%', backgroundColor: '#D8A54B' }}
           />
         ))}
       </div>
@@ -3026,10 +3026,10 @@ function WhyChooseUs() {
         }}
       >
         <svg viewBox="0 0 200 200" fill="none">
-          <path d="M10 190 C50 140 80 90 120 20" stroke="#D9A441" strokeWidth="1.8" strokeLinecap="round" />
-          <path d="M40 150 C55 135 75 138 70 120 C55 130 45 140 40 150 Z" fill="#D9A441" />
-          <path d="M65 115 C82 100 102 105 97 88 C82 98 72 108 65 115 Z" fill="#D9A441" />
-          <path d="M90 75 C105 60 125 65 120 50 C105 60 97 70 90 75 Z" fill="#D9A441" />
+          <path d="M10 190 C50 140 80 90 120 20" stroke="#D8A54B" strokeWidth="1.8" strokeLinecap="round" />
+          <path d="M40 150 C55 135 75 138 70 120 C55 130 45 140 40 150 Z" fill="#D8A54B" />
+          <path d="M65 115 C82 100 102 105 97 88 C82 98 72 108 65 115 Z" fill="#D8A54B" />
+          <path d="M90 75 C105 60 125 65 120 50 C105 60 97 70 90 75 Z" fill="#D8A54B" />
         </svg>
       </div>
 
@@ -3047,10 +3047,10 @@ function WhyChooseUs() {
         }}
       >
         <svg viewBox="0 0 200 200" fill="none">
-          <path d="M10 190 C50 140 80 90 120 20" stroke="#D9A441" strokeWidth="1.8" strokeLinecap="round" />
-          <path d="M40 150 C55 135 75 138 70 120 C55 130 45 140 40 150 Z" fill="#D9A441" />
-          <path d="M65 115 C82 100 102 105 97 88 C82 98 72 108 65 115 Z" fill="#D9A441" />
-          <path d="M90 75 C105 60 125 65 120 50 C105 60 97 70 90 75 Z" fill="#D9A441" />
+          <path d="M10 190 C50 140 80 90 120 20" stroke="#D8A54B" strokeWidth="1.8" strokeLinecap="round" />
+          <path d="M40 150 C55 135 75 138 70 120 C55 130 45 140 40 150 Z" fill="#D8A54B" />
+          <path d="M65 115 C82 100 102 105 97 88 C82 98 72 108 65 115 Z" fill="#D8A54B" />
+          <path d="M90 75 C105 60 125 65 120 50 C105 60 97 70 90 75 Z" fill="#D8A54B" />
         </svg>
       </div>
 
@@ -3068,15 +3068,15 @@ function WhyChooseUs() {
               marginBottom: '12px',
             }}
           >
-            <span style={{ width: '45px', height: '1px', backgroundColor: '#D9A441', opacity: 0.5 }} />
-            <span style={{ fontSize: '10px', color: '#D9A441' }}>✦</span>
-            <svg width="22" height="18" viewBox="0 0 24 24" fill="none" stroke="#D9A441" strokeWidth="2">
+            <span style={{ width: '45px', height: '1px', backgroundColor: '#D8A54B', opacity: 0.5 }} />
+            <span style={{ fontSize: '10px', color: '#D8A54B' }}>✦</span>
+            <svg width="22" height="18" viewBox="0 0 24 24" fill="none" stroke="#D8A54B" strokeWidth="2">
               <path d="M12 3c-1.5 3-4 6.5-7 9 3 1.5 6 1.5 7-2 1 3.5 4 3.5 7 2-3-2.5-5.5-6-7-9z" />
               <path d="M12 10c-2.5 3.5-5.5 6-8.5 7 3.5 2 7 1.5 8.5-1 1.5 2.5 5 3 8.5 1-3-1-6-3.5-8.5-7z" />
               <path d="M12 17v4" />
             </svg>
-            <span style={{ fontSize: '10px', color: '#D9A441' }}>✦</span>
-            <span style={{ width: '45px', height: '1px', backgroundColor: '#D9A441', opacity: 0.5 }} />
+            <span style={{ fontSize: '10px', color: '#D8A54B' }}>✦</span>
+            <span style={{ width: '45px', height: '1px', backgroundColor: '#D8A54B', opacity: 0.5 }} />
           </div>
 
           {/* Tagline */}
@@ -3085,7 +3085,7 @@ function WhyChooseUs() {
               fontSize: '12.5px',
               fontWeight: '700',
               letterSpacing: '0.2em',
-              color: '#D9A441',
+              color: '#D8A54B',
               textTransform: 'uppercase',
               marginBottom: '10px',
             }}
@@ -3099,12 +3099,12 @@ function WhyChooseUs() {
               fontFamily: "'Playfair Display', Georgia, serif",
               fontSize: 'clamp(34px, 4.2vw, 52px)',
               fontWeight: '700',
-              color: '#06244E',
+              color: '#021B41',
               margin: '0 0 14px 0',
               letterSpacing: '-0.5px',
             }}
           >
-            Why Choose <span style={{ color: '#D9A441' }}>Positive Mind Gym</span>
+            Why Choose <span style={{ color: '#D8A54B' }}>Positive Mind Gym</span>
           </h2>
 
           {/* Subtitle */}
@@ -3142,7 +3142,7 @@ function WhyChooseUs() {
                 border: '1.5px solid #EFE8DD',
                 padding: '52px 30px 28px 30px',
                 position: 'relative',
-                boxShadow: '0 10px 30px rgba(6, 36, 78, 0.04)',
+                boxShadow: '0 10px 30px rgba(2, 27, 65, 0.04)',
                 display: 'flex',
                 flexDirection: 'column',
                 textAlign: 'center',
@@ -3150,11 +3150,11 @@ function WhyChooseUs() {
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'translateY(-5px)';
-                e.currentTarget.style.boxShadow = '0 18px 40px rgba(6, 36, 78, 0.08)';
+                e.currentTarget.style.boxShadow = '0 18px 40px rgba(2, 27, 65, 0.08)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.transform = 'none';
-                e.currentTarget.style.boxShadow = '0 10px 30px rgba(6, 36, 78, 0.04)';
+                e.currentTarget.style.boxShadow = '0 10px 30px rgba(2, 27, 65, 0.04)';
               }}
             >
               {/* Floating Top Oval/Circular Badge */}
@@ -3168,8 +3168,8 @@ function WhyChooseUs() {
                   height: '72px',
                   borderRadius: '50%',
                   backgroundColor: '#FFFFFF',
-                  border: '1.5px solid rgba(217, 164, 65, 0.4)',
-                  boxShadow: '0 6px 18px rgba(217, 164, 65, 0.15)',
+                  border: '1.5px solid rgba(216, 165, 75, 0.4)',
+                  boxShadow: '0 6px 18px rgba(216, 165, 75, 0.15)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -3197,7 +3197,7 @@ function WhyChooseUs() {
                   fontFamily: "'Playfair Display', Georgia, serif",
                   fontSize: '21px',
                   fontWeight: '700',
-                  color: '#06244E',
+                  color: '#021B41',
                   marginTop: '8px',
                   marginBottom: '10px',
                   letterSpacing: '-0.2px',
@@ -3216,13 +3216,13 @@ function WhyChooseUs() {
                   marginBottom: '16px',
                 }}
               >
-                <span style={{ width: '28px', height: '1px', backgroundColor: '#D9A441', opacity: 0.4 }} />
-                <svg width="14" height="12" viewBox="0 0 24 24" fill="none" stroke="#D9A441" strokeWidth="2">
+                <span style={{ width: '28px', height: '1px', backgroundColor: '#D8A54B', opacity: 0.4 }} />
+                <svg width="14" height="12" viewBox="0 0 24 24" fill="none" stroke="#D8A54B" strokeWidth="2">
                   <path d="M12 3c-1.5 3-4 6.5-7 9 3 1.5 6 1.5 7-2 1 3.5 4 3.5 7 2-3-2.5-5.5-6-7-9z" />
                   <path d="M12 10c-2.5 3.5-5.5 6-8.5 7 3.5 2 7 1.5 8.5-1 1.5 2.5 5 3 8.5 1-3-1-6-3.5-8.5-7z" />
                   <path d="M12 17v4" />
                 </svg>
-                <span style={{ width: '28px', height: '1px', backgroundColor: '#D9A441', opacity: 0.4 }} />
+                <span style={{ width: '28px', height: '1px', backgroundColor: '#D8A54B', opacity: 0.4 }} />
               </div>
 
               {/* Description */}
@@ -3259,7 +3259,7 @@ function WhyChooseUs() {
                   style={{
                     fontSize: '13.5px',
                     fontWeight: '700',
-                    color: '#06244E',
+                    color: '#021B41',
                     letterSpacing: '-0.1px',
                   }}
                 >
@@ -3292,8 +3292,8 @@ function Pricing() {
     <section id="book" style={{ background: '#F4F1EA', padding: '100px 24px' }}>
       <div style={{ maxWidth: 1100, margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: 64 }}>
-          <span style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.15em', color: '#D89B2C', textTransform: 'uppercase' }}>Book a Session</span>
-          <h2 style={{ fontFamily: 'Fraunces, serif', fontSize: 'clamp(28px, 3.5vw, 44px)', fontWeight: 700, color: '#1B2A4A', marginTop: 12, letterSpacing: '-0.5px' }}>Simple, Transparent Plans</h2>
+          <span style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.15em', color: '#D8A54B', textTransform: 'uppercase' }}>Book a Session</span>
+          <h2 style={{ fontFamily: 'Fraunces, serif', fontSize: 'clamp(28px, 3.5vw, 44px)', fontWeight: 700, color: '#021B41', marginTop: 12, letterSpacing: '-0.5px' }}>Simple, Transparent Plans</h2>
           <p style={{ fontSize: 16, color: '#6B7280', marginTop: 14, maxWidth: 520, margin: '14px auto 0' }}>Start free with the app, or book a personal coaching session with Dr. Naveen Ellangala.</p>
         </div>
 
@@ -3313,7 +3313,7 @@ function Pricing() {
             },
           ].map(p => (
             <div key={p.name} style={{
-              background: p.popular ? '#1B2A4A' : '#fff',
+              background: p.popular ? '#021B41' : '#fff',
               borderRadius: 24,
               padding: '36px 28px',
               position: 'relative',
@@ -3321,28 +3321,28 @@ function Pricing() {
               transform: p.popular ? 'scale(1.04)' : 'none',
             }}>
               {p.popular && (
-                <div style={{ position: 'absolute', top: -14, left: '50%', transform: 'translateX(-50%)', background: '#D89B2C', color: '#1B2A4A', fontSize: 12, fontWeight: 700, padding: '5px 18px', borderRadius: 50, letterSpacing: '0.08em', whiteSpace: 'nowrap' }}>
+                <div style={{ position: 'absolute', top: -14, left: '50%', transform: 'translateX(-50%)', background: '#D8A54B', color: '#021B41', fontSize: 12, fontWeight: 700, padding: '5px 18px', borderRadius: 50, letterSpacing: '0.08em', whiteSpace: 'nowrap' }}>
                   ★ MOST POPULAR
                 </div>
               )}
-              <div style={{ fontSize: 12, fontWeight: 700, color: p.popular ? 'rgba(216,155,44,0.8)' : '#D89B2C', letterSpacing: '0.12em', marginBottom: 10, textTransform: 'uppercase' }}>{p.tag}</div>
-              <h3 style={{ fontFamily: 'Fraunces, serif', fontSize: 22, fontWeight: 700, color: p.popular ? '#fff' : '#1B2A4A', marginBottom: 4 }}>{p.name}</h3>
+              <div style={{ fontSize: 12, fontWeight: 700, color: p.popular ? 'rgba(216,155,44,0.8)' : '#D8A54B', letterSpacing: '0.12em', marginBottom: 10, textTransform: 'uppercase' }}>{p.tag}</div>
+              <h3 style={{ fontFamily: 'Fraunces, serif', fontSize: 22, fontWeight: 700, color: p.popular ? '#fff' : '#021B41', marginBottom: 4 }}>{p.name}</h3>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, margin: '20px 0' }}>
-                <span style={{ fontFamily: 'Fraunces, serif', fontSize: 38, fontWeight: 700, color: p.popular ? '#D89B2C' : '#1B2A4A' }}>{p.price}</span>
+                <span style={{ fontFamily: 'Fraunces, serif', fontSize: 38, fontWeight: 700, color: p.popular ? '#D8A54B' : '#021B41' }}>{p.price}</span>
                 <span style={{ fontSize: 13, color: p.popular ? 'rgba(255,255,255,0.5)' : '#9CA3AF' }}>{p.period}</span>
               </div>
               <ul style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 32 }}>
                 {p.features.map(f => (
                   <li key={f} style={{ display: 'flex', gap: 10, fontSize: 14, color: p.popular ? 'rgba(255,255,255,0.78)' : '#4B5563', alignItems: 'flex-start' }}>
-                    <span style={{ color: '#D89B2C', flexShrink: 0 }}>✓</span>{f}
+                    <span style={{ color: '#D8A54B', flexShrink: 0 }}>✓</span>{f}
                   </li>
                 ))}
               </ul>
               <a href="#" style={{
                 display: 'block', textAlign: 'center',
-                background: p.popular ? 'linear-gradient(135deg, #D89B2C, #f0b84a)' : 'transparent',
-                border: p.popular ? 'none' : '2px solid #1B2A4A',
-                color: p.popular ? '#1B2A4A' : '#1B2A4A',
+                background: p.popular ? 'linear-gradient(135deg, #D8A54B, #E8C77D)' : 'transparent',
+                border: p.popular ? 'none' : '2px solid #021B41',
+                color: p.popular ? '#021B41' : '#021B41',
                 padding: '13px', borderRadius: 12, fontWeight: 700, fontSize: 15, textDecoration: 'none',
               }}>{p.cta}</a>
             </div>
@@ -3389,10 +3389,10 @@ function Stories() {
       <div style={{ maxWidth: 1100, margin: '0 auto' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 48, flexWrap: 'wrap', gap: 16 }}>
           <div>
-            <span style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.15em', color: '#D89B2C', textTransform: 'uppercase' }}>Wellness Journal</span>
-            <h2 style={{ fontFamily: 'Fraunces, serif', fontSize: 'clamp(26px, 3vw, 40px)', fontWeight: 700, color: '#1B2A4A', marginTop: 8, letterSpacing: '-0.5px' }}>Read Our Stories</h2>
+            <span style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.15em', color: '#D8A54B', textTransform: 'uppercase' }}>Wellness Journal</span>
+            <h2 style={{ fontFamily: 'Fraunces, serif', fontSize: 'clamp(26px, 3vw, 40px)', fontWeight: 700, color: '#021B41', marginTop: 8, letterSpacing: '-0.5px' }}>Read Our Stories</h2>
           </div>
-          <a href="#" style={{ fontSize: 14, fontWeight: 600, color: '#D89B2C', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6 }}>View All Stories →</a>
+          <a href="#" style={{ fontSize: 14, fontWeight: 600, color: '#D8A54B', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6 }}>View All Stories →</a>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 28 }} className="stories-grid">
@@ -3406,12 +3406,12 @@ function Stories() {
               </div>
               <div style={{ padding: '24px 24px 28px' }}>
                 <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 14 }}>
-                  <span style={{ background: 'rgba(216,155,44,0.12)', color: '#D89B2C', fontSize: 11, fontWeight: 700, padding: '4px 12px', borderRadius: 50, letterSpacing: '0.08em' }}>{p.tag}</span>
+                  <span style={{ background: 'rgba(216,155,44,0.12)', color: '#D8A54B', fontSize: 11, fontWeight: 700, padding: '4px 12px', borderRadius: 50, letterSpacing: '0.08em' }}>{p.tag}</span>
                   <span style={{ fontSize: 12, color: '#9CA3AF' }}>{p.date}</span>
                 </div>
-                <h3 style={{ fontFamily: 'Fraunces, serif', fontSize: 17, fontWeight: 600, color: '#1B2A4A', lineHeight: 1.45, marginBottom: 10 }}>{p.title}</h3>
+                <h3 style={{ fontFamily: 'Fraunces, serif', fontSize: 17, fontWeight: 600, color: '#021B41', lineHeight: 1.45, marginBottom: 10 }}>{p.title}</h3>
                 <p style={{ fontSize: 13, color: '#6B7280', lineHeight: 1.65 }}>{p.excerpt}</p>
-                <a href="#" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, marginTop: 18, fontSize: 13, fontWeight: 600, color: '#1B2A4A', textDecoration: 'none' }}>Read Story <span>→</span></a>
+                <a href="#" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, marginTop: 18, fontSize: 13, fontWeight: 600, color: '#021B41', textDecoration: 'none' }}>Read Story <span>→</span></a>
               </div>
             </article>
           ))}
@@ -3478,7 +3478,7 @@ function FAQ() {
           width: '360px',
           height: '360px',
           borderRadius: '50%',
-          border: '1.5px solid rgba(217, 164, 65, 0.16)',
+          border: '1.5px solid rgba(216, 165, 75, 0.16)',
           pointerEvents: 'none',
         }}
       />
@@ -3490,7 +3490,7 @@ function FAQ() {
           width: '260px',
           height: '260px',
           borderRadius: '50%',
-          border: '1.5px dashed rgba(217, 164, 65, 0.14)',
+          border: '1.5px dashed rgba(216, 165, 75, 0.14)',
           pointerEvents: 'none',
         }}
       />
@@ -3502,7 +3502,7 @@ function FAQ() {
           width: '14px',
           height: '14px',
           borderRadius: '50%',
-          border: '1.5px solid #D9A441',
+          border: '1.5px solid #D8A54B',
           opacity: 0.45,
           pointerEvents: 'none',
         }}
@@ -3524,7 +3524,7 @@ function FAQ() {
         {Array.from({ length: 24 }).map((_, i) => (
           <div
             key={`tr-faq-dot-${i}`}
-            style={{ width: '4px', height: '4px', borderRadius: '50%', backgroundColor: '#D9A441' }}
+            style={{ width: '4px', height: '4px', borderRadius: '50%', backgroundColor: '#D8A54B' }}
           />
         ))}
       </div>
@@ -3545,7 +3545,7 @@ function FAQ() {
         {Array.from({ length: 16 }).map((_, i) => (
           <div
             key={`br-faq-dot-${i}`}
-            style={{ width: '4px', height: '4px', borderRadius: '50%', backgroundColor: '#D9A441' }}
+            style={{ width: '4px', height: '4px', borderRadius: '50%', backgroundColor: '#D8A54B' }}
           />
         ))}
       </div>
@@ -3564,28 +3564,28 @@ function FAQ() {
               marginBottom: '12px',
             }}
           >
-            <span style={{ width: '45px', height: '1px', backgroundColor: '#D9A441', opacity: 0.5 }} />
+            <span style={{ width: '45px', height: '1px', backgroundColor: '#D8A54B', opacity: 0.5 }} />
             <div
               style={{
                 width: '34px',
                 height: '34px',
                 borderRadius: '50%',
                 backgroundColor: '#FAF5EC',
-                border: '1.5px solid #D9A441',
+                border: '1.5px solid #D8A54B',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: '0 4px 12px rgba(217, 164, 65, 0.15)',
+                boxShadow: '0 4px 12px rgba(216, 165, 75, 0.15)',
               }}
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D9A441" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D8A54B" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="10" />
                 <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
                 <line x1="12" y1="17" x2="12.01" y2="17" />
               </svg>
             </div>
-            <span style={{ width: '45px', height: '1px', backgroundColor: '#D9A441', opacity: 0.5 }} />
-            <span style={{ width: '4px', height: '4px', borderRadius: '50%', backgroundColor: '#D9A441', opacity: 0.7 }} />
+            <span style={{ width: '45px', height: '1px', backgroundColor: '#D8A54B', opacity: 0.5 }} />
+            <span style={{ width: '4px', height: '4px', borderRadius: '50%', backgroundColor: '#D8A54B', opacity: 0.7 }} />
           </div>
 
           {/* Tagline */}
@@ -3594,7 +3594,7 @@ function FAQ() {
               fontSize: '12.5px',
               fontWeight: '700',
               letterSpacing: '0.22em',
-              color: '#D9A441',
+              color: '#D8A54B',
               textTransform: 'uppercase',
               marginBottom: '10px',
             }}
@@ -3608,12 +3608,12 @@ function FAQ() {
               fontFamily: "'Playfair Display', Georgia, serif",
               fontSize: 'clamp(34px, 4.2vw, 52px)',
               fontWeight: '700',
-              color: '#06244E',
+              color: '#021B41',
               margin: '0 0 14px 0',
               letterSpacing: '-0.5px',
             }}
           >
-            Frequently <span style={{ fontStyle: 'italic', color: '#D9A441' }}>Asked</span> Questions
+            Frequently <span style={{ fontStyle: 'italic', color: '#D8A54B' }}>Asked</span> Questions
           </h2>
 
           {/* Lotus Separator: ── 🪷 ── */}
@@ -3626,13 +3626,13 @@ function FAQ() {
               marginBottom: '18px',
             }}
           >
-            <span style={{ width: '36px', height: '1px', backgroundColor: '#D9A441', opacity: 0.5 }} />
-            <svg width="20" height="16" viewBox="0 0 24 24" fill="none" stroke="#D9A441" strokeWidth="2">
+            <span style={{ width: '36px', height: '1px', backgroundColor: '#D8A54B', opacity: 0.5 }} />
+            <svg width="20" height="16" viewBox="0 0 24 24" fill="none" stroke="#D8A54B" strokeWidth="2">
               <path d="M12 3c-1.5 3-4 6.5-7 9 3 1.5 6 1.5 7-2 1 3.5 4 3.5 7 2-3-2.5-5.5-6-7-9z" />
               <path d="M12 10c-2.5 3.5-5.5 6-8.5 7 3.5 2 7 1.5 8.5-1 1.5 2.5 5 3 8.5 1-3-1-6-3.5-8.5-7z" />
               <path d="M12 17v4" />
             </svg>
-            <span style={{ width: '36px', height: '1px', backgroundColor: '#D9A441', opacity: 0.5 }} />
+            <span style={{ width: '36px', height: '1px', backgroundColor: '#D8A54B', opacity: 0.5 }} />
           </div>
 
           {/* Subtitle */}
@@ -3661,12 +3661,12 @@ function FAQ() {
                 style={{
                   backgroundColor: '#FFFFFF',
                   borderRadius: '20px',
-                  border: isOpen ? '1.5px solid #D9A441' : '1.5px solid #EFE8DD',
+                  border: isOpen ? '1.5px solid #D8A54B' : '1.5px solid #EFE8DD',
                   overflow: 'hidden',
                   transition: 'all 0.3s ease',
                   boxShadow: isOpen
-                    ? '0 12px 30px rgba(217, 164, 65, 0.12)'
-                    : '0 6px 20px rgba(6, 36, 78, 0.04)',
+                    ? '0 12px 30px rgba(216, 165, 75, 0.12)'
+                    : '0 6px 20px rgba(2, 27, 65, 0.04)',
                 }}
               >
                 <button
@@ -3691,7 +3691,7 @@ function FAQ() {
                         width: '38px',
                         height: '38px',
                         borderRadius: '50%',
-                        border: '1.5px solid rgba(217, 164, 65, 0.4)',
+                        border: '1.5px solid rgba(216, 165, 75, 0.4)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -3699,7 +3699,7 @@ function FAQ() {
                         backgroundColor: '#FAF5EC',
                       }}
                     >
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D9A441" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D8A54B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
                         <path d="M12 8v3M12 14h.01" />
                       </svg>
@@ -3710,7 +3710,7 @@ function FAQ() {
                       style={{
                         fontSize: '16.5px',
                         fontWeight: '700',
-                        color: '#06244E',
+                        color: '#021B41',
                         letterSpacing: '-0.2px',
                       }}
                     >
@@ -3723,7 +3723,7 @@ function FAQ() {
                     style={{
                       fontSize: '26px',
                       fontWeight: '300',
-                      color: '#D9A441',
+                      color: '#D8A54B',
                       lineHeight: 1,
                       flexShrink: 0,
                       transform: isOpen ? 'rotate(45deg)' : 'none',
@@ -3760,22 +3760,22 @@ function FAQ() {
 // ─── CTA Band ─────────────────────────────────────────────────────────────────
 function CTABand() {
   return (
-    <section style={{ background: '#D89B2C', padding: '80px 24px', overflow: 'hidden', position: 'relative' }}>
+    <section style={{ background: '#D8A54B', padding: '80px 24px', overflow: 'hidden', position: 'relative' }}>
       {/* Soft decorative circle */}
       <div style={{ position: 'absolute', right: -80, top: '50%', transform: 'translateY(-50%)', width: 440, height: 440, borderRadius: '50%', background: 'rgba(27,42,74,0.12)', pointerEvents: 'none' }} />
 
       <div style={{ maxWidth: 1100, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr auto', gap: 60, alignItems: 'center', position: 'relative' }} className="cta-grid">
         <div>
-          <h2 style={{ fontFamily: 'Fraunces, serif', fontSize: 'clamp(28px, 3.5vw, 48px)', fontWeight: 700, color: '#1B2A4A', lineHeight: 1.1, marginBottom: 16, letterSpacing: '-0.5px' }}>
+          <h2 style={{ fontFamily: 'Fraunces, serif', fontSize: 'clamp(28px, 3.5vw, 48px)', fontWeight: 700, color: '#021B41', lineHeight: 1.1, marginBottom: 16, letterSpacing: '-0.5px' }}>
             Let's Try Positive Mind Gym,<br /><em>for Free.</em>
           </h2>
           <p style={{ fontSize: 16, color: 'rgba(27,42,74,0.72)', marginBottom: 32 }}>Download the app and start your first practice today. No credit card needed.</p>
           <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
-            <a href="#" style={{ display: 'flex', alignItems: 'center', gap: 10, background: '#1B2A4A', color: '#fff', padding: '13px 24px', borderRadius: 14, fontWeight: 600, fontSize: 14, textDecoration: 'none' }}>
+            <a href="#" style={{ display: 'flex', alignItems: 'center', gap: 10, background: '#021B41', color: '#fff', padding: '13px 24px', borderRadius: 14, fontWeight: 600, fontSize: 14, textDecoration: 'none' }}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
               App Store
             </a>
-            <a href="#" style={{ display: 'flex', alignItems: 'center', gap: 10, background: '#1B2A4A', color: '#fff', padding: '13px 24px', borderRadius: 14, fontWeight: 600, fontSize: 14, textDecoration: 'none' }}>
+            <a href="#" style={{ display: 'flex', alignItems: 'center', gap: 10, background: '#021B41', color: '#fff', padding: '13px 24px', borderRadius: 14, fontWeight: 600, fontSize: 14, textDecoration: 'none' }}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M3.18 23.76c.31.17.65.24 1 .22l12.57-12.57L13.18 7.84 3.18 23.76zm17.7-10.93c.37-.65.37-1.71 0-2.36L18.5 8.7l-3.32 3.32 3.32 3.32 2.38-2.51zM3 1.02A1.38 1.38 0 0 0 2.18 2.2v19.6a1.38 1.38 0 0 0 .82 1.18L16.12 9.85 3 1.02zm11.35 8.83L3.18.24C2.83.22 2.49.29 2.18.46l13 12.91 3.17-3.52z"/></svg>
               Google Play
             </a>
@@ -3804,11 +3804,11 @@ function Newsletter() {
   return (
     <section style={{ background: '#F4F1EA', padding: '60px 24px', borderTop: '1px solid rgba(27,42,74,0.08)' }}>
       <div style={{ maxWidth: 560, margin: '0 auto', textAlign: 'center' }}>
-        <h3 style={{ fontFamily: 'Fraunces, serif', fontSize: 26, fontWeight: 700, color: '#1B2A4A', marginBottom: 10 }}>Subscribe to Our Newsletter</h3>
+        <h3 style={{ fontFamily: 'Fraunces, serif', fontSize: 26, fontWeight: 700, color: '#021B41', marginBottom: 10 }}>Subscribe to Our Newsletter</h3>
         <p style={{ fontSize: 15, color: '#6B7280', marginBottom: 28 }}>Weekly tips for a calmer, stronger mind. No spam — ever.</p>
         {submitted ? (
-          <div style={{ background: '#fff', border: '1px solid rgba(216,155,44,0.3)', borderRadius: 14, padding: '20px 32px', color: '#1B2A4A', fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D9A441" strokeWidth="2"><path d="M12 3c-1.5 3-4 6.5-7 9 3 1.5 6 1.5 7-2 1 3.5 4 3.5 7 2-3-2.5-5.5-6-7-9z"/><path d="M12 10c-2.5 3.5-5.5 6-8.5 7 3.5 2 7 1.5 8.5-1 1.5 2.5 5 3 8.5 1-3-1-6-3.5-8.5-7z"/><path d="M12 17v4"/></svg>
+          <div style={{ background: '#fff', border: '1px solid rgba(216,155,44,0.3)', borderRadius: 14, padding: '20px 32px', color: '#021B41', fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D8A54B" strokeWidth="2"><path d="M12 3c-1.5 3-4 6.5-7 9 3 1.5 6 1.5 7-2 1 3.5 4 3.5 7 2-3-2.5-5.5-6-7-9z"/><path d="M12 10c-2.5 3.5-5.5 6-8.5 7 3.5 2 7 1.5 8.5-1 1.5 2.5 5 3 8.5 1-3-1-6-3.5-8.5-7z"/><path d="M12 17v4"/></svg>
             Thank you! You'll hear from us soon.
           </div>
         ) : (
@@ -3819,9 +3819,9 @@ function Newsletter() {
               onChange={e => setEmail(e.target.value)}
               placeholder="your@email.com"
               required
-              style={{ flex: '1 1 200px', minWidth: 0, padding: '14px 18px', borderRadius: 12, border: '1.5px solid rgba(27,42,74,0.15)', background: '#fff', fontSize: 15, color: '#1B2A4A', outline: 'none' }}
+              style={{ flex: '1 1 200px', minWidth: 0, padding: '14px 18px', borderRadius: 12, border: '1.5px solid rgba(27,42,74,0.15)', background: '#fff', fontSize: 15, color: '#021B41', outline: 'none' }}
             />
-            <button type="submit" style={{ background: '#1B2A4A', color: '#fff', padding: '14px 24px', borderRadius: 12, border: 'none', fontWeight: 700, fontSize: 15, cursor: 'pointer', whiteSpace: 'nowrap' }}>Subscribe</button>
+            <button type="submit" style={{ background: '#021B41', color: '#fff', padding: '14px 24px', borderRadius: 12, border: 'none', fontWeight: 700, fontSize: 15, cursor: 'pointer', whiteSpace: 'nowrap' }}>Subscribe</button>
           </form>
         )}
       </div>

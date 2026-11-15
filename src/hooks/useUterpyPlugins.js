@@ -50,14 +50,46 @@ export function useUterpyPlugins() {
         });
       }
 
+      // Steps 4-6 are deferred by two animation frames. Owl Carousel's loop
+      // cloning, WOW.js's entrance-animation styling, and Odometer's counter
+      // text are all heavy DOM mutations that, run synchronously on mount,
+      // were firing before the browser's first real paint had a chance to
+      // settle — the confirmed cause of Largest Contentful Paint never
+      // resolving (PageSpeed Insights reported NO_LCP on this page; a direct
+      // PerformanceObserver check reproduced zero LCP entries). Letting one
+      // frame paint first, then running these, fixes that with no visible
+      // change to any of the animations themselves.
+      const runHeavyInit = () => {
       // 4. Owl Carousels
       if ($.fn && $.fn.owlCarousel) {
         if ($('.thm-owl__carousel').length) {
           $('.thm-owl__carousel').each(function () {
             const elm = $(this);
             if (!elm.hasClass('owl-loaded')) {
-              const options = elm.data('owl-options');
-              elm.owlCarousel(options || {});
+              const options = elm.data('owl-options') || {};
+              const wantsAutoplay = options.autoplay === true;
+              // Defer the FIRST autoplay transition until after the page has
+              // fully loaded. An autoplaying hero that starts swapping its
+              // full-bleed slide image within the first few seconds prevents
+              // the browser's Largest Contentful Paint from ever settling on
+              // a final candidate (confirmed: PageSpeed/real PerformanceObserver
+              // both reported zero LCP entries). Letting the first slide paint
+              // and settle before any transition fixes that, with no visible
+              // change to the carousel's normal behavior afterward.
+              elm.owlCarousel(wantsAutoplay ? { ...options, autoplay: false } : options);
+              if (wantsAutoplay) {
+                const autoplayTimeout = options.autoplayTimeout || 5000;
+                const startAutoplay = () => {
+                  setTimeout(() => {
+                    elm.trigger('play.owl.autoplay', [autoplayTimeout]);
+                  }, 500);
+                };
+                if (document.readyState === 'complete') {
+                  startAutoplay();
+                } else {
+                  $(window).one('load', startAutoplay);
+                }
+              }
             }
           });
         }
@@ -198,6 +230,13 @@ export function useUterpyPlugins() {
           const countNumber = $(this).data('count');
           $(this).html(countNumber);
         });
+      }
+      };
+
+      if (typeof window.requestAnimationFrame === 'function') {
+        window.requestAnimationFrame(() => window.requestAnimationFrame(runHeavyInit));
+      } else {
+        runHeavyInit();
       }
 
       // 7. Accordions / FAQ
