@@ -159,7 +159,7 @@ export default function BlogDetails() {
           ]}
         />
         <HeaderOne />
-        <PageHeader title="Blog Details" breadcrumb="Blog Details" />
+        <PageHeader title={postDetails.headerTitle || post.title} breadcrumb="Blog Details" />
 
         {/* Start Blog Details */}
         <section className="blog-details">

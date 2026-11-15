@@ -558,7 +558,7 @@ export async function resolvePageMetadata(pathname = '/') {
       schemas: [
         generateBreadcrumbSchema([
           { name: 'Home', path: '/' },
-          { name: 'Videos on Talks', path: '/videos' }
+          { name: 'Videos', path: '/videos' }
         ])
       ]
     };
