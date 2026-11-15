@@ -405,7 +405,7 @@ export async function saveDbBlog(blogData) {
     };
     await conn.query(
       `UPDATE blogs SET slug=?, title=?, excerpt=?, content=?, category=?, image=?, author=?, status=?, readTime=?, details=?, seo=?, updatedAt=?, publishedAt=? WHERE id=?`,
-      [merged.slug, merged.title, merged.excerpt, merged.content, merged.category, merged.image, merged.author, merged.status, merged.readTime, JSON.stringify(merged.details || null), JSON.stringify(merged.seo || {}), JSON.stringify(eventExtra(merged)), toMysqlDatetime(merged.updatedAt), merged.publishedAt ? toMysqlDatetime(merged.publishedAt) : null, existing.id]
+      [merged.slug, merged.title, merged.excerpt, merged.content, merged.category, merged.image, merged.author, merged.status, merged.readTime, JSON.stringify(merged.details || null), JSON.stringify(merged.seo || {}), toMysqlDatetime(merged.updatedAt), merged.publishedAt ? toMysqlDatetime(merged.publishedAt) : null, existing.id]
     );
     return merged;
   }
@@ -440,7 +440,7 @@ export async function saveDbBlog(blogData) {
   await conn.query(
     `INSERT INTO blogs (id, slug, title, excerpt, content, category, image, author, status, readTime, details, seo, createdAt, updatedAt, publishedAt)
      VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
-    [record.id, record.slug, record.title, record.excerpt, record.content, record.category, record.image, record.author, record.status, record.readTime, JSON.stringify(record.details), JSON.stringify(record.seo), JSON.stringify(eventExtra(eventData)), toMysqlDatetime(record.createdAt), toMysqlDatetime(record.updatedAt), record.publishedAt ? toMysqlDatetime(record.publishedAt) : null]
+    [record.id, record.slug, record.title, record.excerpt, record.content, record.category, record.image, record.author, record.status, record.readTime, JSON.stringify(record.details), JSON.stringify(record.seo), toMysqlDatetime(record.createdAt), toMysqlDatetime(record.updatedAt), record.publishedAt ? toMysqlDatetime(record.publishedAt) : null]
   );
   return record;
 }
