@@ -4936,6 +4936,89 @@ Therapy One
   transform: translateX(-50%) translateY(-50%) scale(1.0);
 }
 
+/* Moved out of a runtime-injected <style> tag in TestimonialsSection.jsx:
+   that tag being torn down and recreated on every re-render of the
+   component was forcing the browser to repeatedly recompute styles for
+   every element these !important rules touch, which was preventing
+   Largest Contentful Paint from ever resolving on the homepage (confirmed
+   by bisection — removing just the inline <style> tag fixed it). Static
+   CSS has no such re-injection, so it carries the same overrides safely. */
+.testimonial-carousel__one .owl-stage {
+  display: flex !important;
+}
+.testimonial-carousel__one .owl-item {
+  display: flex !important;
+  height: auto !important;
+}
+.testimonial-carousel__one .owl-item > div {
+  display: flex !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+.testimonial-one__single {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 360px !important;
+  box-sizing: border-box !important;
+  padding: 40px 35px 35px 35px !important;
+  background-color: #ffffff !important;
+  border: 1px solid #e3e3e3 !important;
+  transition: all 0.3s ease !important;
+}
+.testimonial-one__single-text {
+  flex: 1 1 auto !important;
+  display: flex !important;
+  align-items: flex-start !important;
+  font-size: 18px !important;
+  line-height: 32px !important;
+  margin-bottom: 25px !important;
+  color: #4a4a4a !important;
+}
+.testimonial-one__client-info {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  border-top: 1px solid #e8e2e1 !important;
+  padding-top: 25px !important;
+  margin-top: auto !important;
+  width: 100% !important;
+}
+.testimonial-one__client-details {
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+}
+.testimonial-one__client-content {
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+}
+.testimonial-one__client-content h3 {
+  color: var(--uterpy-black, #1b263b) !important;
+  font-size: 20px !important;
+  line-height: 26px !important;
+  font-weight: 700 !important;
+  margin: 0 0 4px 0 !important;
+}
+.testimonial-one__client-content p {
+  color: var(--uterpy-base, #8b6b61) !important;
+  font-size: 14px !important;
+  line-height: 20px !important;
+  margin: 0 !important;
+}
+.testimonial-one__quote {
+  flex-shrink: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.testimonial-one__quote span {
+  font-size: 36px !important;
+  color: var(--uterpy-base, #8b6b61) !important;
+  opacity: 0.85 !important;
+}
+
 .carousel-control-block__outer {
   position: absolute;
   top: 300px;
