@@ -343,7 +343,7 @@ export default function About() {
                   <div className="therapy-one__left">
                     <div className="sec-title">
                       <div className="sec-title__tagline">
-                        <h6>{aboutContent.therapy.tagline}</h6>
+                        <span>{aboutContent.therapy.tagline}</span>
                       </div>
                       <h2 className="sec-title__title">
                         {aboutContent.therapy.title.split('\n').map((line, lIdx, arr) => (
@@ -355,9 +355,9 @@ export default function About() {
                       </h2>
                       {aboutContent.therapy.founderInfo && (
                         <div className="therapy-one__founder-badge" style={{ marginTop: '14px' }}>
-                          <h4 style={{ fontSize: '18px', fontWeight: '700', color: 'var(--uterpy-black)', margin: '0 0 2px' }}>
+                          <h3 style={{ fontSize: '18px', fontWeight: '700', color: 'var(--uterpy-black)', margin: '0 0 2px' }}>
                             {aboutContent.therapy.founderInfo.name}
-                          </h4>
+                          </h3>
                           <p style={{ fontSize: '13.5px', fontWeight: '600', color: 'var(--uterpy-base)', margin: 0, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                             {aboutContent.therapy.founderInfo.role}
                           </p>
@@ -431,7 +431,7 @@ export default function About() {
           <div className="container">
             <div className="sec-title text-center">
               <div className="sec-title__tagline">
-                <h6>{aboutContent.team.tagline}</h6>
+                <span>{aboutContent.team.tagline}</span>
               </div>
               <h2 className="sec-title__title">
                 {aboutContent.team.title.split('\n').map((line, lIdx, arr) => (

@@ -155,9 +155,7 @@ export default function HomeOne() {
                       <span className={item.icon}></span>
                     </div>
                     <div className="intro-one__single-content">
-                      <h2>
-                        <a href="#">{item.title}</a>
-                      </h2>
+                      <h2 style={{ color: 'var(--uterpy-black)' }}>{item.title}</h2>
                       <p>{item.description}</p>
                     </div>
                   </div>
@@ -173,7 +171,7 @@ export default function HomeOne() {
           <div className="container">
             <div className="sec-title text-center">
               <div className="sec-title__tagline">
-                <h6>{homeContent.services.tagline}</h6>
+                <span>{homeContent.services.tagline}</span>
               </div>
               <h2 className="sec-title__title">
                 {homeContent.services.title.split('\n').map((line, lIdx, arr) => (
@@ -357,7 +355,7 @@ export default function HomeOne() {
           <div className="container" style={{ position: 'relative' }}>
             <div className="sec-title text-center" style={{ marginBottom: '45px' }}>
               <div className="sec-title__tagline">
-                <h6>{homeContent.caseStudies.tagline}</h6>
+                <span>{homeContent.caseStudies.tagline}</span>
               </div>
               <h2 className="sec-title__title">{homeContent.caseStudies.title}</h2>
             </div>
@@ -552,7 +550,7 @@ export default function HomeOne() {
                   <div className="therapy-one__left">
                     <div className="sec-title">
                       <div className="sec-title__tagline">
-                        <h6>{homeContent.therapy.tagline}</h6>
+                        <span>{homeContent.therapy.tagline}</span>
                       </div>
                       <h2 className="sec-title__title">
                         {homeContent.therapy.title.split('\n').map((line, lIdx, arr) => (
@@ -564,9 +562,9 @@ export default function HomeOne() {
                       </h2>
                       {homeContent.therapy.founderInfo && (
                         <div className="therapy-one__founder-badge" style={{ marginTop: '14px' }}>
-                          <h4 style={{ fontSize: '18px', fontWeight: '700', color: 'var(--uterpy-black)', margin: '0 0 2px' }}>
+                          <h3 style={{ fontSize: '18px', fontWeight: '700', color: 'var(--uterpy-black)', margin: '0 0 2px' }}>
                             {homeContent.therapy.founderInfo.name}
-                          </h4>
+                          </h3>
                           <p style={{ fontSize: '13.5px', fontWeight: '600', color: 'var(--uterpy-base)', margin: 0, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                             {homeContent.therapy.founderInfo.role}
                           </p>
@@ -651,7 +649,7 @@ export default function HomeOne() {
           <div className="container">
             <div className="sec-title text-center">
               <div className="sec-title__tagline">
-                <h6>{homeContent.blog.tagline}</h6>
+                <span>{homeContent.blog.tagline}</span>
               </div>
               <h2 className="sec-title__title">
                 {homeContent.blog.title.split('\n').map((line, lIdx, arr) => (

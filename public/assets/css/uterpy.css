@@ -408,7 +408,9 @@ Custom Cursor
   margin-bottom: 13px;
 }
 
-.sec-title__tagline h6 {
+.sec-title__tagline h6,
+.sec-title__tagline span {
+  display: block;
   color: var(--uterpy-base);
   font-size: 16px;
   line-height: 26px;
@@ -4864,7 +4866,7 @@ Therapy One
   margin-left: 15px;
 }
 
-.testimonial-one__client-content h4 {
+.testimonial-one__client-content h3 {
   color: var(--uterpy-black);
   font-size: 20px;
   line-height: 30px;
@@ -8591,7 +8593,7 @@ Services Details
   transition-delay: 0.1s;
 }
 
-.services-details__faq .accrodion-title h4 {
+.services-details__faq .accrodion-title h3 {
   position: relative;
   margin: 0;
   font-size: 18px;
@@ -8611,11 +8613,11 @@ Services Details
   background-color: #fcf8f8;
 }
 
-.services-details__faq .accrodion.active .accrodion-title h4 {
+.services-details__faq .accrodion.active .accrodion-title h3 {
   color: var(--uterpy-black);
 }
 
-.services-details__faq .accrodion-title h4::before {
+.services-details__faq .accrodion-title h3::before {
   content: "\e935";
   font-family: 'icomoon' !important;
   font-weight: normal;
@@ -8638,7 +8640,7 @@ Services Details
   text-align: center;
 }
 
-.services-details__faq .accrodion.active .accrodion-title h4::before {
+.services-details__faq .accrodion.active .accrodion-title h3::before {
   content: "\e92f";
   color: #ffffff;
   background: var(--uterpy-base);

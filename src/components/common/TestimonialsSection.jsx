@@ -108,7 +108,7 @@ export default function TestimonialsSection({ data }) {
         <div className="sec-title">
           {testimonials.tagline && (
             <div className="sec-title__tagline">
-              <h6>{testimonials.tagline}</h6>
+              <span>{testimonials.tagline}</span>
             </div>
           )}
           {testimonials.title && (
@@ -134,7 +134,7 @@ export default function TestimonialsSection({ data }) {
                     <div className="testimonial-one__client-info">
                       <div className="testimonial-one__client-details">
                         <div className="testimonial-one__client-content">
-                          <h4>{t.name}</h4>
+                          <h3>{t.name}</h3>
                           <p>{t.role}</p>
                         </div>
                       </div>

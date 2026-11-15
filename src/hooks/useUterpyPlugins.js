@@ -161,6 +161,24 @@ export function useUterpyPlugins() {
             },
           });
         }
+
+        // 4b. Accessible names for Owl Carousel nav arrows & dots (auto-generated
+        // by the plugin with no text, which Lighthouse/axe flag as link/button-name
+        // violations). Covers every carousel on every page.
+        const labelOwlControls = function () {
+          $('.owl-carousel').each(function () {
+            const $carousel = $(this);
+            $carousel.find('.owl-prev').attr('aria-label', 'Previous slide');
+            $carousel.find('.owl-next').attr('aria-label', 'Next slide');
+            $carousel.find('.owl-dot').each(function (idx) {
+              $(this).attr('aria-label', 'Go to slide ' + (idx + 1));
+            });
+          });
+        };
+        labelOwlControls();
+        $(document)
+          .off('initialized.owl.carousel changed.owl.carousel', '.owl-carousel')
+          .on('initialized.owl.carousel changed.owl.carousel', '.owl-carousel', labelOwlControls);
       }
 
       // 5. WOW.js entrance animations

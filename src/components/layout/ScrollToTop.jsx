@@ -10,13 +10,14 @@ export default function ScrollToTop() {
   };
 
   return (
-    <a
-      href="#"
+    <button
+      type="button"
       onClick={handleClick}
       data-target="html"
       className="scroll-to-target scroll-to-top"
+      aria-label="Scroll to top"
     >
       <i className="fa fa-angle-up"></i>
-    </a>
+    </button>
   );
 }

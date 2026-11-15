@@ -22,6 +22,13 @@ export default function FAQSection({
     setActiveIndex(prev => (prev === index ? -1 : index));
   };
 
+  // Pages without a matching FAQ catalog entry get an empty array back
+  // (intentional — see getPageFaqData): render nothing rather than an
+  // empty "Frequently Asked Questions" accordion with no questions in it.
+  if (!activeFaqs || activeFaqs.length === 0) {
+    return null;
+  }
+
   // Structured Schema for Answer Engines (AEO) and Generative Engines (GEO)
   const faqSchemaJson = {
     "@context": "https://schema.org",
@@ -73,7 +80,7 @@ export default function FAQSection({
                         itemType="https://schema.org/Question"
                       >
                         <div className="accrodion-title">
-                          <h4 itemProp="name">{faq.q}</h4>
+                          <h3 itemProp="name">{faq.q}</h3>
                         </div>
                         <div
                           className="accrodion-content"
