@@ -44,7 +44,8 @@ export const commonContent = {
       { name: "Books", path: "/resources?tab=books" },
       { name: "Affirmation Cards", path: "/resources?tab=affirmation-cards" },
       { name: "Feed", path: "/feed" },
-      { name: "Videos on Talks", path: "/videos" },
+      { name: "Blogs", path: "/blog" },
+      { name: "Videos", path: "/videos" },
       { name: "Meditation & Music", path: "/meditation" },
       { name: "Free Resources", path: "/free-resources" }
     ]

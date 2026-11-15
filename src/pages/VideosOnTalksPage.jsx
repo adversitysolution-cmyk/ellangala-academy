@@ -39,12 +39,12 @@ export default function VideosOnTalksPage() {
           structuredData={[
             generateBreadcrumbSchema([
               { name: 'Home', path: '/' },
-              { name: 'Videos on Talks', path: '/videos' }
+              { name: 'Videos', path: '/videos' }
             ])
           ]}
         />
         <HeaderOne />
-        <PageHeader title="Videos on Talks" breadcrumb="Videos on Talks" />
+        <PageHeader title="Videos" breadcrumb="Videos" />
 
         {/* Start Videos Page */}
         <section style={{ paddingTop: '60px', paddingBottom: '90px', backgroundColor: '#FAF8F5' }}>
@@ -56,7 +56,7 @@ export default function VideosOnTalksPage() {
                 <span>KEYNOTE TALKS &amp; PRESENTATIONS</span>
               </div>
               <h2 style={{ fontSize: '32px', fontWeight: '800', color: '#0F231B', marginBottom: '12px' }}>
-                Videos on Talks by Dr. Naveen Ellangala
+                Videos by Dr. Naveen Ellangala
               </h2>
               <p style={{ fontSize: '15px', color: '#64748B', lineHeight: '1.65' }}>
                 Explore video presentations, keynote addresses, free mind training lectures, and masterclasses on Positive Psychology and holistic wellbeing.
