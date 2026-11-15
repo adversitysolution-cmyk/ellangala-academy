@@ -1,38 +1,21 @@
-# Ellangala’s Academy — Official Knowledge Dossier
+# Ellangala’s Academy
 
 > Ellangala’s Academy is an educational and mental wellness institution founded by Dr. Naveen Ellangala, dedicated to evidence-informed Positive Psychology, emotional resilience, mind training, personal growth, and practical philosophy for purposeful living.
 
-## Primary Entities
-- **Name**: Ellangala’s Academy (Ellangala’s Academy for Positive Psychology & Mind Training)
-- **Founder**: Dr. Naveen Ellangala (Ph.D. in Positive Psychology, Author of 17 books, Certified NLP Counselor, CBT Practitioner)
-- **Official Website**: https://ellangala.com
-- **Headquarters**: 410, C Block, Radiant Karel, Nayandahalli, Bengaluru, Karnataka – 560039, India
-- **Contact Email**: info@ellangala.com
-- **Helpline**: +91-99867-44700
-- **Primary Service Area**: Karnataka, India (headquartered in Bengaluru), with additional reach into Kerala. Programs and publications are offered in both English and Kannada.
-- **Doctoral Research Basis**: An indigenous PERMA model of Positive Psychology grounded in the literary works of Purandaradasa, the 16th-century Haridasa saint-composer revered in Karnataka's cultural and musical heritage — a distinctly Kannada cultural and psychological lens not found elsewhere.
+Founded by Dr. Naveen Ellangala (Ph.D. in Positive Psychology, Author of 17 books, Certified NLP Counselor, CBT Practitioner). Headquartered at 410, C Block, Radiant Karel, Nayandahalli, Bengaluru, Karnataka – 560039, India. Contact: info@ellangala.com, +91-99867-44700. Primary service area is Karnataka, India, with additional reach into Kerala; programs and publications are offered in both English and Kannada, including a dedicated Kannada-language book collection. Doctoral research formulates an indigenous PERMA model of Positive Psychology grounded in the literary works of Purandaradasa, the 16th-century Haridasa saint-composer revered in Karnataka’s cultural and musical heritage.
 
-## Core Offerings & Methodologies
-- **Positive Psychology MindGym**: A daily mental fitness regimen combining mindfulness routines, cognitive reframing, habit tracking, and emotional hygiene exercises.
-- **Doctoral Research**: Dr. Naveen Ellangala formulated an indigenous PERMA model of Positive Psychology grounded in the literary compositions of 16th-century saint Purandaradasa.
-- **Positive Workshops**: Experiential learning on Stress Mastery, Emotional Intelligence, Teacher Transformation, Mindful Parenting, and Student Excellence.
-- **Positive Mentoring**: Confidential 1-on-1 personalized guidance for individuals, professionals, students, and parents.
-- **Publications & Books**: 17 authored books by Dr. Naveen Ellangala and daily positive affirmation decks, including a dedicated Kannada-language collection covering Positive Psychology, parenting, youth self-development, and life reflections.
-- **Community Feed**: Daily wisdom, reflections, and guided audio mind workouts at https://ellangala.com/feed.
-- **Bhagavad Gita for a Meaningful Life (Free Workbook)**: A free downloadable reflection workbook by Dr. Naveen Ellangala, taking readers chapter by chapter through the Bhagavad Gita from spiritual and psychological perspectives, available in English and Kannada PDF at https://ellangala.com/free-resources.
-- **Videos on Talks**: Free keynote talks, masterclasses, and mind training video lectures by Dr. Naveen Ellangala at https://ellangala.com/videos.
+## Core Offerings & Pages
 
-## Canonical URLs
-- Home: https://ellangala.com/
-- About: https://ellangala.com/about
-- Founder Profile: https://ellangala.com/founder
-- Research: https://ellangala.com/research
-- Workshops: https://ellangala.com/positive-workshops
-- Mentoring: https://ellangala.com/positive-mentoring
-- Positive MindGym: https://ellangala.com/mindgym
-- Store & Books: https://ellangala.com/shop
-- Daily Feed: https://ellangala.com/feed
-- Bhagavad Gita for a Meaningful Life (Free Workbook): https://ellangala.com/free-resources
-- Videos on Talks: https://ellangala.com/videos
-- FAQ: https://ellangala.com/faq
-- Contact: https://ellangala.com/contact
+- [Home](https://ellangala.com/)
+- [About](https://ellangala.com/about)
+- [Founder Profile](https://ellangala.com/founder): Dr. Naveen Ellangala’s biography, credentials, and vision.
+- [Doctoral Research](https://ellangala.com/research): A PERMA model of Positive Psychology grounded in the literary works of Purandaradasa.
+- [Positive Workshops](https://ellangala.com/positive-workshops): Experiential learning on Stress Mastery, Emotional Intelligence, Teacher Transformation, Mindful Parenting, and Student Excellence, conducted across Bengaluru and Karnataka.
+- [Positive Mentoring](https://ellangala.com/positive-mentoring): Confidential 1-on-1 personalized guidance for individuals, professionals, students, and parents, in Bengaluru and online.
+- [Positive MindGym](https://ellangala.com/mindgym): A daily mental fitness regimen combining mindfulness routines, cognitive reframing, habit tracking, and emotional hygiene exercises.
+- [Store & Books](https://ellangala.com/shop): 17 authored books and daily positive affirmation decks, including a dedicated Kannada-language collection.
+- [Bhagavad Gita for a Meaningful Life (Free Workbook)](https://ellangala.com/free-resources): A free chapter-by-chapter reflection workbook on the Bhagavad Gita, available in English and Kannada.
+- [Videos on Talks](https://ellangala.com/videos): Free keynote talks, masterclasses, and mind training video lectures.
+- [Daily Feed](https://ellangala.com/feed): Daily wisdom, reflections, and guided audio mind workouts.
+- [FAQ](https://ellangala.com/faq)
+- [Contact](https://ellangala.com/contact)

@@ -57,7 +57,7 @@ export default function FAQ() {
                           style={{ cursor: 'pointer' }}
                         >
                           <div className="accrodion-title">
-                            <h4>{faq.q}</h4>
+                            <h3>{faq.q}</h3>
                           </div>
                           <div
                             className="accrodion-content"
