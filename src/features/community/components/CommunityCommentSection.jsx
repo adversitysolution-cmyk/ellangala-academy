@@ -8,6 +8,7 @@ import { useAdminAuth } from '../../../admin/context/AdminAuthContext';
 export default function CommunityCommentSection({ postId, onCommentAdded }) {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [visibleCount, setVisibleCount] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [content, setContent] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
@@ -90,7 +91,11 @@ export default function CommunityCommentSection({ postId, onCommentAdded }) {
         content: textToSubmit
       });
 
-      setComments(prev => [...prev, newComment]);
+      setComments(prev => {
+        const next = [...prev, newComment];
+        setVisibleCount(next.length);
+        return next;
+      });
       setContent('');
       sessionStorage.removeItem(`pending_comment_${postId}`);
       if (onCommentAdded) onCommentAdded();
@@ -146,7 +151,7 @@ export default function CommunityCommentSection({ postId, onCommentAdded }) {
         </div>
       ) : (
         <div className="community-comments-list">
-          {comments.map(c => (
+          {comments.slice(0, visibleCount).map(c => (
             <div key={c.id} className="community-comment-item">
               {c.authorAvatar ? (
                 <img
@@ -184,6 +189,24 @@ export default function CommunityCommentSection({ postId, onCommentAdded }) {
               </div>
             </div>
           ))}
+
+          {comments.length > visibleCount && (
+            <button
+              type="button"
+              onClick={() => setVisibleCount(prev => prev + 3)}
+              style={{
+                background: 'none',
+                border: 'none',
+                padding: '4px 0 10px',
+                color: '#CA8A38',
+                fontSize: '13px',
+                fontWeight: '600',
+                cursor: 'pointer'
+              }}
+            >
+              Show more comments
+            </button>
+          )}
         </div>
       )}
 
