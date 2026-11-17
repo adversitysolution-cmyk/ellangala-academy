@@ -16,6 +16,7 @@ import {
   getAdminCommunityComments,
   updateCommunityCommentStatus,
   deleteCommunityComment,
+  recalculateCommunityPostCounts,
   getCommunitySidebarData,
   getCommunityQuoteCard,
   updateCommunityQuoteCard,
@@ -401,6 +402,16 @@ router.delete('/admin/community/posts/:id', async (req, res) => {
     res.json({ success: true, message: 'Community post deleted successfully.' });
   } else {
     res.status(404).json({ error: 'Post not found.' });
+  }
+});
+
+// PATCH /api/admin/community/posts/:id/recalculate-counts (fixes stale/seed like & comment counters to match real data)
+router.patch('/admin/community/posts/:id/recalculate-counts', async (req, res) => {
+  try {
+    const updated = await recalculateCommunityPostCounts(req.params.id);
+    res.json(updated);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
   }
 });
 
