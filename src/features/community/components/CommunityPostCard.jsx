@@ -22,7 +22,7 @@ export default function CommunityPostCard({ post, onPostUpdated }) {
   const [liked, setLiked] = useState(Boolean(post.hasLiked));
   const [likesCount, setLikesCount] = useState(post.likesCount || 0);
   const [saved, setSaved] = useState(Boolean(post.hasSaved));
-  const [showComments, setShowComments] = useState(false);
+  const [showComments, setShowComments] = useState(Boolean(post.commentsCount > 0));
   const [commentsCount, setCommentsCount] = useState(post.commentsCount || 0);
   const [showShareModal, setShowShareModal] = useState(false);
   const [avatarError, setAvatarError] = useState(false);
