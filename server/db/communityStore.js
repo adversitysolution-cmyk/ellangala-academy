@@ -204,9 +204,9 @@ const SEED_POSTS = [
     pinnedAt: new Date(Date.now() - 3600000 * 72).toISOString(),
     scheduledFor: null,
     publishedAt: new Date(Date.now() - 3600000 * 72).toISOString(),
-    likesCount: 212,
-    commentsCount: 36,
-    sharesCount: 15,
+    likesCount: 0,
+    commentsCount: 0,
+    sharesCount: 0,
     createdAt: new Date(Date.now() - 3600000 * 72).toISOString(),
     updatedAt: new Date(Date.now() - 3600000 * 72).toISOString()
   },
@@ -237,9 +237,9 @@ const SEED_POSTS = [
     pinnedAt: null,
     scheduledFor: null,
     publishedAt: new Date(Date.now() - 3600000 * 48).toISOString(),
-    likesCount: 186,
-    commentsCount: 24,
-    sharesCount: 12,
+    likesCount: 0,
+    commentsCount: 0,
+    sharesCount: 0,
     createdAt: new Date(Date.now() - 3600000 * 48).toISOString(),
     updatedAt: new Date(Date.now() - 3600000 * 48).toISOString()
   },
@@ -269,9 +269,9 @@ const SEED_POSTS = [
     pinnedAt: null,
     scheduledFor: null,
     publishedAt: new Date(Date.now() - 3600000 * 96).toISOString(),
-    likesCount: 134,
-    commentsCount: 18,
-    sharesCount: 9,
+    likesCount: 0,
+    commentsCount: 0,
+    sharesCount: 0,
     createdAt: new Date(Date.now() - 3600000 * 96).toISOString(),
     updatedAt: new Date(Date.now() - 3600000 * 96).toISOString()
   }
@@ -1116,6 +1116,34 @@ export async function deleteCommunityComment(commentId) {
   await pool.query('DELETE FROM community_comments WHERE id = ?', [commentId]);
   await pool.query('UPDATE community_posts SET commentsCount = GREATEST(0, commentsCount - 1) WHERE id = ?', [c.postId]);
   return true;
+}
+
+// Recomputes commentsCount and likesCount from the real underlying rows,
+// correcting any stale/seed counters that don't match actual engagement.
+export async function recalculateCommunityPostCounts(postId) {
+  if (!pool) {
+    const post = memoryStore.posts.find(p => p.id === postId);
+    if (!post) throw new Error('Post not found.');
+    post.commentsCount = memoryStore.comments.filter(c => c.postId === postId && c.status === 'approved').length;
+    post.likesCount = Array.from(memoryStore.likes.keys()).filter(k => k.startsWith(`${postId}:`)).length;
+    savePersistentPosts();
+    return post;
+  }
+
+  const [[{ commentsCount }]] = await pool.query(
+    'SELECT COUNT(*) AS commentsCount FROM community_comments WHERE postId = ? AND status = "approved"',
+    [postId]
+  );
+  const [[{ likesCount }]] = await pool.query(
+    'SELECT COUNT(*) AS likesCount FROM community_likes WHERE postId = ?',
+    [postId]
+  );
+  await pool.query('UPDATE community_posts SET commentsCount = ?, likesCount = ? WHERE id = ?', [
+    commentsCount, likesCount, postId
+  ]);
+  const [[updated]] = await pool.query('SELECT * FROM community_posts WHERE id = ?', [postId]);
+  if (!updated) throw new Error('Post not found.');
+  return updated;
 }
 
 // ============================================================================
